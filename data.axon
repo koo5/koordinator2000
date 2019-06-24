@@ -1,15 +1,46 @@
-description:
-	1:
-		url: https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
-		title: Ecover
-	2:
-		url: https://www.ethicalconsumer.org/home-garden/ecover-and-method-boycott
+statement1:
+	description:
+		1:
+			url: https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
+			title: Ecover
+		2:
+			url: https://www.ethicalconsumer.org/home-garden/ecover-and-method-boycott
 
 	
-supported_by:
-	koo5
+	supported_by:
+		koo5
 
-discussion:
-	Company bought by an Evil company. Do profits from buying their Good products go straight to the bank of the Evil company now? Boycott or support?
+	discussion:
+		Company bought by an Evil company. Do profits from buying their Good products go straight to the bank of the Evil company now? Boycott or support?
+
+	will_participate_if: more than 100000 others participate.
+	
+
+statement2:
+	description:
+		#statement1
+	
+	supported_by:
+		stoopkid
+
+	will_participate_if: more than 10000 others participate.
 
 	
+
+
+statement3:
+	description:
+		ALWAYS clean up after your dog.
+		I will always clean up after my dog, if others pledge to do so.
+	location: prague
+	supported_by: koo5
+	limit: 1000000
+
+
+	
+	
+
+
+
+
+

@@ -1,0 +1,14 @@
+* continue sketching out the format of "statements"
+* make the coordinator fetch statements from known places, evaluate them, inform user of reached critical massess.
+
+* work out an "estimate" format.
+** I might be estimating that 54684 are already participating in the campaign, outside of/including information i have available by collecting statements with my crawler, and outside of/including estimates provided by others.
+
+* collect published boycotts and other usecases
+* automate generating and publishing statements of participation: 
+** for example, i support everything that stoopkid supports, just with 10x higher limit 
+** i support every ethicalconsumer boycott, but i will only provide my limit upon (automatic?) request
+
+* ????
+* no profit.
+
