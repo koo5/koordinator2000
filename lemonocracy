@@ -1,0 +1,63 @@
+i want to take over the world.
+
+estimated 667687563 people want to take over the world. would you like to take over the world together? [y/n]
+
+y
+
+estimated 32132311 people want to take over the world together.
+the estimated outcome is: global holocaust. participate? [y/n]
+
+y
+
+
+=============
+
+
+
+i want to stop answering questions on SO until they loosen their "offtopic" policy.
+
+12132 people do. 5000 people promised participation. promise participation? [y/n]
+y
+
+(a notification comes...)
+5001 people promised participation in "stop answering questions on SO until they loosen their "offtopic" policy". estimated outcome: success. declare that you are now participating? [y/n]
+y
+
+200 people are participating.
+
+3000 people are participating.
+
+...
+
+
+===========
+
+
+the lemon syntax:
+```
+things to do in coordination:
+	stop answering questions on SO until they loosen their "offtopic" policy
+	take over the world
+```
+(maps to rdf)
+thing1 lemonocracy:body "stop answering questions on SO until they loosen their "offtopic" policy"; a lemonocracy:thing_to_do.
+etc..
+----------
+
+
+stoopkids declaration of intent of participation:
+
+@namespace lemonocracy <https://koo5.github.com/lemonocracy>
+stoopkid lemonocracy:will_participate <https://raw.githubusercontent.com/koo5/new_shit/master/data/koo5/lemonocracy.n3#thing1>.
+
+
+
+
+
+
+
+
+https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
+
+##we could use:
+https://github.com/researchstudio-sat/webofneeds
