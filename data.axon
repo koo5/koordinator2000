@@ -44,3 +44,13 @@ statement3:
 
 
 
+statement4:
+	description:
+		PUBG flashmob. Let's jump at the end of the flight route, and all go to victory together. No shooting except when shot-at first. Erangel, classic mode.
+	supported_by: koo5
+	expected_availability: every day from 12UTC to 2UTC.
+	comment: everyone should state their expected availability. Their kooordinator will notify them when a datetime is picked.
+	
+	
+	
+	
