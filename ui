@@ -4,7 +4,7 @@ pages/windows:
 		sorting:
 			by datetime (added to local db):
 
-		later:
+		tbd later:
 			filtering:
 				location-specific causes: (lists all causes related to a location)
 					countries, cities
@@ -55,3 +55,8 @@ pages/windows:
 			* fulfilled
 			* unfulfilled
 			
+--
+
+	support koordinator (tbd later):
+		
+--
