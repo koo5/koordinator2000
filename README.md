@@ -28,3 +28,46 @@ etc.
 # current status
 mocking up the app: https://koordinator.knack.com/koordinator#campaigns/
 
+
+# condition language/ontology:
+	condition := condition or condition
+	condition := condition and condition
+	condition := number of participants
+	condition := number of confirmed participants
+	condition := number of estimated participants
+	
+
+### "number of participants":
+	```
+	total number of participants whose "number of participants" have been met.
+	determined by:
+		given a list of thresholds
+		sort the list from lowest to highest
+		for idx starting with len(list) - 1 and ending at 0:
+			threshold = list[idx]
+			#number of other supporters is the count of remaining items whose threshold <= threshold
+			num_supporters = 0
+			for idx2 starting with len(list) - 2 and ending at 0:
+				if list[idx2] <= threshold:
+					num_supporters += 1
+			if num_supporters >= threshold:
+				return idx
+	```
+			
+### "number of confirmed participants":
+	```
+	given a list of participation statements:
+		if confirmed is true:
+			sum += 1
+	if sum >= threshold:
+		alert user, ask for confirmation of participation, set confirmed to true
+	```
+		
+
+### "number of estimated participants":
+	```
+	estimation would initially be in hands of the user that created the campaign
+	```
+
+
+
