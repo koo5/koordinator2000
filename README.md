@@ -1,5 +1,17 @@
 # What
-Most of us would make our world better if we could. Or at least different. For example, you would vote that tiny progressive political party, if you knew your vote would matter. So let's get to work to make it matter. Don't waste your vote until you know there is a mass large enough to make it count. The same principle applies to pressuring corporations by boycotts, or, more widely, changing consumer habits. If you choose to buy the more ethical brand every time, you'll soon be out of money, and the less ethical brand will still be going strong, but if enough people focus on the same issue at the same time, changes happen. In our current society, this is only achieved in extraordinary cases, but now, with almost everyone on-line, we can make it the norm.
+Most of us would make our world better if we could. Or at least different. 
+
+## Politics
+
+For example, you would vote that tiny progressive political party, if you knew your vote would matter. So let's get to work to make it matter. Don't waste your vote until you know there is a mass large enough to make it count. 
+
+## Consumers
+
+The same principle applies to pressuring corporations by boycotts, or, more widely, changing consumer habits. If you choose to buy the more ethical brand every time, you'll soon be out of money, and the less ethical brand will still be going strong, but if enough people focus on the same issue at the same time, changes happen. In our current society, this is only achieved in extraordinary cases, but now, with almost everyone on-line, we can make it the norm.
+
+## Companies
+
+The same issue exists on the companies side. If there isn't a long-term pressure from customers to change, then, for example, choosing a more ethical supplier and raising prices only means shelling money out of their own pocket while another company moves into the empty space and voids their effort. 
 
 # How
 Express your support for cause. Express under what conditions are you willing to invest the energy. I will only switch to the more expensive, more ethical brand if 10000 other people do. Express it in a way that computer can understand it. 
