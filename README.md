@@ -82,4 +82,125 @@ mocking up the app: https://koordinator.knack.com/koordinator#campaigns/
 	```
 
 
+# older bullet-points for UI design
+```
+pages/windows:
+
+	browse causes (serves as home page):
+		sorting:
+			by datetime (added to local db):
+
+		tbd later:
+			filtering:
+				location-specific causes: (lists all causes related to a location)
+					countries, cities
+
+			fulltext search
+		
+--
+
+	cause detail:
+		title
+		location
+		description
+		references?
+		event datetime (if applicable)
+		author
+		supporters:
+			name
+			threshold
+	
+--
+
+	add/edit cause:
+	
+--
+
+	my support:
+		cause: (title/link) (for example: "start buying l'oreal products")
+		conditions:
+		my identity:
+			choices:
+				* anonymous
+				* nickname
+				* facebook profile (can trigger login)
+			privacy:
+				* public
+				* only known to this pod
+		how to be notified when threshold is reached:
+	
+--
+
+	condition object:
+		(administered by cause author or site admin..)
+		types:
+			* threshold (number of active supporters so far) (can initially be processed fully automatically)
+			* event/observation:
+				(only plaintext for now, for example: "l'oreal stops testing on animals")
+		state:
+			* fulfilled
+			* unfulfilled
+			
+--
+
+	support koordinator (tbd later):
+		
+--
+```
+
+# sources of campaigns to add, causes to support:
+https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
+https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
+https://github.com/aindilis/elle-ethical-consumer/blob/master/sample.xml
+https://www.reddit.com/r/Anticonsumption/
+https://www.reddit.com/r/Futurology/comments/da0214/the_35_rule_states_any_movement_that_gains_35_of/
+https://github.com/yacy/yacy_search_server/issues/314
+
+
+# related sw
+https://github.com/researchstudio-sat/webofneeds
+https://github.com/peta-pico/debate-nanopubs
+
+
+
+
+
+# testcases that it makes sense to coordinate in small numbers of people
+flashmobs
+popularization of koordinator
+cooperative testcases
+
+
+# resources & related projects
+
+
+https://theconversation.com/climate-crisis-we-are-not-individuals-fighting-a-faceless-system-we-are-the-system-that-needs-to-change-129513
+
+https://airtable.com/shrVDkswEnsgA87yS
+
+https://csarven.ca/linked-research-decentralised-web
+
+https://thezvi.wordpress.com/2020/01/16/how-escape-from-immoral-mazes/
+
+maslo.cz
+
+https://github.com/TheDataRideAlongs/ProjectDomino
+
+
+
+# todo
+
+* continue sketching out the format of "statements"
+* make the coordinator fetch statements from known places, evaluate them, inform user of reached critical massess.
+
+* work out an "estimate" format.
+** I might be estimating that 54684 are already participating in the campaign, outside of/including information i have available by collecting statements with my crawler, and outside of/including estimates provided by others.
+
+* collect published boycotts and other usecases
+* automate generating and publishing statements of participation: 
+** for example, i support everything that stoopkid supports, just with 10x higher limit 
+** i support every ethicalconsumer boycott, but i will only provide my limit upon (automatic?) request
+
+* ????
+* no profit.
 
