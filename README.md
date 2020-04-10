@@ -81,10 +81,45 @@ mocking up the app: https://koordinator.knack.com/koordinator#campaigns/
 	estimation would initially be in hands of the user that created the campaign
 	```
 
+# the data schema/ontology in detail
+Location:
+	a string or an uri or possibly some api-specific identifier
+	not sure if there is any free ontology or service we can use to autocomplete and disambiguate.
+	possibly: https://cloud.google.com/maps-platform/places
+	may be helpful but lacks details: https://bioportal.bioontology.org/ontologies/GEO
 
-# older bullet-points for UI design
+Campaign_description:
+	content: Prose
+	timestamp: Datetime
+	created_by: User
+
+Campaign:
+	Campaign describes an action or set of actions that each participant can take, and goals or possible results.
+	
+	relevant_to_location: Location,	can be specified multiple times
+	created: Datetime
+	owner: User
+	picture: file path?
+	title: string
+	description: Campaign_description
+	
+
+		
+		
+
+# bullet-points for UI design
 ```
 pages/windows:
+
+	landing/welcome page:
+		list let's say 3 campaigns ordered by "landing page order". determined by:
+			"featuredness": an int property of Campaign, set by site admin in the db
+			user location:
+				obtained through browser Geolocation API or ip geolocation:
+					https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+					https://medium.com/@ipdata_co/what-is-the-best-commercial-ip-geolocation-api-d8195cda7027
+					
+		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
 
 	browse causes (serves as home page):
 		sorting:
