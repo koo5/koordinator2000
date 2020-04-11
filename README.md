@@ -87,6 +87,9 @@ Location:
 	not sure if there is any free ontology or service we can use to autocomplete and disambiguate.
 	possibly: https://cloud.google.com/maps-platform/places
 	may be helpful but lacks details: https://bioportal.bioontology.org/ontologies/GEO
+	user location can have default value obtained through browser Geolocation API or ip geolocation:
+		https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+		https://medium.com/@ipdata_co/what-is-the-best-commercial-ip-geolocation-api-d8195cda7027
 
 Campaign_description:
 	content: Prose
@@ -103,7 +106,14 @@ Campaign:
 	title: string
 	description: Campaign_description
 	
-
+kinds of participation proclamations:
+	Participation upon notice:
+		the simplest kind. You proclaim that you'll start participating as soon as there is an X number of other participants. You will be alerted when this becomes the case. You can always amend or retract your proclamation.
+	maybe we should initially stick to just this kind.
+	
+	Basic participation proclamation:
+		Number of people: int
+			this may be the simplest way to include for example a spouse or a friend
 		
 		
 
@@ -112,12 +122,9 @@ Campaign:
 pages/windows:
 
 	landing/welcome page:
-		list let's say 3 campaigns ordered by "landing page order". determined by:
+		lists let's say 3 campaigns ordered by "landing page order". determined by:
 			"featuredness": an int property of Campaign, set by site admin in the db
-			user location:
-				obtained through browser Geolocation API or ip geolocation:
-					https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
-					https://medium.com/@ipdata_co/what-is-the-best-commercial-ip-geolocation-api-d8195cda7027
+			user location
 					
 		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
 
