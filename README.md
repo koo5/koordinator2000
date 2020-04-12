@@ -212,7 +212,7 @@ pages/windows:
 --
 ```
 
-# sources of campaigns to add, causes to support:
+# sources of campaigns to add
 https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
 https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
 https://github.com/aindilis/elle-ethical-consumer/blob/master/sample.xml
@@ -226,17 +226,13 @@ https://github.com/researchstudio-sat/webofneeds
 https://github.com/peta-pico/debate-nanopubs
 
 
-
-
-
 # testcases that it makes sense to coordinate in small numbers of people
 flashmobs
 popularization of koordinator
 cooperative testcases
 
 
-# resources & related projects
-
+# resources & inspirations
 
 https://theconversation.com/climate-crisis-we-are-not-individuals-fighting-a-faceless-system-we-are-the-system-that-needs-to-change-129513
 
@@ -246,7 +242,7 @@ https://csarven.ca/linked-research-decentralised-web
 
 https://thezvi.wordpress.com/2020/01/16/how-escape-from-immoral-mazes/
 
-maslo.cz
+http://maslo.cz
 
 https://github.com/TheDataRideAlongs/ProjectDomino
 
@@ -254,7 +250,7 @@ https://github.com/TheDataRideAlongs/ProjectDomino
 
 # todo
 
-* continue sketching out the format of "statements"
+* continue sketching out the format of "participation statements"
 * make the coordinator fetch statements from known places, evaluate them, inform user of reached critical massess.
 
 * work out an "estimate" format.
