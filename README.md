@@ -91,6 +91,13 @@ Location:
 		https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
 		https://medium.com/@ipdata_co/what-is-the-best-commercial-ip-geolocation-api-d8195cda7027
 
+User:
+	obviously some internal id: int or uri
+	username: maybe i'd leave this out
+	full name: string, in case anyone would want to fill that in, eventually
+	google/facebook etc logins
+	
+
 Campaign_description:
 	content: Prose
 	timestamp: Datetime
@@ -107,13 +114,17 @@ Campaign:
 	description: Campaign_description
 	
 kinds of participation proclamations:
+	maybe we should initially stick to just the simplest kind:
+		
 	Participation upon notice:
 		the simplest kind. You proclaim that you'll start participating as soon as there is an X number of other participants. You will be alerted when this becomes the case. You can always amend or retract your proclamation.
-	maybe we should initially stick to just this kind.
 	
-	Basic participation proclamation:
-		Number of people: int
+		number of people: int
 			this may be the simplest way to include for example a spouse or a friend
+		user: User
+		number_of_other_participants_condition: int
+			this would be the simplest thing to do, if we limit types of participation to just "Participation upon notice"
+			
 		
 		
 
@@ -128,9 +139,9 @@ pages/windows:
 					
 		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
 
-	browse causes (serves as home page):
+	browse causes:
 		sorting:
-			by datetime (added to local db):
+			by creation datetime
 
 		tbd later:
 			filtering:
@@ -143,25 +154,48 @@ pages/windows:
 
 	cause detail:
 		title
-		location
+		locations
 		description
 		references?
 		event datetime (if applicable)
 		author
-		supporters:
-			name
-			threshold
+		list of participants
+		
+		it would be nice to have this fully versioned/with auditable changes
 	
 --
 
 	add/edit cause:
-	
+
+		edit basic info
+		
+		work with participation estimates:
+			a Campaign should have one number that the owner should strive to make it reflect the actual number of currently participating individuals. In the UI, it would be the one number displayed prominently, while clicking on it could show a breakdown. It would be a sum of several aspects:
+				Unique IPs of anonymous/pseudonymous users
+				number of socially-logged-in users
+				estimate of unique participants expressed on other sites
+				estimate of "offline" participants
+				any adjustments, adding an adjustment of -10000 "users" that turned out to be a botnet
+		
+		possibly:
+			event/observation condition objects administered by cause author or site admin:
+				only plaintext for now, for example: "l'oreal stops testing on animals"
+				state:
+					* fulfilled
+					* unfulfilled
+				these could be referenced the conditions section of participation statements, for example, the Campaign is "Start buying L'Oreal", and this Campaign has an attached event condition "l'oreal stops testing on animals", and clicking "participate" automatically makes that the condition of the users participation.
+				This shows to the company the positive support that it has for changing its practices. When the campaign owner sets the state to "fulfilled", all participants are noticed that it's time to act.
+
 --
 
-	my support:
+	participation:
 		cause: (title/link) (for example: "start buying l'oreal products")
 		conditions:
 		my identity:
+			
+			we need to lower the barrier as much as possible, so even without login, people can obviously browse causes, and click "participate" somewhere, but then, they should decide how much energy/privacy they want to invest in that participation statement. We can always store their IP address, which, in larger numbers/statistically/with some data clenup, could serve quite well in some cases. Ie, if i get 200K unique czech IPs at day of massive demonstration, and i don't have much reason to suspect that anyone would really profit from screwing up my estimates with a botnet, or, say, i'm able to determine that most of these IPs belonged to relatively secure devices, ie smartphones, then it's a reasonably good basis for publishing that number as an estimation of number of actually participating people.
+			Campaign authors/site admins should have control over what numbers to display, ie, anything between raw number of IPs to manually entered numbers. The success of their campaign relies on keeping these numbers accurate.
+			
 			choices:
 				* anonymous
 				* nickname
@@ -173,20 +207,8 @@ pages/windows:
 	
 --
 
-	condition object:
-		(administered by cause author or site admin..)
-		types:
-			* threshold (number of active supporters so far) (can initially be processed fully automatically)
-			* event/observation:
-				(only plaintext for now, for example: "l'oreal stops testing on animals")
-		state:
-			* fulfilled
-			* unfulfilled
-			
---
+	about this site/support quor (tbd later).
 
-	support koordinator (tbd later):
-		
 --
 ```
 
