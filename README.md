@@ -1,4 +1,5 @@
 # What
+
 Most of us would make our world better if we could. Or at least different. 
 
 ## Politics
@@ -11,34 +12,46 @@ The same principle applies to pressuring corporations by boycotts, or, more wide
 
 ## Companies
 
-The same issue exists on the companies side. If there isn't a long-term pressure from customers to change, then, for example, choosing a more ethical supplier and raising prices only means shelling money out of their own pocket while another company moves into the empty space and voids their effort. 
+The same issue exists on the companies side. If there isn't a long-term pressure from customers to change, then, for example, choosing a more ethical supplier and raising prices only means shelling money out of their own pocket while another company moves into the empty space and voids their effort. It can also be expressed positively: i will start buying products of X if/when X does/changes something.
 
 # How
-Express your support for cause. Express under what conditions are you willing to invest the energy. I will only switch to the more expensive, more ethical brand if 10000 other people do. Express it in a way that computer can understand it. 
 
+Express your support for campaigns. Participation costs you money or time, so express under what conditions are you willing to invest it. For example, i will only switch to the more expensive, more ethical brand if 10000 other people do. Express it in a way that computers can understand it, so you can be automatically informed when your conditions are satisfied. Track progress and evaluate outcomes. Repeat.
 
 ## How to reach critical mass
+
 ### 1
 First, the website has to be finished and polished. And ideally a mobile app too. 
 ### 2
-Some worthwhile causes should be collected, as examples, to give people reason to click around and share.
+Some worthwhile campaigns should be collected, as examples, to give people reason to click around and share.
 ### 3
-An issue that already reached good critical mass has to be identified. Something that would benefit from additional coordination. An example from Czech Republic is the 2019 event of 250 000 people gathering to protest against prime minister Babiš, and to block the many products of His Agrofert holding. A reasonably sized effort also happened outside of streets and social media, for example a chrome extension that helps online shoppers avoid Agrofert's products. Eventually the momentum all but died out, without effect. I postulate that things would have evolved differently if each of those 250 000 people that gathered would be introduced to the application and encouraged to coordinate through it. I postulate that the biggest obstacle to an individual's effort is this lack of confidence in other's sustained effort, and by extension, each of us includes this shared lack of confidence in our calculations.
+A real-world (or virtual-world cause that has already reached a critical mass of supporters has to be identified. Something that would benefit from additional coordination. An example from Czech Republic is the 2019 event of 250 000 people gathering to protest against prime minister Babiš, and to block the many products of His Agrofert holding. A reasonably sized effort also happened outside of streets and social media, for example a chrome extension that helps online shoppers avoid Agrofert's products. Eventually the momentum all but died out, without effect. I postulate that things would have evolved differently if each of those 250 000 people that gathered would be introduced to the application and encouraged to coordinate through it. I postulate that the biggest obstacle to an individual's effort is this lack of confidence in other's sustained effort, and by extension, each of us includes this shared lack of confidence in our calculations.
 
 
 ## extensibility, decentralization
-this is an open protocol. If you are tech-saavy, you are encouraged to:
+
+We could already start communicating in a fully decentralized fashion, even, let's say, abstracting away the semi-centralized physical nature of the internet with things like IPFS. But that's not the point here. But: Participations, Conditions and Users - we can build the initial version with just the simplest structures and mechanics, ie, just "Participation upon notice", no confirmations, User objects corresponding to signed-up users, but: "praticipation after confirmation" will be useful to express campaigns that require exact time/space coordination, for example, organizing an online flashmob. The idea of what constitutes an individual will likewise require extending over time, especially if we ever need to handle spam or to handle attempts to skew our estimates / mess with campaigns. So: this should be open protocol. I want an easily extensible UI, so we can quickly experiment with different data structures. If you want to do something different with data from "our" users, you should be able to, if the users consent. All these issues are the focus of https://solidproject.org/
+
+"""People can express trust boundaries in shapes such that apps and query engines receive boundaries of which sources to trust for what information. By default, this might just be the user’s pod. Others’ pods might be consulted for their personal information, such as name, location, birth date, but not for things such as preferences, annotations, etc. Such limits will affect both performance and trust positively, at the cost of perhaps missing some results that might still be trustworthy, but were not part of the shape. In any case, documenting the provenance of query results and their individual components remains important in decentralized networks.""" - https://ruben.verborgh.org/blog/2019/06/17/shaping-linked-data-apps/
+
+"""dokieli implements the W3C Web Annotation specifications Wherever your article is published, readers can leave annotations and replies if they have their own personal datastore to save them to. If your article is published on a personal storage space, you can offer to store annotations and replies on their behalf, and enable anonymous responses too. """ - https://dokie.li/
+
+If you are tech-saavy, you are encouraged to:
 *  publish your own statements of participation
-(todo: link to the ontology, to some generator, etc)
+(todo: link to the ontology, to some generator, to the relevant page on our site, etc)
 * extend the data scheme of participation conditions
-currently, the only method of specifying your conditions is the "number of others willing to participate" (todo: fill in the actual rdf predicate name), which more precisely means: "number of others whose number of others willing to participate has been reached". And these "others", precisely, are other users who expressed their identify by logging into * website with their google/facebook/etc account. At some point, a need may arise to have somebody:
+currently, the only method of specifying your conditions is the "number of others willing to participate" (todo: fill in the actual rdf predicate name), which more precisely means: "number of others whose number of others willing to participate has been reached". And these "others", precisely, are other users who expressed their identify by logging into this website with their google/facebook/etc account. 
+*...
+
+At some point, a need may arise to have somebody:
 * estimate how many of these accounts belong to real people
 * estimate how many people are already commited and participating outside of this platform
 * expressed their intent to participate through other similar platforms
 etc.
 
 # current status
-mocking up the app: https://koordinator.knack.com/koordinator#campaigns/
+* done: a rough app draft: https://koordinator.knack.com/koordinator#campaigns/
+* doing: this readme
 
 
 # condition language/ontology:
@@ -139,33 +152,33 @@ pages/windows:
 					
 		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
 
-	browse causes:
+	browse campaigns:
 		sorting:
 			by creation datetime
 
 		tbd later:
 			filtering:
-				location-specific causes: (lists all causes related to a location)
+				location-specific campaigns: (lists all campaigns related to a location)
 					countries, cities
 
 			fulltext search
 		
 --
 
-	cause detail:
+	campaign detail:
 		title
 		locations
 		description
-		references?
+		references/links
 		event datetime (if applicable)
 		author
 		list of participants
 		
-		it would be nice to have this fully versioned/with auditable changes
+		it would be nice to have at least this fully versioned/with auditable changes
 	
 --
 
-	add/edit cause:
+	add/edit campaign:
 
 		edit basic info
 		
@@ -178,7 +191,7 @@ pages/windows:
 				any adjustments, adding an adjustment of -10000 "users" that turned out to be a botnet
 		
 		possibly:
-			event/observation condition objects administered by cause author or site admin:
+			event/observation condition objects administered by campaign owner or site admin:
 				only plaintext for now, for example: "l'oreal stops testing on animals"
 				state:
 					* fulfilled
@@ -189,11 +202,11 @@ pages/windows:
 --
 
 	participation:
-		cause: (title/link) (for example: "start buying l'oreal products")
+		campaign: (title/link) (for example: "start buying l'oreal products")
 		conditions:
 		my identity:
 			
-			we need to lower the barrier as much as possible, so even without login, people can obviously browse causes, and click "participate" somewhere, but then, they should decide how much energy/privacy they want to invest in that participation statement. We can always store their IP address, which, in larger numbers/statistically/with some data clenup, could serve quite well in some cases. Ie, if i get 200K unique czech IPs at day of massive demonstration, and i don't have much reason to suspect that anyone would really profit from screwing up my estimates with a botnet, or, say, i'm able to determine that most of these IPs belonged to relatively secure devices, ie smartphones, then it's a reasonably good basis for publishing that number as an estimation of number of actually participating people.
+			we need to lower the barrier as much as possible, so even without login, people can obviously browse campaigns, and click "participate" somewhere, but then, they should decide how much energy/privacy they want to invest in that participation statement. We can always store their IP address, which, in larger numbers/statistically/with some data clenup, could serve quite well in some cases. Ie, if i get 200K unique czech IPs at day of massive demonstration, and i don't have much reason to suspect that anyone would really profit from screwing up my estimates with a botnet, or, say, i'm able to determine that most of these IPs belonged to relatively secure devices, ie smartphones, then it's a reasonably good basis for publishing that number as an estimation of number of actually participating people.
 			Campaign authors/site admins should have control over what numbers to display, ie, anything between raw number of IPs to manually entered numbers. The success of their campaign relies on keeping these numbers accurate.
 			
 			choices:
@@ -259,7 +272,7 @@ https://github.com/TheDataRideAlongs/ProjectDomino
 * collect published boycotts and other usecases
 * automate generating and publishing statements of participation: 
 ** for example, i support everything that stoopkid supports, just with 10x higher limit 
-** i support every ethicalconsumer boycott, but i will only provide my limit upon (automatic?) request
+** i support every ethicalconsumer boycott, but i will only provide my threshold upon (automatic?) request
 
 * ????
 * no profit.
