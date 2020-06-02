@@ -18,8 +18,7 @@ export function writable(key, initialValue) {
   }
 */
 
-  if (typeof localStorage === "undefined" || localStorage === null) {
-  } else
+  if (typeof localStorage === "undefined" || localStorage === null) {} else
   {
     const json = localStorage.getItem(key);
     if (json) {
@@ -31,7 +30,8 @@ export function writable(key, initialValue) {
   return {
     // capture set and write to localStorage
     set(value) {
-      localStorage.setItem(key, JSON.stringify(value))
+      if (typeof localStorage === "undefined" || localStorage === null) {} else
+        localStorage.setItem(key, JSON.stringify(value));
       set(value)
     },
     // capture updates and write to localStore

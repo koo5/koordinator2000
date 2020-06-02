@@ -1,5 +1,8 @@
 <script>
 	export let segment;
+
+	import { request_queue_store } from '../stores.js';
+
 </script>
 
 <style>
@@ -47,6 +50,11 @@
 		display: block;
 	}
 </style>
+
+<p>
+requests in queue: {$request_queue_store.length}
+</p>
+
 
 <nav>
 	<ul>

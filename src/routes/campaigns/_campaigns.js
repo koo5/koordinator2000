@@ -9,9 +9,6 @@ const campaigns = [
 			
 			<ul>
 				<li>donate!</li>
-				<li>donate!</li>
-				<li>donate!</li>
-				<li>donate!</li>
 			</ul>
 
 			<p>This will feed aindils for a couple of days so he can focus on koordinator.</p>

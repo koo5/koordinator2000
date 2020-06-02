@@ -1,6 +1,6 @@
 const base = 'https://localhost:3000/';
 
-function send({ method, path, data, token }) {
+export function send({ method, path, data, token }) {
 	const fetch = process.browser ? window.fetch : require('node-fetch').default;
 
 	const opts = { method, headers: {} };
@@ -15,7 +15,10 @@ function send({ method, path, data, token }) {
 	}
 
 	return fetch(`${base}/${path}`, opts)
-		.then(r => r.text())
+}
+
+function decode(promise) {
+		promise.then(r => r.text())
 		.then(json => {
 			try {
 				return JSON.parse(json);
@@ -26,17 +29,17 @@ function send({ method, path, data, token }) {
 }
 
 export function get(path, token) {
-	return send({ method: 'GET', path, token });
+	return decode(send({ method: 'GET', path, token }));
 }
 
 export function del(path, token) {
-	return send({ method: 'DELETE', path, token });
+	return decode(send({ method: 'DELETE', path, token }));
 }
 
 export function post(path, data, token) {
-	return send({ method: 'POST', path, data, token });
+	return decode(send({ method: 'POST', path, data, token }));
 }
 
 export function put(path, data, token) {
-	return send({ method: 'PUT', path, data, token });
+	return decode(send({ method: 'PUT', path, data, token }));
 }
