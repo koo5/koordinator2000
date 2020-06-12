@@ -224,6 +224,57 @@ pages/windows:
 
 --
 ```
+# preliminary initial db schema
+```
+
+User {
+  email Email;
+  password PasswordHash;
+}
+
+DayCount isa Int;
+ParticipantCount isa Int;
+
+Campaign {
+  coordinator User;
+  title SingleLineString;
+  description Text;
+  notification_interval DayCount;
+  notification_threshold ParticipantCount;
+}
+
+PreCommitment {
+  user User;
+  campaign Campaign;
+  registered_at TimeStamp;
+  participant_threshold Int;
+}
+
+CoordinatorNotification {
+  campaign Campaign;
+  sent_at TimeStamp;
+  sent_because JSON; # structured, provides which notification field triggered
+  email Text; # record entire email, it's just useful later
+}
+
+CommitedUserNotification {
+  campaign Campaign;
+  triggered_at TimeStamp;
+  notes Text; # co-ordinator fills these out
+  email_template Text;
+}
+
+CommitedUserNotificationTransmissionState {
+  transmission_of CommitedUserNotification;
+  to_user User;
+  last_attempted_at TimeStamp;
+  email Text;
+  status ??; # probably an enum of some variation?
+  user_responded_at TimeStamp?;
+  user_responded_with ??; # also probably an enum
+}
+```
+
 
 # sources of campaigns to add
 https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
