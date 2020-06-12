@@ -98,7 +98,7 @@ etc.
 Location:
 	a string or an uri or possibly some api-specific identifier
 	not sure if there is any free ontology or service we can use to autocomplete and disambiguate.
-	possibly: https://cloud.google.com/maps-platform/places
+	possibly: https://www.geonames.org (or https://cloud.google.com/maps-platform/places)
 	may be helpful but lacks details: https://bioportal.bioontology.org/ontologies/GEO
 	user location can have default value obtained through browser Geolocation API or ip geolocation:
 		https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
@@ -259,7 +259,9 @@ http://maslo.cz
 
 https://github.com/TheDataRideAlongs/ProjectDomino
 
+https://www.idnes.cz/zpravy/domaci/ochrana-zvirat-proti-tyrani-klecove-chovy-slepice.A200610_084300_domaci_kop
 
+https://www.reddit.com/r/thevenusproject
 
 # todo
 
