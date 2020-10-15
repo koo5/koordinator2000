@@ -5,9 +5,7 @@
   import Books from './Books.svelte';
   const client = new ApolloClient({ uri: '...' });
   setClient(client);
-</script>
 
-<script context="module">
 	export async function preload({ params, query }) {
 		// the `slug` parameter is available because
 		// this file is called [slug].svelte
@@ -20,9 +18,7 @@
 			this.error(res.status, data.message);
 		}
 	}
-</script>
 
-<script>
 	export let campaign;
 </script>
 

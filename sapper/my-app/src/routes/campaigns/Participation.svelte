@@ -8,7 +8,7 @@
 
 
 <div class='content'>
-	Your threshold: <input type="text" name="threshold">5</input>
+	Your threshold: <input type="text" name="threshold"\>
 	<button on:click={onClickUpdate}>update</button>
 	recommended: {participation.recommended_threshold}
 </div>

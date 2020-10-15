@@ -141,22 +141,25 @@ kinds of participation proclamations:
 		
 		
 
-# bullet-points for UI design
+# components of the UI
 ```
 pages/windows:
 
 	landing/welcome page:
+		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
 		lists let's say 3 campaigns ordered by "landing page order". determined by:
 			"featuredness": an int property of Campaign, set by site admin in the db
-			user location
-					
-		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
+			later:user location
+			
+			<CampaignPreview v-for:$featured_campaigns
+			?c a Campaign...					
+		
 
 	browse campaigns:
 		sorting:
 			by creation datetime
 
-		tbd later:
+		later:
 			filtering:
 				location-specific campaigns: (lists all campaigns related to a location)
 					countries, cities
@@ -224,7 +227,7 @@ pages/windows:
 
 --
 ```
-# preliminary initial db schema
+# preliminary initial db schema, thanks to mst
 ```
 
 User {
@@ -313,6 +316,19 @@ https://github.com/TheDataRideAlongs/ProjectDomino
 https://www.idnes.cz/zpravy/domaci/ochrana-zvirat-proti-tyrani-klecove-chovy-slepice.A200610_084300_domaci_kop
 
 https://www.reddit.com/r/thevenusproject
+
+# technology
+
+https://www.researchgate.net/publication/228854943_Tracking_rdf_graph_provenance_using_rdf_molecules
+
+https://solidproject.org/
+
+https://medium.com/@sdmonroe/vios-reference-implementation-3153a3d589cf
+
+http://vos.openlinksw.com/owiki/wiki/VOS/VirtuosoFacetsWebService
+
+
+
 
 # todo
 
