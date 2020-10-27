@@ -279,17 +279,9 @@ CommitedUserNotificationTransmissionState {
 ```
 
 
-# sources of campaigns to add
-https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
-https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
-https://github.com/aindilis/elle-ethical-consumer/blob/master/sample.xml
-https://www.reddit.com/r/Anticonsumption/
-https://www.reddit.com/r/Futurology/comments/da0214/the_35_rule_states_any_movement_that_gains_35_of/
-https://github.com/yacy/yacy_search_server/issues/314
-
-
 # related sw
 https://github.com/researchstudio-sat/webofneeds
+https://humanifa.com/soporte
 https://github.com/peta-pico/debate-nanopubs
 
 
@@ -299,7 +291,16 @@ popularization of koordinator
 cooperative testcases
 
 
-# resources & inspirations
+# sources of campaigns to add
+https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
+https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
+https://github.com/aindilis/elle-ethical-consumer/blob/master/sample.xml
+https://www.reddit.com/r/Anticonsumption/
+https://www.reddit.com/r/Futurology/comments/da0214/the_35_rule_states_any_movement_that_gains_35_of/
+https://github.com/yacy/yacy_search_server/issues/314
+
+
+# inspirations
 
 https://theconversation.com/climate-crisis-we-are-not-individuals-fighting-a-faceless-system-we-are-the-system-that-needs-to-change-129513
 
@@ -317,17 +318,10 @@ https://www.idnes.cz/zpravy/domaci/ochrana-zvirat-proti-tyrani-klecove-chovy-sle
 
 https://www.reddit.com/r/thevenusproject
 
+
 # technology
 
-https://www.researchgate.net/publication/228854943_Tracking_rdf_graph_provenance_using_rdf_molecules
-
-https://solidproject.org/
-
-https://medium.com/@sdmonroe/vios-reference-implementation-3153a3d589cf
-
-http://vos.openlinksw.com/owiki/wiki/VOS/VirtuosoFacetsWebService
-
-
+undecided yet. https://github.com/koo5/hackery2/blob/master/src/data/notes/rdf_forms.txt
 
 
 # todo
