@@ -39,21 +39,27 @@
 			)
 		}
 		else
-			return 5
+			return subscribe(
+				client,
+				{
+					query: LIST,
+					variables: {
+						_user_id: 0
+					}
+				}
+			)
 	}
 
 	$: notifications = maybe_subscribe($my_user);
 
-	/*{@debug notifications}*/
 </script>
 
 <ul>
 
-	{#if notifications !== 5}
+	{#if $notifications !== 5}
 		{#await $notifications}
 			<li>Loading...</li>
 		{:then result}
-			{@debug result}
 			<pre>{JSON.stringify(result, null, '  ')}</pre>
 			{#each result.data.campaign_notifications as notification (notification.id)}
 				<Notification {notification}/>
