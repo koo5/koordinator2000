@@ -51,10 +51,12 @@
 
 <div class="dotted">
 <form on:submit={addUser}>
-  <label for="user">User</label>
+  Add user:
+  <label for="user-name">Name</label>
   <input type="text" id="user-name" bind:value={name} />
+  <label for="user-email">E-mail</label>
   <input type="text" id="user-email" bind:value={email} />
   <button type="submit">Add User</button>
-  <br>status:<pre>{ status_string }</pre>
+  <br>GraphQL status:<pre>{ status_string }</pre>
 </form>
 </div>

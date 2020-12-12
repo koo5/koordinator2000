@@ -2,8 +2,8 @@
   import gql from 'graphql-tag';
   import { client } from './apollo';
   import { subscribe } from 'svelte-apollo';
-  import { my_user } from './my_user.js';
-  import { MyParticipation } from './MyParticipation.svelte';
+  import MyParticipation from './MyParticipation.svelte';
+
 
 
   const CAMPAIGN_LIST = gql`
@@ -32,8 +32,6 @@
 
 <style>
 .tooltip {
-  position: relative;
-  display: inline-block;
   border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
 
@@ -57,8 +55,6 @@
 }
 </style>
 
-<button class="button" on:click={() => {console.log(campaignList)}}>Click</button>
-
 
 <ul>
   {#await $campaignList}
@@ -75,14 +71,10 @@
 
       <b>participants:</b>
       {#each campaign.participations as participation (participation.id)}
-        <span class='tooltip'>{participation.user.name}
-          <span class="tooltiptext">user id:{participation.user.id}</span>
-        </span>
-        (
-        <span class='tooltip'>{participation.threshold}
-          <span class="tooltiptext">participation id:{participation.id}</span>
-        </span>
-        )
+
+        <span>
+          <span class='tooltip'>{participation.user.name}<span class="tooltiptext">user id:{participation.user.id}</span></span>(<span class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span></span>) </span>
+
       {/each}
 
     {:else}
