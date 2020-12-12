@@ -55,7 +55,7 @@
   Add campaign:
   <label for="title">Title</label>
   <input type="text" id="title" bind:value={title} />
-  <label for="description">Eescription</label>
+  <label for="description">Description</label>
   <input type="text" id="description" bind:value={description} />
   <button type="submit">Add Campaign</button>
   <br>GraphQL status:<pre>{ status_string }</pre>

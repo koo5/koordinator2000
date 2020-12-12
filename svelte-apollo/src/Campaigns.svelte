@@ -36,7 +36,7 @@
       <li>No campaigns found</li>
     {/each}
   {:catch error}
-    <li>Error loading campaigns: {error}</li>
+    <li>Error loading campaigns: <pre>{JSON.stringify(error,null,'  ')}</pre></li>
   {/await}
 </ul>
 
