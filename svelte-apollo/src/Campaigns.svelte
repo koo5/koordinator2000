@@ -1,7 +1,10 @@
-<script context="module">
+<script>
   import gql from 'graphql-tag';
   import { client } from './apollo';
   import { subscribe } from 'svelte-apollo';
+  import { my_user } from './my_user.js';
+  import { MyParticipation } from './MyParticipation.svelte';
+
 
   const CAMPAIGN_LIST = gql`
     subscription {
@@ -20,7 +23,8 @@
       }
     }
   `;
-  const campaignList = subscribe(client, { query: CAMPAIGN_LIST });
+  const campaignList = subscribe(client, { query: CAMPAIGN_LIST })
+
 </script>
 
 
@@ -53,14 +57,22 @@
 }
 </style>
 
+<button class="button" on:click={() => {console.log(campaignList)}}>Click</button>
+
 
 <ul>
   {#await $campaignList}
     <li>Loading...</li>
   {:then result}
     {#each result.data.campaigns as campaign (campaign.id)}
+
       <li><h4>{campaign.id} - {campaign.title}</h4></li>
-      description:<div>{campaign.description}</div>
+      <p>{campaign.description}</p>
+
+      <b>participate:</b>
+      <MyParticipation campaign={campaign}>
+      </MyParticipation>
+
       <b>participants:</b>
       {#each campaign.participations as participation (participation.id)}
         <span class='tooltip'>{participation.user.name}
@@ -70,9 +82,9 @@
         <span class='tooltip'>{participation.threshold}
           <span class="tooltiptext">participation id:{participation.id}</span>
         </span>
-
         )
       {/each}
+
     {:else}
       <li>No campaigns found</li>
     {/each}

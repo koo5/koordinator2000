@@ -45,6 +45,11 @@
   }
 </script>
 
+<style>
+  div.dotted {border-style: dotted;}
+</style>
+
+<div class="dotted">
 <form on:submit={addUser}>
   <label for="user">User</label>
   <input type="text" id="user-name" bind:value={name} />
@@ -52,3 +57,4 @@
   <button type="submit">Add User</button>
   <br>status:<pre>{ status_string }</pre>
 </form>
+</div>
