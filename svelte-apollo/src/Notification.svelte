@@ -45,14 +45,13 @@ notification-unread {
 
 
 
-<li>campaign:{notification.campaign.title}</li>
+<li><b>{notification.campaign.title}</b></li>
 
 <span class="{notification.read ? 'notification-read' : 'notification-unread'}">{notification.content}</span>
 
-<label for="confirmed">
-	{#if notification.confirmed}confirmed:{:else}confirm:{/if}
-</label>
-
-<input id="confirmed" type="checkbox" bind:checked={notification.confirmed}>
-
+<form>
+	<label for="confirmed-checbox">{#if notification.confirmed}confirmed:{:else}confirm:{/if}
+		<input id="confirmed-checbox" type="checkbox" bind:checked={notification.confirmed}>
+	</label>
+</form>
 

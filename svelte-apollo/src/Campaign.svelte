@@ -40,17 +40,15 @@
 
 <p>{campaign.description}</p>
 
-<b>participate:</b>
-<MyParticipation campaign={campaign} />
-
-<b>participants:</b>
-{#each campaign.participations as participation (participation.id)}
-
-  <span>
-    <span class='tooltip'>{participation.user.name}<span
-			class="tooltiptext">user id:{participation.user.id}</span></span>(<span
-		  class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span></span>) </span>
-
-{/each}
+<MyParticipation campaign={campaign}/>
 
 
+<p>
+	participants:
+	{#each campaign.participations as participation (participation.id)}
+		<span><span class='tooltip'>{participation.user.name}<span
+				class="tooltiptext">user id:{participation.user.id}</span></span>(<span
+			  class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span></span>) </span>
+	{/each}
+
+</p>

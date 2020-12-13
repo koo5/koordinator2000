@@ -17,14 +17,16 @@
 	{
 		my_user.update((x) =>
 		{
+			let result;
+			console.log(x);
 			if (x)
-				return x;
-			return {id: 1, name: 'me', email: 'me@me.me'}
+				result = x;
+			else
+				result = {id: 1, name: 'me', email: 'me@me.me'}
+			console.log(result);
+			return result
 		});
 	});
-
-
-
 
 </script>
 

@@ -9,11 +9,14 @@ import { writable, get } from 'svelte/store';
 function makeLocalStorageSharedStore(name) {
 
 	function setStorage(value) {
-		window.localStorage.setItem(name, JSON.stringify(value));
+		let str = JSON.stringify(value);
+		console.log(str);
+		window.localStorage.setItem(name, str);
 	}
 
 	function getStorage() {
 		let item = window.localStorage.getItem(name);
+		//console.log(item);
 		try
 		{
 			if (item == 'undefined') // only in JS...
@@ -32,11 +35,11 @@ function makeLocalStorageSharedStore(name) {
 			if (key !== name) {
 				return;
 			}
-
 			set(JSON.parse(newValue));
 		}
 
 		set(getStorage());
+		//console.log('111');
 		window.addEventListener('storage', handleStorageEvent);
 
 		return () => window.removeEventListener('storage', handleStorageEvent);
@@ -45,12 +48,13 @@ function makeLocalStorageSharedStore(name) {
 	return {
 		subscribe,
 		set(value) {
+			//console.log(value);
 			setStorage(value);
 			set(value);
 		},
 		update(callback) {
-			const value = update(callback);
-			setStorage(value);
+			//console.log(callback);
+			update(callback);
 		}
 	};
 }
