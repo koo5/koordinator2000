@@ -3,19 +3,23 @@
 	import gql from 'graphql-tag';
 	import {client} from './apollo';
 	import {subscribe, mutate} from 'svelte-apollo';
+	  import { onMount } from 'svelte';
 
 	export let campaign;
+	let new_threshold = 100;
 
 	$: my_participation = get_my_participation(campaign, $my_user);
 
 	function get_my_participation(campaign, my_user)
 	{
 		if (campaign.my_participations.length == 1)
-			return campaign.my_participations[0]
+		{
+			let p = campaign.my_participations[0]
+			new_threshold = p.threshold;
+			return p
+		}
 		else if (campaign.my_participations.length == 0)
-			return ({
-				threshold: 66
-			})
+			return {}
 		else
 			throw('(campaign.my_participations.length > 1)');
 	}
@@ -35,7 +39,7 @@
 				variables: {
 					campaign_id: campaign.id,
 					user_id: $my_user.id,
-					threshold: my_participation.threshold
+					threshold: new_threshold
 				}
 			})
 		} catch (e)
@@ -64,7 +68,7 @@
 	{#if my_participation.id}
 		<form class="cell" on:submit|preventDefault={upsert}>
 			<label for="threshold">My threshold:
-				<input type="text" id="threshold" bind:value={my_participation.threshold}/>
+				<input type="text" id="threshold" bind:value={new_threshold}/>
 				<button type="submit">Update</button>
 				(suggested: 20-50000)
 			</label>
@@ -75,7 +79,7 @@
 	{:else}
 		<form class="cell"  on:submit|preventDefault={upsert}>
 			<label for="threshold">My threshold:
-				<input type="text" id="threshold" bind:value={my_participation.threshold}/>
+				<input type="text" id="threshold" bind:value={new_threshold}/>
 				<button type="submit">Participate</button>
 				(suggested: 20-50000)
 			</label>
