@@ -7,6 +7,7 @@
 	import Users from './Users.svelte';
 	import AddUser from './AddUser.svelte';
 	import Causes from './Causes.svelte';
+	import Settings from './Settings.svelte';
 	import Campaigns from './Campaigns.svelte';
 	import AddCampaign from './AddCampaign.svelte';
 	import Notifications from './Notifications.svelte';
@@ -55,6 +56,9 @@
 	<hr>
 	<h2>Articles</h2>
 	...
+	<hr>
+	<h2>Settings</h2>
+	<Settings/>
 	<hr>
 	<h2>WIP. Roadmap:</h2>
 	<ul>

@@ -1,4 +1,3 @@
-import { writable } from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
 
 export const my_user = localStorageSharedStore('my_user');

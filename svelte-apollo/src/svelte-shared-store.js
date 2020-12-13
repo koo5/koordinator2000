@@ -8,7 +8,7 @@ import { writable, get } from 'svelte/store';
 
 function makeLocalStorageSharedStore(name) {
 
-	function setStorage(value) {
+	function setStorage(value, default_ = undefined) {
 		let str = JSON.stringify(value);
 		console.log(str);
 		window.localStorage.setItem(name, str);
@@ -16,11 +16,11 @@ function makeLocalStorageSharedStore(name) {
 
 	function getStorage() {
 		let item = window.localStorage.getItem(name);
-		//console.log(item);
+		console.log(item);
 		try
 		{
 			if (item == 'undefined') // only in JS...
-				return undefined;
+				return default_;
 			return JSON.parse(item);
 		}
 		catch (e)
