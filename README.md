@@ -298,7 +298,7 @@ https://github.com/aindilis/elle-ethical-consumer/blob/master/sample.xml
 https://www.reddit.com/r/Anticonsumption/
 https://www.reddit.com/r/Futurology/comments/da0214/the_35_rule_states_any_movement_that_gains_35_of/
 https://github.com/yacy/yacy_search_server/issues/314
-
+https://github.com/aindilis/elle-ethical-consumer/tree/master/subsys/source-analysis/source/causes
 
 # inspirations
 
@@ -340,3 +340,7 @@ undecided yet. https://github.com/koo5/hackery2/blob/master/src/data/notes/rdf_f
 * ????
 * no profit.
 
+
+
+# notes
+for matcher: https://medium.com/swlh/server-sided-graphql-with-apollo-client-cf072a27145f
