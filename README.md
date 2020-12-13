@@ -343,4 +343,8 @@ undecided yet. https://github.com/koo5/hackery2/blob/master/src/data/notes/rdf_f
 
 
 # notes
-for matcher: https://medium.com/swlh/server-sided-graphql-with-apollo-client-cf072a27145f
+for matcher: 
+	https://medium.com/swlh/server-sided-graphql-with-apollo-client-cf072a27145f
+	node
+	docker
+	what else is needed?

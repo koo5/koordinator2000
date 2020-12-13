@@ -18,6 +18,8 @@
             id
             name
           }
+          confirmed
+          condition_is_fulfilled
         },
         my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
           id

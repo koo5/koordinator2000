@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143a77b1-0d65-4bea-a017-56bc11371e42" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Settings.svelte" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/settings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.svelte" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/my_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/my_user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/svelte-shared-store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/svelte-shared-store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Campaign.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaign.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Campaigns.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaigns.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +49,7 @@
       <updated>1607717491320</updated>
       <workItem from="1607717492885" duration="4707000" />
       <workItem from="1607724063752" duration="50386000" />
+      <workItem from="1607894140102" duration="1583000" />
     </task>
     <servers />
   </component>

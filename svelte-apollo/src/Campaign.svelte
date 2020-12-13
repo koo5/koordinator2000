@@ -9,6 +9,18 @@
 </script>
 
 <style>
+
+	.condition_is_fulfilled	{
+		font-weight: bold;
+		background-color: lightgreen;
+	}
+
+	.condition_is_not_fulfilled	{
+		font-weight: 900;
+		background-color: orange;
+		  text-transform: uppercase;
+	}
+
 	.tooltip {
 		border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 	}
@@ -46,9 +58,15 @@
 <p>
 	participants:
 	{#each campaign.participations as participation (participation.id)}
-		<span><span class='tooltip'>{participation.user.name}<span
-				class="tooltiptext">user id:{participation.user.id}</span></span>(<span
-			  class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span></span>) </span>
+		<div class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">
+			"{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}"
+			<span class='tooltip'>{participation.user.name}
+				<span class="tooltiptext">user id:{participation.user.id}</span>
+			</span>(
+			<span class='tooltip'>{participation.threshold}
+				<span class="tooltiptext">participation id:{participation.id}</span>)
+			</span>
+		</div>
 	{/each}
 
 </p>
