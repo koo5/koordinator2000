@@ -27,10 +27,9 @@
 	/* Tooltip text */
 	.tooltip .tooltiptext {
 		visibility: hidden;
-		width: 120px;
 		background-color: yellow;
 		text-align: center;
-		padding: 5px 0;
+		padding: 1em 1em;
 		border-radius: 6px;
 
 		/* Position the tooltip text - see examples below! */
@@ -57,7 +56,13 @@
 <p>
 	participants:
 	{#each campaign.participations as participation (participation.id)}
-		<span class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">{participation.condition_is_fulfilled ? '✔' : '❌'}<span class='tooltip'>{participation.user.name}<span class="tooltiptext">user id:{participation.user.id}</span></span>(<span class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span>)</span>
+		<span class='tooltip'><span class="tooltiptext">
+				participation ID:{participation.id}<br>
+				user ID: {participation.user.id}<br>
+				user name: {participation.user.name}<br>
+				how many people must participate:{participation.threshold}<br>
+				condition is fulfilled: {participation.condition_is_fulfilled}<br>
+			</span><span class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">{participation.condition_is_fulfilled ? '✔' : '❌'}{participation.user.name}</span>(<span class='tooltip'>{participation.threshold})</span>
 		</span>
 	{/each}
 
