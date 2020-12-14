@@ -11,6 +11,9 @@
         id,
         title,
         description,
+        suggested_lowest_threshold,
+        suggested_highest_threshold,
+        suggested_optimal_threshold,
         participations(order_by: [{threshold: asc}]) {
           id
           threshold
