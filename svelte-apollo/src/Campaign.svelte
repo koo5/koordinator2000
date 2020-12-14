@@ -12,10 +12,12 @@
 
 	.condition_is_fulfilled	{
 		background-color: lightgreen;
+		border-radius: 1px;
 	}
 
 	.condition_is_not_fulfilled	{
 		background-color: orange;
+		border-radius: 1px;
 	}
 
 	.tooltip {
@@ -56,13 +58,10 @@
 	participants:
 	{#each campaign.participations as participation (participation.id)}
 		<span class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">
-			{participation.condition_is_fulfilled ? '✔' : '❌'}
+			 {participation.condition_is_fulfilled ? '✔' : '❌'}
 			<span class='tooltip'>{participation.user.name}
 				<span class="tooltiptext">user id:{participation.user.id}</span>
-			</span>(
-			<span class='tooltip'>{participation.threshold}
-				<span class="tooltiptext">participation id:{participation.id}</span>)
-			</span>
+			</span>(<span class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span>) </span>
 		</span>
 	{/each}
 
