@@ -103,16 +103,16 @@ async function flip_stuff(data)
 	for (const campaign of data.campaigns)
 	{
 		console.log(campaign.id + ' - ' + campaign.title + ':');
-		var participation_idx_starting_at_1 = 1;
-		var last_fulfilled_idx;
+		let participation_idx_starting_at_1 = 1;
+		let last_fulfilled_idx = -1;
 		campaign.participations.forEach((participation) =>
 		{
 			if (participation.threshold <= participation_idx_starting_at_1)
 				last_fulfilled_idx = participation_idx_starting_at_1 - 1;
 			participation_idx_starting_at_1++;
 		});
-		var idx = 0;
-		var fulfilled = true;
+		let idx = 0;
+		let fulfilled = true;
 		//campaign.participations.forEach(async (participation) =>
 		for (const participation of campaign.participations)
 		{
