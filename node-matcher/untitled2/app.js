@@ -165,7 +165,7 @@ async function run() {
 	{
 		await flip_stuff(data);
 	}
-	} catch (e)
+	catch (e)
 	{
 		console.log(e)
 		sleep = 30;
