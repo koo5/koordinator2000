@@ -57,11 +57,7 @@
 <p>
 	participants:
 	{#each campaign.participations as participation (participation.id)}
-		<span class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">
-			 {participation.condition_is_fulfilled ? '✔' : '❌'}
-			<span class='tooltip'>{participation.user.name}
-				<span class="tooltiptext">user id:{participation.user.id}</span>
-			</span>(<span class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span>) </span>
+		<span class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">{participation.condition_is_fulfilled ? '✔' : '❌'}<span class='tooltip'>{participation.user.name}<span class="tooltiptext">user id:{participation.user.id}</span></span>(<span class='tooltip'>{participation.threshold}<span class="tooltiptext">participation id:{participation.id}</span>)</span>
 		</span>
 	{/each}
 
