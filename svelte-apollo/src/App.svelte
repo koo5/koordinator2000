@@ -38,6 +38,16 @@
 </style>
 
 <section>
+	<h2>Campaigns</h2>
+	<Campaigns/>
+	<h2>Add Campaign</h2>
+	<AddCampaign/>
+	<hr>
+	<h2>Users</h2>
+	<Users/>
+	<h2>Add User</h2>
+	<AddUser/>
+	<hr>
 	my_user.id = {$my_user && $my_user.id}.
 	<hr>
 	<h2>Notifications</h2>
@@ -45,15 +55,6 @@
 	<hr>
 	<h2>Causes</h2>
 	<Causes/>
-	<hr>
-	<h2>Campaigns</h2>
-	<Campaigns/>
-	<AddCampaign/>
-	<hr>
-	<h2>Users</h2>
-	<Users/>
-	<AddUser/>
-	<hr>
 	<h2>Articles</h2>
 	...
 	<hr>

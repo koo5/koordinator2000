@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143a77b1-0d65-4bea-a017-56bc11371e42" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Campaign.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaign.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +22,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/sw/node-v10.15.1-linux-x64/lib/node_modules/node-cli" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../node-matcher/untitled2" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -47,7 +46,7 @@
       <updated>1607717491320</updated>
       <workItem from="1607717492885" duration="4707000" />
       <workItem from="1607724063752" duration="50386000" />
-      <workItem from="1607894140102" duration="9002000" />
+      <workItem from="1607894140102" duration="11517000" />
     </task>
     <servers />
   </component>

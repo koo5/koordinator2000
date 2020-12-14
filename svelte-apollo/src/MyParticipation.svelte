@@ -6,7 +6,7 @@
 	  import { onMount } from 'svelte';
 
 	export let campaign;
-	let new_threshold = 100;
+	let new_threshold = campaign.suggested_optimal_threshold;
 
 	$: my_participation = get_my_participation(campaign, $my_user);
 
@@ -70,7 +70,7 @@
 			<label for="threshold">My threshold:
 				<input type="text" id="threshold" bind:value={new_threshold}/>
 				<button type="submit">Update</button>
-				(suggested: 20-50000)
+				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
 			</label>
 		</form>
 		<form class="cell"  on:submit|preventDefault={del}>
@@ -81,7 +81,7 @@
 			<label for="threshold">My threshold:
 				<input type="text" id="threshold" bind:value={new_threshold}/>
 				<button type="submit">Participate</button>
-				(suggested: 20-50000)
+				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
 			</label>
 		</form>
 	{/if}

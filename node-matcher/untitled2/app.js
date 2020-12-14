@@ -160,8 +160,17 @@ async function run() {
 		`,
 	});
 	//console.log(data);
-	await flip_stuff(data);
-	setTimeout(async () => {await run();}, 10000);
+	let sleep = 15;
+	try
+	{
+		await flip_stuff(data);
+	}
+	} catch (e)
+	{
+		console.log(e)
+		sleep = 30;
+	}
+	setTimeout(async () => {await run();}, sleep * 1000);
 };
 
 (async () => {await run()})();

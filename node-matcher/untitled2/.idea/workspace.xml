@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5330bfa8-b60e-4191-9410-a05479b6741a" name="Default Changelist" comment="" />
+    <list default="true" id="5330bfa8-b60e-4191-9410-a05479b6741a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/AddCampaign.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/AddCampaign.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/Campaigns.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/Campaigns.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/MyParticipation.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/MyParticipation.svelte" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="ProjectId" id="1lcxU727dJnnGAj0UVFwLg7aTnZ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -18,7 +28,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.18.4" />
     <property name="javascript.nodejs.core.library.typings.version" value="12.19.9" />
-    <property name="last_opened_file_path" value="$USER_HOME$/sw/node-v10.15.1-linux-x64/lib/node_modules/node-cli" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -41,6 +51,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607910195981</updated>
       <workItem from="1607910198724" duration="7181000" />
+      <workItem from="1607922366386" duration="119000" />
     </task>
     <servers />
   </component>
