@@ -11,14 +11,11 @@
 <style>
 
 	.condition_is_fulfilled	{
-		font-weight: bold;
 		background-color: lightgreen;
 	}
 
 	.condition_is_not_fulfilled	{
-		font-weight: 900;
 		background-color: orange;
-		  text-transform: uppercase;
 	}
 
 	.tooltip {
@@ -59,7 +56,7 @@
 	participants:
 	{#each campaign.participations as participation (participation.id)}
 		<div class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">
-			"{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}"
+			"{participation.condition_is_fulfilled ? '✔' : '❌'}"
 			<span class='tooltip'>{participation.user.name}
 				<span class="tooltiptext">user id:{participation.user.id}</span>
 			</span>(
