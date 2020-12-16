@@ -3,9 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="5330bfa8-b60e-4191-9410-a05479b6741a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../svelte-apollo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/App.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/Campaign.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/Campaign.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/Campaigns.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/Campaigns.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../svelte-apollo/src/Notifications.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/../../svelte-apollo/src/Notifications.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +54,7 @@
       <workItem from="1607910198724" duration="7181000" />
       <workItem from="1607922366386" duration="661000" />
       <workItem from="1608077470456" duration="918000" />
-      <workItem from="1608078778680" duration="2150000" />
+      <workItem from="1608078778680" duration="3520000" />
     </task>
     <servers />
   </component>
