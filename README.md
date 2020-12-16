@@ -1,22 +1,22 @@
-# What
+# What?
 
-Most of us would make our world better if we could. Or at least different. 
+It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured, and that's what this site does.
 
 ## Politics
 
-For example, you would vote that tiny progressive political party, if you knew your vote would matter. So let's get to work to make it matter. Don't waste your vote until you know there is a mass large enough to make it count. 
+For example, you would vote for a tiny progressive political party, if you knew that your vote would matter. You will probably waste your vote, unless you can know thaht there is a large enough mass of people to make it count. In some places, this is ensured by the voting system. In the rest, you have to coordinate with other voters! 
 
 ## Consumers
 
-The same principle applies to pressuring corporations by boycotts, or, more widely, changing consumer habits. If you choose to buy the more ethical brand every time, you'll soon be out of money, and the less ethical brand will still be going strong, but if enough people focus on the same issue at the same time, changes happen. In our current society, this is only achieved in extraordinary cases, but now, with almost everyone on-line, we can make it the norm.
+The same principle applies to influencing commercial entities by boycotts and support campaigns. If you are alone in choosig to buy the more ethical brand every time, because everyone thinks they are alone in it, you'll soon be out of money, and the less ethical brand will still be going strong, but if enough people focus on the same issue at the same time, changes will happen. This is usually only achieved in extraordinary situations, with a lot of noise, but the year is 2020, almost everyone is on-line, and we can make highly coordinated consumer habit changes the norm.
 
 ## Companies
 
-The same issue exists on the companies side. If there isn't a long-term pressure from customers to change, then, for example, choosing a more ethical supplier and raising prices only means shelling money out of their own pocket while another company moves into the empty space and voids their effort. It can also be expressed positively: i will start buying products of X if/when X does/changes something.
+The same issue is percieved by companies. If there isn't a long-term pressure from customers to change, then, for example, choosing a more ethical supplier and raising prices only means losing money while another company takes its place. A company can start it's own campaign to coordinate with other companies, or it can be influenced by positive or nagative campaigns. Campaigns should have discernible goals. Public pressure can stop when a goal is reached. Stop buying products of X until X changes a particular practice, supplier, etc, or promise to start buying products of X when X changes.
 
-# How
+## Campaigns
 
-Express your support for campaigns. Participation costs you money or time, so express under what conditions are you willing to invest it. For example, i will only switch to the more expensive, more ethical brand if 10000 other people do. Express it in a way that computers can understand it, so you can be automatically informed when your conditions are satisfied. Track progress and evaluate outcomes. Repeat.
+Express your support for campaigns(actions). Participation costs you money or time, so express under what conditions you are willing to invest it. For example, i will only switch to the more expensive, more ethical brand if 10000 other people do. This site's goal is to let you express it in a way that computers can understand it, so you can be automatically informed when your conditions are satisfied. Track progress, evaluate outcomes, build trust, and repeat.
 
 ## How to reach critical mass
 
@@ -27,20 +27,24 @@ Some worthwhile campaigns should be collected, as examples, to give people reaso
 ### 3
 A real-world (or virtual-world cause that has already reached a critical mass of supporters has to be identified. Something that would benefit from additional coordination. An example from Czech Republic is the 2019 event of 250 000 people gathering to protest against prime minister Babiš, and to block the many products of His Agrofert holding. A reasonably sized effort also happened outside of streets and social media, for example a chrome extension that helps online shoppers avoid Agrofert's products. Eventually the momentum all but died out, without effect. I postulate that things would have evolved differently if each of those 250 000 people that gathered would be introduced to the application and encouraged to coordinate through it. I postulate that the biggest obstacle to an individual's effort is this lack of confidence in other's sustained effort, and by extension, each of us includes this shared lack of confidence in our calculations.
 
+## current status
+* done: a rough app draft: https://koordinator.knack.com/koordinator#campaigns/
+* done: another rough draft, almost a demo! : http://52.254.50.234:8080/
 
 ## extensibility, decentralization
 
-We could already start communicating in a fully decentralized fashion, even, let's say, abstracting away the semi-centralized physical nature of the internet with things like IPFS. But that's not the point here. But: Participations, Conditions and Users - we can build the initial version with just the simplest structures and mechanics, ie, just "Participation upon notice", no confirmations, User objects corresponding to signed-up users, but: "praticipation after confirmation" will be useful to express campaigns that require exact time/space coordination, for example, organizing an online flashmob. The idea of what constitutes an individual will likewise require extending over time, especially if we ever need to handle spam or to handle attempts to skew our estimates / mess with campaigns. So: this should be open protocol. I want an easily extensible UI, so we can quickly experiment with different data structures. If you want to do something different with data from "our" users, you should be able to, if the users consent. All these issues are the focus of https://solidproject.org/
-
-"""People can express trust boundaries in shapes such that apps and query engines receive boundaries of which sources to trust for what information. By default, this might just be the user’s pod. Others’ pods might be consulted for their personal information, such as name, location, birth date, but not for things such as preferences, annotations, etc. Such limits will affect both performance and trust positively, at the cost of perhaps missing some results that might still be trustworthy, but were not part of the shape. In any case, documenting the provenance of query results and their individual components remains important in decentralized networks.""" - https://ruben.verborgh.org/blog/2019/06/17/shaping-linked-data-apps/
-
-"""dokieli implements the W3C Web Annotation specifications Wherever your article is published, readers can leave annotations and replies if they have their own personal datastore to save them to. If your article is published on a personal storage space, you can offer to store annotations and replies on their behalf, and enable anonymous responses too. """ - https://dokie.li/
-
-If you are tech-saavy, you are encouraged to:
+If you are tech-saavy, you are encouraged to try to:
 *  publish your own statements of participation
 (todo: link to the ontology, to some generator, to the relevant page on our site, etc)
+
 * extend the data scheme of participation conditions
 currently, the only method of specifying your conditions is the "number of others willing to participate" (todo: fill in the actual rdf predicate name), which more precisely means: "number of others whose number of others willing to participate has been reached". And these "others", precisely, are other users who expressed their identify by logging into this website with their google/facebook/etc account. 
+
+	condition := condition or condition
+	condition := condition and condition
+	condition := number of participants
+	condition := number of confirmed participants
+	condition := number of estimated participants
 *...
 
 At some point, a need may arise to have somebody:
@@ -49,18 +53,13 @@ At some point, a need may arise to have somebody:
 * expressed their intent to participate through other similar platforms
 etc.
 
-# current status
-* done: a rough app draft: https://koordinator.knack.com/koordinator#campaigns/
-* doing: this readme
 
+We could already start communicating in a fully decentralized fashion, even, let's say, abstracting away the semi-centralized physical nature of the internet with things like IPFS. But that's not the point here. But: Participations, Conditions and Users - we can build the initial version with just the simplest structures and mechanics, ie, just "Participation upon notice", no confirmations, User objects corresponding to signed-up users, but: "praticipation after confirmation" will be useful to express campaigns that require exact time/space coordination, for example, organizing an online flashmob. The idea of what constitutes an individual will likewise require extending over time, especially if we ever need to handle spam or to handle attempts to skew our estimates / mess with campaigns. So: this should be open protocol. I want an easily extensible UI, so we can quickly experiment with different data structures. If you want to do something different with data from "our" users, you should be able to, if the users consent. All these issues are the focus of https://solidproject.org/
 
-# condition language/ontology:
-	condition := condition or condition
-	condition := condition and condition
-	condition := number of participants
-	condition := number of confirmed participants
-	condition := number of estimated participants
-	
+"""People can express trust boundaries in shapes such that apps and query engines receive boundaries of which sources to trust for what information. By default, this might just be the user’s pod. Others’ pods might be consulted for their personal information, such as name, location, birth date, but not for things such as preferences, annotations, etc. Such limits will affect both performance and trust positively, at the cost of perhaps missing some results that might still be trustworthy, but were not part of the shape. In any case, documenting the provenance of query results and their individual components remains important in decentralized networks.""" - https://ruben.verborgh.org/blog/2019/06/17/shaping-linked-data-apps/
+
+"""dokieli implements the W3C Web Annotation specifications Wherever your article is published, readers can leave annotations and replies if they have their own personal datastore to save them to. If your article is published on a personal storage space, you can offer to store annotations and replies on their behalf, and enable anonymous responses too. """ - https://dokie.li/
+
 
 ### "number of participants":
 	```
@@ -94,7 +93,7 @@ etc.
 	estimation would initially be in hands of the user that created the campaign
 	```
 
-# the data schema/ontology in detail
+## the data schema/ontology in detail
 Location:
 	a string or an uri or possibly some api-specific identifier
 	not sure if there is any free ontology or service we can use to autocomplete and disambiguate.
@@ -141,7 +140,7 @@ kinds of participation proclamations:
 		
 		
 
-# components of the UI
+## components of the UI
 ```
 pages/windows:
 
@@ -227,7 +226,7 @@ pages/windows:
 
 --
 ```
-# preliminary initial db schema, thanks to mst
+## preliminary initial db schema, thanks to mst
 ```
 
 User {
@@ -279,7 +278,7 @@ CommitedUserNotificationTransmissionState {
 ```
 
 
-# related sw
+# similar or related sw
 https://github.com/researchstudio-sat/webofneeds
 https://humanifa.com/soporte
 https://github.com/peta-pico/debate-nanopubs
@@ -321,14 +320,13 @@ https://www.reddit.com/r/thevenusproject
 
 # technology
 
-undecided yet. https://github.com/koo5/hackery2/blob/master/src/data/notes/rdf_forms.txt
+Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used as an overlay over the core data model, to allow users and admins to express nuanced matters of provenance, trust and identity, help fight off bots, enable federation, express forecasts etc.
 
 
-# todo
+# todo?
 
 * continue sketching out the format of "participation statements"
 * make the coordinator fetch statements from known places, evaluate them, inform user of reached critical massess.
-
 * work out an "estimate" format.
 ** I might be estimating that 54684 are already participating in the campaign, outside of/including information i have available by collecting statements with my crawler, and outside of/including estimates provided by others.
 
@@ -340,11 +338,4 @@ undecided yet. https://github.com/koo5/hackery2/blob/master/src/data/notes/rdf_f
 * ????
 * no profit.
 
-
-
 # notes
-for matcher: 
-	https://medium.com/swlh/server-sided-graphql-with-apollo-client-cf072a27145f
-	node
-	docker
-	what else is needed?
