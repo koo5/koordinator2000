@@ -141,9 +141,8 @@ async function flip_stuff(data)
 
 
 
-
-
-async function run() {
+async function my_fetch()
+{
 	const { data } = await client.query({
 		query: gql`
 			query GET_PARTICIPATIONS {
@@ -159,10 +158,15 @@ async function run() {
 			}
 		`,
 	});
-	//console.log(data);
+	return data;
+};
+
+
+async function run() {
 	let sleep = 15;
 	try
 	{
+		let data = await my_fetch();
 		await flip_stuff(data);
 	}
 	catch (e)
@@ -174,6 +178,8 @@ async function run() {
 };
 
 (async () => {await run()})();
+
+
 
 /*
 var cron = require('node-cron');
