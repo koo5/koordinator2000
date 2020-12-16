@@ -69,7 +69,7 @@ hr {
 				how many people must participate:{participation.threshold}<br>
 				condition is fulfilled: {participation.condition_is_fulfilled}<br>
 			</span><span class="{participation.condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled'}">{participation.condition_is_fulfilled ? '✔' : '❌'}{participation.user.name}</span>(<span class='tooltip'>{participation.threshold})</span>
-		</span>
+		</span><span> </span>
 	{/each}
 
 </p>
