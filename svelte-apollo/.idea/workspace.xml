@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143a77b1-0d65-4bea-a017-56bc11371e42" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../node-matcher/untitled2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../node-matcher/untitled2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../node-matcher/untitled2/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/../node-matcher/untitled2/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +35,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.CSS" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -46,7 +49,11 @@
       <updated>1607717491320</updated>
       <workItem from="1607717492885" duration="4707000" />
       <workItem from="1607724063752" duration="50386000" />
-      <workItem from="1607894140102" duration="11517000" />
+      <workItem from="1607894140102" duration="11869000" />
+      <workItem from="1608075977446" duration="799000" />
+      <workItem from="1608076928953" duration="386000" />
+      <workItem from="1608077332670" duration="136000" />
+      <workItem from="1608080962327" duration="990000" />
     </task>
     <servers />
   </component>

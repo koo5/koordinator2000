@@ -72,11 +72,11 @@ const client = new apollo.ApolloClient({
 
 
 
-async function flip_bit(_idd, val)
+async function flip_bit(participation, val)
 {
 	try
 	{
-		const res = await client.mutate({
+		console.log(await client.mutate({
 			mutation: gql`
 				mutation MyMutation($_id: Int, $condition_is_fulfilled: Boolean) {
 				  update_participations(where: {id: {_eq: $_id}}, _set: {condition_is_fulfilled: $condition_is_fulfilled}){
@@ -85,11 +85,24 @@ async function flip_bit(_idd, val)
 				}
 			`,
 			variables: {
-				_id: _idd,
+				_id: participation.id,
 				condition_is_fulfilled: val
 			}
-		})
-		console.log(res);
+		}));
+		console.log(await client.mutate({
+			mutation: gql`
+				mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
+				  insert_campaign_notifications_one(object: {campaign_id: $campaign_id, content: $content, user_id: $user_id}) {
+					id
+				  }
+				}			
+			`,
+			variables: {
+				user_id: participation.user_id,
+				campaign_id: participation.campaign_id,
+				content: `Yo! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`
+			}
+		}));
 	} catch (e)
 	{
 		console.log(e)
@@ -124,7 +137,7 @@ async function flip_stuff(data)
 				//console.log('flip ' + JSON.stringify(participation, null, '') + '.');
 				console.log('FLIP!');
 				// only do one at a time for now..
-				await flip_bit(participation.id, fulfilled);
+				await flip_bit(participation, fulfilled);
 				return
 			}
 			idx++;
@@ -152,6 +165,10 @@ async function run() {
 			  	title
 				participations(order_by: [{threshold: asc}]) {
 	              id
+	              campaign
+	              {
+	              	title
+	              }
 				  threshold
 				  condition_is_fulfilled
 				},
