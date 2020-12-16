@@ -49,7 +49,7 @@
 
 <section>
 	<h2>Introduction</h2>
-	<a href="https://github.com/koo5/koordinator2000/blob/master/README.md">README.md</a> | It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments.  Actions that only make sense if a critical mass of people is ensured, and that's what this site does.
+	Work in progress. <a href="https://github.com/koo5/koordinator2000/blob/master/README.md">README.md</a>. It's like kickstarter, but not for collecting money, rather, it's for coordinating collective actions.
 	<h2>Campaigns</h2>
 	<Campaigns/>
 	<h2>Add Campaign</h2>
@@ -73,14 +73,13 @@
 	<h2>Settings</h2>
 	<Settings/>
 	<hr>
-	<h2>WIP. Roadmap:</h2>
+	<h2>Roadmap:</h2>
 	<ul>
 		<li>multiple display modes. (A default mode with lots of explanations, and a "power" mode that lets you review
 			campaigns/causes and interact with maximum speed)
 		</li>
 		<li>real initial content. (We have good ideas and sources for campaigns, so let's fill the db with them)</li>
 		<li>authentication</li>
-		<li>matching</li>
 		<li>e-mail notifications</li>
 		<li>routing/navbar</li>
 		<li>less naive db querying (caching etc)</li>
