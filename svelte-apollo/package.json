@@ -19,8 +19,8 @@
     "now-build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
-    "start": "sirv public",
-    "start:dev": "sirv public --dev"
+    "start": "sirv public --port 8080",
+    "start:dev": "sirv public --dev --port 8080"
   },
   "dependencies": {
     "apollo-cache-inmemory": "^1.6.0",
