@@ -1,5 +1,6 @@
 # What?
 
+See (demo)[http://52.254.50.234:8080/].
 It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured, and that's what this site does.
 
 ## Politics
@@ -26,10 +27,6 @@ First, the website has to be finished and polished. And ideally a mobile app too
 Some worthwhile campaigns should be collected, as examples, to give people reason to click around and share.
 ### 3
 A real-world (or virtual-world cause that has already reached a critical mass of supporters has to be identified. Something that would benefit from additional coordination. An example from Czech Republic is the 2019 event of 250 000 people gathering to protest against prime minister Babiš, and to block the many products of His Agrofert holding. A reasonably sized effort also happened outside of streets and social media, for example a chrome extension that helps online shoppers avoid Agrofert's products. Eventually the momentum all but died out, without effect. I postulate that things would have evolved differently if each of those 250 000 people that gathered would be introduced to the application and encouraged to coordinate through it. I postulate that the biggest obstacle to an individual's effort is this lack of confidence in other's sustained effort, and by extension, each of us includes this shared lack of confidence in our calculations.
-
-## current status
-* done: a rough app draft: https://koordinator.knack.com/koordinator#campaigns/
-* done: another rough draft, almost a demo! : http://52.254.50.234:8080/
 
 ## extensibility, decentralization
 
