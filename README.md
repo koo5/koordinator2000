@@ -1,6 +1,6 @@
 # What?
 
-See (demo)[http://52.254.50.234:8080/].
+See demo: http://52.254.50.234:8080/ .
 It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured, and that's what this site does.
 
 ## Politics
