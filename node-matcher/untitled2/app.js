@@ -44,7 +44,7 @@ module.exports = app;
 
 
 
-
+let verbose = false;
 
 
 var fetch = require('cross-fetch');
@@ -76,6 +76,27 @@ async function flip_bit(participation, val)
 {
 	try
 	{
+		let content;
+		if (val)
+			content = `Yo! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`;
+		else
+			content = `Yo! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
+		
+		console.log(await client.mutate({
+			mutation: gql`
+				mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
+				  insert_campaign_notifications(objects: {campaign_id: $campaign_id, content: $content, user_id: $user_id}) {
+					affected_rows
+				  }
+				}			
+			`,
+			variables: {
+				user_id: participation.user_id,
+				campaign_id: participation.campaign_id,
+				content: content
+			}
+		}));
+		
 		console.log(await client.mutate({
 			mutation: gql`
 				mutation MyMutation($_id: Int, $condition_is_fulfilled: Boolean) {
@@ -87,20 +108,6 @@ async function flip_bit(participation, val)
 			variables: {
 				_id: participation.id,
 				condition_is_fulfilled: val
-			}
-		}));
-		console.log(await client.mutate({
-			mutation: gql`
-				mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
-				  insert_campaign_notifications_one(object: {campaign_id: $campaign_id, content: $content, user_id: $user_id}) {
-					id
-				  }
-				}			
-			`,
-			variables: {
-				user_id: participation.user_id,
-				campaign_id: participation.campaign_id,
-				content: `Yo! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`
 			}
 		}));
 	} catch (e)
@@ -115,7 +122,7 @@ async function flip_stuff(data)
 {
 	for (const campaign of data.campaigns)
 	{
-		console.log(campaign.id + ' - ' + campaign.title + ':');
+if (verbose)		console.log(campaign.id + ' - ' + campaign.title + ':');
 		let participation_idx_starting_at_1 = 1;
 		let last_fulfilled_idx = -1;
 		campaign.participations.forEach((participation) =>
@@ -131,11 +138,13 @@ async function flip_stuff(data)
 		{
 			if (idx > last_fulfilled_idx)
 				fulfilled = false;
-			console.log(JSON.stringify(participation, null, ''));
+if (verbose)			console.log(JSON.stringify(participation, null, ''));
 			if (participation.condition_is_fulfilled != fulfilled)
 			{
 				//console.log('flip ' + JSON.stringify(participation, null, '') + '.');
 				console.log('FLIP!');
+				if (!verbose)console.log(campaign.id + ' - ' + campaign.title + ':');
+				if (!verbose)console.log(JSON.stringify(participation, null, ''));
 				// only do one at a time for now..
 				await flip_bit(participation, fulfilled);
 				return
@@ -144,10 +153,10 @@ async function flip_stuff(data)
 		}
 		console.log();
 	}
-	console.log();
-	console.log(Date.now());
-	console.log();
 
+if (verbose)	console.log();
+	console.log(Date.now());
+if (verbose)	console.log();
 }
 
 
@@ -164,6 +173,8 @@ async function my_fetch()
 			  	title
 				participations(order_by: [{threshold: asc}]) {
 	              id
+                  user_id
+                  campaign_id
 	              campaign
 	              {
 	              	title
