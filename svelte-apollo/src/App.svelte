@@ -35,6 +35,16 @@
 	h2 {
 		color: purple;
 	}
+
+	:global(.condition_is_fulfilled)	{
+		background-color: lightgreen;
+	}
+
+	:global(.condition_is_not_fulfilled)	{
+		background-color: orange;
+	}
+
+
 </style>
 
 <section>

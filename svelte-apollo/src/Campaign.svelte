@@ -10,13 +10,7 @@
 
 <style>
 
-	.condition_is_fulfilled	{
-		background-color: lightgreen;
-		border-radius: 1px;
-	}
-
-	.condition_is_not_fulfilled	{
-		background-color: orange;
+	.participation_badge {
 		border-radius: 1px;
 	}
 
@@ -41,11 +35,23 @@
 	.tooltip:hover .tooltiptext {
 		visibility: visible;
 	}
+
+
+
+/* Thick red border */
+hr {
+  border: 3px solid red;
+}
+
 </style>
 
 
 <li>
-	<h4>{campaign.id} - {campaign.title}</h4>
+
+	<span class="{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled') : ''}">
+		{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled:' : 'condition_is_not_fulfilled:') : 'not participating:'}
+		<h4>{campaign.id} - {campaign.title}</h4>
+	</span>
 </li>
 
 <p>{campaign.description}</p>
@@ -56,7 +62,7 @@
 <p>
 	participants:
 	{#each campaign.participations as participation (participation.id)}
-		<span class='tooltip'><span class="tooltiptext">
+		<span class='tooltip participation_badge'><span class="tooltiptext">
 				participation ID:{participation.id}<br>
 				user ID: {participation.user.id}<br>
 				user name: {participation.user.name}<br>
@@ -67,3 +73,4 @@
 	{/each}
 
 </p>
+<hr>

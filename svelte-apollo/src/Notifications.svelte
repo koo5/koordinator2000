@@ -10,7 +10,7 @@
 
 	const LIST = gql`
 	subscription MySubscription222($_user_id: Int) {
-	  campaign_notifications(where: {user_id: {_eq: $_user_id}}) {
+	  campaign_notifications(where: {user_id: {_eq: $_user_id}}, order_by: [{id: desc}]) {
 		campaign {
 		  id
 		  title
@@ -60,7 +60,7 @@
 		{#await $notifications}
 			<li>Loading...</li>
 		{:then result}
-			<pre>{JSON.stringify(result, null, '  ')}</pre>
+			<!-- <pre>{JSON.stringify(result, null, '  ')}</pre> -->
 			{#each result.data.campaign_notifications as notification (notification.id)}
 				<Notification {notification}/>
 			{:else}
