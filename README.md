@@ -279,15 +279,15 @@ CommitedUserNotificationTransmissionState {
 
 
 # similar or related sw
-https://github.com/researchstudio-sat/webofneeds
-https://humanifa.com/soporte
-https://github.com/peta-pico/debate-nanopubs
+* https://github.com/researchstudio-sat/webofneeds
+* https://humanifa.com/soporte
+* https://github.com/peta-pico/debate-nanopubs
 
 
 # testcases that it makes sense to coordinate in small numbers of people
-flashmobs
-popularization of koordinator
-cooperative testcases
+* flashmobs
+* cooperative testcases..
+* popularization of koordinator?
 
 
 # sources of campaigns to add
@@ -302,19 +302,12 @@ https://github.com/aindilis/elle-ethical-consumer/tree/master/subsys/source-anal
 # inspirations
 
 https://theconversation.com/climate-crisis-we-are-not-individuals-fighting-a-faceless-system-we-are-the-system-that-needs-to-change-129513
-
 https://airtable.com/shrVDkswEnsgA87yS
-
 https://csarven.ca/linked-research-decentralised-web
-
 https://thezvi.wordpress.com/2020/01/16/how-escape-from-immoral-mazes/
-
 http://maslo.cz
-
 https://github.com/TheDataRideAlongs/ProjectDomino
-
 https://www.idnes.cz/zpravy/domaci/ochrana-zvirat-proti-tyrani-klecove-chovy-slepice.A200610_084300_domaci_kop
-
 https://www.reddit.com/r/thevenusproject
 
 
@@ -338,4 +331,3 @@ Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used a
 * ????
 * no profit.
 
-# notes
