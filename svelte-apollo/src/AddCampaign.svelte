@@ -82,11 +82,11 @@
   <input type="text" id="title" bind:value={title} />
   <label for="description">Description</label>
   <input type="text" id="description" bind:value={description} />
-  <label for="xxx">Lowes suggested threshold (the smallest number of people that should participate. Participating in a smaller number of people is expected to either bring no discernible effect, and/or to bring harm to the participants.</label>
+  <label for="xxx">The lowest suggested threshold (the smallest number of people that should participate. Participating in a smaller number of people is expected to either bring no discernible effect, and/or to bring harm to the participants:</label>
   <input type="number" id="xxx" bind:value={suggested_lowest_threshold} />
-  <label for="xxxx">Highest suggested threshold (the highest threshold that anyone should set. The number of participants is not expected to grow beyond it. For example: a campaign targetted at a local issue in a village of 160 people should suggest 160 or less) </label>
+  <label for="xxxx">The highest suggested threshold (the highest threshold that anyone should set. The number of participants is not expected to grow beyond it. For example: a campaign targetted at a local issue in a village of 160 people should suggest 160 or less):</label>
   <input type="number" id="xxxx" bind:value={suggested_highest_threshold} />
-  <label for="xxxxx">Suggested threshold </label>
+  <label for="xxxxx">Suggested threshold:</label>
   <input type="number" id="xxxxx" bind:value={suggested_optimal_threshold} />
   <button type="submit">Add Campaign</button>
   <br>GraphQL status:<pre>{ status_string }</pre>

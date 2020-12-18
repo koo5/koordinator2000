@@ -40,24 +40,26 @@
 
 /* Thick red border */
 hr {
-  border: 3px solid red;
+
 }
 
 </style>
 
 
-<li>
+	<span class='tooltip'>
+		<span class="tooltiptext">
+			ID:{campaign.id}<br>
+		</span>
+		<li><h4>{campaign.title}</h4></li>
+	</span>
+
+	<p>{campaign.description}</p>
 
 	<span class="{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled') : ''}">
-		{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled:' : 'condition_is_not_fulfilled:') : 'not participating:'}
-		<h4>{campaign.id} - {campaign.title}</h4>
+			{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'threshold is reached:' : 'threshold is not reached:') : 'not participating:'}
 	</span>
-</li>
 
-<p>{campaign.description}</p>
-
-<MyParticipation campaign={campaign}/>
-
+	<MyParticipation campaign={campaign}/>
 
 <p>
 	participants:

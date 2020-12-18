@@ -48,9 +48,27 @@
 		}
 	}
 
-	async function del()
+	async function del(my_participation)
 	{
-
+		try
+		{
+			await mutate(client, {
+				mutation: gql`
+					mutation MyMutation($id: Int!) {
+						delete_participations_by_pk(id: $id)
+						{
+							id
+						}
+					}
+				`,
+				variables: {
+					id: my_participation.id,
+				}
+			})
+		} catch (e)
+		{
+			console.log(e)
+		}
 	}
 
 </script>
@@ -73,7 +91,7 @@
 				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
 			</label>
 		</form>
-		<form class="cell"  on:submit|preventDefault={del}>
+		<form class="cell"  on:submit|preventDefault={() => del(my_participation)}>
 			<button type="submit">Delete</button>
 		</form>
 	{:else}

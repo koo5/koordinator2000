@@ -7,7 +7,7 @@
 
 	const CAMPAIGN_LIST = gql`
     subscription ($_user_id: Int) {
-      campaigns(order_by: [{id: asc}]) {
+      campaigns(order_by: [{id: asc}], where: {smazano: {_eq: false}}) {
         id,
         title,
         description,

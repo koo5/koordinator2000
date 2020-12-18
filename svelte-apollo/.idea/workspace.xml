@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="143a77b1-0d65-4bea-a017-56bc11371e42" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AddCampaign.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/AddCampaign.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Campaign.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaign.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Campaigns.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/Campaigns.svelte" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MyParticipation.svelte" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyParticipation.svelte" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +55,7 @@
       <workItem from="1608076928953" duration="386000" />
       <workItem from="1608077332670" duration="136000" />
       <workItem from="1608080962327" duration="5856000" />
-      <workItem from="1608151918851" duration="813000" />
+      <workItem from="1608151918851" duration="4990000" />
     </task>
     <servers />
   </component>
