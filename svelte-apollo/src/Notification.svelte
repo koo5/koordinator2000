@@ -34,9 +34,6 @@
 
 <style>
 
-notification-unread {
-	background-color: yellow;
-}
 .notification-unread {
 	background-color: yellow;
 }

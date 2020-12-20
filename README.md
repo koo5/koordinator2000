@@ -308,7 +308,6 @@ https://github.com/TheDataRideAlongs/ProjectDomino
 https://www.idnes.cz/zpravy/domaci/ochrana-zvirat-proti-tyrani-klecove-chovy-slepice.A200610_084300_domaci_kop
 https://www.reddit.com/r/thevenusproject
 
-
 # technology
 
 Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used as an overlay over the core data model, to allow users and admins to express nuanced matters of provenance, trust and identity, help fight off bots, enable federation, express forecasts etc.

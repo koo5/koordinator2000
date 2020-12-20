@@ -9,6 +9,18 @@ import scss from 'rollup-plugin-scss';
 
 
 
+	import ProgressBar from "@okrad/svelte-progressbar";
+	let series = [20,16];
+
+
+	// Import Swiper Svelte components
+	import { Swiper, SwiperSlide } from 'swiper/svelte';
+
+	// Import Swiper styles
+	import 'swiper/swiper.scss';
+
+
+
 const preprocess = sveltePreprocess({
   scss: {
     includePaths: ['src'],

@@ -6,6 +6,8 @@
 	import {my_user} from './my_user';
 
 
+
+
 	import ProgressBar from "@okrad/svelte-progressbar";
 	let series = [20,16];
 
@@ -15,6 +17,9 @@
 
 	// Import Swiper styles
 	import 'swiper/swiper.scss';
+
+
+
 
 
 	const CAMPAIGN_LIST = gql`
@@ -66,33 +71,48 @@
 </script>
 
 
-<Swiper
-  spaceBetween={50}
-  slidesPerView={3}
-  on:slideChange={() => console.log('slide change')}
-  on:swiper={(e) => console.log(e.detail[0])}
->
-  <SwiperSlide>Slide 1</SwiperSlide>
-  <SwiperSlide>Slide 2</SwiperSlide>
-  <SwiperSlide>Slide 3</SwiperSlide>
-  <SwiperSlide>Slide 4</SwiperSlide>
-
-</Swiper>
-
-<ProgressBar {series} height={2} showProgressValue=false />
-
-<button on:click={() => series = [50, 50]}>fill</button>
-<button on:click={() => series = [0, 0]}>clear</button>
-
 <ul>
 	{#await $campaigns}
 		<li>Loading...</li>
 	{:then result}
+
+
+		<ProgressBar {series} height={2} showProgressValue=false />
+		<button on:click={() => series = [50, 50]}>fill</button>
+		<button on:click={() => series = [0, 0]}>clear</button>
+
+
+		{#each result.data.campaigns as campaign (campaign.id)}
+			<Swiper
+					grabCursor={true}
+					watchOverflow={true}
+					effect={'fade'}
+					speed={150}
+				initialSlide={1}
+				spaceBetween={50}
+				slidesPerView={3}
+				on:slideChange={() => console.log('slide change')}
+				on:swiper={(e) => console.log(e.detail[0])}
+			>
+			  <SwiperSlide>DISMISS</SwiperSlide>
+			  <SwiperSlide>
+				  <Campaign {campaign}/>
+			  </SwiperSlide>
+			  <SwiperSlide>PARTICIPATE</SwiperSlide>
+			</Swiper>
+		{:else}
+			<li>No campaigns found</li>
+		{/each}
+
+
+		<hr><hr><hr><hr><hr><hr>
+
 		{#each result.data.campaigns as campaign (campaign.id)}
 			<Campaign {campaign}/>
 		{:else}
 			<li>No campaigns found</li>
 		{/each}
+
 	{:catch error}
 		<li>Error loading campaigns:
 			<pre>{JSON.stringify(error, null, '  ')}</pre>
