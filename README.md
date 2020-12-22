@@ -296,6 +296,7 @@ https://www.reddit.com/r/Anticonsumption/
 https://www.reddit.com/r/Futurology/comments/da0214/the_35_rule_states_any_movement_that_gains_35_of/
 https://github.com/yacy/yacy_search_server/issues/314
 https://github.com/aindilis/elle-ethical-consumer/tree/master/subsys/source-analysis/source/causes
+https://headlines.peta.org/air-france-stop-shipping-monkeys/#action
 
 # inspirations
 
