@@ -298,6 +298,9 @@ https://github.com/yacy/yacy_search_server/issues/314
 https://github.com/aindilis/elle-ethical-consumer/tree/master/subsys/source-analysis/source/causes
 https://headlines.peta.org/air-france-stop-shipping-monkeys/#action
 https://demo.mobilizon.org/events/e1f914a4-13e1-49ed-9e70-a99d6ae66df1
+https://www.reddit.com/r/Anticonsumption/comments/kqhq8x/boycott_nestl%C3%A9/
+https://www.reddit.com/r/Environmentalism/comments/kr0bpt/shells_hell/
+https://rejstrik-firem.kurzy.cz/24741647/nomad-international-s-r-o-v-likvidaci/
 
 # inspirations
 
