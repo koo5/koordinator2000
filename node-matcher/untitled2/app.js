@@ -151,7 +151,7 @@ if (verbose)			console.log(JSON.stringify(participation, null, ''));
 			}
 			idx++;
 		}
-		console.log();
+		if (verbose)	console.log();
 	}
 
 if (verbose)	console.log();
@@ -191,7 +191,7 @@ async function my_fetch()
 
 
 async function run() {
-	let sleep = 15;
+	let sleep = 5;
 	try
 	{
 		let data = await my_fetch();
@@ -200,7 +200,7 @@ async function run() {
 	catch (e)
 	{
 		console.log(e)
-		sleep = 30;
+		sleep = 20;
 	}
 	setTimeout(async () => {await run();}, sleep * 1000);
 };
