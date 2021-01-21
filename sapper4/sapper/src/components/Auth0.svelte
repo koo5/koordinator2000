@@ -28,6 +28,8 @@
 
 	async function maybe_ping_server_about_this(isAuthenticated)
 	{
+		if (!process.browser)
+			return;
 		if (!isAuthenticated)
 			return;
 		event($my_user);
