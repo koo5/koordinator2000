@@ -1,8 +1,9 @@
 # What?
 
-dev version/demo: http://52.254.50.234:8080/ .
-readme: https://github.com/koo5/koordinator2000/blob/master/README.md
-It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured, and that's what this site does.
+dev version/demo: https://koordinator.farted.net/ .
+readme: https://github.com/koo5/koordinator2000/
+
+It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured.
 
 ## Politics
 
