@@ -5,6 +5,7 @@
 	import {my_user} from 'srcs/my_user.js';
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
+	import DismissalBadge from 'cmps/DismissalBadge.svelte';
 
 
 	export let campaign;
@@ -45,7 +46,10 @@
 		confirmation):
 	</div>
 	{#each campaign.participations as participation (participation.id)}
-		<ParticipationBadge participation={participation}/>
+		<ParticipationBadge {participation}/>
+	{/each}
+	{#each campaign.dismissals as dismissal (dismissal.id)}
+		<DismissalBadge {dismissal}/>
 	{/each}
 
 	<MutationForm
@@ -64,14 +68,12 @@
 
 <style>
 
-
     pre {
         overflow-x: scroll;
         overflow-y: scroll;
         width: 300px;
         height: 300px;
     }
-
 
     :global(.dev) {
         border-style: dotted;

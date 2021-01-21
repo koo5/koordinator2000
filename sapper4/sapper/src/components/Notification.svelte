@@ -4,11 +4,17 @@
 	import { gql } from "srcs/apollo.js";
 
 	export let notification;
+	$: confirmed = my_participation ? my_participation.confirmed : undefined;
+	$: notification_id = my_participation ? my_participation.id : undefined;
+	$: my_participation = my_participations ? my_participations[0] : undefined;
+	$: my_participations = campaign ? campaign.my_participations : undefined;
+	$: campaign = notification ? notification.campaign : undefined;
 
 	async function del()
 	{
 
 	}
+
 
 </script>
 
@@ -35,8 +41,8 @@
 				}
 			`}
 			variables={{
-				confirmed: notification.campaign.my_participations[0].confirmed,
-				id: notification.campaign.my_participations[0].id
+				confirmed: confirmed,
+				id: notification_id
 			}}
 	>
 		<label for="confirmed-checbox">
@@ -47,7 +53,7 @@
 			{/if}
 		</label>
 
-		<input id="confirmed-checbox" type="checkbox" bind:checked={notification.campaign.my_participations[0].confirmed}>
+		<input id="confirmed-checbox" type="checkbox" bind:checked={confirmed}>
 		<button type="submit">save</button>
 	</MutationForm>
 
