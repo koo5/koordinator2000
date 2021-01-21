@@ -1,30 +1,31 @@
 <script>
 
-	import { my_user } from 'srcs/my_user.js';
-	export let css_ref;
+	import {my_user} from 'srcs/my_user.js';
+
+	export let css_ref = '';
+	export let enabled = true;
 
 </script>
 
-	{#if $my_user.database_debug}
-		<span class='tooltip' {css_ref}>
-			<div class="tooltiptext dev">
-				<slot name="tooltip"></slot>
-			</div>
-			<slot></slot>
-		</span>
-	{:else}
+{#if enabled}
+
+	<span class='tooltip'>
 		<slot></slot>
-	{/if}
+		<div class="tooltiptext {css_ref}">
+			<slot name="tooltip">tooltip</slot>
+		</div>
+	</span>
+
+{:else}
+	<slot></slot>
+
+{/if}
 
 <!--
 todo
 	https://dev.to/gokayokyay/how-to-use-popper-with-svelte-in-a-sveltish-way-with-actions-2h02?utm_source=dormosheio&utm_campaign=dormosheio
 
 -->
-
-
-
-
 
 
 <style>
@@ -38,11 +39,6 @@ todo
 		position: absolute;
 		z-index: 1;
 		padding: 1em 1em;
-	}
-
-	.dev {
-		border-style: dotted;
-		background-color: rgb(230,230,230);
 	}
 
 	/* Show the tooltip text when you mouse over the tooltip container */

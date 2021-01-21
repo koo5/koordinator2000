@@ -2,6 +2,13 @@
 	import {my_user} from 'srcs/my_user.js';
 </script>
 
+<h3>user settings</h3>
+<p>
+	hide_help:
+	<input type="checkbox" bind:checked={$my_user.hide_help}>
+	<br>
+</p>
+
 <h3>developer settings</h3>
 <p>
 	crash_debug:
