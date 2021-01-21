@@ -1,0 +1,96 @@
+1)user loads the frontend, possibly from a completely static cnd
+
+2)frontend sees that localStorage.user is undefined
+
+3)POST /get_free_user_id
+	1)atomically gets+inc's free_user_id on server
+		either directly in database, or from some assigned range (in case of multiple servers)
+	2)returns a signed "i am user 123"
+
+...that's kinda "it". Hasura will accept the token.
+...
+4)auth0 returns a signed "yes this is xxx", or "yes this is xxx@gmail.com"
+5)frontend stores this in the db
+
+
+
+
+
+----
+
+https://github.com/dopry/svelte-oidc
+
+
+
+
+
+<!--
+alternatives:
+	scroll to next campaign on swipe:
+		https://www.npmjs.com/package/svelte-scrollto
+		https://svelte.dev/repl/fb849bd4c802457fa3fca9baf33e55c9?version=3.20.1
+	swipe:
+		https://github.com/SharifClick/svelte-swipe
+
+
+-->
+
+
+https://www.reddit.com/r/sveltejs/comments/kwirbr/tinyx_a_tiny_state_manager_for_big_applications/
+
+
+
+
+
+
+
+
+
+crypto:
+	https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
+
+
+
+
+
+
+
+todo:
+	nvm i lts # fixes the crypto?
+		https://github.com/panva/jose/discussions/150
+		console.log(publicKey.export({type:'spki',format:'pem'}))
+		https://nodejs.org/api/crypto.html#crypto_class_keyobject
+		https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
+
+	login box/row - "log in / [log in with...] (or just social icons),
+	- red or green header
+
+	tooltips - dev options - settings menu
+
+	editable whole campaign/cause as text? This would "solve" full collaborative editability, and open doorway to distributed operation at the same time
+
+		- and we absolutely have to tap into this / hijack, this - the current way things are organized, that is, by plaintext posts on social media
+
+		so probably a default simple interface - multiple controls, text boxes, textarea, etc
+			- probably already with rich text description editor?
+			- also, i'd stay with the idea that the edited object is already persistently saved
+
+		at the bottom will be a button toggling between simple and advanced ui.
+
+		advanced ui:
+			just one rich text editor - "social media format" - the format specifies all the relevant details like minimum participation threshold etc, in a plain-text format suitable for posting anywhere
+
+		- somewhere later we can talk about hijacking with the "participation" format
+
+	- crashes
+		- update sapper/svelte?
+
+
+
+
+
+
+---
+
+
+https://github.com/hasura/graphql-engine/tree/master/community/sample-apps/firebase-jwt
