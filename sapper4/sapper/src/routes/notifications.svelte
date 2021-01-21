@@ -1,9 +1,9 @@
 <script type='js'>
 
 	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
-	import { subscribe, gql } from "srcs/apollo.js";
+	import {subscribe, gql} from "srcs/apollo.js";
 	import Notification from 'cmps/Notification.svelte';
-	import { my_user } from 'srcs/my_user.js';
+	import {my_user} from 'srcs/my_user.js';
 
 	$: items = subscribe(
 		gql`
@@ -12,8 +12,11 @@
 				campaign {
 				  id
 				  title
+					my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
+						id
+					}
 				}
-				confirmed
+
 				content
 				id
 				read

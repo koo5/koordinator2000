@@ -115,6 +115,10 @@
 		max-width: 100%;
 		word-wrap: break-word;
 	}
+	:global(.confirmed)	{
+		background-color: #88ff88;
+	}
+
 	:global(.condition_is_fulfilled)	{
 		background-color: #ccffcc;
 	}

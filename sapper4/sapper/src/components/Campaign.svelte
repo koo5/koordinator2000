@@ -48,15 +48,15 @@
 		<ParticipationBadge participation={participation}/>
 	{/each}
 
-			<MutationForm
+	<MutationForm
 			mutation={CAMPAIGN_DISMISSAL}
 			variables={{
 				user_id: $my_user.id,
 				campaign_id: campaign.id
 			}}
-		>
-			<button type="submit">dismiss campaign</button>
-		</MutationForm>
+	>
+		<button type="submit">dismiss campaign</button>
+	</MutationForm>
 
 	<hr>
 </li>
@@ -65,17 +65,17 @@
 <style>
 
 
-	pre {
-		overflow-x: scroll;
-		overflow-y: scroll;
-		width: 300px;
-		height: 300px;
-	}
+    pre {
+        overflow-x: scroll;
+        overflow-y: scroll;
+        width: 300px;
+        height: 300px;
+    }
 
 
-	:global(.dev) {
-		border-style: dotted;
-		background-color: rgb(230, 230, 230);
-	}
+    :global(.dev) {
+        border-style: dotted;
+        background-color: rgb(230, 230, 230);
+    }
 
 </style>
