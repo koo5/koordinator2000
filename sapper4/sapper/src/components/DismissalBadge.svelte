@@ -4,7 +4,7 @@
 
 </script>
 
-👎({dismissal.user.name})
+👎{dismissal.user.name}
 
 <style>
 

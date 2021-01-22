@@ -54,8 +54,7 @@
 				  threshold
 				  condition_is_fulfilled
 				}
-				campaign_dismissals(where: {user_id: {_eq: $_user_id}}) {
-				  id
+				campaign_dismissals {
 				  user_id
 				  user {
 				    id

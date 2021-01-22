@@ -42,13 +42,12 @@
 	<MyParticipation campaign={campaign}/>
 
 	<p>
-	<div>participants (sorted from lowest threshold. "✔" signifies condition fulfilled. "?" signifies waiting for
-		confirmation):
+	<div>participants (sorted from lowest threshold):<br/> "✔" - participating<br/> "?" - condition fulfilled, waiting for confirmation<br/> "…" - condition was not fulfilled yet<br/> 👎 - disagreement/dismissal
 	</div>
 	{#each campaign.participations as participation (participation.id)}
 		<ParticipationBadge {participation}/>
 	{/each}
-	{#each campaign.dismissals as dismissal (dismissal.id)}
+	{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
 		<DismissalBadge {dismissal}/>
 	{/each}
 

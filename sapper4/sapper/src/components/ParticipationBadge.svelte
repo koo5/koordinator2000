@@ -34,15 +34,14 @@
 				return "❓"
 		}
 		else
-			return ""
+			return "…"
 	}
 
 </script>
 
 <span class='participation_badge'>
 				<span class="{status_class}">
-					{tickmark}{participation.user.name}&nbsp;
-				<ToolTipsy>
+					{tickmark}{participation.user.name}<ToolTipsy>
 					({participation.threshold})
 					<div slot="tooltip" class="{status_class}">
 						{#if $my_user.database_debug}
