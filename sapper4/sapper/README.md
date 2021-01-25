@@ -1,6 +1,6 @@
 
 #### demo:
-https://koordinator.farted.net/
+https://koordinator.planlogic.net/
 
 
 #### local setup:
