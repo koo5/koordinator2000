@@ -11,7 +11,7 @@
 		logout,
 		userInfo,
 	} from '@dopry/svelte-auth0';
-
+	import { get } from 'svelte/store';
 	import {stores} from '@sapper/app'
 	import {my_user, event} from 'srcs/my_user.js';
 
@@ -24,15 +24,16 @@
 	$: domain = "dev-koord11.eu.auth0.com"
 	$: client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf"
 
-	$: maybe_ping_server_about_this(isAuthenticated)
+	$: maybe_ping_server_about_this($idToken)
 
-	async function maybe_ping_server_about_this(isAuthenticated)
+	async function maybe_ping_server_about_this(_)
 	{
 		if (!process.browser)
 			return;
-		if (!isAuthenticated)
-			return;
-		my_user.auth0 =$authToken;
+		/*if (!isAuthenticated)
+			return;*/
+		let auth = {'auth0':get(idToken)};
+		my_user.update((u) => { return {...u, auth } });
 		event($my_user);
 	}
 

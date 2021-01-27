@@ -9,7 +9,7 @@ import compression from 'compression';
 import * as sapper from '@sapper/server';
 import SignJWT from 'jose/jwt/sign'
 import parseJwk from 'jose/jwk/parse'
-const { json } = require('body-parser');
+const bodyParser = require('body-parser')
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
@@ -66,18 +66,19 @@ async function free_user_id()
 }
 
 
-polka()
-	.post('/get_free_user_id', async (req, res) => {
+let app = polka()
+	app.use(
+		bodyParser.json(),
+		bodyParser.urlencoded({ extended: false }));
+ app.post('/get_free_user_id', async (req, res) => {
 	   	send(res, 200, await free_user_id());
 	})
 	.post('/event', async (req, res) => {
-		console.log(req.query);
 		console.log(req.body);
 	   	send(res, 200, {"okie":"dokie"});
 	})
     .use(
 		compression({ threshold: 0 }),
-		json(),
 		sirv('static', { dev }),
 		sapper.middleware(
 			{

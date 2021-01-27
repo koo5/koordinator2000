@@ -55,7 +55,7 @@
     "rollup-plugin-terser": "^7.0.0",
     "sapper": "^0.28.0",
     "subscriptions-transport-ws": "^0.9.18",
-    "svelte": "^3.17.3",
+    "svelte": "^3.32.0",
     "svelte-apollo": "^0.4.0",
     "svelte-scrollto": "^0.2.0",
     "swiper": "^6.4.5"
