@@ -35,15 +35,21 @@ export async function event(event)
 	console.log(event);
 	try
 	{
-		var res = await fetch('/event', {method: 'POST'})
-		var r = await res.json()
-		console.log("r:"+JSON.stringify(r, null, '  '));
+		let res = await fetch('/event', {
+			method: 'POST',
+			headers: {
+    		  'Content-Type': 'application/json'
+		    },
+		    body: JSON.stringify({event:event})
+  		});
+		res = await res.json();
+		console.log("r:"+JSON.stringify(res, null, '  '));
 	}
 	catch(e)
 	{
 		console.error(e);
 	}
-	return r
+	return res
 }
 
 

@@ -6,6 +6,7 @@
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
+	import { slide } from 'svelte/transition';
 
 
 	export let campaign;
@@ -24,7 +25,7 @@
 
 <hr>
 
-<li>
+<li transition:slide|local>>
 
 	<ToolTipsy enabled="{my_user.database_debug}" css_ref="dev">
 		<h3>{campaign.title}</h3>

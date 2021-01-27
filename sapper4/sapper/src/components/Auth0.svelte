@@ -32,6 +32,7 @@
 			return;
 		if (!isAuthenticated)
 			return;
+		my_user.auth0 =$authToken;
 		event($my_user);
 	}
 

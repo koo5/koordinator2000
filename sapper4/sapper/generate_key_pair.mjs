@@ -18,11 +18,12 @@ import jwtVerify from 'jose/jwt/verify'
 	publicJwk.alg = alg
 	const x = {private:privateJwk,public:publicJwk}
 	console.log(x)
+	console.log()
 
+	console.log("MY_APP_KEYS="+JSON.stringify(x,null,''))
+	console.log()
 	const ecPrivateKey = await parseJwk(x.private)
 	const rsaPublicKey = await parseJwk(x.public)
-	ecPrivateKey.alg = alg
-	rsaPublicKey.alg = alg
 
 	const jwt = await new SignJWT({ 'urn:id': 545 })
 	  .setProtectedHeader({ alg })
@@ -33,13 +34,14 @@ import jwtVerify from 'jose/jwt/verify'
 	  .sign(privateKey)
 
 	console.log(jwt)
-
+	console.log()
 	const { payload, protectedHeader } = await jwtVerify(jwt, rsaPublicKey, {
 	  issuer: 'urn:example:issuer',
 	  audience: 'urn:example:audience'
 	})
 
 	console.log(protectedHeader)
+	console.log()
 	console.log(payload)
 
 })();
