@@ -138,7 +138,7 @@ if (verbose)		console.log(campaign.id + ' - ' + campaign.title + ':');
 		{
 			if (idx > last_fulfilled_idx)
 				fulfilled = false;
-if (verbose)			console.log(JSON.stringify(participation, null, ''));
+				if (verbose) console.log(JSON.stringify(participation, null, ''));
 			if (participation.condition_is_fulfilled != fulfilled)
 			{
 				//console.log('flip ' + JSON.stringify(participation, null, '') + '.');
@@ -151,12 +151,12 @@ if (verbose)			console.log(JSON.stringify(participation, null, ''));
 			}
 			idx++;
 		}
-		if (verbose)	console.log();
+		if (verbose) console.log();
 	}
 
-if (verbose)	console.log();
+	if (verbose) console.log();
 	console.log(Date.now());
-if (verbose)	console.log();
+	if (verbose) console.log();
 }
 
 
@@ -172,15 +172,15 @@ async function my_fetch()
 			  	id
 			  	title
 				participations(order_by: [{threshold: asc}]) {
-	              id
-                  user_id
-                  campaign_id
-	              campaign
-	              {
-	              	title
-	              }
-				  threshold
-				  condition_is_fulfilled
+					id
+					user_id
+					campaign_id
+					campaign
+					{
+						title
+					}
+					threshold
+					condition_is_fulfilled
 				},
 			  }
 			}
