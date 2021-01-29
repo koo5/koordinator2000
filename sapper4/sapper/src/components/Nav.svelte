@@ -1,6 +1,14 @@
 <script>
 	import PageReloadClock from "cmps/PageReloadClock.svelte";
 	import {ensure_we_exist,apply_newly_authenticated_user,my_user, logout} from 'srcs/my_user.js';
+	import { goto } from '@sapper/app';
+	import {
+		login,
+	} from '@dopry/svelte-auth0';
+
+  	import Popover from 'svelte-popover';
+	import Settings from 'cmps/Settings.svelte';
+
 
 	export let segment;
 
@@ -14,21 +22,85 @@
 		try
 		{
 			await apply_newly_authenticated_user(await ensure_we_exist());
-		} catch (e)
+			goto('/you');
+		}
+		catch (e)
 		{
 			console.log(e)
 		}
-
-
 	}
-	async function login()
+/*
+	function settings_popup_toggle()
 	{
-		await register();
-	}
 
+
+	}
+*/
 </script>
 
+<div class:authenticated class:guest>
+	<PageReloadClock/>
+	{#if $my_user.auth_debug}
+		|
+		my_user = {my_user_str}
+		|
+	{/if}
+	{#if $my_user.id > 0}
+		<form class="cell" on:submit={logout}><button type="submit">Log out</button></form>
+	{:else}
+		<button on:click|preventDefault='{() => login() }'>Login</button>
+		<button on:click={register}>Register</button>
+	{/if}
+</div>
+<nav>
+	<ul>
+		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
+
+		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
+
+		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
+		     the blog data when we hover over the link or tap it on a touchscreen -->
+		<li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'campaigns' ? 'page' : undefined}" href="campaigns">campaigns</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'add_campaign' ? 'page' : undefined}" href="add_campaign">add_campaign</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'causes' ? 'page' : undefined}" href="causes">causes</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'add_cause' ? 'page' : undefined}" href="add_cause">add_cause</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'notifications' ? 'page' : undefined}" href="notifications">notifications</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'you' ? 'page' : undefined}" href="you">you</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'users' ? 'page' : undefined}" href="users">users</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'auth0' ? 'page' : undefined}" href="auth0">auth0</a></li>
+		<li><a rel=prefetch aria-current="{segment === 'settings' ? 'page' : undefined}" href="settings">settings</a></li>
+		 <li class="topnav-right">
+			<Popover>
+			  <button slot=target>Settings</button>
+			  <div slot=content>
+				  <div class="pop_up">
+					<Settings/>
+				  </div>
+			  </div>
+			</Popover>
+		 </li>
+	</ul>
+</nav>
+
+
+
+
+
 <style>
+
+	.pop_up {
+		border-bottom: 1px solid rgba(255,62,0,0.1);
+		padding: 1em;
+		display: block;
+		clear: both;
+		background-color: rgb(255,255,200);
+    }
+
+	.topnav-right {
+	  float: right;
+	}
+
 	nav {
 		border-bottom: 1px solid rgba(255,62,0,0.1);
 		font-weight: 300;
@@ -81,39 +153,3 @@
 		display: block;
 	}
 </style>
-
-<div class:authenticated class:guest>
-	<PageReloadClock/>
-	{#if $my_user.auth_debug}
-		|
-		my_user = {my_user_str}
-		|
-	{/if}
-	{#if $my_user.id > 0}
-		<form class="cell" on:submit={logout}><button type="submit">Log out</button></form>
-	{:else}
-		<button on:click={login}>Log in</button>
-		<button on:click={register}>Register</button>
-	{/if}
-</div>
-<nav>
-	<ul>
-		<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">home</a></li>
-
-		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
-
-		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-		     the blog data when we hover over the link or tap it on a touchscreen -->
-		<li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'campaigns' ? 'page' : undefined}" href="campaigns">campaigns</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'add_campaign' ? 'page' : undefined}" href="add_campaign">add_campaign</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'causes' ? 'page' : undefined}" href="causes">causes</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'add_cause' ? 'page' : undefined}" href="add_cause">add_cause</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'notifications' ? 'page' : undefined}" href="notifications">notifications</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'you' ? 'page' : undefined}" href="you">you</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'users' ? 'page' : undefined}" href="users">users</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'auth0' ? 'page' : undefined}" href="auth0">auth0</a></li>
-		<li><a rel=prefetch aria-current="{segment === 'settings' ? 'page' : undefined}" href="settings">settings</a></li>
-
-	</ul>
-</nav>

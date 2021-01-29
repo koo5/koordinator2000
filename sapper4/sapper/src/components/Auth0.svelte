@@ -17,45 +17,11 @@
 
 	const {page, preloading, session} = stores()
 
-	$: PUBLIC_URL = $session.PUBLIC_URL;
-	$: callback_url = PUBLIC_URL + "/auth0"
-	$: logout_url = PUBLIC_URL + "/auth0"
-	$: audience = undefined;
-	$: domain = "dev-koord11.eu.auth0.com"
-	$: client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf"
-
-	$: maybe_ping_server_about_this($idToken, $userInfo)
-
-	async function maybe_ping_server_about_this(token, info)
-	{
-		if (!process.browser)
-			return;
-		/*if (!isAuthenticated)
-			return;*/
-		let auth = {'auth0': {token, info}};
-		my_user.update((u) =>
-		{
-			return {...u, auth}
-		});
-		let event_result = await event($my_user);
-		if (event_result && event_result.user)
-		{
-			console.log('ich bin logged in');
-			my_user.set(event_result.user);
-		}
-	}
 
 </script>
 
 {#if process.browser}
-	Auth0Context:
-	<Auth0Context
-			{domain}
-			{client_id}
-			{audience}
-			{callback_url}
-			{logout_url}
-	>
+
 		<button on:click|preventDefault='{() => login() }'>Login</button>
 		<button on:click|preventDefault='{() => logout() }'>Logout</button>
 		<br/>
@@ -63,7 +29,7 @@
 		{#if $isAuthenticated}
 			you are authenticated
 		{:else}
-			you are not authenticated...but it doesn't matter
+			you are not authenticated...but it doesn't matter, you can still play around
 		{/if}
 
 		<pre>isLoading: {$isLoading}</pre>
@@ -75,16 +41,6 @@
 
 		{#if $my_user.auth_debug}
 
-			configuration:
-			<pre>
-				PUBLIC_URL = {PUBLIC_URL}
-				callback_url = {callback_url}
-				logout_url = {logout_url}
-				audience = {audience}
-				domain = {domain}
-				client_id = {client_id}
-		</pre>
-
 			page:
 			<pre>{JSON.stringify($page, null, '  ')}</pre>
 			preloading:
@@ -93,9 +49,6 @@
 			<pre>{JSON.stringify($session, null, '  ')}</pre>
 
 		{/if}
-
-
-	</Auth0Context>
 
 {:else}
 	loading..

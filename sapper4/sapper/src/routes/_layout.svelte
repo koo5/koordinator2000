@@ -1,9 +1,46 @@
 <script>
 	import Nav from 'cmps/Nav.svelte';
-	import {my_user} from 'srcs/my_user.js';
-	import {onMount} from 'svelte';
 	import {setClient} from 'svelte-apollo';
 	import {new_apollo_client} from 'srcs/apollo.js';
+	import {
+		Auth0Context,
+		idToken,
+		userInfo,
+	} from '@dopry/svelte-auth0';
+	import {stores} from '@sapper/app'
+	import {my_user, event} from 'srcs/my_user.js';
+	const {page, session} = stores()
+
+
+	$: PUBLIC_URL = $session.PUBLIC_URL;
+	$: callback_url = PUBLIC_URL + "/auth0"
+	$: logout_url = PUBLIC_URL + "/auth0"
+	$: audience = undefined;
+	$: domain = "dev-koord11.eu.auth0.com"
+	$: client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf"
+
+
+	$: maybe_ping_server_about_this($idToken, $userInfo)
+
+	async function maybe_ping_server_about_this(token, info)
+	{
+		if (!process.browser)
+			return;
+		/*if (!isAuthenticated)
+			return;*/
+		let auth = {'auth0': {token, info}};
+		my_user.update((u) =>
+		{
+			return {...u, auth}
+		});
+		let event_result = await event($my_user);
+		if (event_result && event_result.user)
+		{
+			console.log('ich bin logged in');
+			my_user.set(event_result.user);
+		}
+	}
+
 
 
 	export let segment;
@@ -26,7 +63,15 @@
 	}*/
 </style>
 
+{#if process.browser}
 
+	<Auth0Context
+			{domain}
+			{client_id}
+			{audience}
+			{callback_url}
+			{logout_url}
+	>
 
 <Nav {segment}/>
 
@@ -34,6 +79,26 @@
 	<slot></slot>
 </main>
 
+
+		{#if $my_user.auth_debug}
+
+			auth0 configuration:
+			<pre>
+				PUBLIC_URL = {PUBLIC_URL}
+				callback_url = {callback_url}
+				logout_url = {logout_url}
+				audience = {audience}
+				domain = {domain}
+				client_id = {client_id}
+			</pre>
+
+		{/if}
+
+
+	</Auth0Context>
+{:else}
+	loading..
+{/if}
 
 
 <svelte:head>

@@ -43,7 +43,7 @@
 				<span class="{status_class}">
 					{tickmark}{participation.user.name}<ToolTipsy>
 					({participation.threshold})
-					<div slot="tooltip" class="{status_class}">
+					<div slot="tooltip" class="info_tooltip">
 						{#if $my_user.database_debug}
 							participation ID:{participation.id}<br>
 							user ID: {participation.user.id}<br>
