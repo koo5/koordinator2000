@@ -22,7 +22,7 @@ MY_APP_KEYS = JSON.parse(MY_APP_KEYS);
 var sess = {PUBLIC_URL};
 
 if(MY_APP_KEYS == undefined)
-{	
+{
 	throw("must have keys")
 }
 const pr = MY_APP_KEYS["private"];
@@ -85,6 +85,7 @@ async function user_authenticity_jwt(id)
 
 async function event(x)
 {
+	console.log(x)
 	if (x.id == -1 || !x.id)
 		return;
 	let auth0 = x.auth.auth0;
