@@ -85,9 +85,6 @@ async function user_authenticity_jwt(id)
 
 async function event(x)
 {
-	console.log(x)
-	if (x.id == -1 || !x.id)
-		return;
 	let auth0 = x.auth.auth0;
 	if (auth0.token == "") return;
 	/*console.log("decode:")
@@ -133,6 +130,8 @@ async function user_id_from_auth(provider, sub)
 
 async function save_verified_authentication(user_id, provider, login_name)
 {
+	if (user_id == -1 || !user_id)
+		return;
 	return await apollo_client.mutate({
 			mutation: gql`
 				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int = 10) {
