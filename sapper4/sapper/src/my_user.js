@@ -31,26 +31,38 @@ async function new_user()
 
 export async function event(event)
 {
-	console.log('/event');
-	console.log(event);
+	//console.log('/event');
+	//console.log(event);
+	let res;
+	let res2;
 	try
 	{
-		var res = await fetch('/event', {
+		res = fetch('/event', {
 			method: 'POST',
 			headers: {
-    		  'Content-Type': 'application/json'
+    		  'Content-Type': 'application/json',
+				'Accept': 'application/json',
 		    },
-
+			mode:"same-origin",
 		    body: JSON.stringify({event:event})
   		});
-		res = await res.json();
-		console.log("r:"+JSON.stringify(res, null, '  '));
+		console.log("res:"+ (typeof res) + ":" + JSON.stringify(res, null, '  '));
+		res = await res;
+		console.log("res:"+ (typeof res) + ":" + JSON.stringify(res, null, '  '));
+		try
+		{
+			res2 = await res.json()
+		}
+		catch(ee)
+		{
+		}
+		console.log("res2:" + (typeof res2) + ":" + JSON.stringify(res2, null, '  '));
 	}
 	catch(e)
 	{
 		console.error(e);
 	}
-	return res
+	return res2
 }
 
 

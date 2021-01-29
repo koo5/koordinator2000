@@ -11,14 +11,16 @@ export function localStorageSharedStore(name_postfix, default_) {
 
 	function setStorage(value) {
 		let str = JSON.stringify(value);
-		console.log(str);
+		//console.log(str);
 		window.localStorage.setItem(name, str);
 	}
 
 	function getStorage() {
 		let item = window.localStorage.getItem(name);
+		/*
 		console.log("getStorage()");
 		console.log(item);
+		 */
 		let result = default_;
 		try
 		{
@@ -32,8 +34,11 @@ export function localStorageSharedStore(name_postfix, default_) {
 			console.log('trying to parse: "' + item + '"');
 			console.log(e);
 		}
+/*
 		console.log("getStorage result");
 		console.log(result);
+
+ */
 		return result;
 	}
 
@@ -57,13 +62,13 @@ export function localStorageSharedStore(name_postfix, default_) {
 	return {
 		subscribe,
 		set(value) {
-			console.log(value);
+			//console.log(value);
 			setStorage(value);
 			set(value);
 		},
 		update(fn) {
 			let value2 = fn(get(this))
-			console.log(value2);
+			//console.log(value2);
 			setStorage(value2);
 			set(value2);
 		}
