@@ -24,15 +24,15 @@
 	$: domain = "dev-koord11.eu.auth0.com"
 	$: client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf"
 
-	$: maybe_ping_server_about_this($idToken)
+	$: maybe_ping_server_about_this($idToken,$userInfo)
 
-	async function maybe_ping_server_about_this(_)
+	async function maybe_ping_server_about_this(token,info)
 	{
 		if (!process.browser)
 			return;
 		/*if (!isAuthenticated)
 			return;*/
-		let auth = {'auth0':get(idToken)};
+		let auth = {'auth0':{token, info}};
 		my_user.update((u) => { return {...u, auth } });
 		event($my_user);
 	}

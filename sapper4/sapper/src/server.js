@@ -4,16 +4,20 @@ var myEnv = dotenv.config()
 dotenvExpand(myEnv)
 import sirv from 'sirv';
 import polka from 'polka';
+
+const bodyParser = require('body-parser')
 const send = require('@polka/send-type');
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import SignJWT from 'jose/jwt/sign'
 import parseJwk from 'jose/jwk/parse'
-const bodyParser = require('body-parser')
+/*import decodeProtectedHeader from 'jose/util/decode_protected_header'
+import jwtVerify from 'jose/jwt/verify'*/
 
-const { PORT, NODE_ENV } = process.env;
+
+const {PORT, NODE_ENV} = process.env;
 const dev = NODE_ENV === 'development';
-var {PUBLIC_URL="http://localhost:3000", MY_APP_KEYS} = myEnv.parsed;
+var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = myEnv.parsed;
 MY_APP_KEYS = JSON.parse(MY_APP_KEYS);
 var sess = {PUBLIC_URL};
 
@@ -30,11 +34,16 @@ async function load_keys()
 	ecPrivateKey = await parseJwk(pr)
 	rsaPublicKey = await parseJwk(pu)
 }
-(async () => {await load_keys()})();
+
+(async () =>
+{
+	await load_keys()
+})();
 
 
-import { new_apollo_client } from 'srcs/apollo.js';
+import {new_apollo_client} from 'srcs/apollo.js';
 import gql from 'graphql-tag';
+
 const apollo_client = new_apollo_client();
 
 
@@ -53,39 +62,76 @@ async function free_user_id()
 	const id = result['data']['insert_users_one']['id'];
 
 
-	const jwt = await new SignJWT({ 'urn:id': id })
-	  .setProtectedHeader({ alg:pr.alg })
-	  .setIssuedAt()
-	  .setIssuer('urn:example:issuer')
-	  .setAudience('urn:example:audience')
-	  .setExpirationTime('2h')
-	  .sign(ecPrivateKey)
+	const jwt = await new SignJWT({'urn:id': id})
+		.setProtectedHeader({alg: pr.alg})
+		.setIssuedAt()
+		.setIssuer('urn:example:issuer')
+		.setAudience('urn:example:audience')
+		.setExpirationTime('2h')
+		.sign(ecPrivateKey)
 
 
-	return {id, jwt, auth_debug: true };
+	return {id, jwt, auth_debug: true};
 }
 
 
+async function event(x)
+{
+	let auth0 = x.auth.auth0;
+	if (auth0.token == "") return;
+	/*console.log("decode:")
+	let ph = decodeProtectedHeader(token)
+	console.log(ph)*/
+	console.log("user is:"),
+		console.log(auth0.info.sub)
+	const result = await apollo_client.mutate({
+			mutation: gql`
+				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int = 10) {
+				  insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, user_id: $user_id})
+				  {
+				  	user_id
+				  }
+				}
+			`,
+			variables: {
+				user_id: x.id,
+				login_name: auth0.info.sub,
+				provider: "auth0"
+			}
+
+		}
+	);
+
+
+}
+
 let app = polka()
-	app.use(
-		bodyParser.json(),
-		bodyParser.urlencoded({ extended: false }));
- app.post('/get_free_user_id', async (req, res) => {
-	   	send(res, 200, await free_user_id());
+app.use(
+	bodyParser.json(),
+	bodyParser.urlencoded({extended: false}));
+app.post('/get_free_user_id', async (req, res) =>
+{
+	send(res, 200, await free_user_id());
+})
+	.post('/event', async (req, res) =>
+	{
+		/*console.log(req.body);
+		console.log(typeof req.body);
+		console.log(typeof req.body.event);*/
+
+		event(req.body.event);
+		send(res, 200, {"okie": "dokie"});
 	})
-	.post('/event', async (req, res) => {
-		console.log(req.body);
-	   	send(res, 200, {"okie":"dokie"});
-	})
-    .use(
-		compression({ threshold: 0 }),
-		sirv('static', { dev }),
+	.use(
+		compression({threshold: 0}),
+		sirv('static', {dev}),
 		sapper.middleware(
 			{
 				session: () => sess
 			})
 	)
-    .listen(PORT, err => {
+	.listen(PORT, err =>
+	{
 		if (err)
 			console.log('error', err);
-    });
+	});
