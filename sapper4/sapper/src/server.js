@@ -21,6 +21,10 @@ var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = myEnv.parsed;
 MY_APP_KEYS = JSON.parse(MY_APP_KEYS);
 var sess = {PUBLIC_URL};
 
+if(MY_APP_KEYS == undefined)
+{	
+	throw("must have keys")
+}
 const pr = MY_APP_KEYS["private"];
 const pu = MY_APP_KEYS["public"];
 
