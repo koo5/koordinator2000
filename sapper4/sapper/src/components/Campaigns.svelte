@@ -3,13 +3,11 @@
 	import {my_user} from 'srcs/my_user.js';
 	import {onMount, onDestroy} from "svelte";
 	import * as animateScroll from "svelte-scrollto";
-	import ProgressBar from "@okrad/svelte-progressbar";
 	import {subscribe, gql} from "srcs/apollo.js";
 	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
 
 
 	var my_timeout;
-	let series = [20, 16];
 	let campaign_containers;
 
 
@@ -146,6 +144,7 @@
 
 </style>
 (swipe like on Tinder!)<br/>
+<p></p>
 
 <div bind:this="{campaign_containers}">
 <!--<ul bind:this="{campaign_containers}">-->
@@ -211,6 +210,7 @@
 
 <!--				</li>-->
 			</Swiper>
+
 		{:else}
 			No campaigns found
 		{/each}
@@ -219,7 +219,7 @@
 <!--</ul>-->
 
 
-<!-- this should show, relative to your set threshold (100%), number of cofirmed and number of unconfirmed participants:
+<!-- this should show, relative to your set threshold (100%), number of confirmed and number of unconfirmed participants:
 	<svelte:component this={ProgressBar} {series} height={5} showProgressValue={false} />
 	<ProgressBar {series} height={5} showProgressValue={false} />
 	gotta fix the transition_out bug though.

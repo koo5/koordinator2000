@@ -7,9 +7,11 @@
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
 	import {slide} from 'svelte/transition';
+	import ProgressBar from "@okrad/svelte-progressbar";
 
 
 	export let campaign;
+	let series = [20, 16];
 
 
 	const CAMPAIGN_DISMISSAL = gql`
@@ -23,17 +25,20 @@
 
 </script>
 
-<hr>
 
 <li transition:slide|local>
 	<div class="campaign">
 
 		<ToolTipsy enabled="{my_user.database_debug}" css_ref="dev">
-			<h3>{campaign.title}</h3>
+			<h2>{campaign.title}</h2>
 			<pre slot="tooltip">
 				{JSON.stringify(campaign, null, '  ')}
 			</pre>
 		</ToolTipsy>
+
+		{#if process.browser}
+			<ProgressBar {series} height={5} showProgressValue={false} />
+		{/if}
 
 		<p>{campaign.description}</p>
 

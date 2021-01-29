@@ -51,6 +51,16 @@
 		<button on:click|preventDefault='{() => login() }'>Login</button>
 		<button on:click={register}>Register</button>
 	{/if}
+	<span class="topnav-right">
+		<Popover>
+		  <button slot=target>Settings</button>
+		  <div slot=content>
+			  <div class="pop_up">
+				<Settings/>
+			  </div>
+		  </div>
+		</Popover>
+	</span>
 </div>
 <nav>
 	<ul>
@@ -70,16 +80,6 @@
 		<li><a rel=prefetch aria-current="{segment === 'users' ? 'page' : undefined}" href="users">users</a></li>
 		<li><a rel=prefetch aria-current="{segment === 'auth0' ? 'page' : undefined}" href="auth0">auth0</a></li>
 		<li><a rel=prefetch aria-current="{segment === 'settings' ? 'page' : undefined}" href="settings">settings</a></li>
-		 <li class="topnav-right">
-			<Popover>
-			  <button slot=target>Settings</button>
-			  <div slot=content>
-				  <div class="pop_up">
-					<Settings/>
-				  </div>
-			  </div>
-			</Popover>
-		 </li>
 	</ul>
 </nav>
 

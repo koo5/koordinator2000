@@ -14,6 +14,8 @@ import parseJwk from 'jose/jwk/parse'
 /*import decodeProtectedHeader from 'jose/util/decode_protected_header'
 import jwtVerify from 'jose/jwt/verify'*/
 
+const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+
 
 const {PORT, NODE_ENV} = process.env;
 const dev = NODE_ENV === 'development';
@@ -53,23 +55,32 @@ const apollo_client = new_apollo_client();
 
 async function free_user_id()
 {
+	const name = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
 	const result = await apollo_client.mutate({
 			mutation: gql`
-				mutation MyMutation {
-					insert_users_one(object: {}) {
+				mutation MyMutation($name: String) {
+					insert_users_one(object: {name:name}) {
 						id
 					}
 				}
-			`
+			`,
+			variables:
+				{
+					name
+				}
 		}
 	);
-	return await user_object(result['data']['insert_users_one']['id']);
+	return await sign_user_object(
+		{
+			id:result['data']['insert_users_one']['id'],
+			name
+		});
 }
 
-async function user_object(id)
+async function sign_user_object(x)
 {
-	const jwt = await user_authenticity_jwt(id);
-	return {id, jwt};
+	const jwt = await user_authenticity_jwt(x.id);
+	return {...x, jwt};
 }
 
 async function user_authenticity_jwt(id)
@@ -96,7 +107,7 @@ async function event(x)
 	console.log("found_user_id:")
 	console.log(found_user_id)
 	if (found_user_id)
-		return {user: await user_object(found_user_id)};
+		return {user: await sign_user_object({id:found_user_id})};
 	else
 		save_verified_authentication(x.id, "auth0", auth0.info.sub)
 }
