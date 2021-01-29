@@ -27,7 +27,6 @@
 		status = new_status;
 		console.log(status);
 	});
-//transition:slide|local
 </script>
 
 <style>
@@ -49,7 +48,7 @@
 <slot>???</slot>
 {#if status_string}
 	{#if $my_user.database_debug}
-		<pre>action status:
+		<pre transition:slide|local>action status:
 			{status_string}
 		</pre>
 	{/if}

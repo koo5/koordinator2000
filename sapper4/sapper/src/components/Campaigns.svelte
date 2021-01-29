@@ -82,8 +82,15 @@
 		console.log(campaign_id);
 		console.log('x.detail[0][0].activeIndex');
 		console.log(x.detail[0][0].activeIndex);*/
+		if (!x) return;
+		if (!x.detail) return;
+		if (!x.detail[0]) return;
+		if (!x.detail[0][0]) return;
+		if (x.detail[0][0].activeIndex == undefined) return;
 		if (x.detail[0][0].activeIndex != 2)
 		{
+			if (!campaign_containers) return;
+			if (!campaign_containers.children) return;
 			const children = campaign_containers.children;
 			var goToNext = false;
 			for (var i = 0; i < children.length; i++)
@@ -99,7 +106,7 @@
 					// hmm this could maybe also be done by navigating to a hash (the element id)
 					return;
 				}
-
+				if (!ch.dataset) return;
 				const j = ch.dataset.campaignId;
 				/*console.log('j');
 				console.log(j);*/
@@ -143,11 +150,11 @@
 
 
 </style>
-(swipe like on Tinder!)<br/>
-<p></p>
+
+
+
 
 <div bind:this="{campaign_containers}">
-<!--<ul bind:this="{campaign_containers}">-->
 
 	<SubscribedItemsInner {items} let:da={data}>
 
@@ -165,13 +172,6 @@
 						fadeEffect={ {crossFade: true} }
 						on:slideChange={(x) => slideChange(x,campaign.id)}
 				>
-
-<!--						preventInteractionOnTransition={true}-->
-<!--						effect={'fade'}-->
-
-<!--					<li class="rastrast" data-campaign-id={campaign.id}>-->
-
-
 					<SwiperSlide>
 						<div class="rastrast">
 							<button type="submit">participate in all campaigns of this cause</button>
@@ -188,9 +188,11 @@
 					</SwiperSlide>
 
 					<SwiperSlide>
+
 						<div class="rastrast">
 							<Campaign {campaign}/>
 						</div>
+
 					</SwiperSlide>
 
 					<SwiperSlide>
@@ -208,7 +210,6 @@
 						</div>
 					</SwiperSlide>
 
-<!--				</li>-->
 			</Swiper>
 
 		{:else}
@@ -216,21 +217,4 @@
 		{/each}
 	</SubscribedItemsInner>
 </div>
-<!--</ul>-->
 
-
-<!-- this should show, relative to your set threshold (100%), number of confirmed and number of unconfirmed participants:
-	<svelte:component this={ProgressBar} {series} height={5} showProgressValue={false} />
-	<ProgressBar {series} height={5} showProgressValue={false} />
-	gotta fix the transition_out bug though.
--->
-
-
-<!--<div>Current slide is { isActive ? 'active' : 'not active' }</div> -->
-
-<!--
-							  <div>
-								{JSON.stringify(campaign)}
-								  bla.
-							  </div>
--->

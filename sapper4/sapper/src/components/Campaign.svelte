@@ -59,8 +59,12 @@
 		</ToolTipsy>
 
 		{#if process.browser}
+			<!-- this should show, relative to your set threshold (100%), number of confirmed and number of unconfirmed participants: -->
+		<!--
 			<ProgressBar {series} showProgressValue={false} />
+		-->
 		{/if}
+
 
 		<p>{campaign.description}</p>
 

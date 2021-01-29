@@ -26,7 +26,7 @@
     "@dopry/svelte-auth0": "git+https://github.com/koo5/svelte-auth0.git",
     "@firebase/app": "^0.6.13",
     "@firebase/database": "^0.8.1",
-    "@okrad/svelte-progressbar": "^1.9.4",
+    "@okrad/svelte-progressbar": "^1.11.1",
     "@polka/send-type": "^0.5.2",
     "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-babel": "^5.0.0",
@@ -55,11 +55,11 @@
     "rollup-plugin-terser": "^7.0.0",
     "sapper": "^0.28.0",
     "subscriptions-transport-ws": "^0.9.18",
-    "svelte": "^3.32.0",
+    "svelte": "^3.17.3",
     "svelte-apollo": "^0.4.0",
     "svelte-popover": "^2.0.8",
     "svelte-scrollto": "^0.2.0",
-    "swiper": "^6.4.5",
+    "swiper": "^6.4.10",
     "unique-names-generator": "^4.3.1"
   }
 }
