@@ -2,4 +2,4 @@
 	import Campaigns from 'cmps/Campaigns.svelte';
 </script>
 
-	<Campaigns/>
+<Campaigns/>

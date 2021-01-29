@@ -1,32 +1,16 @@
 <script type='js'>
-	import {my_user} from 'srcs/my_user.js';
+	import {my_user,get_my_participation} from 'srcs/my_user.js';
 	import gql from 'graphql-tag';
 	import MutationForm from 'cmps/MutationForm.svelte';
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;
 	$: my_participation = get_my_participation(campaign, $my_user);
+	$: set_new_threshold($my_user);
 
-	function get_my_participation(campaign, my_user)
+	function set_new_threshold(u)
 	{
-		my_user=my_user
-		if (!campaign)
-			return {}
-		if (!campaign.my_participations)
-			return {}
-		if (campaign.my_participations.length == 1)
-		{
-			let p = campaign.my_participations[0]
-			new_threshold = p.threshold;
-			return p
-		}
-		else if (campaign.my_participations.length == 0)
-			return {}
-		else
-		{
-			console.log(campaign.my_participations)
-			throw('this shouldnt happen: (campaign.my_participations.length > 1)');
-		}
+		if (my_participation.threshold != undefined) new_threshold = my_participation.threshold;
 	}
 
 	const UPSERT = gql`

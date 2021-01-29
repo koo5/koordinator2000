@@ -2,16 +2,38 @@
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import gql from 'graphql-tag';
-	import {my_user} from 'srcs/my_user.js';
+	import {my_user,get_my_participation} from 'srcs/my_user.js';
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
-	import {slide} from 'svelte/transition';
 	import ProgressBar from "@okrad/svelte-progressbar";
+	//import {slide, fade} from 'svelte/transition';
+	/*import { flip } from 'svelte/animate';
+	import { crossfade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';*/
 
 
 	export let campaign;
-	let series = [20, 16];
+	$: my_participation = get_my_participation(campaign, $my_user);
+	$: confirmed_percent = get_confirmed_percent($my_user, my_participation);
+
+	function get_confirmed_percent(my_user, my_participation)
+	{
+		if (!my_participation.id) return 0;
+		//my_participation.threshold
+		return 10;
+	}
+
+	$: series = [
+        {
+                perc: confirmed_percent,
+                color: '#88ff88'
+        },
+        {
+                perc: 32,
+                color: '#ccffcc'
+        }
+]
 
 
 	const CAMPAIGN_DISMISSAL = gql`
@@ -26,7 +48,7 @@
 </script>
 
 
-<li transition:slide|local>
+<li>
 	<div class="campaign">
 
 		<ToolTipsy enabled="{my_user.database_debug}" css_ref="dev">
@@ -37,7 +59,7 @@
 		</ToolTipsy>
 
 		{#if process.browser}
-			<ProgressBar {series} height={5} showProgressValue={false} />
+			<ProgressBar {series} showProgressValue={false} />
 		{/if}
 
 		<p>{campaign.description}</p>
@@ -61,10 +83,16 @@
 		</ToolTipsy>
 
 		{#each campaign.participations as participation (participation.id)}
-			<ParticipationBadge {participation}/>
+			<span
+			>
+				<ParticipationBadge {participation} />
+			</span>
 		{/each}
 		{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
-			<DismissalBadge {dismissal}/>
+			<span
+			>
+				<DismissalBadge {dismissal}/>
+			</span>
 		{/each}
 
 		<MutationForm

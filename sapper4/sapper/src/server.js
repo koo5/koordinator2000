@@ -56,17 +56,19 @@ const apollo_client = new_apollo_client();
 async function free_user_id()
 {
 	const name = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
+	console.log(name)
+	console.log(typeof name)
 	const result = await apollo_client.mutate({
 			mutation: gql`
 				mutation MyMutation($name: String) {
-					insert_users_one(object: {name:name}) {
-						id
-					}
+				  insert_users_one(object: {name: $name}) {
+					id
+				  }
 				}
 			`,
 			variables:
 				{
-					name
+					name:name
 				}
 		}
 	);

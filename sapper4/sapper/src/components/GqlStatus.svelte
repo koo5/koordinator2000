@@ -1,7 +1,7 @@
 <script type='js'>
 
 	import {setContext} from 'svelte';
-	import {slide} from 'svelte/transition';
+	//import {slide} from 'svelte/transition';
 	import {my_user} from 'srcs/my_user.js';
 
 
@@ -27,7 +27,7 @@
 		status = new_status;
 		console.log(status);
 	});
-
+//transition:slide|local
 </script>
 
 <style>
@@ -40,6 +40,7 @@
 		border-style: dotted;
 		background-color: rgb(230, 230, 230);
 		border-style: dotted;
+
 	}
 
 </style>
@@ -47,7 +48,9 @@
 
 <slot>???</slot>
 {#if status_string}
-	<pre transition:slide|local>action status:
-		{status_string}
-	</pre>
+	{#if $my_user.database_debug}
+		<pre>action status:
+			{status_string}
+		</pre>
+	{/if}
 {/if}

@@ -87,3 +87,25 @@ export function logout()
 {
 	my_user.set({id:-1});
 }
+
+
+export function get_my_participation(campaign, my_user)
+	{
+		if (!campaign)
+			return {}
+		if (!campaign.my_participations)
+			return {}
+		if (campaign.my_participations.length == 1)
+		{
+			let p = campaign.my_participations[0]
+			return p
+		}
+		else if (campaign.my_participations.length == 0)
+			return {}
+		else
+		{
+			console.log(campaign.my_participations)
+			throw('this shouldnt happen: (campaign.my_participations.length > 1)');
+		}
+	}
+
