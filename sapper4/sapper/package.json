@@ -57,6 +57,7 @@
     "subscriptions-transport-ws": "^0.9.18",
     "svelte": "^3.32.0",
     "svelte-apollo": "^0.4.0",
+    "svelte-popover": "^2.0.8",
     "svelte-scrollto": "^0.2.0",
     "swiper": "^6.4.5"
   }

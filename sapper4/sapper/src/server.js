@@ -85,6 +85,8 @@ async function user_authenticity_jwt(id)
 
 async function event(x)
 {
+	if (x.id == -1 || !x.id)
+		return;
 	let auth0 = x.auth.auth0;
 	if (auth0.token == "") return;
 	/*console.log("decode:")

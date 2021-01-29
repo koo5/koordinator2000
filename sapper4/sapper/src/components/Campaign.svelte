@@ -6,7 +6,7 @@
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
-	import { slide } from 'svelte/transition';
+	import {slide} from 'svelte/transition';
 
 
 	export let campaign;
@@ -25,48 +25,63 @@
 
 <hr>
 
-<li transition:slide|local>>
+<li transition:slide|local>
+	<div class="campaign">
 
-	<ToolTipsy enabled="{my_user.database_debug}" css_ref="dev">
-		<h3>{campaign.title}</h3>
-		<pre slot="tooltip">
-			{JSON.stringify(campaign, null, '  ')}
-		</pre>
-	</ToolTipsy>
+		<ToolTipsy enabled="{my_user.database_debug}" css_ref="dev">
+			<h3>{campaign.title}</h3>
+			<pre slot="tooltip">
+				{JSON.stringify(campaign, null, '  ')}
+			</pre>
+		</ToolTipsy>
 
-	<p>{campaign.description}</p>
+		<p>{campaign.description}</p>
 
-	<span class="{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled') : ''}">
+		<span class="{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled') : ''}">
 				{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'threshold is reached:' : 'threshold is not reached:') : 'not participating:'}
 		</span>
 
-	<MyParticipation campaign={campaign}/>
+		<MyParticipation campaign={campaign}/>
 
-	<p>
-	<div>participants (sorted from lowest threshold):<br/> "✔" - participating<br/> "?" - condition fulfilled, waiting for confirmation<br/> "…" - condition was not fulfilled yet<br/> 👎 - disagreement/dismissal
-	</div>
-	{#each campaign.participations as participation (participation.id)}
-		<ParticipationBadge {participation}/>
-	{/each}
-	{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
-		<DismissalBadge {dismissal}/>
-	{/each}
+		<p></p>
+		<ToolTipsy enabled="{!$my_user.hide_help}">
+			participating users (sorted from lowest threshold to highest):
+			<div slot="tooltip">
+				<div class="help_tooltip">
+				Help:
+				<br/> "✔" - participating<br/> "?" - condition fulfilled,
+				waiting for confirmation<br/> "…" - condition was not fulfilled yet<br/> 👎 - disagreement/dismissal
+				</div>
+			</div>
+		</ToolTipsy>
 
-	<MutationForm
-			mutation={CAMPAIGN_DISMISSAL}
-			variables={{
+		{#each campaign.participations as participation (participation.id)}
+			<ParticipationBadge {participation}/>
+		{/each}
+		{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
+			<DismissalBadge {dismissal}/>
+		{/each}
+
+		<MutationForm
+				mutation={CAMPAIGN_DISMISSAL}
+				variables={{
 				user_id: $my_user.id,
 				campaign_id: campaign.id
 			}}
-	>
-		<button type="submit">dismiss campaign</button>
-	</MutationForm>
+		>
+			<button type="submit">dismiss campaign</button>
+		</MutationForm>
 
-	<hr>
+		<hr>
+	</div>
+
 </li>
 
-
 <style>
+
+    .campaign {
+        border-style: line;
+    }
 
     pre {
         overflow-x: scroll;

@@ -115,6 +115,18 @@
 </script>
 
 <style>
+
+
+	:global(.help_tooltip)	{
+		background-color: #ffffff;
+		padding: 1em;
+	}
+
+	:global(.info_tooltip)	{
+		background-color: #ffffff;
+		padding: 1em;
+	}
+
 	.rastrast {
 		max-width: 100%;
 		word-wrap: break-word;
