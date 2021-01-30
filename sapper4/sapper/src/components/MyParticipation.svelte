@@ -2,6 +2,8 @@
 	import {my_user,get_my_participation} from 'srcs/my_user.js';
 	import gql from 'graphql-tag';
 	import MutationForm from 'cmps/MutationForm.svelte';
+	import {createEventDispatcher} from 'svelte';
+	const dispatch = createEventDispatcher();
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;
@@ -42,7 +44,7 @@
 <div class="line">
 	{#if my_participation.id}
 
-		<MutationForm css_ref="cell"
+		<MutationForm  on:done={() => dispatch('my_participation_upsert')}  css_ref="cell"
 			mutation={UPSERT}
 			variables={upsert_vars}
 		>
@@ -54,7 +56,7 @@
 		</MutationForm>
 
 
-		<MutationForm css_ref="cell"
+		<MutationForm  on:done={() => dispatch('my_participation_upsert')} css_ref="cell"
 			mutation={gql`
 					mutation MyMutation($id: Int!) {
 						delete_participations_by_pk(id: $id)
@@ -73,7 +75,7 @@
 	{:else}
 
 
-		<MutationForm css_ref="cell"
+		<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="cell"
 			mutation={UPSERT}
 			variables={upsert_vars}
 		>

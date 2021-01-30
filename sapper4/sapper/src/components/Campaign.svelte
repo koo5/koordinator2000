@@ -51,7 +51,7 @@
 <li>
 	<div class="campaign">
 
-		<ToolTipsy enabled="{my_user.database_debug}" css_ref="dev">
+		<ToolTipsy enabled="{$my_user.database_debug}" css_ref="dev">
 			<h2>{campaign.title}</h2>
 			<pre slot="tooltip">
 				{JSON.stringify(campaign, null, '  ')}
@@ -72,7 +72,7 @@
 				{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'threshold is reached:' : 'threshold is not reached:') : 'not participating:'}
 		</span>
 
-		<MyParticipation campaign={campaign}/>
+		<MyParticipation campaign={campaign} on:my_participation_upsert/>
 
 		<p></p>
 		<ToolTipsy enabled="{!$my_user.hide_help}">

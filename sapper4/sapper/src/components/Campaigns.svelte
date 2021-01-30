@@ -14,6 +14,7 @@
 	import {Swiper, SwiperSlide} from 'swiper/svelte';
 	import SwiperCore, {EffectFade} from 'swiper';
 	import 'swiper/swiper-bundle.css';
+
 	SwiperCore.use([EffectFade]);
 
 
@@ -88,31 +89,35 @@
 		if (!x.detail[0][0]) return;
 		if (x.detail[0][0].activeIndex == undefined) return;
 		if (x.detail[0][0].activeIndex != 2)
-		{
-			if (!campaign_containers) return;
-			if (!campaign_containers.children) return;
-			const children = campaign_containers.children;
-			var goToNext = false;
-			for (var i = 0; i < children.length; i++)
-			{
-				const ch = children[i];
+			go_to_next_campaign(campaign_id);
 
-				if (goToNext)
+	}
+
+	function go_to_next_campaign(current_campaign_id)
+	{
+		if (!campaign_containers) return;
+		if (!campaign_containers.children) return;
+		const children = campaign_containers.children;
+		var goToNext = false;
+		for (var i = 0; i < children.length; i++)
+		{
+			const ch = children[i];
+
+			if (goToNext)
+			{
+				my_timeout = setTimeout(() =>
 				{
-					my_timeout = setTimeout(() =>
-					{
-						animateScroll.scrollTo({delay: 0, element: ch});
-					}, 2000);
-					// hmm this could maybe also be done by navigating to a hash (the element id)
-					return;
-				}
-				if (!ch.dataset) return;
-				const j = ch.dataset.campaignId;
-				/*console.log('j');
-				console.log(j);*/
-				if (campaign_id == j)
-					goToNext = true;
+					animateScroll.scrollTo({delay: 0, element: ch});
+				}, 2000);
+				// hmm this could maybe also be done by navigating to a hash (the element id)
+				return;
 			}
+			if (!ch.dataset) return;
+			const j = ch.dataset.campaignId;
+			/*console.log('j');
+			console.log(j);*/
+			if (current_campaign_id == j)
+				goToNext = true;
 		}
 	}
 
@@ -122,36 +127,35 @@
 <style>
 
 
-	:global(.help_tooltip)	{
-		background-color: #ffffff;
-		padding: 1em;
-	}
+    :global(.help_tooltip) {
+        background-color: #ffffff;
+        padding: 1em;
+    }
 
-	:global(.info_tooltip)	{
-		background-color: #ffffff;
-		padding: 1em;
-	}
+    :global(.info_tooltip) {
+        background-color: #ffffff;
+        padding: 1em;
+    }
 
-	.rastrast {
-		max-width: 100%;
-		word-wrap: break-word;
-	}
-	:global(.confirmed)	{
-		background-color: #88ff88;
-	}
+    .rastrast {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
 
-	:global(.condition_is_fulfilled)	{
-		background-color: #ccffcc;
-	}
+    :global(.confirmed) {
+        background-color: #88ff88;
+    }
 
-	:global(.condition_is_not_fulfilled)	{
-		background-color: #ffe0e0;
-	}
+    :global(.condition_is_fulfilled) {
+        background-color: #ccffcc;
+    }
+
+    :global(.condition_is_not_fulfilled) {
+        background-color: #ffe0e0;
+    }
 
 
 </style>
-
-
 
 
 <div bind:this="{campaign_containers}">
@@ -160,55 +164,55 @@
 
 		{#each data.campaigns as campaign (campaign.id)}
 
-				<Swiper data-campaign-id={campaign.id}
-						threshold={60}
-						initialSlide={2}
-						slidesPerView={1}
-						spaceBetween={0}
-						grabCursor={true}
-						watchOverflow={true}
-						speed={1500}
-						freeModeMomentum={false}
-						fadeEffect={ {crossFade: true} }
-						on:slideChange={(x) => slideChange(x,campaign.id)}
-				>
-					<SwiperSlide>
-						<div class="rastrast">
-							<button type="submit">participate in all campaigns of this cause</button>
-							<button type="submit">participate in all campaigns of this user</button>
+			<Swiper data-campaign-id={campaign.id}
+					threshold={60}
+					initialSlide={2}
+					slidesPerView={1}
+					spaceBetween={0}
+					grabCursor={true}
+					watchOverflow={true}
+					speed={1500}
+					freeModeMomentum={false}
+					fadeEffect={ {crossFade: true} }
+					on:slideChange={(x) => slideChange(x,campaign.id)}
+			>
+				<SwiperSlide>
+					<div class="rastrast">
+						<button type="submit">participate in all campaigns of this cause</button>
+						<button type="submit">participate in all campaigns of this user</button>
+					</div>
+				</SwiperSlide>
+
+				<SwiperSlide>
+					<div class="rastrast">
+						<div>PARTICIPATEd. double right:
+							See all campaigns of this cause. (button)
 						</div>
-					</SwiperSlide>
+					</div>
+				</SwiperSlide>
 
-					<SwiperSlide>
-						<div class="rastrast">
-							<div>PARTICIPATEd. double right:
-								See all campaigns of this cause. (button)
-							</div>
+				<SwiperSlide>
+
+					<div class="rastrast">
+						<Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)}/>
+					</div>
+
+				</SwiperSlide>
+
+				<SwiperSlide>
+					<div class="rastrast">
+						<div>DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
+							cause. (button)
 						</div>
-					</SwiperSlide>
+					</div>
+				</SwiperSlide>
 
-					<SwiperSlide>
-
-						<div class="rastrast">
-							<Campaign {campaign}/>
-						</div>
-
-					</SwiperSlide>
-
-					<SwiperSlide>
-						<div class="rastrast">
-							<div>DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
-								cause. (button)
-							</div>
-						</div>
-					</SwiperSlide>
-
-					<SwiperSlide>
-						<div class="rastrast">
-							<button type="submit">dismiss all campaigns of this cause</button>
-							<button type="submit">dismiss all campaigns of this user (for ever and ever...)</button>
-						</div>
-					</SwiperSlide>
+				<SwiperSlide>
+					<div class="rastrast">
+						<button type="submit">dismiss all campaigns of this cause</button>
+						<button type="submit">dismiss all campaigns of this user (for ever and ever...)</button>
+					</div>
+				</SwiperSlide>
 
 			</Swiper>
 

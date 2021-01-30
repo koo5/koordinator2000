@@ -12,9 +12,10 @@
 				campaign {
 				  id
 				  title
-					my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
-						id
-					}
+                  my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
+                    id
+                    confirmed
+                  }
 				}
 
 				content
@@ -40,3 +41,6 @@
 		{/each}
 	</SubscribedItemsInner>
 </ul>
+
+<!--<pre>{JSON.stringify(items, null, 2)}</pre> -->
+

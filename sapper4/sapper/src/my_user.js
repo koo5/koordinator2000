@@ -69,7 +69,8 @@ export async function event(event)
 export async function ensure_we_exist()
 {
 	const user = get(my_user);
-	console.log('i am ' + JSON.stringify(user, null, '  '));
+	if (my_user.auth_debug)
+		console.log('i am ' + JSON.stringify(user, null, '  '));
 	if (user.id < 1)
 	{
 		return await new_user();

@@ -1,11 +1,11 @@
 <script type='js'>
 
 	import {mutation as apollo_mutation} from 'svelte-apollo';
-	import {createEventDispatcher} from 'svelte';
 	import {getContext} from 'svelte';
 	import {ensure_we_exist,apply_newly_authenticated_user,my_user} from 'srcs/my_user.js';
-
+	import {createEventDispatcher} from 'svelte';
 	const dispatch = createEventDispatcher();
+
 	export let css_ref;
 	export let mutation;
 	export let variables;
@@ -13,9 +13,8 @@
 	let status_displayer = getContext('graphql_status_displayer');
 	$: variables_str = JSON.stringify(variables, null, ' ');
 
-	async function submit(e)
+	async function submit()
 	{
-		e.preventDefault();
 		status_displayer(['MUTATE:', mutation2]);
 		let newly_authenticated_user;
 		try
@@ -56,7 +55,7 @@
 
 </script>
 
-<form {css_ref} on:submit={submit}>
+<form {css_ref} on:submit|preventDefault={submit}>
 	{#if $my_user.graphql_debug}
 		<pre>mutation vars:{variables_str}</pre>
 	{/if}
