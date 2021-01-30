@@ -1,7 +1,7 @@
 <script type='js'>
 
 	import {setContext} from 'svelte';
-	//import {slide} from 'svelte/transition';
+	import {slide} from 'svelte/transition';
 	import {my_user} from 'srcs/my_user.js';
 
 

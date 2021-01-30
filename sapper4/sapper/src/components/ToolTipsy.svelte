@@ -38,7 +38,7 @@ todo
 		visibility: hidden;
 		position: absolute;
 		z-index: 1;
-		margin: 1em 1em;
+		border: 1em 1em;
 	}
 
 	/* Show the tooltip text when you mouse over the tooltip container */

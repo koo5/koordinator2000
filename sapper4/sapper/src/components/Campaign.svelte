@@ -51,12 +51,14 @@
 <li>
 	<div class="campaign">
 
-		<ToolTipsy enabled="{$my_user.database_debug}" css_ref="dev">
-			<h2>{campaign.title}</h2>
-			<pre slot="tooltip">
-				{JSON.stringify(campaign, null, '  ')}
-			</pre>
-		</ToolTipsy>
+		<h2>
+			<ToolTipsy enabled="{$my_user.database_debug}" css_ref="dev">
+				{campaign.title}
+				<pre slot="tooltip">
+					{JSON.stringify(campaign, null, '  ')}
+				</pre>
+			</ToolTipsy>
+		</h2>
 
 		{#if process.browser}
 			<!-- this should show, relative to your set threshold (100%), number of confirmed and number of unconfirmed participants: -->

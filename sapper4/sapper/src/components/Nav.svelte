@@ -46,12 +46,12 @@
 		|
 	{/if}
 	{#if $my_user.id > 0}
-		<form class="cell" on:submit={logout}><button type="submit">Log out</button></form>
+		<form class="cell" on:submit={logout}><button  class="cell"  type="submit">Log out</button></form>
 	{:else}
-		<button on:click|preventDefault='{() => login() }'>Login</button>
-		<button on:click={register}>Register</button>
+		<button  class="cell"  on:click|preventDefault='{() => login() }'>Login</button>
+		<button  class="cell"  on:click={register}>New user</button>
 	{/if}
-	<span class="topnav-right">
+	<span  class="cell" >
 		<Popover>
 		  <button slot=target>Settings</button>
 		  <span slot=content>
@@ -88,6 +88,10 @@
 
 <style>
 
+	.cell {
+        display: table-cell;
+    }
+
 	.pop_up {
 		border-bottom: 1px solid rgba(255,62,0,0.1);
 		padding: 1em;
@@ -95,11 +99,11 @@
 		clear: both;
 		background-color: rgb(255,255,200);
     }
-
+/*
 	.topnav-right {
 	  align: right;
 	}
-
+*/
 	nav {
 		border-bottom: 1px solid rgba(255,62,0,0.1);
 		font-weight: 300;
