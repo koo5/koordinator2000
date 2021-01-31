@@ -61,6 +61,7 @@
 		  </span>
 		</Popover>
 	</span>
+	<span  class="cell" >my_user.name</span>
 </div>
 <nav>
 	<ul>
