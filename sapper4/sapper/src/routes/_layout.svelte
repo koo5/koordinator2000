@@ -97,6 +97,8 @@
 
 	</Auth0Context>
 {:else}
+	It's like kickstarter, but not for collecting money, it's for decentralized coordination of collective action.
+	<p>
 	loading..
 {/if}
 
