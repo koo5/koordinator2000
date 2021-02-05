@@ -8,13 +8,14 @@
 		userInfo,
 	} from '@dopry/svelte-auth0';
 	import {stores} from '@sapper/app'
-	import {my_user, event} from 'srcs/my_user.js';
+	import {my_user, ensure_we_exist, apply_newly_authenticated_user, event} from 'srcs/my_user.js';
+	import { onMount } from "svelte";
 	const {page, session} = stores()
 
 
-	$: PUBLIC_URL = $session.PUBLIC_URL;
+	/*$: PUBLIC_URL = $session.PUBLIC_URL;
 	$: callback_url = PUBLIC_URL + "/auth0"
-	$: logout_url = PUBLIC_URL + "/auth0"
+	$: logout_url = PUBLIC_URL + "/auth0"*/
 	$: audience = undefined;
 	$: domain = "dev-koord11.eu.auth0.com"
 	$: client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf"
@@ -50,6 +51,12 @@
 		setClient(new_apollo_client());
 	}
 
+	onMount(async () =>
+	{
+		console.log("ensure_we_exist()");
+		await apply_newly_authenticated_user(await ensure_we_exist());
+	});
+
 </script>
 
 <style>
@@ -69,9 +76,9 @@
 			{domain}
 			{client_id}
 			{audience}
-			{callback_url}
-			{logout_url}
 	>
+			<!--{callback_url}
+			{logout_url}-->
 
 <Nav {segment}/>
 
@@ -84,12 +91,14 @@
 
 			auth0 configuration:
 			<pre>
-				PUBLIC_URL = {PUBLIC_URL}
-				callback_url = {callback_url}
-				logout_url = {logout_url}
+
 				audience = {audience}
 				domain = {domain}
 				client_id = {client_id}
+				<!--
+				PUBLIC_URL = {PUBLIC_URL}
+				callback_url = {callback_url}
+				logout_url = {logout_url}-->
 			</pre>
 
 		{/if}
@@ -97,7 +106,7 @@
 
 	</Auth0Context>
 {:else}
-	It's like kickstarter, but not for collecting money, it's for decentralized coordination of collective action.
+	It's like kickstarter, but not for collecting money, it's for decentralized coordination of collective action. <a href="https://github.com/koo5/koordinator2000/">README.</a>
 	<p>
 	loading..
 {/if}
