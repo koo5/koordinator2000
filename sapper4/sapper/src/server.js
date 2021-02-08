@@ -55,9 +55,8 @@ const apollo_client = new_apollo_client();
 
 async function free_user_id()
 {
-	const name = uniqueNamesGenerator({ dictionaries: [adjectives, colors, animals] });
-	console.log(name)
-	console.log(typeof name)
+	const name = uniqueNamesGenerator({ dictionaries: [adjectives, colors] });
+	console.log("free_user_id:"+name)
 	const result = await apollo_client.mutate({
 			mutation: gql`
 				mutation MyMutation($name: String) {
@@ -72,11 +71,14 @@ async function free_user_id()
 				}
 		}
 	);
-	return await sign_user_object(
+	let r = await sign_user_object(
 		{
 			id:result['data']['insert_users_one']['id'],
 			name
 		});
+	console.log("free_user_id result:"+JSON.stringify(r, null, ' '))
+	console.log()
+	return r;
 }
 
 async function sign_user_object(x)
@@ -96,7 +98,7 @@ async function user_authenticity_jwt(id)
 		.sign(ecPrivateKey)
 }
 
-async function event(x)
+async function process_event(x)
 {
 	let auth0 = x.auth.auth0;
 	if (auth0.token == "") return;
@@ -177,12 +179,16 @@ app.use(
 		/*console.log(req.body);
 		console.log(typeof req.body);
 		console.log(typeof req.body.event);*/
-		let rrr = await event(req.body.event);
-		console.log('rrr:');
+		let e = req.body.event;
+		console.log('/event:');
+		console.log(e);
+		let rrr = await process_event(e);
+		console.log('/event response:');
 		console.log(rrr);
 		if (rrr)
 			rrr["banana"] = true;
 		send(res, 200, rrr);
+		console.log();
 	})
 	.use(
 		compression({threshold: 0}),

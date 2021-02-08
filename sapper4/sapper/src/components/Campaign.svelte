@@ -50,7 +50,7 @@
 
 <li>
 	<div class="campaign">
-
+		<hr>
 		<h2>
 			<ToolTipsy enabled="{$my_user.database_debug}" css_ref="dev">
 				{campaign.title}

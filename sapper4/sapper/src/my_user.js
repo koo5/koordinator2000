@@ -1,8 +1,9 @@
 import { readable,writable, get } from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
+import {goto} from '@sapper/app';
 
 export const my_user = process.browser ?
-	localStorageSharedStore('my_user',{id:-1})
+	localStorageSharedStore('my_user',{id:-1,auth_debug:true})
 	//writable({id:-1})
 	:
 	readable({id:0});
@@ -110,3 +111,15 @@ export function get_my_participation(campaign, my_user)
 		}
 	}
 
+export async function register()
+	{
+		try
+		{
+			await apply_newly_authenticated_user(await ensure_we_exist());
+			goto('/you');
+		}
+		catch (e)
+		{
+			console.log(e)
+		}
+	}

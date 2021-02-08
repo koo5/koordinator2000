@@ -19,7 +19,7 @@
 	  `, {});
 
 </script>
-Causes are higher-level than actions. A cause can have multiple associated actions. It states the problem and the goal.
+Multiple campaigns can be grouped under one cause.
 <ul>
 	{#if process.browser}
 		{#if $q.loading}

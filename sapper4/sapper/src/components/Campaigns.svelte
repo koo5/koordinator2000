@@ -108,7 +108,7 @@
 				my_timeout = setTimeout(() =>
 				{
 					animateScroll.scrollTo({delay: 0, element: ch});
-				}, 2000);
+				}, 500);
 				// hmm this could maybe also be done by navigating to a hash (the element id)
 				return;
 			}

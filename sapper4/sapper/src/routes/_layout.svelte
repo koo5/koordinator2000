@@ -13,9 +13,10 @@
 	const {page, session} = stores()
 
 
-	/*$: PUBLIC_URL = $session.PUBLIC_URL;
-	$: callback_url = PUBLIC_URL + "/auth0"
-	$: logout_url = PUBLIC_URL + "/auth0"*/
+	$: PUBLIC_URL = $session.PUBLIC_URL;
+	$: callback_url = PUBLIC_URL + "/you"
+	$: logout_url = PUBLIC_URL + "/you"
+
 	$: audience = undefined;
 	$: domain = "dev-koord11.eu.auth0.com"
 	$: client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf"
@@ -54,7 +55,9 @@
 	onMount(async () =>
 	{
 		console.log("ensure_we_exist()");
-		await apply_newly_authenticated_user(await ensure_we_exist());
+		let u = await ensure_we_exist();
+		if (u)
+			await apply_newly_authenticated_user(u)
 	});
 
 </script>
@@ -70,43 +73,40 @@
 	}*/
 </style>
 
-{#if process.browser}
+{#if process.browser && $my_user}
 
 	<Auth0Context
 			{domain}
 			{client_id}
 			{audience}
-	>
-			<!--{callback_url}
-			{logout_url}-->
 
-<Nav {segment}/>
+			{callback_url}
+			{logout_url}>
 
-<main>
-	<slot></slot>
-</main>
+		<Nav {segment}/>
 
+		<main>
+			<slot></slot>
+		</main>
 
 		{#if $my_user.auth_debug}
-
 			auth0 configuration:
 			<pre>
-
 				audience = {audience}
 				domain = {domain}
 				client_id = {client_id}
-				<!--
+
 				PUBLIC_URL = {PUBLIC_URL}
 				callback_url = {callback_url}
-				logout_url = {logout_url}-->
+				logout_url = {logout_url}
 			</pre>
 
 		{/if}
-
-
 	</Auth0Context>
+
+
 {:else}
-	It's like kickstarter, but not for collecting money, it's for decentralized coordination of collective action. <a href="https://github.com/koo5/koordinator2000/">README.</a>
+	Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. <a href="https://github.com/koo5/koordinator2000/">README.</a>
 	<p>
 	loading..
 {/if}

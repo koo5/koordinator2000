@@ -7,7 +7,9 @@
 
 </script>
 
-before starting to fill in data, you may want to register, so that your data may not become orphaned.
+Multiple campaigns can be grouped under one cause.
+
+Before starting to fill in data, you may want to register, so that your data may not become orphaned.
 
 <MutationForm
 	mutation={gql`

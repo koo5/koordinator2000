@@ -25,7 +25,7 @@
 		<br/>
 
 		{#if $isAuthenticated}
-			you are authenticated.<br/>
+			you are authenticated as: {JSON.stringify($my_user && $my_user.auth && $my_user.auth.auth0 && $my_user.auth.auth0.info && $my_user.auth.auth0.info.sub)}<br/>
 			<button on:click|preventDefault='{() => logout() }'>Unauthenticate</button>
 		{:else}
 			you are not authenticated.<br/>
