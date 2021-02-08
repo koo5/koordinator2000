@@ -7,7 +7,7 @@ It's like kickstarter, but not for collecting money, rather it's for coordinatin
 
 ## Politics
 
-For example, you would vote for a tiny progressive political party, if you knew that your vote would matter. You will probably waste your vote, unless you can know thaht there is a large enough mass of people to make it count. In some places, this is ensured by the voting system. In the rest, you have to coordinate with other voters! 
+For example, you would vote for a tiny progressive political party, if you knew that your vote would matter. You will probably waste your vote, unless you can know that there is a large enough mass of people to make it count. In some places, this is ensured by the voting system. In others, you have to coordinate with other voters yourself. 
 
 ## Consumers
 
