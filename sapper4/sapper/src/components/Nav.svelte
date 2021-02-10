@@ -83,6 +83,7 @@
 		display: block;
 		clear: both;
 		background-color: rgb(255, 255, 200);
+		color: #000;
 	}
 
 	/*
@@ -90,11 +91,6 @@
 		  align: right;
 		}
 	*/
-	nav {
-		border-bottom: 1px solid rgba(255, 62, 0, 0.1);
-		font-weight: 300;
-		padding: 0 1em;
-	}
 
 	ul {
 		margin: 0;
