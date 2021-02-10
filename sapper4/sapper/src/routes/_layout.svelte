@@ -71,6 +71,56 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}*/
+/*
+
+	nav {
+		border-bottom: 1px solid rgba(255, 62, 0, 0.1);
+		font-weight: 300;
+		padding: 0 1em;
+	}
+*/
+
+:global(html) {
+    padding:12px;
+        background: salmon;
+}
+@media (min-width:420px) {
+   :global(html) {
+    padding: 3vw 12vw 3vw 8vh;
+   }
+}
+
+:global(h1, h2, h3, h4, h5) {
+    font-family:serif;
+}
+:global(h1) {
+    font-size:310%;
+    margin-left:-3vw;
+    padding-left:2vw;
+    border-left:1vw ridge #f88072
+}
+
+:global(body) {
+    margin:0 auto;
+    max-width:600px;
+}
+main {
+    background:white;
+    box-shadow:20px 50px 3px;
+    padding:3vh 3vw
+}
+
+:global(nav) {
+    background:#333333;
+    border-bottom:10px dotted #f88072;
+    display:block;
+    color:white;
+}
+
+:global(h2) {
+    padding:22px 0 12px 0;
+}
+
 </style>
 
 {#if process.browser && $my_user}
