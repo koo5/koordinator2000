@@ -1,13 +1,22 @@
 <script type='js'>
 	import {my_user} from 'srcs/my_user.js';
+	const default_participations_display_styles = ['koo1','koo1_introductory','facebook'];
 </script>
 
 <h3>user settings</h3>
-<p>
+<br>
 	<label for="x1">hide_help:</label>
 	<input id="x1" type="checkbox" bind:checked={$my_user.hide_help}>
-	<br>
-</p>
+
+	<h4>default_participations_display_style:</h4>
+	{#each default_participations_display_styles as s (s)}
+		<label>
+			<input type=radio bind:group={$my_user.default_participations_display_style} value={s}>
+			{s}
+		</label>
+		<br>
+	{/each}
+<br>
 
 <h3>developer settings</h3>
 <p>

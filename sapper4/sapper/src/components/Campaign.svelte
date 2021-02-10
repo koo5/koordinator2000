@@ -88,6 +88,11 @@
 			</div>
 		</ToolTipsy>
 
+		{#if $my_user.default_participations_display_style == 'facebook'}
+			emojis go here
+		{:else if $my_user.default_participations_display_style == 'koo1_introductory'}
+			wordy stuff goes here
+		{:else}
 		{#each campaign.participations as participation (participation.id)}
 			<span
 			>
@@ -100,6 +105,7 @@
 				<DismissalBadge {dismissal}/>
 			</span>
 		{/each}
+		{/if}
 
 		<MutationForm
 				mutation={CAMPAIGN_DISMISSAL}
