@@ -8,6 +8,10 @@
 	<label for="x1">hide_help:</label>
 	<input id="x1" type="checkbox" bind:checked={$my_user.hide_help}>
 
+<br>
+	<label for="x1">enable_swiping_on_desktop (TODO):</label>
+	<input id="x1" type="checkbox" bind:checked={$my_user.enable_swiping_on_desktop}>
+
 	<h4>default_participations_display_style:</h4>
 	{#each default_participations_display_styles as s (s)}
 		<label>

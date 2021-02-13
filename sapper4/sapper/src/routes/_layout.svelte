@@ -109,14 +109,14 @@ main {
     box-shadow:20px 50px 3px;
     padding:3vh 3vw
 }
-
+/*
 :global(nav) {
     background:#333333;
     border-bottom:10px dotted #f88072;
     display:block;
     color:white;
 }
-
+*/
 :global(h2) {
     padding:22px 0 12px 0;
 }

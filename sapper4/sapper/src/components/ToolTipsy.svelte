@@ -9,7 +9,7 @@
 
 {#if enabled}
 
-	<span class='tooltip'>
+	<span class='tooltipsy'>
 		<slot></slot>
 		<div class="tooltiptext {css_ref}">
 			<slot name="tooltip">tooltip</slot>
@@ -30,7 +30,7 @@ todo
 
 <style>
 
-	.tooltip {
+	.tooltipsy {
 		border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 	}
 
@@ -42,7 +42,7 @@ todo
 	}
 
 	/* Show the tooltip text when you mouse over the tooltip container */
-	.tooltip:hover .tooltiptext {
+	.tooltipsy:hover .tooltiptext {
 		visibility: visible;
 	}
 

@@ -48,8 +48,8 @@
 			mutation={UPSERT}
 			variables={upsert_vars}
 		>
-			<label for="threshold">My threshold:
-				<input type="text" id="threshold" bind:value={new_threshold}/>
+			<label>My threshold:
+				<input type="text" bind:value={new_threshold}/>
 				<button type="submit">Update</button>
 				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
 			</label>

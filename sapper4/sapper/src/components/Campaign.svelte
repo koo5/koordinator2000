@@ -7,6 +7,7 @@
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
 	import ProgressBar from "@okrad/svelte-progressbar";
+  	import { Progress } from 'sveltestrap';
 	//import {slide, fade} from 'svelte/transition';
 	/*import { flip } from 'svelte/animate';
 	import { crossfade } from 'svelte/transition';
@@ -60,12 +61,11 @@
 			</ToolTipsy>
 		</h2>
 
-		{#if process.browser}
-			<!-- this should show, relative to your set threshold (100%), number of confirmed and number of unconfirmed participants: -->
-		<!--
-			<ProgressBar {series} showProgressValue={false} />
-		-->
-		{/if}
+		<Progress multi>
+		  <Progress bar color="success" value={15} max={55}>15</Progress>
+			<!-- how to make the below the "light green" "unconfirmed participation"? -->
+		  <Progress bar color="warning" value={10} max={55}>10</Progress>
+		</Progress>
 
 
 		<p>{campaign.description}</p>
