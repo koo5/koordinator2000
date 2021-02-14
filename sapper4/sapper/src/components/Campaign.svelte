@@ -2,7 +2,7 @@
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import gql from 'graphql-tag';
-	import {my_user,get_my_participation} from 'srcs/my_user.js';
+	import {my_user,default_participations_display_style,get_my_participation} from 'srcs/my_user.js';
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
@@ -89,19 +89,19 @@
 			</div>
 		</ToolTipsy>
 
-		{#if $my_user.default_participations_display_style == 'facebook'}
+		{#if default_participations_display_style($my_user) == 'facebook'}
 			emojis go here
-		{:else if $my_user.default_participations_display_style == 'koo1_introductory'}
+		{:else if default_participations_display_style($my_user) == 'koo1_introductory'}
 			wordy stuff goes here
-		{:else if $my_user.default_participations_display_style == 'tabular_breakdown'}
-			<TabularParticipationsBreakdown {campaign}/>
+		{:else if default_participations_display_style($my_user) == 'koo1'}
+			{#each campaign.participations as participation (participation.id)}
+				<span
+				>
+					<ParticipationBadge {participation} />
+				</span>
+			{/each}
 		{:else}
-		{#each campaign.participations as participation (participation.id)}
-			<span
-			>
-				<ParticipationBadge {participation} />
-			</span>
-		{/each}
+			<TabularParticipationsBreakdown {campaign}/>
 		{/if}
 		<br>
 		and these users dismissed the campaign:
