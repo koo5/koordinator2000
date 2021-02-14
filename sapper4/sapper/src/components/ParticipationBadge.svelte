@@ -1,43 +1,11 @@
 <script lang='js'>
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import {my_user} from 'srcs/my_user.js';
-
+	import {get_status_class,get_tickmark} from 'srcs/stuff.js';
 
 	export let participation;
 	$: status_class = get_status_class(participation);
-
-	function get_status_class(participation)
-	{
-		if (participation.condition_is_fulfilled)
-		{
-			if (participation.confirmed)
-			{
-				return "confirmed"
-			}
-			else
-				return "condition_is_fulfilled"
-		}
-		else
-			return "condition_is_not_fulfilled"
-	}
-
 	$: tickmark = get_tickmark(participation);
-
-	function get_tickmark(participation)
-	{
-		if (participation.condition_is_fulfilled)
-		{
-			if (participation.confirmed)
-			{
-				return '✔'
-			}
-			else
-				return "❓"
-		}
-		else
-			return "…"
-	}
-
 	$: my_badge = $my_user.id == participation.user.id;
 
 </script>

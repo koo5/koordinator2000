@@ -1,6 +1,6 @@
 <script type='js'>
 	import {my_user} from 'srcs/my_user.js';
-	const default_participations_display_styles = ['koo1','koo1_introductory','facebook'];
+	const default_participations_display_styles = ['koo1','koo1_introductory','facebook','tabular_breakdown'];
 </script>
 
 <h3>user settings</h3>
@@ -9,8 +9,8 @@
 	<input id="x1" type="checkbox" bind:checked={$my_user.hide_help}>
 
 <br>
-	<label for="x1">enable_swiping_on_desktop (TODO):</label>
-	<input id="x1" type="checkbox" bind:checked={$my_user.enable_swiping_on_desktop}>
+	<label for="x1b">enable_swiping_on_desktop (TODO):</label>
+	<input id="x1b" type="checkbox" bind:checked={$my_user.enable_swiping_on_desktop}>
 
 	<h4>default_participations_display_style:</h4>
 	{#each default_participations_display_styles as s (s)}

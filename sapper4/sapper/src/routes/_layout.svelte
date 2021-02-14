@@ -83,6 +83,7 @@
 :global(html) {
     padding:12px;
         background: salmon;
+	filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);
 }
 @media (min-width:420px) {
    :global(html) {

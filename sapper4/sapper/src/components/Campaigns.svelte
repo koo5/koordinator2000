@@ -151,7 +151,7 @@
     }
 
     :global(.condition_is_not_fulfilled) {
-        background-color: #ffe0e0;
+        background-color: #ffffe0;
     }
 
 

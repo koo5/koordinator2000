@@ -1,25 +1,14 @@
 <script>
 	import PageReloadClock from "cmps/PageReloadClock.svelte";
-	import {ensure_we_exist, apply_newly_authenticated_user, my_user, logout} from 'srcs/my_user.js';
-	import {goto} from '@sapper/app';
-	import {
-		login,
-	} from '@dopry/svelte-auth0';
-
+	import {my_user} from 'srcs/my_user.js';
 	import Popover from 'svelte-popover';
 	import Settings from 'cmps/Settings.svelte';
-
 
 	export let segment;
 
 	let my_user_str;
 	$: my_user_str = JSON.stringify($my_user, null, ' ');
-	$: authenticated = $my_user && ($my_user.id > 0);
-	$: guest = !authenticated;
 
-	/*
-	 class:authenticated class:guest
-	 */
 </script>
 
 {#if process.browser}
@@ -72,11 +61,6 @@
 <style>
 
 
-	/*
-		.cell {
-			display: table-cell;
-		}
-	*/
 	.pop_up {
 		border-bottom: 1px solid rgba(255, 62, 0, 0.1);
 		padding: 1em;
@@ -86,18 +70,13 @@
 		color: #000;
 	}
 
-	/*
-		.topnav-right {
-		  align: right;
-		}
-	*/
 
 	ul {
 		margin: 0;
 		padding: 0;
 	}
 
-	/* clearfix */
+
 	ul::after {
 		content: '';
 		display: block;
@@ -124,15 +103,6 @@
 		bottom: -1px;
 	}
 
-	/*
-		.guest {
-			background-color: rgb(255,155,155);
-		}
-
-		.authenticated {
-			background-color: rgb(155,255,155);
-		}
-	*/
 	a {
 		text-decoration: none;
 		padding: 1em 0.5em;

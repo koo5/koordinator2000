@@ -6,6 +6,7 @@
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import ParticipationBadge from 'cmps/ParticipationBadge.svelte';
 	import DismissalBadge from 'cmps/DismissalBadge.svelte';
+	import TabularParticipationsBreakdown from 'cmps/TabularParticipationsBreakdown.svelte';
 	import ProgressBar from "@okrad/svelte-progressbar";
   	import { Progress } from 'sveltestrap';
 	//import {slide, fade} from 'svelte/transition';
@@ -71,7 +72,7 @@
 		<p>{campaign.description}</p>
 
 		<span class="{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled') : ''}">
-				{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'threshold is reached:' : 'threshold is not reached:') : 'not participating:'}
+				{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'my threshold is reached.' : 'my threshold is not reached.') : 'not participating.'}
 		</span>
 
 		<MyParticipation campaign={campaign} on:my_participation_upsert/>
@@ -82,8 +83,8 @@
 			<div slot="tooltip">
 				<div class="help_tooltip">
 				Help:
-				<br/> "✔" - participating<br/> "?" - condition fulfilled,
-				waiting for confirmation<br/> "…" - condition was not fulfilled yet<br/> 👎 - disagreement/dismissal
+				<br/> "✔" - participating, confirmed<br/> "👍" - condition fulfilled,
+				waiting for confirmation<br/> "🖐" - condition was not fulfilled yet<br/> 👎 - disagreement/dismissal
 				</div>
 			</div>
 		</ToolTipsy>
@@ -92,6 +93,8 @@
 			emojis go here
 		{:else if $my_user.default_participations_display_style == 'koo1_introductory'}
 			wordy stuff goes here
+		{:else if $my_user.default_participations_display_style == 'tabular_breakdown'}
+			<TabularParticipationsBreakdown {campaign}/>
 		{:else}
 		{#each campaign.participations as participation (participation.id)}
 			<span
@@ -99,13 +102,15 @@
 				<ParticipationBadge {participation} />
 			</span>
 		{/each}
+		{/if}
+		<br>
+		and these users dismissed the campaign:
 		{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
 			<span
 			>
 				<DismissalBadge {dismissal}/>
 			</span>
 		{/each}
-		{/if}
 
 		<MutationForm
 				mutation={CAMPAIGN_DISMISSAL}
