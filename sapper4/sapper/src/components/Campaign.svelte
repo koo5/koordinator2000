@@ -102,6 +102,9 @@
 
 		<p>{campaign.description}</p>
 
+		<h5>My threshold</h5>
+		<i>I will join when other people join:</i><br>
+
 		<MyParticipation campaign={campaign} on:my_participation_upsert/>
 		<br>
 

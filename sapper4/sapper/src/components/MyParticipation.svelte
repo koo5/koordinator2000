@@ -45,9 +45,6 @@
 <div class="line">
 	{#if my_participation.id}
 
-		<h5>My threshold</h5>
-		<i>I will join when other people join:</i><br>
-
 		<MutationForm  on:done={() => dispatch('my_participation_upsert')}  css_ref="cell"
 			mutation={UPSERT}
 			variables={upsert_vars}

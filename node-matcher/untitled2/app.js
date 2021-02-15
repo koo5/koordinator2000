@@ -127,7 +127,7 @@ if (verbose)		console.log(campaign.id + ' - ' + campaign.title + ':');
 		let last_fulfilled_idx = -1;
 		campaign.participations.forEach((participation) =>
 		{
-			if (participation.threshold <= participation_idx_starting_at_1)
+			if (participation.threshold < participation_idx_starting_at_1)
 				last_fulfilled_idx = participation_idx_starting_at_1 - 1;
 			participation_idx_starting_at_1++;
 		});
