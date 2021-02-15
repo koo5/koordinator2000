@@ -60,6 +60,16 @@
 				  	name
 				  }
 				}
+				unconfirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: false}, condition_is_fulfilled: {_eq: true}}) {
+				  aggregate {
+					count
+				  }
+				}
+				confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}}) {
+				  aggregate {
+					count
+				  }
+				}
 		  }
 		}
   	`;
@@ -127,32 +137,32 @@
 <style>
 
 
-    :global(.help_tooltip) {
-        background-color: #ffffff;
-        padding: 1em;
-    }
+	:global(.help_tooltip) {
+		background-color: #ffffff;
+		padding: 1em;
+	}
 
-    :global(.info_tooltip) {
-        background-color: #ffffff;
-        padding: 1em;
-    }
+	:global(.info_tooltip) {
+		background-color: #ffffff;
+		padding: 1em;
+	}
 
-    .rastrast {
-        max-width: 100%;
-        word-wrap: break-word;
-    }
+	.rastrast {
+		max-width: 100%;
+		word-wrap: break-word;
+	}
 
-    :global(.confirmed) {
-        background-color: #88ff88;
-    }
+	:global(.confirmed) {
+		background-color: #88ff88;
+	}
 
-    :global(.condition_is_fulfilled) {
-        background-color: #ccffcc;
-    }
+	:global(.condition_is_fulfilled) {
+		background-color: #ccffcc;
+	}
 
-    :global(.condition_is_not_fulfilled) {
-        background-color: #ffffe0;
-    }
+	:global(.condition_is_not_fulfilled) {
+		background-color: #ffffe0;
+	}
 
 
 </style>

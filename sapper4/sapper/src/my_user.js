@@ -124,4 +124,5 @@ export function default_participations_display_style(my_user)
 {
 	if (my_user.default_participations_display_style)
 		return my_user.default_participations_display_style;
+	return "tabular_breakdown";
 }

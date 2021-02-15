@@ -1,6 +1,6 @@
 <script type='js'>
-	import {my_user} from 'srcs/my_user.js';
-	const default_participations_display_styles = ['koo1','koo1_introductory','facebook','tabular_breakdown'];
+	import {my_user, default_participations_display_style} from 'srcs/my_user.js';
+	const default_participations_display_styles_list = ['koo1','koo1_introductory','facebook','tabular_breakdown'];
 </script>
 
 <h3>user settings</h3>
@@ -13,7 +13,7 @@
 	<input id="x1b" type="checkbox" bind:checked={$my_user.enable_swiping_on_desktop}>
 
 	<h4>default_participations_display_style:</h4>
-	{#each default_participations_display_styles as s (s)}
+	{#each default_participations_display_styles_list as s (s)}
 		<label>
 			<input type=radio bind:group={$my_user.default_participations_display_style} value={s}>
 			{s}

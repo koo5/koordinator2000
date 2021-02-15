@@ -51,7 +51,7 @@
 			<label>My threshold:
 				<input type="text" bind:value={new_threshold}/>
 				<button type="submit">Update</button>
-				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
+				minimum threshold suggested: {campaign.suggested_lowest_threshold}<br>maximum threshold suggested:{campaign.suggested_highest_threshold}
 			</label>
 		</MutationForm>
 
