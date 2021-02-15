@@ -51,6 +51,7 @@
 				my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
 				  id
 				  threshold
+				  confirmed
 				  condition_is_fulfilled
 				}
 				campaign_dismissals {
