@@ -102,13 +102,12 @@
 
 		<p>{campaign.description}</p>
 
-		<span class="{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'condition_is_fulfilled' : 'condition_is_not_fulfilled') : ''}">
-				{campaign.my_participations[0] ? (campaign.my_participations[0].condition_is_fulfilled ? 'my threshold is reached.' : 'my threshold is not reached.') : 'not participating.'}
-		</span>
-
 		<MyParticipation campaign={campaign} on:my_participation_upsert/>
+		<br>
 
-		goal of {suggested_optimal_threshold} participants:<br>
+		<h5>Participants</h5>
+		<i>We want {suggested_optimal_threshold} people:</i><br>
+
 		<Progress multi>
 			<Progress bar color="success"
 					  value={confirmed_contributing_count}
@@ -120,7 +119,7 @@
 					  max={suggested_optimal_threshold}>
 				{unconfirmed_contributing_count}</Progress>
 		</Progress>
-		{confirmed_contributing_count} confirmed, {unconfirmed_contributing_count} unconfirmed.<br>
+		{confirmed_contributing_count} are confirmed, {unconfirmed_contributing_count} are unconfirmed.<br>
 
 		<p></p>
 		<ToolTipsy enabled="{!$my_user.hide_help}">
@@ -150,7 +149,7 @@
 			<TabularParticipationsBreakdown {campaign}/>
 		{/if}
 		<br>
-		and these users dismissed the campaign:
+		and these users dismissed the campaign as stupid:
 		{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
 			<span
 			>

@@ -4,6 +4,7 @@
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import {createEventDispatcher} from 'svelte';
 	const dispatch = createEventDispatcher();
+	import {get_status_class,get_tickmark} from 'srcs/stuff.js';
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;
@@ -44,14 +45,18 @@
 <div class="line">
 	{#if my_participation.id}
 
+		<h5>My threshold</h5>
+		<i>I will join when other people join:</i><br>
+
 		<MutationForm  on:done={() => dispatch('my_participation_upsert')}  css_ref="cell"
 			mutation={UPSERT}
 			variables={upsert_vars}
 		>
+			minimum threshold suggested: {campaign.suggested_lowest_threshold}<br>
 			<label>My threshold:
 				<input type="text" bind:value={new_threshold}/>
-				<button type="submit">Update</button>
-				minimum threshold suggested: {campaign.suggested_lowest_threshold}<br>maximum threshold suggested:{campaign.suggested_highest_threshold}
+				<button type="submit">Update</button><br>
+				maximum threshold suggested:{campaign.suggested_highest_threshold}
 			</label>
 		</MutationForm>
 
@@ -70,6 +75,21 @@
 		>
 			<button type="submit">Delete</button>
 		</MutationForm>
+
+		{get_tickmark(my_participation)}
+		{#if my_participation.threshold != undefined}
+			{#if my_participation.condition_is_fulfilled}
+				{#if my_participation.confirmed}
+					<span class="confirmed">my threshold is reached and i confirmed.</span>
+				{:else}
+					<span class="condition_is_fulfilled">my threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
+				{/if}
+			{:else}
+				<span class="condition_is_not_fulfilled">my threshold is not reached.</span>
+			{/if}
+		{:else}
+			I am not participating.
+		{/if}
 
 
 	{:else}

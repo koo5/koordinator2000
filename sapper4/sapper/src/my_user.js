@@ -104,7 +104,7 @@ export function get_my_participation(campaign, my_user)
 	else
 	{
 		console.log(campaign.my_participations)
-		throw('this shouldnt happen: (campaign.my_participations.length > 1)');
+		alert('database error, this shouldnt happen: (campaign.my_participations.length > 1)');
 	}
 }
 

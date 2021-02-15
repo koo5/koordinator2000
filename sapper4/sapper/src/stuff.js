@@ -14,16 +14,21 @@ export function get_status_class(participation)
 }
 
 export function get_tickmark(participation)
+{
+	if (!participation || participation.threshold === undefined)
+		return ""
+	else
 	{
 		if (participation.condition_is_fulfilled)
 		{
 			if (participation.confirmed)
 			{
-				return '✔'
+				return '✅'
 			}
 			else
-				return "👍"
+				return "✉" // "☑?"
 		}
 		else
-			return "🖐"
+			return "👁"
 	}
+}
