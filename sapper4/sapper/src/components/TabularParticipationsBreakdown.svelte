@@ -23,7 +23,7 @@
 					</div>
 				</ToolTipsy>
 			</td>
-			<td>{get_tickmark(participation)}{short_description(participation)}</td>
+			<td>{get_tickmark(participation)} - {short_description(participation)}</td>
 		</tr>
 	{/each}
 	</tbody>
