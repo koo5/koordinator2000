@@ -131,8 +131,8 @@
 			<div slot="tooltip">
 				<div class="help_tooltip">
 					Help:
-					<br/> "✔" - participating, confirmed<br/> "👍" - condition fulfilled,
-					waiting for confirmation<br/> "🖐" - condition was not fulfilled yet<br/> 👎 -
+					<br/> "✅" - participating, confirmed<br/> "✉" - condition fulfilled,
+					waiting for confirmation<br/> "👁" - condition was not fulfilled yet<br/> 👎 -
 					disagreement/dismissal
 				</div>
 			</div>
