@@ -32,3 +32,23 @@ export function get_tickmark(participation)
 			return "👁"
 	}
 }
+
+export function short_description(participation)
+{
+	if (!participation || participation.threshold === undefined)
+		return ""
+	else
+	{
+		if (participation.condition_is_fulfilled)
+		{
+			if (participation.confirmed)
+			{
+				return 'confirmed'
+			}
+			else
+				return "fulfilled"
+		}
+		else
+			return "waiting"
+	}
+}

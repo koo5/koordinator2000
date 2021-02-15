@@ -105,6 +105,8 @@
 
 	function go_to_next_campaign(current_campaign_id)
 	{
+		if (!$my_user.autoscroll)
+			return;
 		if (!campaign_containers) return;
 		if (!campaign_containers.children) return;
 		const children = campaign_containers.children;
@@ -112,22 +114,18 @@
 		for (var i = 0; i < children.length; i++)
 		{
 			const ch = children[i];
-
-			if (goToNext)
-			{
-				my_timeout = setTimeout(() =>
-				{
-					animateScroll.scrollTo({delay: 0, element: ch});
-				}, 500);
-				// hmm this could maybe also be done by navigating to a hash (the element id)
-				return;
-			}
 			if (!ch.dataset) return;
 			const j = ch.dataset.campaignId;
-			/*console.log('j');
-			console.log(j);*/
 			if (current_campaign_id == j)
-				goToNext = true;
+			{
+				const next_ch = children[i+1];
+				if (!next_ch) return;
+				my_timeout = setTimeout(() =>
+				{
+					animateScroll.scrollTo({delay: 0, element: next_ch});
+				}, 500);
+				return; // hmm this could maybe also be done by navigating to a hash (the element id)
+			}
 		}
 	}
 

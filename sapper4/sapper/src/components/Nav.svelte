@@ -51,6 +51,9 @@
 				</Popover>
 			</li>
 
+			<li>
+				<label>autoscroll<input type="checkbox" bind:checked={$my_user.autoscroll}></label>
+			</li>
 
 		</ul>
 	</nav>

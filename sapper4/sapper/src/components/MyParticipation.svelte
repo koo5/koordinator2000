@@ -77,15 +77,15 @@
 		{#if my_participation.threshold != undefined}
 			{#if my_participation.condition_is_fulfilled}
 				{#if my_participation.confirmed}
-					<span class="confirmed">my threshold is reached and i confirmed.</span>
+					<span class="confirmed">my participation is confirmed.</span>
 				{:else}
 					<span class="condition_is_fulfilled">my threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
 				{/if}
 			{:else}
-				<span class="condition_is_not_fulfilled">my threshold is not reached.</span>
+				<span class="condition_is_not_fulfilled">i'm waiting for more people</span>
 			{/if}
 		{:else}
-			I am not participating.
+			i'm not participating.
 		{/if}
 
 

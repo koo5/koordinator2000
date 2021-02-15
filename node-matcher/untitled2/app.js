@@ -122,7 +122,7 @@ async function flip_stuff(data)
 {
 	for (const campaign of data.campaigns)
 	{
-if (verbose)		console.log(campaign.id + ' - ' + campaign.title + ':');
+		if (verbose)console.log(campaign.id + ' - ' + campaign.title + ':');
 		let participation_idx_starting_at_1 = 1;
 		let last_fulfilled_idx = -1;
 		campaign.participations.forEach((participation) =>

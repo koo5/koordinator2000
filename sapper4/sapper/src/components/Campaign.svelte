@@ -64,8 +64,6 @@
 			}
 		}
 	);
-	$: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
-
 	$: unconfirmed_contributing_count_q = subscribe(CONTRIBUTING_COUNT, {
 			variables: {
 				threshold: campaign.suggested_optimal_threshold,
@@ -74,7 +72,10 @@
 			}
 		}
 	);
+	$: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: unconfirmed_contributing_count = $unconfirmed_contributing_count_q.data && $unconfirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
+	$: confirmed_contributing_count_str = confirmed_contributing_count == undefined ? '???' : confirmed_contributing_count;
+	$: unconfirmed_contributing_count_str = unconfirmed_contributing_count == undefined ? '???' : unconfirmed_contributing_count;
 
 	const CAMPAIGN_DISMISSAL = gql`
 		mutation MyMutation($campaign_id: Int, $user_id: Int) {
@@ -122,7 +123,7 @@
 					  max={suggested_optimal_threshold}>
 				{unconfirmed_contributing_count}</Progress>
 		</Progress>
-		{confirmed_contributing_count} are confirmed, {unconfirmed_contributing_count} are unconfirmed.<br>
+		{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>
 
 		<p></p>
 		<ToolTipsy enabled="{!$my_user.hide_help}">
