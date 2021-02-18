@@ -92,14 +92,16 @@
 <li>
 	<div class="campaign">
 		<hr>
-		<h2>
-			<ToolTipsy enabled="{$my_user.database_debug}" css_ref="dev">
-				{campaign.title}
-				<pre slot="tooltip">
-					{JSON.stringify(campaign, null, '  ')}
-				</pre>
-			</ToolTipsy>
-		</h2>
+		<ToolTipsy enabled="{!!$my_user.database_debug}" css_ref="dev">
+			<div slot="tooltip">
+				<small><pre>
+						{JSON.stringify(campaign, null, '  ')}
+					</pre>
+				</small>
+			</div>
+		</ToolTipsy>
+
+		<h2>{campaign.title}</h2>
 
 		<p>{campaign.description}</p>
 
@@ -132,7 +134,7 @@
 				<div class="help_tooltip">
 					Help:
 					<br/> "✅" - participating, confirmed<br/> "✉" - condition fulfilled,
-					waiting for confirmation<br/> "👁" - condition was not fulfilled yet<br/> 👎 -
+					waiting for confirmation<br/> "👁" - condition was not fulfilled yet/waiting<br/> 👎 -
 					disagreement/dismissal
 				</div>
 			</div>
@@ -153,7 +155,17 @@
 			<TabularParticipationsBreakdown {campaign}/>
 		{/if}
 		<br>
-		and these users dismissed the campaign as stupid:
+
+		<ToolTipsy enabled="{!$my_user.hide_help}">
+			and these users dismissed the campaign:
+			<div slot="tooltip">
+				<div class="help_tooltip">
+					Maybe they think it is stupid, or they just want to get back to it later. At any case, they don't
+					want to see it now.
+				</div>
+			</div>
+		</ToolTipsy>
+
 		{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
 			<span
 			>

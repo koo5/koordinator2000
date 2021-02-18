@@ -137,12 +137,12 @@
 
 
 	:global(.help_tooltip) {
-		background-color: #ffffff;
+		background-color: #cccccc;
 		padding: 1em;
 	}
 
 	:global(.info_tooltip) {
-		background-color: #ffffff;
+		background-color: #cccccc;
 		padding: 1em;
 	}
 

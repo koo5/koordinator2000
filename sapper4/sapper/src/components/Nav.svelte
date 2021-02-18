@@ -6,7 +6,7 @@
 
 	export let segment;
 
-	let my_user_str;
+//	let my_user_str;
 	$: my_user_str = JSON.stringify($my_user, null, ' ');
 
 </script>
@@ -44,14 +44,12 @@
 				<Popover>
 					<button slot=target class="link">Settings</button>
 					<span slot=content>
-				  <span class="pop_up">
-					<Settings/>
-				  </span>
-			  </span>
+						<span class="pop_up">
+							<Settings/>
+				  		</span>
+			  		</span>
 				</Popover>
-			</li>
 
-			<li>
 				<label>autoscroll<input type="checkbox" bind:checked={$my_user.autoscroll}></label>
 			</li>
 

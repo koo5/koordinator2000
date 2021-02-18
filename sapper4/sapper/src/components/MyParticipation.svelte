@@ -51,7 +51,7 @@
 		>
 			minimum threshold suggested: {campaign.suggested_lowest_threshold}<br>
 			<label>My threshold:
-				<input type="text" bind:value={new_threshold}/>
+				<input type="number"  min="0" max="99999999999999"  bind:value={new_threshold}/>
 				<button type="submit">Update</button><br>
 				maximum threshold suggested:{campaign.suggested_highest_threshold}
 			</label>
@@ -97,7 +97,7 @@
 			variables={upsert_vars}
 		>
 			<label for="threshold">My threshold:
-				<input type="text" id="threshold" bind:value={new_threshold}/>
+				<input type="number"  min="0" max="99999999999999" id="threshold" bind:value={new_threshold}/>
 				<button type="submit">Participate</button>
 				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
 			</label>

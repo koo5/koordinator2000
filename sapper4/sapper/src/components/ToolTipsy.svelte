@@ -10,7 +10,7 @@
 {#if enabled}
 
 	<span class='tooltipsy'>
-		<slot></slot>
+		<slot></slot><small>(?)</small>
 		<div class="tooltiptext {css_ref}">
 			<slot name="tooltip">tooltip</slot>
 		</div>
@@ -18,7 +18,6 @@
 
 {:else}
 	<slot></slot>
-
 {/if}
 
 <!--
@@ -39,6 +38,7 @@ todo
 		position: absolute;
 		z-index: 1;
 		border: 1em 1em;
+		background: salmon;
 	}
 
 	/* Show the tooltip text when you mouse over the tooltip container */

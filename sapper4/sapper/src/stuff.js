@@ -52,3 +52,24 @@ export function short_description(participation)
 			return "waiting"
 	}
 }
+
+export function long_description(participation)
+{
+	if (!participation || participation.threshold === undefined)
+		return ""
+	else
+	{
+		if (participation.condition_is_fulfilled)
+		{
+			if (participation.confirmed)
+			{
+				return 'this user is participating (confirmed)'
+			}
+			else
+				return 'this user is participating (waiting for confirmation)'
+		}
+		else
+			return "this user is waiting for more users to participate"
+	}
+}
+
