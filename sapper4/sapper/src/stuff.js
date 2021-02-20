@@ -9,7 +9,7 @@ export const CAMPAIGN_FRAGMENT = `
 			suggested_lowest_threshold,
 			suggested_highest_threshold,
 			suggested_optimal_threshold,
-			participations(order_by: [{threshold: asc}]) {
+			participations(order_by: [{threshold: asc}], where:{ user:{smazano:{_eq: false}}} ) {
 			  id
 			  threshold
 			  user {
@@ -32,12 +32,12 @@ export const CAMPAIGN_FRAGMENT = `
 				name
 			  }
 			}
-			unconfirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: false}, condition_is_fulfilled: {_eq: true}}) {
+			unconfirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: false}, condition_is_fulfilled: {_eq: true}, user:{smazano:{_eq: false}}}) {
 			  aggregate {
 				count
 			  }
 			}
-			confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}}) {
+			confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}, user:{smazano:{_eq: false}}}) {
 			  aggregate {
 				count
 			  }

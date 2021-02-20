@@ -49,8 +49,8 @@
 
 	// participations_contributing_towards_reaching_optimal_threshold
 	const CONTRIBUTING_COUNT = gql`
-		subscription ($threshold: Int, $campaign_id:Int, $confirmed: Boolean) {
-		  participations_aggregate(where: {threshold: {_lte: $threshold}, confirmed: {_eq: $confirmed}, campaign_id: {_eq: $campaign_id}}) {
+		subscription ($threshold: Int, $campaign_id: Int, $confirmed: Boolean) {
+		  participations_aggregate(where: {threshold: {_lt: $threshold}, confirmed: {_eq: $confirmed}, campaign_id: {_eq: $campaign_id}, user: {smazano: {_eq: false}}}) {
 			aggregate {
 			  count
 			}
@@ -159,10 +159,10 @@
 		<br>
 
 		<ToolTipsy enabled="{!$my_user.hide_help}">
-			and these users dismissed the campaign:
+			and these users dismissed the campaign:<br>
 			<div slot="tooltip">
 				<div class="help_tooltip">
-					Maybe they think it is stupid, or they just want to get back to it later. At any case, they don't
+					<p>Maybe they think it is stupid, or they just want to get back to it later.</p> At any case, they don't
 					want to see it now.
 				</div>
 			</div>

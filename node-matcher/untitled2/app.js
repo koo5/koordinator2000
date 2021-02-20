@@ -173,7 +173,7 @@ async function my_fetch()
 			  campaigns (order_by: [{id: asc}]) {
 			  	id
 			  	title
-				participations(order_by: [{threshold: asc}]) {
+				participations(order_by: [{threshold: asc}], where: {user: {smazano: {_eq: false}}} ) {
 					id
 					user_id
 					campaign_id
