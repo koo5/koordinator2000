@@ -16,6 +16,8 @@
 
 
 	export let campaign;
+
+
 	$: my_participation = get_my_participation(campaign, $my_user);
 
 	/*
@@ -103,7 +105,7 @@
 
 		<h2>{campaign.title}</h2>
 
-		<p>{campaign.description}</p>
+		<p>{@html campaign.description}</p>
 
 		<h5>My threshold</h5>
 		<i>I will join when other people join:</i><br>

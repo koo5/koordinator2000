@@ -78,9 +78,9 @@ async function flip_bit(participation, val)
 	{
 		let content;
 		if (val)
-			content = `Yo! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`;
+			content = `Heads up! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`;
 		else
-			content = `Yo! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
+			content = `Heads up! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
 		
 		console.log(await client.mutate({
 			mutation: gql`
@@ -137,8 +137,10 @@ async function flip_stuff(data)
 		for (const participation of campaign.participations)
 		{
 			if (idx > last_fulfilled_idx)
+			{
 				fulfilled = false;
-				if (verbose) console.log(JSON.stringify(participation, null, ''));
+			}
+			if (verbose) console.log(JSON.stringify(participation, null, ''));
 			if (participation.condition_is_fulfilled != fulfilled)
 			{
 				//console.log('flip ' + JSON.stringify(participation, null, '') + '.');

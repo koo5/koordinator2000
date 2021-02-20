@@ -1,20 +1,54 @@
 <script context="module">
-	export async function preload({ params }) {
-		const data = {title:'tttt',html:"<hr><HR>"}
-		return { post: data };
+	export async function preload(page) {
+		const { slug } = page.params;
+		const campaign_id = slug;
+		console.log(campaign_id);
+		return { campaign_id };
 	}
 </script>
 
 <script>
-	export let post;
+
+
+	import Campaign from 'cmps/Campaign.svelte';
+	import {my_user} from 'srcs/my_user.js';
+	import {CAMPAIGN_FRAGMENT} from 'srcs/stuff.js';
+	import {subscribe, gql} from "srcs/apollo.js";
+
+	export let campaign_id;
+
+
+	$: items = subscribe(
+		gql`
+		subscription ($_user_id: Int!, $campaign_id: Int!) {
+		  campaigns_by_pk(id: $campaign_id)
+			${CAMPAIGN_FRAGMENT}
+		}
+  		`,
+		{
+			variables: {
+				_user_id: $my_user.id,
+				campaign_id
+			}
+		}
+	);
+
+	$: console.log(campaign_id);
+
+	$: campaign = $items.data?.campaigns_by_pk;
+
 </script>
 
 <svelte:head>
-	<title>{post.title}</title>
+	<title>{campaign?.title} - Koordinator</title>
 </svelte:head>
 
-<h1>{post.title}</h1>
+{#if campaign}
 
-<div class="content">
-	{@html post.html}
-</div>
+	<Campaign {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
+
+	<br>
+	<hr>
+	<a href="/campaigns">more campaigns.</a>
+{/if}
+

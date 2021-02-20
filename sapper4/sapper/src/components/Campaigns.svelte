@@ -5,6 +5,7 @@
 	import * as animateScroll from "svelte-scrollto";
 	import {subscribe, gql} from "srcs/apollo.js";
 	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
+	import {CAMPAIGN_FRAGMENT} from 'srcs/stuff.js';
 
 
 	var my_timeout;
@@ -21,57 +22,18 @@
 	// fixme, the dismissal filter works in hasura console, but not here, for some reason
 	const CAMPAIGN_LIST = gql`
 		subscription ($_user_id: Int) {
-		  campaigns(
+			campaigns(
 				order_by: [{id: asc}],
 				where: {
 					_and:
 					{
 						smazano: {_eq: false},
+						stealth: {_eq: false},
 						_not: {campaign_dismissals: {user_id: {_eq: $_user_id}}}
 					}
 				}
 			)
-			{
-				id,
-				title,
-				description,
-				suggested_lowest_threshold,
-				suggested_highest_threshold,
-				suggested_optimal_threshold,
-				participations(order_by: [{threshold: asc}]) {
-				  id
-				  threshold
-				  user {
-					id
-					name
-				  }
-				  confirmed
-				  condition_is_fulfilled
-				},
-				my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
-				  id
-				  threshold
-				  confirmed
-				  condition_is_fulfilled
-				}
-				campaign_dismissals {
-				  user_id
-				  user {
-				    id
-				  	name
-				  }
-				}
-				unconfirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: false}, condition_is_fulfilled: {_eq: true}}) {
-				  aggregate {
-					count
-				  }
-				}
-				confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}}) {
-				  aggregate {
-					count
-				  }
-				}
-		  }
+			${CAMPAIGN_FRAGMENT}
 		}
   	`;
 

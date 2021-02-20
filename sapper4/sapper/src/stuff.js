@@ -1,3 +1,51 @@
+import {gql} from "srcs/apollo.js";
+
+export const CAMPAIGN_FRAGMENT = `
+		{
+			id,
+			title,
+			stealth,
+			description,
+			suggested_lowest_threshold,
+			suggested_highest_threshold,
+			suggested_optimal_threshold,
+			participations(order_by: [{threshold: asc}]) {
+			  id
+			  threshold
+			  user {
+				id
+				name
+			  }
+			  confirmed
+			  condition_is_fulfilled
+			},
+			my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
+			  id
+			  threshold
+			  confirmed
+			  condition_is_fulfilled
+			}
+			campaign_dismissals {
+			  user_id
+			  user {
+				id
+				name
+			  }
+			}
+			unconfirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: false}, condition_is_fulfilled: {_eq: true}}) {
+			  aggregate {
+				count
+			  }
+			}
+			confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}}) {
+			  aggregate {
+				count
+			  }
+			}
+		}
+`;
+
+
 export function get_status_class(participation)
 {
 	if (participation.condition_is_fulfilled)

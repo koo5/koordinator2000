@@ -66,6 +66,7 @@
 
 	:global(html) {
 		padding: 12px;
+		margin: 0 auto;
 		background: salmon;
 		//filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);
 	}
