@@ -65,7 +65,7 @@
 <style>
 
 	:global(html) {
-		padding: 12px;
+		padding: 1em;
 		margin: 0 auto;
 		background: salmon;
 		//filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);
@@ -90,7 +90,7 @@
 
 	:global(body) {
 		margin: 0 auto;
-		max-width: 600px;
+		max-width: 60em;
 	}
 
 	main {
@@ -100,7 +100,7 @@
 	}
 
 	:global(h2) {
-		padding: 22px 0 12px 0;
+		padding: 2em 0 1em 0;
 	}
 
 </style>

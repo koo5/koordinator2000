@@ -26,18 +26,12 @@
 		<ul>
 			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
 
-			<!-- 		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
-			<li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li> -->
 			<li><a rel=prefetch aria-current="{segment === 'campaigns' ? 'page' : undefined}"
 				   href="campaigns">Campaigns</a></li>
 			<li><a rel=prefetch aria-current="{segment === 'add_campaign' ? 'page' : undefined}" href="add_campaign">Add
 				campaign</a></li>
-			<!--		<li><a rel=prefetch aria-current="{segment === 'causes' ? 'page' : undefined}" href="causes">Causes</a></li>
-			<li><a rel=prefetch aria-current="{segment === 'add_cause' ? 'page' : undefined}" href="add_cause">Add Cause</a></li>   -->
 			<li><a rel=prefetch aria-current="{segment === 'notifications' ? 'page' : undefined}" href="notifications">Notifications</a>
 			</li>
-			<!--	<li><a rel=prefetch aria-current="{segment === 'users' ? 'page' : undefined}" href="users">users</a></li>  -->
-
 			<li><a rel=prefetch aria-current="{segment === 'you' ? 'page' : undefined}" href="you">You</a></li>
 
 			<li>
@@ -51,6 +45,11 @@
 				</Popover>
 
 				<label>autoscroll<input type="checkbox" bind:checked={$my_user.autoscroll}></label>
+			</li>
+
+			<li>
+				<a href="dev_area">Dev area</a>
+
 			</li>
 
 		</ul>
