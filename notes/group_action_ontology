@@ -1,0 +1,23 @@
+# group_action_ontology
+##the simplest consensus mechanism:
+
+###gui can look like this:
+
+<i> will join <cause> if <amount of people> join
+
+###pseudocode
+
+check(declaration_of_willingness_to_join):
+	d = declaration_of_willingness_to_join
+	c = d.cause
+	count = 0
+	for p in Persons:
+		if p.has_declaration_of_willingness d2 and d2.has_cause c and d2.limit <= d.limit:
+			count += 1
+	if count >= d.limit:
+		alert the user
+
+
+
+##we could use:
+https://github.com/researchstudio-sat/webofneeds
