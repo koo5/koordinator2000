@@ -83,7 +83,7 @@
 	<input type="number" id="xxx" bind:value={suggested_lowest_threshold}/>
 	<br>
 	<label for="xxxx">The highest suggested threshold (the highest threshold that anyone should set. The number of
-		participants is not expected to grow beyond it. For example: a campaign targetted at a local issue in a
+		participants is not expected to grow beyond this. For example: a campaign targetted at a local issue in a
 		village of 160 people should suggest 160 or less):</label>
 	<br>
 	<input type="number" id="xxxx" bind:value={suggested_highest_threshold}/>
