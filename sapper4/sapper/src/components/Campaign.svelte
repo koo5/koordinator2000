@@ -1,4 +1,6 @@
 <script lang='js'>
+	import { readable } from 'svelte/store';
+
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import {subscribe, gql} from "srcs/apollo.js";
@@ -58,22 +60,22 @@
 		}
 	`;
 
-	$: confirmed_contributing_count_q = subscribe(CONTRIBUTING_COUNT, {
+	$: confirmed_contributing_count_q = readable({});/*subscribe(CONTRIBUTING_COUNT, {
 			variables: {
 				threshold: campaign.suggested_optimal_threshold,
 				campaign_id: campaign.id,
 				confirmed: true
 			}
 		}
-	);
-	$: unconfirmed_contributing_count_q = subscribe(CONTRIBUTING_COUNT, {
+	);*/
+	$: unconfirmed_contributing_count_q = readable({});/*subscribe(CONTRIBUTING_COUNT, {
 			variables: {
 				threshold: campaign.suggested_optimal_threshold,
 				campaign_id: campaign.id,
 				confirmed: false
 			}
 		}
-	);
+	);*/
 	$: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: unconfirmed_contributing_count = $unconfirmed_contributing_count_q.data && $unconfirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: confirmed_contributing_count_str = confirmed_contributing_count == undefined ? '???' : confirmed_contributing_count;
