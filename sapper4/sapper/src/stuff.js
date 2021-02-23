@@ -91,13 +91,13 @@ export function short_description(participation)
 		{
 			if (participation.confirmed)
 			{
-				return 'confirmed'
+				return 'participation confirmed!'
 			}
 			else
-				return "fulfilled"
+				return "awaiting confirmation.."
 		}
 		else
-			return "waiting"
+			return "more participants needed..."
 	}
 }
 
@@ -111,13 +111,13 @@ export function long_description(participation)
 		{
 			if (participation.confirmed)
 			{
-				return 'this user is participating (confirmed)'
+				return "threshold is reached, participation is confirmed"
 			}
 			else
-				return 'this user is participating (waiting for confirmation)'
+				return "threshold is reached, waiting for confirmation"
 		}
 		else
-			return "this user is waiting for more users to participate"
+			return "this user is waiting for more participants..."
 	}
 }
 

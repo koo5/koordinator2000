@@ -118,11 +118,12 @@
 	}
 
 	:global(.condition_is_fulfilled) {
-		background-color: #ccffcc;
+		background-color: #88ff88;
+		//background-color: #ccffcc;
 	}
 
 	:global(.condition_is_not_fulfilled) {
-		background-color: #ffffe0;
+		background-color: orange;
 	}
 
 
