@@ -1,3 +1,4 @@
+var moment = require('moment');
 var dotenv = require('dotenv')
 var dotenvExpand = require('dotenv-expand')
 var myEnv = dotenv.config()
@@ -173,9 +174,12 @@ app.use(
 	.post('/get_free_user_id', async (req, res) =>
 	{
 		send(res, 200, await free_user_id());
+		console.log(moment().format());
+		console.log();
 	})
 	.post('/event', async (req, res) =>
 	{
+		console.log(moment().format());
 		/*console.log(req.body);
 		console.log(typeof req.body);
 		console.log(typeof req.body.event);*/
@@ -188,6 +192,7 @@ app.use(
 		if (rrr)
 			rrr["banana"] = true;
 		send(res, 200, rrr);
+		console.log(moment().format());
 		console.log();
 	})
 	.use(

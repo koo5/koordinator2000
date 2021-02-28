@@ -1,3 +1,4 @@
+var moment = require('moment');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -157,7 +158,8 @@ async function flip_stuff(data)
 	}
 
 	if (verbose) console.log();
-	console.log(Date.now());
+	//console.log(Date.now());
+	console.log(moment().format());
 	if (verbose) console.log();
 }
 

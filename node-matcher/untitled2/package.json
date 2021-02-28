@@ -13,9 +13,10 @@
     "express": "~4.16.1",
     "graphql": "^15.4.0",
     "http-errors": "~1.6.3",
+    "moment": "^2.29.1",
     "morgan": "~1.9.1",
     "node-cron": "^2.0.3",
-    "pug": "2.0.0-beta11",
+    "pug": "^2.0.4",
     "react": "^17.0.1"
   }
 }

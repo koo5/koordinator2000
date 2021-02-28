@@ -171,7 +171,7 @@
 			{logout_url}>
 
 		<Nav {segment}/>
-
+		<hr>
 		<main>
 			<slot></slot>
 		</main>
