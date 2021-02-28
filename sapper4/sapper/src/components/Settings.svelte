@@ -1,56 +1,66 @@
 <script type='js'>
 	import {my_user, default_participations_display_style} from 'srcs/my_user.js';
-	const default_participations_display_styles_list = ['koo1','koo1_introductory','facebook','tabular_breakdown'];
 
+	const default_participations_display_styles_list = ['koo1', 'koo1_introductory', 'facebook', 'tabular_breakdown'];
 
 
 </script>
 <h4>Settings</h4>
 <h5>general</h5>
-	<label><input type="checkbox" bind:checked={$my_user.autoscroll}>Autoscroll</label>
-	<br>
-	<label><input type="checkbox" bind:checked={$my_user.hide_help}>Hide help</label>
-	<br>
-	<label><input type="checkbox" bind:checked={$my_user.enable_swiping_also_on_desktop}>enable_swiping_also_on_desktop (TODO)</label>
-	<br>
+<label><input type="checkbox" bind:checked={$my_user.autoscroll}>Autoscroll</label>
+<br>
+<label><input type="checkbox" bind:checked={$my_user.hide_help}>Hide help</label>
+<br>
+<label><input type="checkbox" bind:checked={$my_user.enable_swiping_also_on_desktop}>enable_swiping_also_on_desktop
+	(TODO)</label>
+<br>
 <h5>default display style for participations</h5>
-	{#each default_participations_display_styles_list as s (s)}
-		<label>
-			<input type=radio bind:group={$my_user.default_participations_display_style} value={s}>
-			{s}
-		</label>
-		<br>
-	{/each}
+{#each default_participations_display_styles_list as s (s)}
+	<label>
+		<input type=radio bind:group={$my_user.default_participations_display_style} value={s}>
+		{s}
+	</label>
+	<br>
+{/each}
 
 <h5>color theme</h5>
+
+<label>
+	<input type="checkbox" bind:checked={$my_user.invert}/>
+	invert
+</label>
+<br>
+<label>
 	hue-rotate (deg):
-	<input type="number" min="0" max="359" step="5" bind:value={$my_user.hue_rotate}/>
+	<input type="number" step="1"  min="-9999999999" max="9999999999"  bind:value={$my_user.hue_rotate}/>
+</label>
 <br>
-	invert (%):
-	<input type="number" min="0" max="100" step="2" bind:value={$my_user.invert}/>
-<br>
+<label>
 	saturate (%):
-	<input type="number" min="-100" max="100" step="5" bind:value={$my_user.saturate}/>
+	<input type="number" min="-100" max="100" step="10" bind:value={$my_user.saturate}/>
+</label>
 <br>
+<label>
 	contrast (%):
-	<input type="number" min="-90" max="100" step="5" bind:value={$my_user.contrast}/>
+	<input type="number" min="-80" max="100" step="10" bind:value={$my_user.contrast}/>
+</label>
 <br>
 
 
 <h5>developer settings</h5>
-	<label>
+<label>
 	<input type="checkbox" bind:checked={$my_user.crash_debug}>
-		crash_debug</label>
-	<br>
-	<label>
+	crash_debug</label>
+<br>
+<label>
 	<input type="checkbox" bind:checked={$my_user.database_debug}>
-		database_debug</label>
-	<br>
-	<label>
+	database_debug</label>
+<br>
+<label>
 	<input type="checkbox" bind:checked={$my_user.auth_debug}>
-		auth_debug:</label>
-	<br>
-	<label>
+	auth_debug:</label>
+<br>
+<label>
 	<input type="checkbox" bind:checked={$my_user.graphql_debug}>
-		graphql_debug:</label>
-	<br>
+	graphql_debug:</label>
+<br>

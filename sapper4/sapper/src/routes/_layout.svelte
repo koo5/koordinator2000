@@ -60,10 +60,10 @@
 			await apply_newly_authenticated_user(u)
 	});
 
-	$: process.browser && document.documentElement.style.setProperty('--hue_rotate', $my_user.hue_rotate + "deg");
-	$: process.browser && document.documentElement.style.setProperty('--saturate', (100+$my_user.saturate) + "%");
-	$: process.browser && document.documentElement.style.setProperty('--invert', $my_user.invert + "%");
-	$: process.browser && document.documentElement.style.setProperty('--contrast', (100 + $my_user.contrast) + "%");
+	$: process.browser && document.documentElement.style.setProperty('--hue_rotate', ($my_user.hue_rotate||0) + "deg");
+	$: process.browser && document.documentElement.style.setProperty('--saturate', (100+($my_user.saturate||0)) + "%");
+	$: process.browser && document.documentElement.style.setProperty('--invert', ($my_user.invert?100:0) + "%");
+	$: process.browser && document.documentElement.style.setProperty('--contrast', (100 + ($my_user.contrast||0)) + "%");
 
 </script>
 
