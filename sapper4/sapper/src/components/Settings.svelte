@@ -5,12 +5,10 @@
 
 <h3>user settings</h3>
 <br>
-	<label for="x1">hide_help:</label>
-	<input id="x1" type="checkbox" bind:checked={$my_user.hide_help}>
-
+	<label><input type="checkbox" bind:checked={$my_user.autoscroll}>Autoscroll</label>
+	<label><input type="checkbox" bind:checked={$my_user.hide_help}>Hide help</label>
 <br>
-	<label for="x1b">enable_swiping_also_on_desktop (TODO):</label>
-	<input id="x1b" type="checkbox" bind:checked={$my_user.enable_swiping_also_on_desktop}>
+	<label><input id="x1b" type="checkbox" bind:checked={$my_user.enable_swiping_also_on_desktop}>enable_swiping_also_on_desktop (TODO)</label>
 
 	<h4>default_participations_display_style:</h4>
 	{#each default_participations_display_styles_list as s (s)}

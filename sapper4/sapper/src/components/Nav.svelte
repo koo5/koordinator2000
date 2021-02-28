@@ -32,24 +32,22 @@
 				campaign</a></li>
 			<li><a rel=prefetch aria-current="{segment === 'notifications' ? 'page' : undefined}" href="notifications">Notifications</a>
 			</li>
-			<li><a rel=prefetch aria-current="{segment === 'you' ? 'page' : undefined}" href="you">You</a></li>
-
 			<li>
+				<a href="dev_area">Dev area</a>
+			</li>
+
+			<li align="right">
 				<Popover>
-					<button slot=target class="link">Settings</button>
+					<a slot=target>Settings</a>
 					<span slot=content>
 						<span class="pop_up">
 							<Settings/>
 				  		</span>
 			  		</span>
 				</Popover>
-
-				<label>autoscroll<input type="checkbox" bind:checked={$my_user.autoscroll}></label>
 			</li>
-
-			<li>
-				<a href="dev_area">Dev area</a>
-
+			<li align="right">
+				<a rel=prefetch aria-current="{segment === 'you' ? 'page' : undefined}" href="you">You</a>
 			</li>
 
 		</ul>
