@@ -193,10 +193,12 @@
 
 
 {:else}
+	<div class="content_block">
 	Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. See the <a
 		href="https://github.com/koo5/koordinator2000/">code.</a><br>
 	<p>
 		<div class="animate-flicker">Loading...</div>
+	</div>
 {/if}
 
 

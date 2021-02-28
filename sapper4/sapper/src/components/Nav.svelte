@@ -13,7 +13,6 @@
 
 {#if process.browser}
 
-
 	<div>
 		<PageReloadClock/>
 		{#if $my_user.auth_debug}
@@ -22,7 +21,7 @@
 			|
 		{/if}
 	</div>
-	<nav>
+	<nav class="nav">
 		<ul>
 			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
 
@@ -38,7 +37,7 @@
 
 			<li align="right">
 				<Popover>
-					<a href="javascript:;" slot=target>Settings</a>
+					<a href="javascript:void(0)" slot=target>Settings</a>
 					<span slot=content>
 						<span class="pop_up">
 							<Settings/>
@@ -68,12 +67,10 @@
 		color: #000;
 	}
 
-
-	ul {
+	div {
 		margin: 0;
-		padding: 0;
+		padding: 0 3vw
 	}
-
 
 	ul::after {
 		content: '';
@@ -103,7 +100,7 @@
 
 	a {
 		text-decoration: none;
-		padding: 1em 0.5em;
+		padding: 0em 0.5em;
 		display: block;
 	}
 </style>

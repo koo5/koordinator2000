@@ -5,10 +5,12 @@
 </script>
 
 {#if $items.loading}
-	<li>
+	<div class="content_block">
+
 		<div class="animate-flicker">Loading...</div>
 	<p>If it doesn't load, maybe it crashed or you hit our free demo <a href="http://hasura.io/">Hasura</a> limit. Please try again in a minute.</p>
-	</li>
+
+	</div>
 {:else if $items.data}
 	<slot da={($items.data)}>???</slot>
 {:else}

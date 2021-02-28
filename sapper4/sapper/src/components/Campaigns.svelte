@@ -147,6 +147,7 @@
 			>
 				<SwiperSlide>
 					<div class="campaign_swiper_slide">
+						(TODO.)
 						<button type="submit">participate in all campaigns of this cause</button>
 						<button type="submit">participate in all campaigns of this user</button>
 					</div>
@@ -154,7 +155,7 @@
 
 				<SwiperSlide>
 					<div class="campaign_swiper_slide">
-						<div>PARTICIPATEd. double right:
+						<div>(TODO.) PARTICIPATEd. double right:
 							See all campaigns of this cause. (button)
 						</div>
 					</div>
@@ -170,7 +171,7 @@
 
 				<SwiperSlide>
 					<div class="campaign_swiper_slide">
-						<div>DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
+						<div>(TODO.) DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
 							cause. (button)
 						</div>
 					</div>
@@ -178,6 +179,7 @@
 
 				<SwiperSlide>
 					<div class="campaign_swiper_slide">
+						(TODO.)
 						<button type="submit">dismiss all campaigns of this cause</button>
 						<button type="submit">dismiss all campaigns of this user (for ever and ever...)</button>
 					</div>

@@ -1,9 +1,10 @@
 <script context="module">
-	export async function preload(page) {
-		const { slug } = page.params;
+	export async function preload(page)
+	{
+		const {slug} = page.params;
 		const campaign_id = slug;
 		console.log(campaign_id);
-		return { campaign_id };
+		return {campaign_id};
 	}
 </script>
 
@@ -43,15 +44,16 @@
 	<title>{campaign?.title} - Koordinator</title>
 </svelte:head>
 
-{#if campaign}
+<div class="content_block">
 
-	<Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
+	{#if campaign}
+			<Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
+	{:else}
+		<div class="animate-flicker">Loading...</div>
+	{/if}
 
 	<br>
 	<hr>
 	<a href="/campaigns">more campaigns.</a>
 
-{:else}
-	<div class="animate-flicker">Loading...</div>
-{/if}
-
+</div>
