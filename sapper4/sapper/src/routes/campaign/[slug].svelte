@@ -45,7 +45,7 @@
 
 {#if campaign}
 
-	<Campaign {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
+	<Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
 
 	<br>
 	<hr>

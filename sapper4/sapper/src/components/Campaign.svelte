@@ -18,6 +18,7 @@
 
 
 	export let campaign;
+	export let is_detail_view = false;
 
 
 	$: my_participation = get_my_participation(campaign, $my_user);
@@ -26,7 +27,6 @@
 	$: confirmed_percent = get_confirmed_percent($my_user, my_participation);
 	function get_confirmed_percent(my_user, my_participation)
 	{
-
 		another importaint anspect here: percent of *my* threshold
 		if (!my_participation.id) return 0;
 		//my_participation.threshold
@@ -60,22 +60,22 @@
 		}
 	`;
 
-	$: confirmed_contributing_count_q = readable({});/*subscribe(CONTRIBUTING_COUNT, {
+	$: confirmed_contributing_count_q = !is_detail_view ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
 			variables: {
 				threshold: campaign.suggested_optimal_threshold,
 				campaign_id: campaign.id,
 				confirmed: true
 			}
 		}
-	);*/
-	$: unconfirmed_contributing_count_q = readable({});/*subscribe(CONTRIBUTING_COUNT, {
+	);
+	$: unconfirmed_contributing_count_q = !is_detail_view ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
 			variables: {
 				threshold: campaign.suggested_optimal_threshold,
 				campaign_id: campaign.id,
 				confirmed: false
 			}
 		}
-	);*/
+	);
 	$: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: unconfirmed_contributing_count = $unconfirmed_contributing_count_q.data && $unconfirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: confirmed_contributing_count_str = confirmed_contributing_count == undefined ? '???' : confirmed_contributing_count;
@@ -105,7 +105,7 @@
 			</div>
 		</ToolTipsy>
 
-		<h2>{campaign.title}</h2>
+		<a href="/campaign/{campaign.id}"><h2>{campaign.title}</h2></a>
 
 		<p>{@html campaign.description}</p>
 
