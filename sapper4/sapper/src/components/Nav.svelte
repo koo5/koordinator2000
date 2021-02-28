@@ -6,7 +6,6 @@
 
 	export let segment;
 
-//	let my_user_str;
 	$: my_user_str = JSON.stringify($my_user, null, ' ');
 
 </script>

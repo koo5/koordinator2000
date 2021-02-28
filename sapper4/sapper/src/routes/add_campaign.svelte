@@ -4,8 +4,7 @@
 
 </script>
 
-
-
-
-<AddCampaign />
-Thanks.
+<div class="content_block">
+	<AddCampaign/>
+	Thanks.
+</div>

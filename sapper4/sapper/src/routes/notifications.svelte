@@ -31,8 +31,7 @@
 	);
 
 </script>
-
-<ul>
+<ul class="content_block">
 	<SubscribedItemsInner {items} let:da={data}>
 		{#each data.campaign_notifications as notification (notification.id)}
 			<Notification {notification}/>

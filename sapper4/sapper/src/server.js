@@ -173,24 +173,19 @@ app.use(
 
 	.post('/get_free_user_id', async (req, res) =>
 	{
+		console.log('/get_free_user_id');
 		send(res, 200, await free_user_id());
 		console.log(moment().format());
 		console.log();
 	})
 	.post('/event', async (req, res) =>
 	{
-		console.log(moment().format());
-		/*console.log(req.body);
-		console.log(typeof req.body);
-		console.log(typeof req.body.event);*/
-		let e = req.body.event;
 		console.log('/event:');
-		console.log(e);
+		let e = req.body.event;
+		//console.log(e);
 		let rrr = await process_event(e);
 		console.log('/event response:');
 		console.log(rrr);
-		if (rrr)
-			rrr["banana"] = true;
 		send(res, 200, rrr);
 		console.log(moment().format());
 		console.log();

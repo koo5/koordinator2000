@@ -60,6 +60,11 @@
 			await apply_newly_authenticated_user(u)
 	});
 
+	$: process.browser && document.documentElement.style.setProperty('--hue_rotate', $my_user.hue_rotate + "deg");
+	$: process.browser && document.documentElement.style.setProperty('--saturate', (100+$my_user.saturate) + "%");
+	$: process.browser && document.documentElement.style.setProperty('--invert', $my_user.invert + "%");
+	$: process.browser && document.documentElement.style.setProperty('--contrast', (100 + $my_user.contrast) + "%");
+
 </script>
 
 <style>
@@ -67,7 +72,7 @@
     :global(html) {
         margin: 0 auto;
         background: salmon;
-        /*filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);*/
+        filter: hue-rotate(var(--hue_rotate)) contrast(var(--contrast)) invert(var(--invert)) saturate(var(--saturate));
     }
 
     main {
@@ -190,7 +195,6 @@
 
 		{/if}
 	</Auth0Context>
-
 
 {:else}
 	<div class="content_block">
