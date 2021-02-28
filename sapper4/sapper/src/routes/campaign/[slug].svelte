@@ -50,5 +50,8 @@
 	<br>
 	<hr>
 	<a href="/campaigns">more campaigns.</a>
+
+{:else}
+	<div class="animate-flicker">Loading...</div>
 {/if}
 

@@ -23,7 +23,7 @@ Multiple campaigns can be grouped under one cause.
 <ul>
 	{#if process.browser}
 		{#if $q.loading}
-			<li>Loading...</li>
+			<div class="animate-flicker">Loading...</div>
 		{:else if $q.data}
 			{#each $q.data.causes as cause (cause.id)}
 

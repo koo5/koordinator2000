@@ -97,20 +97,17 @@
 
 <style>
 
-
-	:global(.help_tooltip) {
-		background-color: #cccccc;
-		padding: 1em;
-	}
-
 	:global(.info_tooltip) {
-		background-color: #cccccc;
+		/*background-color: #cccccc;*/
 		padding: 1em;
 	}
 
-	.rastrast {
+	.campaign_swiper_slide {
 		max-width: 100%;
 		word-wrap: break-word;
+		margin: 0 auto;
+		max-width: 60em;
+		padding: 3vh 3vw
 	}
 
 	:global(.confirmed) {
@@ -149,14 +146,14 @@
 					on:slideChange={(x) => slideChange(x,campaign.id)}
 			>
 				<SwiperSlide>
-					<div class="rastrast">
+					<div class="campaign_swiper_slide">
 						<button type="submit">participate in all campaigns of this cause</button>
 						<button type="submit">participate in all campaigns of this user</button>
 					</div>
 				</SwiperSlide>
 
 				<SwiperSlide>
-					<div class="rastrast">
+					<div class="campaign_swiper_slide">
 						<div>PARTICIPATEd. double right:
 							See all campaigns of this cause. (button)
 						</div>
@@ -165,14 +162,14 @@
 
 				<SwiperSlide>
 
-					<div class="rastrast">
+					<div class="campaign_swiper_slide">
 						<Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)}/>
 					</div>
 
 				</SwiperSlide>
 
 				<SwiperSlide>
-					<div class="rastrast">
+					<div class="campaign_swiper_slide">
 						<div>DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
 							cause. (button)
 						</div>
@@ -180,7 +177,7 @@
 				</SwiperSlide>
 
 				<SwiperSlide>
-					<div class="rastrast">
+					<div class="campaign_swiper_slide">
 						<button type="submit">dismiss all campaigns of this cause</button>
 						<button type="submit">dismiss all campaigns of this user (for ever and ever...)</button>
 					</div>

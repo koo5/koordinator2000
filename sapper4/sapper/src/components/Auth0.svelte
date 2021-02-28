@@ -51,5 +51,5 @@
 		{/if}
 
 {:else}
-	loading..
+	<div class="animate-flicker">Loading...</div>
 {/if}

@@ -95,7 +95,6 @@
 
 <li>
 	<div class="campaign">
-		<hr>
 		<ToolTipsy enabled="{!!$my_user.database_debug}" css_ref="dev">
 			<div slot="tooltip">
 				<small><pre>
@@ -106,16 +105,15 @@
 		</ToolTipsy>
 
 		<a href="/campaign/{campaign.id}"><h2>{campaign.title}</h2></a>
-
+		<h5>Description</h5>
 		<p>{@html campaign.description}</p>
 
-		<h5>My threshold</h5>
+		<h5>My participation</h5>
 		<i>I will join when other people join:</i><br>
 
 		<MyParticipation campaign={campaign} on:my_participation_upsert/>
-		<br>
 
-		<h5>Participants</h5>
+		<h5>Progress</h5>
 		<i>We want {suggested_optimal_threshold} people:</i><br>
 
 		<Progress multi>
@@ -131,7 +129,7 @@
 		</Progress>
 		{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>
 
-		<p></p>
+		<h5>Participants</h5>
 		<ToolTipsy enabled="{!$my_user.hide_help}">
 			participating users (sorted from lowest threshold to highest):
 			<div slot="tooltip">
@@ -160,8 +158,9 @@
 		{/if}
 		<br>
 
+		<h5>Dismissals</h5>
 		<ToolTipsy enabled="{!$my_user.hide_help}">
-			and these users dismissed the campaign:<br>
+			And these users dismissed the campaign:<br>
 			<div slot="tooltip">
 				<div class="help_tooltip">
 					<p>Maybe they think it is stupid, or they just want to get back to it later.</p> At any case, they don't
@@ -201,13 +200,8 @@
 	pre {
 		overflow-x: scroll;
 		overflow-y: scroll;
-		width: 300px;
-		height: 300px;
-	}
-
-	:global(.dev) {
-		border-style: dotted;
-		background-color: rgb(230, 230, 230);
+		width: 100%;
+		height: 100%;
 	}
 
 </style>

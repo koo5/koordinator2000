@@ -34,15 +34,13 @@
 </script>
 
 <style>
-	:global(.line) {
-		display: table
-	}
-	:global([ref=cell]) {
-		display: table-cell
-	}
+	/*input
+	{ width: 10em; }
+	^ i guess this is relative to the "outer" font, not the font used to display the digits
+	*/
+
 </style>
 
-<div class="line">
 	{#if my_participation.id}
 
 		<MutationForm  on:done={() => dispatch('my_participation_upsert')}  css_ref="cell"
@@ -51,7 +49,7 @@
 		>
 			minimum threshold suggested: {campaign.suggested_lowest_threshold}<br>
 			<label>My threshold:
-				<input type="number"  min="0" max="99999999999999"  bind:value={new_threshold}/>
+				<input type="number" placeholder={campaign.suggested_optimal_threshold} maxlength="10" min="0" max="9999999999"  bind:value={new_threshold}/>
 				<button type="submit">Update</button><br>
 				maximum threshold suggested:{campaign.suggested_highest_threshold}
 			</label>
@@ -73,21 +71,22 @@
 			<button type="submit">Delete</button>
 		</MutationForm>
 
+		<p>
 		{get_tickmark(my_participation)}
 		{#if my_participation.threshold != undefined}
 			{#if my_participation.condition_is_fulfilled}
 				{#if my_participation.confirmed}
-					<span class="confirmed">my participation is confirmed.</span>
+					<span class="confirmed">My participation is confirmed.</span>
 				{:else}
-					<span class="condition_is_fulfilled">my threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
+					<span class="condition_is_fulfilled">My threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
 				{/if}
 			{:else}
-				<span class="condition_is_not_fulfilled">i'm waiting for more people</span>
+				<span class="condition_is_not_fulfilled">I'm waiting for more people</span>
 			{/if}
 		{:else}
-			i'm not participating.
+			I'm not participating.
 		{/if}
-
+		</p>
 
 	{:else}
 
@@ -96,13 +95,12 @@
 			mutation={UPSERT}
 			variables={upsert_vars}
 		>
-			<label for="threshold">My threshold:
-				<input type="number"  min="0" max="99999999999999" id="threshold" bind:value={new_threshold}/>
-				<button type="submit">Participate</button>
-				(suggested: {campaign.suggested_lowest_threshold}-{campaign.suggested_highest_threshold})
+			<label>My threshold:
+				<input type="number"  placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999" bind:value={new_threshold}/>
 			</label>
+			<button type="submit">Participate</button>
+			(suggested: {campaign.suggested_lowest_threshold} - {campaign.suggested_highest_threshold})
 		</MutationForm>
 
 
 	{/if}
-</div>

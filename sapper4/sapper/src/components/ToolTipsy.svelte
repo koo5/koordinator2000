@@ -34,11 +34,14 @@ todo
 	}
 
 	.tooltiptext {
+		border-style: solid;
 		visibility: hidden;
 		position: absolute;
 		z-index: 1;
+		padding: 0em 1em;
 		border: 1em 1em;
-		background: salmon;
+		background-color: white;
+		foreground-color: black;
 	}
 
 	/* Show the tooltip text when you mouse over the tooltip container */

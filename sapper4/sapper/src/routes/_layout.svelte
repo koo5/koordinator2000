@@ -64,44 +64,99 @@
 
 <style>
 
-	:global(html) {
-		padding: 1em;
-		margin: 0 auto;
-		background: salmon;
-		//filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);
+    :global(html) {
+        margin: 0 auto;
+        background: salmon;
+        /*filter: hue-rotate(0deg) contrast(1) invert(0) saturate(2);*/
+    }
+
+    main {
+        background: white;
+    }
+
+	:global(.content_block)
+	{
+	        margin: 0 auto;
+			max-width: 60em;
+			padding: 3vh 3vw
 	}
 
-	@media (min-width: 420px) {
-		:global(html) {
-			padding: 3vw 12vw 3vw 8vh;
-		}
+    :global(h1, h2, h3, h4, h5) {
+        font-family: serif;
+        margin: 1em;
+        margin-left: -3vw;
+        padding-left: 2vw;
+        border-left: 0.5vw ridge #f88072;
+    }
+
+    :global(h1) {
+        font-size: 310%;
+        margin-left: -3vw;
+        padding-left: 2vw;
+        border-left: 0.5vw ridge #f88072;
+    }
+
+    @keyframes flickerAnimation {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @-o-keyframes flickerAnimation {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @-moz-keyframes flickerAnimation {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @-webkit-keyframes flickerAnimation {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+
+    :global(.animate-flicker) {
+        -webkit-animation: flickerAnimation 1s infinite;
+        -moz-animation: flickerAnimation 1s infinite;
+        -o-animation: flickerAnimation 1s infinite;
+        animation: flickerAnimation 1s infinite;
+    }
+
+	:global(.dev) {
+		border-style: dotted;
+		background-color: rgb(230, 230, 230);
 	}
 
-	:global(h1, h2, h3, h4, h5) {
-		font-family: serif;
-	}
 
-	:global(h1) {
-		font-size: 310%;
-		margin-left: -3vw;
-		padding-left: 2vw;
-		border-left: 1vw ridge #f88072
-	}
-
-	:global(body) {
-		margin: 0 auto;
-		max-width: 60em;
-	}
-
-	main {
-		background: white;
-		box-shadow: 20px 50px 3px;
-		padding: 3vh 3vw
-	}
-
-	:global(h2) {
-		padding: 2em 0 1em 0;
-	}
 
 </style>
 
@@ -141,7 +196,7 @@
 	Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. See the <a
 		href="https://github.com/koo5/koordinator2000/">code.</a><br>
 	<p>
-		loading..
+		<div class="animate-flicker">Loading...</div>
 {/if}
 
 
