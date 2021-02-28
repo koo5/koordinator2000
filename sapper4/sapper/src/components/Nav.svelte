@@ -37,7 +37,7 @@
 
 			<li align="right">
 				<Popover>
-					<a href="javascript:void(0)" slot=target>Settings</a>
+					<a href="{'javascript:void(0)'}" slot=target>Settings</a>
 					<span slot=content>
 						<span class="pop_up">
 							<Settings/>

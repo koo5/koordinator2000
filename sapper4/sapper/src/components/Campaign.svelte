@@ -104,7 +104,13 @@
 			</div>
 		</ToolTipsy>
 
-		<a href="/campaign/{campaign.id}"><h2>{campaign.title}</h2></a>
+		<h2>
+			{#if is_detail_view}
+				{campaign.title}
+			{:else}
+				<a href="/campaign/{campaign.id}">{campaign.title}</a>
+			{/if}
+		</h2>
 		<h5>Description</h5>
 		<p>{@html campaign.description}</p>
 
