@@ -31,7 +31,8 @@
 	);
 
 </script>
-<ul class="content_block">
+<div class="content_block">
+<ul>
 	<SubscribedItemsInner {items} let:da={data}>
 		{#each data.campaign_notifications as notification (notification.id)}
 			<Notification {notification}/>
@@ -40,6 +41,7 @@
 		{/each}
 	</SubscribedItemsInner>
 </ul>
+</div>
 
 <!--<pre>{JSON.stringify(items, null, 2)}</pre> -->
 

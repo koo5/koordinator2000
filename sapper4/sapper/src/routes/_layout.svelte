@@ -73,6 +73,7 @@
         margin: 0 auto;
         background: salmon;
         filter: hue-rotate(var(--hue_rotate)) contrast(var(--contrast)) invert(var(--invert)) saturate(var(--saturate));
+        height: 100%;
     }
 
     main {

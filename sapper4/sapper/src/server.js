@@ -166,6 +166,8 @@ async function save_verified_authentication(user_id, provider, login_name)
 	);
 }
 
+console.log(moment().format());
+
 let app = polka()
 app.use(
 	bodyParser.json(),

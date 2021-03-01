@@ -1,10 +1,12 @@
 <script type='js'>
 
+
+	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
 	import {subscribe, gql} from "srcs/apollo.js";
-	import Campaign from 'cmps/Campaign.svelte';
+	import CampaignLink from 'cmps/CampaignLink.svelte';
 
 
-	$: q = subscribe(
+	$: items = subscribe(
 		gql`
 		subscription {
 		  causes(order_by: [{id: asc}]) {
@@ -13,6 +15,7 @@
 			description,
 			campaigns {
 			  title
+			  id
 			}
 		  }
 		}
@@ -20,27 +23,18 @@
 
 </script>
 Multiple campaigns can be grouped under one cause.
-<ul>
-	{#if process.browser}
-		{#if $q.loading}
-			<div class="animate-flicker">Loading...</div>
-		{:else if $q.data}
-			{#each $q.data.causes as cause (cause.id)}
-
-				<li><h4>{cause.id} - {cause.title}</h4></li>
-				<p>{cause.description}</p>
-
-				{#each cause.campaigns as campaign (campaign.id)}
-					<Campaign {campaign}/>
-				{/each}
-
+<div class="content_block">
+	<ul>
+		<SubscribedItemsInner {items} let:da={data}>
+			{#each data.causes as cause (cause.id)}
+					<li><h4>{cause.id} - {cause.title}</h4></li>
+					<pre>{cause.description}</pre>
+					{#each cause.campaigns as campaign (campaign.id)}
+						<CampaignLink {campaign}/>
+					{/each}
 			{:else}
 				<li>No causes found</li>
 			{/each}
-		{:else}
-			<pre>{JSON.stringify($q.error, null, '  ')}</pre>
-		{/if}
-	{/if}
-</ul>
-
-
+		</SubscribedItemsInner>
+	</ul>
+</div>

@@ -5,7 +5,7 @@
 
 
 </script>
-<h4>Settings</h4>
+<div>
 <h5>general</h5>
 <label><input type="checkbox" bind:checked={$my_user.autoscroll}>Autoscroll</label>
 <br>
@@ -64,3 +64,13 @@
 	<input type="checkbox" bind:checked={$my_user.graphql_debug}>
 	graphql_debug:</label>
 <br>
+</div>
+
+<style>
+	/*div
+	{
+		margin-bottom: 0px;
+		margin-top: 0px;
+    }*/
+
+</style>
