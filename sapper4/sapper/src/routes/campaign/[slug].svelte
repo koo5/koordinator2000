@@ -1,10 +1,15 @@
 <script context="module">
+	import _ from 'underscore';
+
 	export async function preload(page)
 	{
 		const {slug} = page.params;
-		const campaign_id = slug;
-		console.log(campaign_id);
-		return {campaign_id};
+		if (parseInt(slug) >= 0)
+		{
+			const campaign_id = slug;
+			console.log(campaign_id);
+			return {campaign_id};
+		}
 	}
 </script>
 
@@ -35,7 +40,6 @@
 	);
 
 	$: console.log(campaign_id);
-
 	$: campaign = $items.data?.campaigns_by_pk;
 
 </script>
@@ -57,3 +61,5 @@
 	<a href="/campaigns">more campaigns.</a>
 
 </div>
+
+

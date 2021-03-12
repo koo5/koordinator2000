@@ -113,3 +113,16 @@ ssl
 	
 https://www.onegraph.com/graphiql
 
+
+
+
+
+pagination:
+	i'd try a simpler scheme:
+		client keeps a list of already loaded id's. sends them (maybe as ranges when possible?) as part of the query.
+		no "offset", no routing, just the "endless wall".
+		initial request is obvious. then maybe on a scroll event, we trigger then next request
+		
+	https://blog.reactioncommerce.com/how-to-implement-graphql-pagination-and-sorting/
+	
+	
