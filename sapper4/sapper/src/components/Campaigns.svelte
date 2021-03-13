@@ -192,6 +192,3 @@
 		{/each}
 	</SubscribedItemsInner>
 </div>
-
-
-

@@ -51,18 +51,24 @@ let verbose = false;
 var fetch = require('cross-fetch');
 var gql = require('graphql-tag');
 var apollo = require('@apollo/client');
+import ApolloLinkTimeout from 'apollo-link-timeout';
+import { createHttpLink } from 'apollo-link-http';
 
-// Create GraphQL Client for FaunaDB, replace HttpLink configuration
-// with your own GraphQL endpoint configuration.
-const client = new apollo.ApolloClient({
-  cache: new apollo.InMemoryCache(),
-  link: new apollo.HttpLink({
+const httpLink = createHttpLink({
     uri: 'https://koordinator2.hasura.app/v1/graphql',
     headers: {
       //"Authorization": `Bearer ${process.env.FAUNADB_SECRET}`,
     },
     fetch
-  }),
+  });
+
+const timeoutHttpLink = (new ApolloLinkTimeout(10000)).concat(httpLink);
+
+// Create GraphQL Client for FaunaDB, replace HttpLink configuration
+// with your own GraphQL endpoint configuration.
+const client = new apollo.ApolloClient({
+  cache: new apollo.InMemoryCache(),
+  link: timeoutHttpLink,
   defaultOptions: {
     query: {
       fetchPolicy: 'no-cache',
@@ -82,7 +88,7 @@ async function flip_bit(participation, val)
 			content = `Heads up! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`;
 		else
 			content = `Heads up! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
-		
+
 		console.log(await client.mutate({
 			mutation: gql`
 				mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
@@ -97,7 +103,7 @@ async function flip_bit(participation, val)
 				content: content
 			}
 		}));
-		
+
 		console.log(await client.mutate({
 			mutation: gql`
 				mutation MyMutation($_id: Int, $condition_is_fulfilled: Boolean) {
