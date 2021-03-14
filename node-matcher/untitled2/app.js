@@ -63,7 +63,7 @@ const httpLink = new apollo.HttpLink({
     fetch
   });
 
-const timeoutHttpLink = (new timeout_link.ApolloLinkTimeout(10000)).concat(httpLink);
+const timeoutHttpLink = new timeout_link.default(10000).concat(httpLink);
 
 // Create GraphQL Client for FaunaDB, replace HttpLink configuration
 // with your own GraphQL endpoint configuration.
@@ -213,7 +213,7 @@ async function run() {
 		console.log(e)
 		sleep = 20;
 	}
-	//if (counter-- == 0)
+	if (counter-- == 0)
 		process.exit(0)
 	setTimeout(async () => {await run();}, sleep * 1000);
 };
