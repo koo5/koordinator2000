@@ -18,5 +18,8 @@
     "node-cron": "^2.0.3",
     "pug": "^2.0.4",
     "react": "^17.0.1"
+  },
+  "devDependencies": {
+    "apollo-link-timeout": "^4.0.0"
   }
 }
