@@ -53,10 +53,9 @@ let verbose = false;
 var fetch = require('cross-fetch');
 var gql = require('graphql-tag');
 var apollo = require('@apollo/client');
-import ApolloLinkTimeout from 'apollo-link-timeout';
-import { createHttpLink } from 'apollo-link-http';
+var timeout_link = require('apollo-link-timeout');
 
-const httpLink = createHttpLink({
+const httpLink = new apollo.HttpLink({
     uri: 'https://koordinator2.hasura.app/v1/graphql',
     headers: {
       //"Authorization": `Bearer ${process.env.FAUNADB_SECRET}`,
@@ -64,7 +63,7 @@ const httpLink = createHttpLink({
     fetch
   });
 
-const timeoutHttpLink = (new ApolloLinkTimeout(10000)).concat(httpLink);
+const timeoutHttpLink = (new timeout_link.ApolloLinkTimeout(10000)).concat(httpLink);
 
 // Create GraphQL Client for FaunaDB, replace HttpLink configuration
 // with your own GraphQL endpoint configuration.
