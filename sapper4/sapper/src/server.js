@@ -158,7 +158,7 @@ async function save_verified_authentication(user_id, provider, login_name)
 				}
 		`,
 			variables: {
-				user_id: x.id,
+				user_id: user_id,
 				provider: "auth0",
 				login_name: auth0.info.sub
 			}
