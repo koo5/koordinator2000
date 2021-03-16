@@ -7,9 +7,9 @@
 		idToken,
 		userInfo,
 	} from '@dopry/svelte-auth0';
-	import {stores} from '@sapper/app'
 	import {my_user, ensure_we_exist, apply_newly_authenticated_user, event} from 'srcs/my_user.js';
 	import {onMount} from "svelte";
+	import {stores} from '@sapper/app'
 
 	const {page, session} = stores()
 

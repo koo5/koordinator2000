@@ -17,7 +17,7 @@
 	<tbody>
 	{#each campaign.participations as participation (participation.id)}
 		<tr>
-			<td><a href="/users/{participation.user.id}">{participation.user.name}</a></td>
+			<td><a href="/users/{participation.account.id}">{participation.account.name}</a></td>
 			<td>
 				<ToolTipsy>{participation.threshold}
 					<div slot="tooltip" class="info_tooltip">

@@ -29,7 +29,7 @@
 					{
 						smazano: {_eq: false},
 						stealth: {_eq: false},
-						_not: {campaign_dismissals: {user_id: {_eq: $_user_id}}}
+						_not: {campaign_dismissals: {account_id: {_eq: $_user_id}}}
 					}
 				}
 			)

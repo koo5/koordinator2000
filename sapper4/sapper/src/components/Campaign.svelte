@@ -48,11 +48,12 @@
 	// campaign.confirmed_fulfilled_count.aggregate.count;
 
 	$: suggested_optimal_threshold = campaign.suggested_optimal_threshold;
+	$: suggested_mass = campaign.suggested_optimal_threshold + 1;
 
 	// participations_contributing_towards_reaching_optimal_threshold
 	const CONTRIBUTING_COUNT = gql`
 		subscription ($threshold: Int, $campaign_id: Int, $confirmed: Boolean) {
-		  participations_aggregate(where: {threshold: {_lt: $threshold}, confirmed: {_eq: $confirmed}, campaign_id: {_eq: $campaign_id}, user: {smazano: {_eq: false}}}) {
+		  participations_aggregate(where: {threshold: {_lt: $threshold}, confirmed: {_eq: $confirmed}, campaign_id: {_eq: $campaign_id}, account: {smazano: {_eq: false}}}) {
 			aggregate {
 			  count
 			}
@@ -60,17 +61,17 @@
 		}
 	`;
 
-	$: confirmed_contributing_count_q = !is_detail_view ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
+	$: confirmed_contributing_count_q = false ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
 			variables: {
-				threshold: campaign.suggested_optimal_threshold,
+				threshold: suggested_mass,
 				campaign_id: campaign.id,
 				confirmed: true
 			}
 		}
 	);
-	$: unconfirmed_contributing_count_q = !is_detail_view ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
+	$: unconfirmed_contributing_count_q = false ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
 			variables: {
-				threshold: campaign.suggested_optimal_threshold,
+				threshold: suggested_mass,
 				campaign_id: campaign.id,
 				confirmed: false
 			}
@@ -83,9 +84,9 @@
 
 	const CAMPAIGN_DISMISSAL = gql`
 		mutation MyMutation($campaign_id: Int, $user_id: Int) {
-		  insert_campaign_dismissals_one(object: {campaign_id: $campaign_id, user_id: $user_id}) {
+		  insert_campaign_dismissals_one(object: {campaign_id: $campaign_id, account_id: $user_id}) {
 			campaign_id
-			user_id
+			account_id
 		  }
 		}
 	`
@@ -120,17 +121,17 @@
 		<MyParticipation campaign={campaign} on:my_participation_upsert/>
 
 		<h5>Progress</h5>
-		<i>We want {suggested_optimal_threshold} people:</i><br>
+		<i>We want {suggested_mass} people:</i><br>
 
 		<Progress multi>
 			<Progress bar color="success"
 					  value={confirmed_contributing_count}
-					  max={suggested_optimal_threshold}>
+					  max={suggested_mass}>
 				{confirmed_contributing_count}</Progress>
 			<!-- how to make the below the "light green" "unconfirmed participation"? -->
 			<Progress bar color="warning"
 					  value={unconfirmed_contributing_count}
-					  max={suggested_optimal_threshold}>
+					  max={suggested_mass}>
 				{unconfirmed_contributing_count}</Progress>
 		</Progress>
 		{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>
@@ -175,7 +176,7 @@
 			</div>
 		</ToolTipsy>
 
-		{#each campaign.campaign_dismissals as dismissal (dismissal.user_id)}
+		{#each campaign.campaign_dismissals as dismissal (dismissal.account_id)}
 			<span
 			>
 				<DismissalBadge {dismissal}/>

@@ -5,7 +5,7 @@
 
   const ADD_USER = gql`
     mutation($name: String!, $email: String) {
-      insert_users(objects: [{name: $name, email: $email}]) {
+      insert_accounts(objects: [{name: $name, email: $email}]) {
         affected_rows
       }
     }

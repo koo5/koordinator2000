@@ -5,7 +5,7 @@
 </script>
 
 <span class="dismissal">
-👎<a href="/users/{dismissal.user.id}">{dismissal.user.name}</a>
+👎<a href="/users/{dismissal.account.id}">{dismissal.account.name}</a>
 
 
 </span>
