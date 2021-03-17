@@ -140,9 +140,9 @@ async function user_id_from_auth(provider, sub)
 	});
 	await result.data.verified_user_authentications.forEach(async (x) =>
 	{
-		console.log('x:');
+		console.log('found verified_user_authentication:');
 		console.log(x);
-		found_user_id = x.account_id;
+		found_user_id = found_user_id || x.account_id;
 	})
 	return found_user_id;
 }
