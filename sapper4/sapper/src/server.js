@@ -152,9 +152,10 @@ async function save_verified_authentication(user_id, provider, login_name)
 {
 	if (user_id == -1 || !user_id)
 		return;
+	console.log(['save_verified_authentication',user_id, provider, login_name]);
 	return await apollo_client.mutate({
 			mutation: gql`
-				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int = 10) {
+				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
 				  insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, account_id: $user_id})
 				  {
 					account_id
@@ -163,7 +164,7 @@ async function save_verified_authentication(user_id, provider, login_name)
 		`,
 			variables: {
 				user_id,
-				provider: provider,
+				provider,
 				login_name
 			}
 		}
