@@ -3,7 +3,7 @@ import {localStorageSharedStore} from './svelte-shared-store';
 import {goto} from '@sapper/app';
 
 export const my_user = process.browser ?
-	localStorageSharedStore('my_user', {id: -1, auth_debug: true})
+	localStorageSharedStore('my_user', {id: -1, auth_debug: false})
 	//writable({id:-1})
 	:
 	readable({id: 0});

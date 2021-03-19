@@ -27,7 +27,7 @@
 
 <label>
 	<input type="checkbox" bind:checked={$my_user.invert}/>
-	invert
+	invert light/dark
 </label>
 <br>
 <label>

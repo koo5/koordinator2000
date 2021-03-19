@@ -5,6 +5,8 @@
 	import Notification from 'cmps/Notification.svelte';
 	import {my_user} from 'srcs/my_user.js';
 
+	$: my_user_id = $my_user.id
+
 	$: items = subscribe(
 		gql`
 			subscription MySubscription222($_user_id: Int) {
@@ -25,7 +27,7 @@
 			}`,
 		{
 			variables: {
-				_user_id: $my_user.id
+				_user_id: my_user_id
 			}
 		}
 	);

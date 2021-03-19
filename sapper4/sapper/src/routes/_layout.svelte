@@ -60,10 +60,30 @@
 			await apply_newly_authenticated_user(u)
 	});
 
-	$: process.browser && document.documentElement.style.setProperty('--hue_rotate', ($my_user.hue_rotate||0) + "deg");
-	$: process.browser && document.documentElement.style.setProperty('--saturate', (100+($my_user.saturate||0)) + "%");
-	$: process.browser && document.documentElement.style.setProperty('--invert', ($my_user.invert?100:0) + "%");
-	$: process.browser && document.documentElement.style.setProperty('--contrast', (100 + ($my_user.contrast||0)) + "%");
+	$: color_theme_hue_rotate = $my_user.hue_rotate;
+	$: color_theme_saturate = $my_user.saturate;
+	$: color_theme_invert = $my_user.invert;
+	$: color_theme_contrast = $my_user.contrast;
+
+	$: set_hue_rotate(color_theme_invert ? 180 : 0);
+	function set_hue_rotate(x)
+	{
+		if(!process.browser) return;
+		console.log('set_hue_rotate(' + x);
+		$my_user.hue_rotate = x;
+	}
+
+	$: console.log('hue_rotate is'+$my_user.hue_rotate);
+	$: set_css_var('--hue_rotate', ((color_theme_invert ? 180:0) + (color_theme_hue_rotate||0)) + "deg");
+	$: set_css_var('--saturate', (100+(color_theme_saturate||0)) + "%");
+	$: set_css_var('--invert', (color_theme_invert?100:0) + "%");
+	$: set_css_var('--contrast', (100 + (color_theme_contrast||0)) + "%");
+
+	function set_css_var(name, value)
+	{
+		if (!process.browser) return;
+		document.documentElement.style.setProperty(name, value);
+	}
 
 </script>
 
