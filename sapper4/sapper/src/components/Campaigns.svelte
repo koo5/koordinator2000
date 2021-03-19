@@ -10,6 +10,7 @@
 
 	var my_timeout;
 	let campaign_containers;
+	$: my_user_id = $my_user.id
 
 
 	import {Swiper, SwiperSlide} from 'swiper/svelte';
@@ -41,7 +42,7 @@
 		CAMPAIGN_LIST,
 		{
 			variables: {
-				_user_id: $my_user.id
+				_user_id: my_user_id
 			}
 		}
 	);
