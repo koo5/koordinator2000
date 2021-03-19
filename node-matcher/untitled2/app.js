@@ -60,12 +60,7 @@ var apollo = require('@apollo/client');
 var timeout_link = require('apollo-link-timeout');
 
 const httpLink = new apollo.HttpLink({
-
-
-	//todo import this from a common config file
     uri: 'https://' + config.GRAPHQL_ENDPOINT,
-
-
     headers: {
       //"Authorization": `Bearer ${process.env.FAUNADB_SECRET}`,
       ...config.PUBLIC_GRAPHQL_HEADERS
