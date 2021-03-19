@@ -1,3 +1,7 @@
+var config_file = require('../../sapper4/sapper/src/config.js');
+//console.log(config_file);
+var config = config_file.config;
+
 var moment = require('moment');
 var createError = require('http-errors');
 var express = require('express');
@@ -56,9 +60,15 @@ var apollo = require('@apollo/client');
 var timeout_link = require('apollo-link-timeout');
 
 const httpLink = new apollo.HttpLink({
-    uri: 'https://koordinator2.hasura.app/v1/graphql',
+
+
+	//todo import this from a common config file
+    uri: 'https://' + config.GRAPHQL_ENDPOINT,
+
+
     headers: {
       //"Authorization": `Bearer ${process.env.FAUNADB_SECRET}`,
+      ...config.PUBLIC_GRAPHQL_HEADERS
     },
     fetch
   });
@@ -93,13 +103,13 @@ async function flip_bit(participation, val)
 		console.log(await client.mutate({
 			mutation: gql`
 				mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
-				  insert_campaign_notifications(objects: {campaign_id: $campaign_id, content: $content, user_id: $user_id}) {
+				  insert_campaign_notifications(objects: {campaign_id: $campaign_id, content: $content, account_id: $user_id}) {
 					affected_rows
 				  }
 				}			
 			`,
 			variables: {
-				user_id: participation.user_id,
+				user_id: participation.account_id,
 				campaign_id: participation.campaign_id,
 				content: content
 			}
@@ -179,12 +189,12 @@ async function my_fetch()
 	const { data } = await client.query({
 		query: gql`
 			query GET_PARTICIPATIONS {
-			  campaigns (order_by: [{id: asc}]) {
+			  campaigns(order_by: [{id: asc}]) {
 			  	id
 			  	title
-				participations(order_by: [{threshold: asc}], where: {user: {smazano: {_eq: false}}} ) {
+				participations(order_by: [{threshold: asc}], where: {account: {smazano: {_eq: false}}} ) {
 					id
-					user_id
+					account_id
 					campaign_id
 					campaign
 					{
@@ -202,7 +212,7 @@ async function my_fetch()
 
 
 async function run() {
-	let sleep = 5;
+	let sleep = 1;
 	try
 	{
 		let data = await my_fetch();

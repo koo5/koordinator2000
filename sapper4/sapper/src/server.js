@@ -1,8 +1,6 @@
-var moment = require('moment');
-var dotenv = require('dotenv')
-var dotenvExpand = require('dotenv-expand')
-var myEnv = dotenv.config()
-dotenvExpand(myEnv)
+import * as config_file from './config.js';
+var config = config_file.config;
+
 import sirv from 'sirv';
 import polka from 'polka';
 
@@ -14,17 +12,23 @@ import SignJWT from 'jose/jwt/sign'
 import parseJwk from 'jose/jwk/parse'
 /*import decodeProtectedHeader from 'jose/util/decode_protected_header'
 import jwtVerify from 'jose/jwt/verify'*/
+var moment = require('moment');
 
-const { uniqueNamesGenerator, adjectives, colors, animals } = require('unique-names-generator');
+const {uniqueNamesGenerator, adjectives, colors, animals} = require('unique-names-generator');
 
 
 const {PORT, NODE_ENV} = process.env;
 const dev = NODE_ENV === 'development';
-var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = myEnv.parsed;
-MY_APP_KEYS = JSON.parse(MY_APP_KEYS);
-var sess = {PUBLIC_URL};
+var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = config;
 
-if(MY_APP_KEYS == undefined)
+var sess = {
+	PUBLIC_URL,
+	GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
+	PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS
+};
+console.log(sess);
+
+if (MY_APP_KEYS == undefined)
 {
 	throw("must have keys")
 }
@@ -56,28 +60,28 @@ const apollo_client = new_apollo_client();
 
 async function free_user_id()
 {
-	const name = uniqueNamesGenerator({ dictionaries: [adjectives, colors] });
-	console.log("free_user_id:"+name)
+	const name = uniqueNamesGenerator({dictionaries: [adjectives, colors]});
+	console.log("free_user_id:" + name)
 	const result = await apollo_client.mutate({
 			mutation: gql`
 				mutation MyMutation($name: String) {
-				  insert_users_one(object: {name: $name}) {
+				  insert_accounts_one(object: {name: $name}) {
 					id
 				  }
 				}
 			`,
 			variables:
 				{
-					name:name
+					name: name
 				}
 		}
 	);
 	let r = await sign_user_object(
 		{
-			id:result['data']['insert_users_one']['id'],
+			id: result['data']['insert_accounts_one']['id'],
 			name
 		});
-	console.log("free_user_id result:"+JSON.stringify(r, null, ' '))
+	console.log("free_user_id result:" + JSON.stringify(r, null, ' '))
 	console.log()
 	return r;
 }
@@ -112,7 +116,7 @@ async function process_event(x)
 	console.log("found_user_id:")
 	console.log(found_user_id)
 	if (found_user_id)
-		return {user: await sign_user_object({id:found_user_id})};
+		return {user: await sign_user_object({id: found_user_id})};
 	else
 		save_verified_authentication(x.id, "auth0", auth0.info.sub)
 }
@@ -124,7 +128,7 @@ async function user_id_from_auth(provider, sub)
 		query: gql`
 				query MyQuery($login_name: String, $provider: String) {
 				  verified_user_authentications(where: {login_name: {_eq: $login_name}, provider: {_eq: $provider}}) {
-					user_id
+					account_id
 				  }
 				}
 			`,
@@ -136,9 +140,9 @@ async function user_id_from_auth(provider, sub)
 	});
 	await result.data.verified_user_authentications.forEach(async (x) =>
 	{
-		console.log('x:');
+		console.log('found verified_user_authentication:');
 		console.log(x);
-		found_user_id = x.user_id;
+		found_user_id = found_user_id || x.account_id;
 	})
 	return found_user_id;
 }
@@ -148,19 +152,20 @@ async function save_verified_authentication(user_id, provider, login_name)
 {
 	if (user_id == -1 || !user_id)
 		return;
+	console.log(['save_verified_authentication',user_id, provider, login_name]);
 	return await apollo_client.mutate({
 			mutation: gql`
-				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int = 10) {
-				  insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, user_id: $user_id})
+				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
+				  insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, account_id: $user_id})
 				  {
-					user_id
+					account_id
 				  }
 				}
 		`,
 			variables: {
-				user_id: user_id,
-				provider: "auth0",
-				login_name: auth0.info.sub
+				user_id,
+				provider,
+				login_name
 			}
 		}
 	);

@@ -1,6 +1,7 @@
 # What?
 
-dev version/demo: https://koordinator.planlogic.net/ .
+dev version/demo: https://fullcracy.xyz
+
 readme: https://github.com/koo5/koordinator2000/
 
 It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured.

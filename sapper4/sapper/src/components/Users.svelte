@@ -6,7 +6,7 @@
 
 	const USER_LIST = gql`
     subscription {
-      users(order_by: [{id: asc}]) {
+      accounts(order_by: [{id: asc}]) {
         id,
         name,
         email
@@ -30,7 +30,7 @@
 
 <ul>
 	<SubscribedItemsInner {items} let:da={data}>
-		{#each data.users as user (user.id)}
+		{#each data.accounts as user (user.id)}
 			<li>{user.id} - {user.name} - {user.email}
 				<button class="button" on:click={() => impersonate(user.id)}>
 					Impersonate

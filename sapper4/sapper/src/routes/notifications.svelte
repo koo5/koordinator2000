@@ -8,11 +8,11 @@
 	$: items = subscribe(
 		gql`
 			subscription MySubscription222($_user_id: Int) {
-			  campaign_notifications(where: {user_id: {_eq: $_user_id}}, order_by: [{id: desc}]) {
+			  campaign_notifications(where: {account_id: {_eq: $_user_id}}, order_by: [{id: desc}]) {
 				campaign {
 				  id
 				  title
-                  my_participations: participations(where: {user_id: {_eq: $_user_id}}) {
+                  my_participations: participations(where: {account_id: {_eq: $_user_id}}) {
                     id
                     confirmed
                   }

@@ -18,7 +18,7 @@
 
 	const UPSERT = gql`
 				mutation MyMutation($campaign_id: Int, $user_id: Int, $threshold: Int) {
-				  insert_participations(objects: {campaign_id: $campaign_id, user_id: $user_id, threshold: $threshold}, on_conflict: {constraint: participations_campaign_id_user_id, update_columns: threshold}) {
+				  insert_participations(objects: {campaign_id: $campaign_id, account_id: $user_id, threshold: $threshold}, on_conflict: {constraint: participations_campaign_id_user_id, update_columns: threshold}) {
 					affected_rows
 				  }
 				}

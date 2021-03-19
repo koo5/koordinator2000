@@ -5,7 +5,7 @@
 {#if $items.loading}
 	<div class="content_block">
 	<div class="animate-flicker">Loading...</div>
-	<p>If it doesn't load, maybe it crashed or you hit our free demo <a href="http://hasura.io/">Hasura</a> limit.
+	<p>If it doesn't load, maybe it crashed, or you ran into a connection limit with our DB hosting (<a href="http://nhost.io">nhost.io</a>).
 		Please try again in a minute.</p>
 	</div>
 {:else if $items.data}
