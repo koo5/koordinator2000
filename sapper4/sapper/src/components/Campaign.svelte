@@ -126,12 +126,17 @@
 		<Progress multi>
 			<Progress bar color="success"
 					  value={confirmed_contributing_count}
-					  max={suggested_mass}>
+					  max={suggested_mass}
+					  confirmed
+					  >
 				{confirmed_contributing_count}</Progress>
 			<!-- how to make the below the "light green" "unconfirmed participation"? -->
 			<Progress bar color="warning"
 					  value={unconfirmed_contributing_count}
-					  max={suggested_mass}>
+					  max={suggested_mass}
+					  unconfirmed
+					  >
+
 				{unconfirmed_contributing_count}</Progress>
 		</Progress>
 		{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>

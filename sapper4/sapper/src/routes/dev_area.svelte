@@ -1,7 +1,9 @@
 <script>
 	let segment = 0;
 </script>
+	<img src="less_sat_by_telepatx_d2n736h-fullview.jpg" alt="alt"/>
 <div class="content_block">
+
 	<ul>
 		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
 		<li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>

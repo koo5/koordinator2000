@@ -20,16 +20,9 @@
 </script>
 
 {#if process.browser}
-
-	<div>
+	<nav class="nav navbar navbar-inverse navbar-fixed-top">
 		<PageReloadClock/>
-		{#if $my_user.auth_debug}
-			|
-			my_user = {my_user_str}
-			|
-		{/if}
-	</div>
-	<nav class="nav">
+		{#if $my_user.auth_debug}|$my_user = {my_user_str}|{/if}
 		<ul>
 			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
 
@@ -69,7 +62,7 @@
 
 <style>
 
-    div {
+    nav {
         margin: 0;
         padding: 0 3vw
     }

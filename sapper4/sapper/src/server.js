@@ -111,14 +111,17 @@ async function process_event(x)
 	let ph = decodeProtectedHeader(token)
 	console.log(ph)*/
 	console.log("user is:");
-	console.log(auth0.info.sub);
-	let found_user_id = await user_id_from_auth("auth0", auth0.info.sub);
-	console.log("found_user_id:")
-	console.log(found_user_id)
-	if (found_user_id)
-		return {user: await sign_user_object({id: found_user_id})};
+	console.log(JSON.stringify(auth0, null, '  '));
+	let user_id = await user_id_from_auth("auth0", auth0.info.sub);
+	if (user_id)
+		var result = {user: await sign_user_object({id: user_id})};
 	else
-		save_verified_authentication(x.id, "auth0", auth0.info.sub)
+	{
+		user_id = x.id
+		save_verified_authentication(x.id, "auth0", auth0.info)
+	}
+	grab_email(user_id, auth0.info);
+	return result
 }
 
 async function user_id_from_auth(provider, sub)
@@ -148,12 +151,36 @@ async function user_id_from_auth(provider, sub)
 }
 
 
-async function save_verified_authentication(user_id, provider, login_name)
+async function grab_email(user_id, info)
 {
 	if (user_id == -1 || !user_id)
 		return;
+	let email = info.email;
+	console.log(JSON.stringify(await apollo_client.mutate({
+			mutation: gql`
+				mutation MyMutation($user_id: Int, $email: String) {
+					update_accounts(where: {id: {_eq: $user_id}, email: {_is_null: true}}, _set: {email: $email})
+					{
+						returning {
+						  email
+						}
+					}
+				}`,
+			variables: {
+				user_id,
+				email
+			}
+		}
+	),null,''));
+}
+
+async function save_verified_authentication(user_id, provider, info)
+{
+	if (user_id == -1 || !user_id)
+		return;
+	let login_name = info.sub;
 	console.log(['save_verified_authentication',user_id, provider, login_name]);
-	return await apollo_client.mutate({
+	await apollo_client.mutate({
 			mutation: gql`
 				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
 				  insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, account_id: $user_id})

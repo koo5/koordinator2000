@@ -23,7 +23,8 @@ function config()
 		const {session} = stores();
 		return get(session);
 	}
-
+	console.log ('process.browser')
+	console.log (process.browser)
 	return config_file.config;
 }
 

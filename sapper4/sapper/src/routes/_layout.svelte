@@ -60,10 +60,20 @@
 			await apply_newly_authenticated_user(u)
 	});
 
-	$: process.browser && document.documentElement.style.setProperty('--hue_rotate', ($my_user.hue_rotate||0) + "deg");
-	$: process.browser && document.documentElement.style.setProperty('--saturate', (100+($my_user.saturate||0)) + "%");
-	$: process.browser && document.documentElement.style.setProperty('--invert', ($my_user.invert?100:0) + "%");
-	$: process.browser && document.documentElement.style.setProperty('--contrast', (100 + ($my_user.contrast||0)) + "%");
+	$: color_theme_hue_rotate = $my_user.hue_rotate;
+	$: color_theme_saturate = $my_user.saturate;
+	$: color_theme_invert = $my_user.invert;
+	$: color_theme_contrast = $my_user.contrast;
+	$: set_css_var('--hue_rotate', ((color_theme_invert ? 180:0) + (color_theme_hue_rotate||0)) + "deg");
+	$: set_css_var('--saturate', (100+(color_theme_saturate||0)) + "%");
+	$: set_css_var('--invert', (color_theme_invert?100:0) + "%");
+	$: set_css_var('--contrast', (100 + (color_theme_contrast||0)) + "%");
+
+	function set_css_var(name, value)
+	{
+		if (!process.browser) return;
+		document.documentElement.style.setProperty(name, value);
+	}
 
 </script>
 
@@ -92,14 +102,18 @@
         margin: 1em;
         margin-left: -3vw;
         padding-left: 2vw;
-        border-left: 0.5vw ridge #f88072;
+	    border-left: 7vw solid #eef872;
+        border-left-color: rgb(238, 248, 114);
+        border-left-style: solid;
+        border-left-width: 7vw;
+	    border-radius: 10vw;
+		/*border-right-style: solid;
+		border-right-width: 7vw;
+		border-right-color: rgb(238, 248, 114);*/
     }
 
     :global(h1) {
         font-size: 310%;
-        margin-left: -3vw;
-        padding-left: 2vw;
-        border-left: 0.5vw ridge #f88072;
     }
 
     @keyframes flickerAnimation {
