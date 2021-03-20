@@ -1,6 +1,7 @@
 import {readable, writable, get} from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
 import {goto} from '@sapper/app';
+import {logout as auth0_logout} from '@dopry/svelte-auth0';
 
 export const my_user = process.browser ?
 	localStorageSharedStore('my_user', {id: -1, auth_debug: false})
@@ -82,9 +83,10 @@ export async function apply_newly_authenticated_user(newly_authenticated_user)
 	my_user.set(newly_authenticated_user);
 }
 
-export function logout()
+export async function logout()
 {
 	my_user.set({id: -1});
+	await auth0_logout();
 }
 
 

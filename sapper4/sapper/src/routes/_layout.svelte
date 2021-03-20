@@ -102,14 +102,18 @@
         margin: 1em;
         margin-left: -3vw;
         padding-left: 2vw;
-        border-left: 0.5vw ridge #f88072;
+	    border-left: 7vw solid #eef872;
+        border-left-color: rgb(238, 248, 114);
+        border-left-style: solid;
+        border-left-width: 7vw;
+	    border-radius: 10vw;
+		/*border-right-style: solid;
+		border-right-width: 7vw;
+		border-right-color: rgb(238, 248, 114);*/
     }
 
     :global(h1) {
         font-size: 310%;
-        margin-left: -3vw;
-        padding-left: 2vw;
-        border-left: 0.5vw ridge #f88072;
     }
 
     @keyframes flickerAnimation {

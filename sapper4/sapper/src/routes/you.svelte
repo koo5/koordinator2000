@@ -2,19 +2,40 @@
 	import {my_user, register, logout} from 'srcs/my_user.js';
 	import Auth0 from "cmps/Auth0.svelte";
 	import {login} from '@dopry/svelte-auth0';
+	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
+	import {subscribe, gql} from "srcs/apollo.js";
 
+	$: my_user_id = $my_user.id
+	$: account_email_subscription = subscribe(
+		gql`
+			subscription ($my_user_id: Int) {
+  				accounts(where: {id: {_eq: $my_user_id}}) {
+					email
+				}
+			}`,
+			{
+				variables: {
+					my_user_id
+				}
+			}
+	);
 
 	function save()
 	{
 
 	}
 
+
 </script>
 
 <div class="content_block">
-	account ID: {$my_user.id}
+	<p>
+		account ID: {$my_user.id}
+	</p>
+	<p>
+		E-mail: {$account_email_subscription?.data?.accounts?.[0]?.email}
+	</p>
 
-	<p></p>
 
 	<h3>Change username:</h3>
 	<input type="text" id="title" bind:value={$my_user.name}/>
