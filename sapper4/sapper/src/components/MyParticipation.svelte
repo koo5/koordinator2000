@@ -16,6 +16,8 @@
 		if (my_participation.threshold != undefined) new_threshold = my_participation.threshold;
 	}
 
+	$: update_button_disabled = my_participation.threshold == new_threshold;
+
 	const UPSERT = gql`
 				mutation MyMutation($campaign_id: Int, $user_id: Int, $threshold: Int) {
 				  insert_participations(objects: {campaign_id: $campaign_id, account_id: $user_id, threshold: $threshold}, on_conflict: {constraint: participations_campaign_id_user_id, update_columns: threshold}) {
@@ -39,37 +41,64 @@
 	^ i guess this is relative to the "outer" font, not the font used to display the digits
 	*/
 
+	.inline {
+		display: inline-block
+	}
+
+
 </style>
+
+	minimum suggested: {campaign.suggested_lowest_threshold}<br>
 
 	{#if my_participation.id}
 
-		<MutationForm  on:done={() => dispatch('my_participation_upsert')}  css_ref="cell"
+		<MutationForm on:done={() => dispatch('my_participation_upsert')}  css_ref="inline"
 			mutation={UPSERT}
 			variables={upsert_vars}
 		>
-			minimum threshold suggested: {campaign.suggested_lowest_threshold}<br>
+
 			<label>My threshold:
 				<input type="number" placeholder={campaign.suggested_optimal_threshold} maxlength="10" min="0" max="9999999999"  bind:value={new_threshold}/>
-				<button type="submit">Update</button><br>
-				maximum threshold suggested:{campaign.suggested_highest_threshold}
+				<button type="submit" disabled={update_button_disabled}>Update</button>
+
+
+					<MutationForm  on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+						mutation={gql`
+								mutation MyMutation($id: Int!) {
+									delete_participations_by_pk(id: $id)
+									{
+										id
+									}
+								}`}
+						variables={{
+							id: my_participation.id,
+						}}
+					>
+						<button class="inline" type="submit">Delete</button>
+					</MutationForm>
+
 			</label>
 		</MutationForm>
 
+	{:else}
 
-		<MutationForm  on:done={() => dispatch('my_participation_upsert')} css_ref="cell"
-			mutation={gql`
-					mutation MyMutation($id: Int!) {
-						delete_participations_by_pk(id: $id)
-						{
-							id
-						}
-					}`}
-			variables={{
-				id: my_participation.id,
-			}}
+
+		<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+			mutation={UPSERT}
+			variables={upsert_vars}
 		>
-			<button type="submit">Delete</button>
+
+			<label>My threshold:
+				<input type="number"  placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999" bind:value={new_threshold}/>
+			</label>
+			<button type="submit">Participate</button><br>
 		</MutationForm>
+
+
+	{/if}
+
+	<br>maximum suggested:{campaign.suggested_highest_threshold}
+
 
 		<p>
 		{get_tickmark(my_participation)}
@@ -88,19 +117,5 @@
 		{/if}
 		</p>
 
-	{:else}
 
 
-		<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="cell"
-			mutation={UPSERT}
-			variables={upsert_vars}
-		>
-			<label>My threshold:
-				<input type="number"  placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999" bind:value={new_threshold}/>
-			</label>
-			<button type="submit">Participate</button>
-			(suggested: {campaign.suggested_lowest_threshold} - {campaign.suggested_highest_threshold})
-		</MutationForm>
-
-
-	{/if}

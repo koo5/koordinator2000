@@ -58,7 +58,7 @@
 
 	<br>
 	<hr>
-	<a href="/campaigns">more campaigns.</a>
+	<a href="/campaigns">more campaigns</a>
 
 </div>
 

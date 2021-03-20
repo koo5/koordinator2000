@@ -71,6 +71,7 @@
 
 	form {
 		background-color: rgb(250, 250, 230);
+		display: inline-block
 	}
 
 </style>
