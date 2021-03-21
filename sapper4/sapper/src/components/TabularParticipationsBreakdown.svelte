@@ -40,3 +40,12 @@
 	{/each}
 	</tbody>
 </table>
+<style>
+	table {
+		margin: 0;
+		border: 1px inset rgba(128, 110, 164, 0.48);
+		border-radius: 0px 17px 12px 13px;
+		border-collapse: separate;
+		border-spacing: 1em 0;
+	}
+</style>

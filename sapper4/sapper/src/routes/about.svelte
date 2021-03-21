@@ -1,5 +1,7 @@
 <svelte:head>
 	<title>About</title>
+
+
 </svelte:head>
 
 <h1>About this site</h1>
@@ -10,5 +12,12 @@
 
 Thank you for you attention! Created by koo &amp; aindilis. <a href="https://github.com/koo5/koordinator2000/
 blob/master/README.md">https://github.com/koo5/koordinator2000/blob/master/README.md</a>
+
+<h3>How to fund the development</h3>
+111
+{@html '<script src="https://liberapay.com/koo5/widgets/receiving.js"></script>'}
+
+222
+
 
 
