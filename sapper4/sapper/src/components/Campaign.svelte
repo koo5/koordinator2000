@@ -187,7 +187,7 @@
 				<DismissalBadge {dismissal}/>
 			</span>
 		{/each}
-
+		<br/>
 		<MutationForm
 				mutation={CAMPAIGN_DISMISSAL}
 				variables={{

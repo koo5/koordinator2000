@@ -12,7 +12,7 @@
 
 <style>
 	.dismissal {
-		background-color: rgb(250,180,180);
+		background-color: rgb(210,210,255);
     }
 
 </style>

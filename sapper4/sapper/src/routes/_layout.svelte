@@ -64,10 +64,10 @@
 	$: color_theme_saturate = $my_user.saturate;
 	$: color_theme_invert = $my_user.invert;
 	$: color_theme_contrast = $my_user.contrast;
-	$: set_css_var('--hue_rotate', ((color_theme_invert ? 180:0) + (color_theme_hue_rotate||0)) + "deg");
-	$: set_css_var('--saturate', (100+(color_theme_saturate||0)) + "%");
-	$: set_css_var('--invert', (color_theme_invert?100:0) + "%");
-	$: set_css_var('--contrast', (100 + (color_theme_contrast||0)) + "%");
+	$: set_css_var('--hue_rotate', ((color_theme_invert ? 180 : 0) + (color_theme_hue_rotate || 0)) + "deg");
+	$: set_css_var('--saturate', (100 + (color_theme_saturate || 0)) + "%");
+	$: set_css_var('--invert', (color_theme_invert ? 100 : 0) + "%");
+	$: set_css_var('--contrast', (100 + (color_theme_contrast || 0)) + "%");
 
 	function set_css_var(name, value)
 	{
@@ -90,28 +90,31 @@
         background: white;
     }
 
-	:global(.content_block)
-	{
-	        margin: 0 auto;
-			max-width: 60rem;
-			padding: 3vh 3vw
-	}
+    :global(.content_block) {
+        margin: 0 auto;
+        max-width: 60rem;
+        padding: 3vh 3vw
+    }
 
     :global(h1, h2, h3, h4, h5) {
 
-	    border-left: 7vw solid #eef872;
         border-left-color: rgb(238, 248, 114);
         border-left-style: solid;
         border-left-width: 2vw;
-	    /*border-radius: 10em;*/
-		/*border-right-style: solid;
+        /*border-radius: 10em;*/
+        /*border-right-style: solid;
 		border-right-width: 7vw;
 		border-right-color: rgb(238, 248, 114);*/
 
-		/*background: #ccc; */
-        margin: 1em;
+        background: #eee;
+        /*margin: 1em;
         margin-left: -3vw;
-        padding-left: 2vw;
+        padding-left: 2vw;*/
+
+        margin-top: 1em;
+        margin-bottom: 1em;
+        padding: 0;
+
     }
 
     :global(h1) {
@@ -173,11 +176,10 @@
         animation: flickerAnimation 1s infinite;
     }
 
-	:global(.dev) {
-		border-style: dotted;
-		background-color: rgb(230, 230, 230);
-	}
-
+    :global(.dev) {
+        border-style: dotted;
+        background-color: rgb(230, 230, 230);
+    }
 
 
 </style>
@@ -215,9 +217,9 @@
 
 {:else}
 	<div class="content_block">
-	Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. See the <a
-		href="https://github.com/koo5/koordinator2000/">code.</a><br>
-	<p>
+		Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. See the <a
+			href="https://github.com/koo5/koordinator2000/">code.</a><br>
+		<p>
 		<div class="animate-flicker">Loading...</div>
 	</div>
 {/if}
