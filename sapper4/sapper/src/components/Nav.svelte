@@ -63,8 +63,12 @@
 <style>
 
     nav {
+        padding: 0 3vw;
         margin: 0;
-        padding: 0 3vw
+        /*margin: auto;
+        position: sticky;
+        top: 0px;*/
+
     }
 
     ul::after {

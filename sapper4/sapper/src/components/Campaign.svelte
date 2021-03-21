@@ -94,7 +94,7 @@
 </script>
 
 
-<li>
+
 	<div class="campaign">
 		<ToolTipsy enabled="{!!$my_user.database_debug}" css_ref="dev">
 			<div slot="tooltip">
@@ -201,7 +201,6 @@
 		<hr>
 	</div>
 
-</li>
 
 <style>
 

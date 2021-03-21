@@ -93,23 +93,25 @@
 	:global(.content_block)
 	{
 	        margin: 0 auto;
-			max-width: 60em;
+			max-width: 60rem;
 			padding: 3vh 3vw
 	}
 
     :global(h1, h2, h3, h4, h5) {
-        font-family: serif;
-        margin: 1em;
-        margin-left: -3vw;
-        padding-left: 2vw;
+
 	    border-left: 7vw solid #eef872;
         border-left-color: rgb(238, 248, 114);
         border-left-style: solid;
-        border-left-width: 7vw;
-	    border-radius: 10vw;
+        border-left-width: 2vw;
+	    /*border-radius: 10em;*/
 		/*border-right-style: solid;
 		border-right-width: 7vw;
 		border-right-color: rgb(238, 248, 114);*/
+
+		/*background: #ccc; */
+        margin: 1em;
+        margin-left: -3vw;
+        padding-left: 2vw;
     }
 
     :global(h1) {

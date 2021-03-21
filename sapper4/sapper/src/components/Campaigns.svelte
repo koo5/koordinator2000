@@ -117,7 +117,7 @@
 
 	:global(.condition_is_fulfilled) {
 		background-color: #88ff88;
-		//background-color: #ccffcc;
+		/*background-color: #ccffcc;*/
 	}
 
 	:global(.condition_is_not_fulfilled) {
@@ -165,7 +165,9 @@
 				<SwiperSlide>
 
 					<div class="campaign_swiper_slide">
+					<li>
 						<Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)}/>
+					</li>
 					</div>
 
 				</SwiperSlide>
