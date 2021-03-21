@@ -1,7 +1,6 @@
 <script>
 	let segment = 0;
 </script>
-	<img src="less_sat_by_telepatx_d2n736h-fullview.jpg" alt="alt"/>
 <div class="content_block">
 
 	<ul>
@@ -11,9 +10,9 @@
 		<li><a rel=prefetch aria-current="{segment === 'add_cause' ? 'page' : undefined}" href="add_cause">Add Cause</a>
 		</li>
 		<li><a rel=prefetch aria-current="{segment === 'users' ? 'page' : undefined}" href="users">users</a></li>
-
-
 	</ul>
+	<img src="less_sat_by_telepatx_d2n736h-fullview.jpg" alt="alt"/>
+
 </div>
 <style>
 
