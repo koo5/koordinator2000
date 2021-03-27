@@ -16,7 +16,7 @@
     "moment": "^2.29.1",
     "morgan": "~1.9.1",
     "node-cron": "^2.0.3",
-    "pug": "^2.0.4",
+    "pug": "^3.0.1",
     "react": "^17.0.1"
   },
   "devDependencies": {
