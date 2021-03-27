@@ -1,7 +1,9 @@
 {
   "name": "koordinator",
   "description": "koordinator",
-  "version": "0.0.2",
+  "version": "0.0.3",
+  "repository": "https://github.com/koo5/koordinator2000/",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
@@ -10,10 +12,15 @@
     "start": "node __sapper__/build"
   },
   "dependencies": {
+    "@fontsource/aguafina-script": "^4.2.2",
     "compression": "^1.7.1",
     "express-session": "^1.17.1",
+    "jquery": "^1.9.1",
     "polka": "^1.0.0-next.11",
+    "popper.js": "^1.16.1",
     "sirv": "^1.0.0",
+    "typeface-aguafina-script": "^1.1.13",
+    "typeface-open-sans": "^1.1.13",
     "ws": "^7.4.2"
   },
   "devDependencies": {
@@ -57,7 +64,7 @@
     "rollup-plugin-terser": "^7.0.0",
     "sapper": "^0.28.0",
     "subscriptions-transport-ws": "^0.9.18",
-    "svelte": "^3.17.3",
+    "svelte": "^3.35.0",
     "svelte-apollo": "^0.4.0",
     "svelte-scrollto": "^0.2.0",
     "sveltestrap": "^4.0.0-alpha.1",

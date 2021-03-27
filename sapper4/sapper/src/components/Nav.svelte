@@ -69,7 +69,7 @@
 				<NavItem align="right">
 					<NavLink rel=prefetch href="you" active={segment === "you"}>
 						{#if $my_user?.name}
-							$my_user.name
+							{$my_user.name}
 						{:else}
 							You
 						{/if}

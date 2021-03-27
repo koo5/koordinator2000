@@ -94,7 +94,16 @@ async function sign_user_object(x)
 
 async function user_authenticity_jwt(id)
 {
-	return await new SignJWT({'urn:id': id})
+	return await new SignJWT({
+			'urn:id': id,
+/*  "https://hasura.io/jwt/claims": {
+    "x-hasura-allowed-roles": ["editor","user", "mod"],
+    "x-hasura-default-role": "user",
+    "x-hasura-user-id": "1234567890",
+    "x-hasura-org-id": "123",
+    "x-hasura-custom": "custom-value"
+  }*/
+  		})
 		.setProtectedHeader({alg: pr.alg})
 		.setIssuedAt()
 		.setIssuer('urn:example:issuer')

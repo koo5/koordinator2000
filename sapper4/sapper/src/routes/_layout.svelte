@@ -1,4 +1,5 @@
 <script>
+	//import "@fontsource/aguafina-script/400.css";
 	import SettingsModal from 'cmps/SettingsModal.svelte';
 	import Nav from 'cmps/Nav.svelte';
 	import {setClient} from 'svelte-apollo';
@@ -100,6 +101,7 @@
     }
 
     :global(h1, h2, h3, h4, h5) {
+		/*font-family: "Aguafina";*/
 
         border-left-color: #ffcc88;
         border-left-style: solid;

@@ -1,17 +1,20 @@
 <script type='js'>
 	import {
 		Button,
+		Label,
+		Input,
 		Modal,
 		ModalBody,
 		ModalFooter,
 		ModalHeader
 	} from 'sveltestrap';
-	import {my_user,get_my_participation} from 'srcs/my_user.js';
+	import {my_user, get_my_participation} from 'srcs/my_user.js';
 	import gql from 'graphql-tag';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import {createEventDispatcher} from 'svelte';
+
 	const dispatch = createEventDispatcher();
-	import {get_status_class,get_tickmark} from 'srcs/stuff.js';
+	import {get_status_class, get_tickmark} from 'srcs/stuff.js';
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;
@@ -34,10 +37,10 @@
 			`;
 
 	$: upsert_vars = {
-				campaign_id: campaign.id,
-				user_id: $my_user.id,
-				threshold: new_threshold
-			};
+		campaign_id: campaign.id,
+		user_id: $my_user.id,
+		threshold: new_threshold
+	};
 
 
 </script>
@@ -47,74 +50,76 @@
 
 </style>
 
-	minimum suggested: {campaign.suggested_lowest_threshold}<br>
+minimum suggested: {campaign.suggested_lowest_threshold}<br>
 
-	{#if my_participation.id}
+{#if my_participation.id}
 
-		<MutationForm on:done={() => dispatch('my_participation_upsert')}  css_ref="inline"
-			mutation={UPSERT}
-			variables={upsert_vars}
-		>
+	<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+				  mutation={UPSERT}
+				  variables={upsert_vars}
+	>
 
-			<label>My threshold:
-				<input type="number" placeholder={campaign.suggested_optimal_threshold} maxlength="10" min="0" max="9999999999"  bind:value={new_threshold}/>
-				<Button color="success" type="submit" disabled={update_button_disabled}>Update</Button>
+		<Label>My threshold:
+			<Input type="number" placeholder={campaign.suggested_optimal_threshold} maxlength="10" min="0"
+				   max="9999999999" bind:value={new_threshold}/>
+		</Label>
+		<Button color="success" type="submit" disabled={update_button_disabled}>Update</Button>
 
-
-					<MutationForm  on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
-						mutation={gql`
+		<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+					  mutation={gql`
 								mutation MyMutation($id: Int!) {
 									delete_participations_by_pk(id: $id)
 									{
 										id
 									}
 								}`}
-						variables={{
+					  variables={{
 							id: my_participation.id,
 						}}
-					>
-						<Button color="secondary" class="inline" type="submit">Delete</Button>
-					</MutationForm>
-
-			</label>
-		</MutationForm>
-
-	{:else}
-
-
-		<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
-			mutation={UPSERT}
-			variables={upsert_vars}
 		>
-
-			<label>My threshold:
-				<input type="number"  placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999" bind:value={new_threshold}/>
-			</label>
-			<Button color="primary" type="submit">Participate</Button><br>
+			<Button color="secondary" class="inline" type="submit">Delete</Button>
 		</MutationForm>
 
+	</MutationForm>
 
-	{/if}
-
-	<br>maximum suggested:{campaign.suggested_highest_threshold}
+{:else}
 
 
-		<p>
-		{get_tickmark(my_participation)}
-		{#if my_participation.threshold != undefined}
-			{#if my_participation.condition_is_fulfilled}
-				{#if my_participation.confirmed}
-					<span class="confirmed">My participation is confirmed.</span>
-				{:else}
-					<span class="condition_is_fulfilled">My threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
-				{/if}
+	<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+				  mutation={UPSERT}
+				  variables={upsert_vars}
+	>
+
+		<Label>My threshold:
+			<Input type="number" placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999"
+				   bind:value={new_threshold}/>
+		</Label>
+		<Button color="primary" type="submit">Participate</Button>
+		<br>
+	</MutationForm>
+
+
+{/if}
+
+<br>maximum suggested:{campaign.suggested_highest_threshold}
+
+
+<p>
+	{get_tickmark(my_participation)}
+	{#if my_participation.threshold != undefined}
+		{#if my_participation.condition_is_fulfilled}
+			{#if my_participation.confirmed}
+				<span class="confirmed">My participation is confirmed.</span>
 			{:else}
-				<span class="condition_is_not_fulfilled">I'm waiting for more people</span>
+				<span class="condition_is_fulfilled">My threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
 			{/if}
 		{:else}
-			I'm not participating.
+			<span class="condition_is_not_fulfilled">I'm waiting for more people</span>
 		{/if}
-		</p>
+	{:else}
+		I'm not participating.
+	{/if}
+</p>
 
 
 
