@@ -1,4 +1,5 @@
 <script>
+	import SettingsModal from 'cmps/SettingsModal.svelte';
 	import Nav from 'cmps/Nav.svelte';
 	import {setClient} from 'svelte-apollo';
 	import {new_apollo_client} from 'srcs/apollo.js';
@@ -54,7 +55,7 @@
 
 	onMount(async () =>
 	{
-		console.log("ensure_we_exist()");
+		//console.log("ensure_we_exist()");
 		let u = await ensure_we_exist();
 		if (u)
 			await apply_newly_authenticated_user(u)
@@ -75,13 +76,15 @@
 		document.documentElement.style.setProperty(name, value);
 	}
 
+	let toggle_settings;
+
 </script>
 
 <style>
 
     :global(html) {
         margin: 0 auto;
-        background: salmon;
+        background: #dddddd;
         filter: hue-rotate(var(--hue_rotate)) contrast(var(--contrast)) invert(var(--invert)) saturate(var(--saturate));
         height: 100%;
     }
@@ -98,10 +101,10 @@
 
     :global(h1, h2, h3, h4, h5) {
 
-        border-left-color: rgb(238, 248, 114);
+        border-left-color: #ffcc88;
         border-left-style: solid;
         border-left-width: 2vw;
-        /*border-radius: 10em;*/
+        border-radius: 10em;
         /*border-right-style: solid;
 		border-right-width: 7vw;
 		border-right-color: rgb(238, 248, 114);*/
@@ -194,7 +197,10 @@
 			{callback_url}
 			{logout_url}>
 
-		<Nav {segment}/>
+
+		<SettingsModal bind:toggle_settings={toggle_settings}/>
+
+		<Nav {segment} {toggle_settings}/>
 		<hr>
 		<main>
 			<slot></slot>

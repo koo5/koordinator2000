@@ -26,7 +26,7 @@ var sess = {
 	GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
 	PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS
 };
-console.log(sess);
+//console.log(sess);
 
 if (MY_APP_KEYS == undefined)
 {
@@ -214,7 +214,7 @@ app.use(
 	})
 	.post('/event', async (req, res) =>
 	{
-		console.log('/event:');
+		//console.log('/event:');
 		let e = req.body.event;
 		//console.log(e);
 		let rrr = await process_event(e);

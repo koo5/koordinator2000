@@ -1,11 +1,17 @@
+<script context="module">
+	export async function preload({ params }) {
+		console.log(params);
+	}
+</script>
+
 <script type='js'>
 
 	import Notification from 'cmps/Notification.svelte';
 	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
 	import {subscribe, gql} from "srcs/apollo.js";
 	import {my_user} from 'srcs/my_user.js';
-
 	$: my_user_id = $my_user.id
+
 	$: items = subscribe(
 		gql`
 			subscription MySubscription222($_user_id: Int) {

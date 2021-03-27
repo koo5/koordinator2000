@@ -12,7 +12,7 @@
   "dependencies": {
     "compression": "^1.7.1",
     "express-session": "^1.17.1",
-    "polka": "next",
+    "polka": "^1.0.0-next.11",
     "sirv": "^1.0.0",
     "ws": "^7.4.2"
   },
@@ -60,7 +60,7 @@
     "svelte": "^3.17.3",
     "svelte-apollo": "^0.4.0",
     "svelte-scrollto": "^0.2.0",
-    "sveltestrap": "^3.13.0",
+    "sveltestrap": "^4.0.0-alpha.1",
     "swiper": "^6.4.10",
     "underscore": "^1.12.0",
     "unique-names-generator": "^4.3.1"

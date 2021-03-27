@@ -40,7 +40,8 @@
 	);
 
 	$: console.log(campaign_id);
-	$: campaign = $items.data?.campaigns_by_pk;
+	$: dddd = $items.data;
+	$: campaign = dddd ? dddd.campaigns_by_pk : undefined;
 
 </script>
 
@@ -53,7 +54,11 @@
 	{#if campaign}
 			<Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
 	{:else}
-		<div class="animate-flicker">Loading...</div>
+		{#if dddd}
+			sorry, this campaign doesn't exist
+		{:else}
+			<div class="animate-flicker">Loading...</div>
+		{/if}
 	{/if}
 
 	<br>

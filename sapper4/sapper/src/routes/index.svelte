@@ -11,7 +11,7 @@
 
 <div class="content_block">
 
-	<h1>Welcome to Koordinator.</h1>
+	<h1>Welcome to Fullcracy.</h1>
 	<p>
 		Welcome, visitor!
 		{#if $my_user.name}

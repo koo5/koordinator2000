@@ -1,6 +1,8 @@
 <script lang='js'>
+	import {
+		Button,
+	} from 'sveltestrap';
 	import { readable } from 'svelte/store';
-
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import {subscribe, gql} from "srcs/apollo.js";
@@ -195,7 +197,7 @@
 				campaign_id: campaign.id
 			}}
 		>
-			<button type="submit">dismiss campaign</button>
+			<Button color="secondary" type="submit">dismiss campaign</Button>
 		</MutationForm>
 
 		<hr>

@@ -16,13 +16,13 @@ export function impersonate(_id)
 
 async function new_user()
 {
-	console.log('/get_free_user_id');
+	//console.log('/get_free_user_id');
 	try
 	{
 		var res = await fetch('/get_free_user_id', {method: 'POST'})
-		console.log(res);
+		//console.log(res);
 		var r = await res.json()
-		console.log("r:" + JSON.stringify(r, null, '  '));
+		//console.log("r:" + JSON.stringify(r, null, '  '));
 	} catch (e)
 	{
 		console.error(e);
@@ -47,16 +47,16 @@ export async function event(event)
 			mode: "same-origin",
 			body: JSON.stringify({event: event})
 		});
-		console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
+		//console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
 		res = await res;
-		console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
+		//console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
 		try
 		{
 			res2 = await res.json()
 		} catch (ee)
 		{
 		}
-		console.log("res2:" + (typeof res2) + ":" + JSON.stringify(res2, null, '  '));
+		//console.log("res2:" + (typeof res2) + ":" + JSON.stringify(res2, null, '  '));
 	} catch (e)
 	{
 		console.error(e);

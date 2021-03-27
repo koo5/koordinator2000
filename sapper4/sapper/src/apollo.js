@@ -60,9 +60,7 @@ function subscribe(query, options)
 
 function new_apollo_client()
 {
-	var fuck_you = config();
-	console.log('fuck_you');
-	console.log(fuck_you);
+	//console.log(config());
 
 	const headers = {
 		'content-type': 'application/json',

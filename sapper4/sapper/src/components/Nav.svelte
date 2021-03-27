@@ -1,8 +1,18 @@
 <script>
 	import PageReloadClock from "cmps/PageReloadClock.svelte";
 	import {my_user} from 'srcs/my_user.js';
-	import Settings from 'cmps/Settings.svelte';
 	import {
+		Collapse,
+		Navbar,
+		NavbarToggler,
+		NavbarBrand,
+		Nav,
+		NavItem,
+		NavLink,
+		UncontrolledDropdown,
+		DropdownToggle,
+		DropdownMenu,
+		DropdownItem,
 		Button,
 		Modal,
 		ModalBody,
@@ -11,96 +21,63 @@
 	} from 'sveltestrap';
 
 	export let segment;
+	export let toggle_settings;
 
 	$: my_user_str = JSON.stringify($my_user, null, ' ');
 
-	let open = false;
-	const toggle = () => (open = !open);
+	let navbar_open = false;
+	function navbar_handleUpdate(event) {navbar_open = event.detail.isOpen;}
+
 
 </script>
 
 {#if process.browser}
-	<nav class="nav navbar navbar-inverse navbar-fixed-top">
+
+	{#if $my_user.auth_debug}|$my_user = {my_user_str}|{/if}
+
+	<Navbar color="light" light expand="md">
+		<NavbarBrand href="/"><img src="/favicon.ico" alt="logo"/></NavbarBrand>
 		<PageReloadClock/>
-		{#if $my_user.auth_debug}|$my_user = {my_user_str}|{/if}
-		<ul>
-			<li><a aria-current="{segment === undefined ? 'page' : undefined}" href=".">Home</a></li>
+		<NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
+		<Collapse isOpen={navbar_open} navbar expand="md" on:update={(e) => navbar_handleUpdate(e)}>
+			<Nav class="ml-auto" navbar>
 
-			<li><a rel=prefetch aria-current="{segment === 'campaigns' ? 'page' : undefined}"
-				   href="campaigns">Campaigns</a></li>
-			<li><a rel=prefetch aria-current="{segment === 'add_campaign' ? 'page' : undefined}" href="add_campaign">Add
-				campaign</a></li>
-			<li><a rel=prefetch aria-current="{segment === 'notifications' ? 'page' : undefined}" href="notifications">Notifications</a>
-			</li>
-			<li>
-				<a href="dev_area">Dev area</a>
-			</li>
+				<NavItem>
+					<NavLink rel=prefetch href="." active={segment === undefined}>Home</NavLink>
+				</NavItem>
 
-			<li>
-				<a href="{'javascript:void(0)'}" on:click={toggle}>Settings</a>
+				<NavItem>
+					<NavLink rel=prefetch href="campaigns" active={segment === "campaigns"}>Campaigns</NavLink>
+				</NavItem>
 
-				<Modal isOpen={open} {toggle} fade={false} keyboard={true} scrollable={true}>
-				    <ModalHeader {toggle}>Settings</ModalHeader>
-					<ModalBody>
-						<Settings/>
-					</ModalBody>
-				    <ModalFooter>
-				      <Button color="secondary" on:click={toggle}>Close</Button>
-				    </ModalFooter>
-				</Modal>
+				<NavItem>
+					<NavLink rel=prefetch href="add_campaign" active={segment === "add_campaign"}>Add campaign</NavLink>
+				</NavItem>
 
-			</li>
-			<li align="right">
-				<a rel=prefetch aria-current="{segment === 'you' ? 'page' : undefined}" href="you">You</a>
-			</li>
+				<NavItem>
+					<NavLink rel=prefetch href="notifications" active={segment === "notifications"}>Notifications</NavLink>
+				</NavItem>
 
-		</ul>
-	</nav>
+				<NavItem>
+					<NavLink rel=prefetch href="dev_area" active={segment === "dev_area"}>Dev area</NavLink>
+				</NavItem>
+
+				<NavItem>
+					<NavLink rel=prefetch href="{'javascript:void(0)'}" on:click={toggle_settings}>Settings</NavLink>
+				</NavItem>
+
+				<NavItem align="right">
+					<NavLink rel=prefetch href="you" active={segment === "you"}>
+						{#if $my_user?.name}
+							$my_user.name
+						{:else}
+							You
+						{/if}
+					</NavLink>
+				</NavItem>
+
+			</Nav>
+		</Collapse>
+	</Navbar>
 
 {/if}
-
-
-<style>
-
-    nav {
-        padding: 0 3vw;
-        margin: 0;
-        /*margin: auto;
-        position: sticky;
-        top: 0px;*/
-
-    }
-
-    ul::after {
-        content: '';
-        display: block;
-        clear: both;
-    }
-
-    li {
-        display: block;
-        float: left;
-    }
-
-    [aria-current] {
-        position: relative;
-        display: inline-block;
-    }
-
-    [aria-current]::after {
-        position: absolute;
-        content: '';
-        width: calc(100% - 1em);
-        height: 2px;
-        background-color: rgb(255, 62, 0);
-        display: block;
-        bottom: -1px;
-    }
-
-    a {
-        text-decoration: none;
-        padding: 0em 0.5em;
-        display: block;
-    }
-
-</style>

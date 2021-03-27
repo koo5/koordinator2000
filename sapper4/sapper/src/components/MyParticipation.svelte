@@ -1,4 +1,11 @@
 <script type='js'>
+	import {
+		Button,
+		Modal,
+		ModalBody,
+		ModalFooter,
+		ModalHeader
+	} from 'sveltestrap';
 	import {my_user,get_my_participation} from 'srcs/my_user.js';
 	import gql from 'graphql-tag';
 	import MutationForm from 'cmps/MutationForm.svelte';
@@ -36,14 +43,6 @@
 </script>
 
 <style>
-	/*input
-	{ width: 10em; }
-	^ i guess this is relative to the "outer" font, not the font used to display the digits
-	*/
-
-	.inline {
-		display: inline-block
-	}
 
 
 </style>
@@ -59,7 +58,7 @@
 
 			<label>My threshold:
 				<input type="number" placeholder={campaign.suggested_optimal_threshold} maxlength="10" min="0" max="9999999999"  bind:value={new_threshold}/>
-				<button type="submit" disabled={update_button_disabled}>Update</button>
+				<Button color="success" type="submit" disabled={update_button_disabled}>Update</Button>
 
 
 					<MutationForm  on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
@@ -74,7 +73,7 @@
 							id: my_participation.id,
 						}}
 					>
-						<button class="inline" type="submit">Delete</button>
+						<Button color="secondary" class="inline" type="submit">Delete</Button>
 					</MutationForm>
 
 			</label>
@@ -91,7 +90,7 @@
 			<label>My threshold:
 				<input type="number"  placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999" bind:value={new_threshold}/>
 			</label>
-			<button type="submit">Participate</button><br>
+			<Button color="primary" type="submit">Participate</Button><br>
 		</MutationForm>
 
 
