@@ -106,9 +106,6 @@
 	.campaign_swiper_slide {
 		max-width: 100%;
 		word-wrap: break-word;
-		margin: 0 auto;
-		max-width: 60em;
-		padding: 3vh 3vw
 	}
 
 	:global(.confirmed) {

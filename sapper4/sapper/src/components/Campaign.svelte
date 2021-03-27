@@ -2,7 +2,7 @@
 	import {
 		Button,
 	} from 'sveltestrap';
-	import { readable } from 'svelte/store';
+	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import {subscribe, gql} from "srcs/apollo.js";
@@ -95,9 +95,8 @@
 
 </script>
 
-
-
-	<div class="campaign">
+<div class="campaign">
+	<div class="content_block">
 		<ToolTipsy enabled="{!!$my_user.database_debug}" css_ref="dev">
 			<div slot="tooltip">
 				<small><pre>
@@ -106,23 +105,29 @@
 				</small>
 			</div>
 		</ToolTipsy>
+	</div>
 
-		<h2>
-			{#if is_detail_view}
-				{campaign.title}
-			{:else}
-				<a href="/campaign/{campaign.id}">{campaign.title}</a>
-			{/if}
-		</h2>
-		<h5>Description</h5>
+	<h2>
+		{#if is_detail_view}
+			{campaign.title}
+		{:else}
+			<a href="/campaign/{campaign.id}">{campaign.title}</a>
+		{/if}
+	</h2>
+	<h5>Description</h5>
+	<div class="content_block">
 		<p>{@html campaign.description}</p>
+	</div>
 
-		<h5>My participation</h5>
+	<h5>My participation</h5>
+	<div class="content_block">
 		<i>I will join when other people join:</i><br>
 
 		<MyParticipation campaign={campaign} on:my_participation_upsert/>
 
-		<h5>Progress</h5>
+	</div>
+	<h5>Progress</h5>
+	<div class="content_block">
 		<i>We want {suggested_mass} people:</i><br>
 
 		<Progress multi>
@@ -130,20 +135,22 @@
 					  value={confirmed_contributing_count}
 					  max={suggested_mass}
 					  confirmed
-					  >
+			>
 				{confirmed_contributing_count}</Progress>
 			<!-- how to make the below the "light green" "unconfirmed participation"? -->
 			<Progress bar color="warning"
 					  value={unconfirmed_contributing_count}
 					  max={suggested_mass}
 					  unconfirmed
-					  >
+			>
 
 				{unconfirmed_contributing_count}</Progress>
 		</Progress>
 		{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>
 
-		<h5>Participants</h5>
+	</div>
+	<h5>Participants</h5>
+	<div class="content_block">
 		<ToolTipsy enabled="{!$my_user.hide_help}">
 			participating users (sorted from lowest threshold to highest):
 			<div slot="tooltip">
@@ -171,13 +178,15 @@
 			<TabularParticipationsBreakdown {campaign}/>
 		{/if}
 		<br>
-
-		<h5>Dismissals</h5>
+	</div>
+	<h5>Dismissals</h5>
+	<div class="content_block">
 		<ToolTipsy enabled="{!$my_user.hide_help}">
 			And these users dismissed the campaign:<br>
 			<div slot="tooltip">
 				<div class="help_tooltip">
-					<p>Maybe they think it is stupid, or they just want to get back to it later.</p> At any case, they don't
+					<p>Maybe they think it is stupid, or they just want to get back to it later.</p> At any case, they
+					don't
 					want to see it now.
 				</div>
 			</div>
@@ -199,9 +208,9 @@
 		>
 			<Button color="secondary" type="submit">dismiss campaign</Button>
 		</MutationForm>
-
-		<hr>
 	</div>
+	<hr>
+</div>
 
 
 <style>

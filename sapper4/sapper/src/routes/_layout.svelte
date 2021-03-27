@@ -103,8 +103,8 @@
 
         border-left-color: #ffcc88;
         border-left-style: solid;
-        border-left-width: 2vw;
-        border-radius: 10em;
+        border-left-width: 1vw;
+        border-radius: 100em 0em 0em 100em;
         /*border-right-style: solid;
 		border-right-width: 7vw;
 		border-right-color: rgb(238, 248, 114);*/
@@ -116,7 +116,10 @@
 
         margin-top: 1em;
         margin-bottom: 1em;
-        padding: 0;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        padding-left: clamp(6vw, calc(((30rem - 50%) - 5em)), calc((30rem - 50%)));
+        margin-left: clamp(0px, calc(((50% - 30rem) - 5em) + 6vw), calc((50% - 30rem) + 6vw));
 
     }
 
