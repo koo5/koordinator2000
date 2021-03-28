@@ -3,7 +3,7 @@ import sanitizeHtml from 'sanitize-html';
 
 export function sanitize_html(x)
 {
-	return sanitizeHtml(x);
+	return sanitizeHtml(x, {disallowedTagsMode: 'escape'});
 //	return x;
 }
 

@@ -63,7 +63,7 @@ export default {
 				extensions: ['.js', '.svelte', '.jsx', '.mjs'],
 				dedupe: ['svelte']
 			}),
-			commonjs({preferBuiltins: false}),
+			commonjs(),
 
 			legacy && babel({
 				extensions: ['.js', '.mjs', '.html', '.svelte'],
@@ -121,9 +121,9 @@ export default {
    				extensions: ['.js', '.svelte', '.jsx', '.mjs'],
 			}),
 			json(),
-			commonjs({preferBuiltins: false})
+			commonjs()
 		],
-		external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
+		//external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
 
 		preserveEntrySignatures: 'strict',
 		onwarn,
