@@ -58,11 +58,12 @@ export default {
 			}),
 			
 			resolve({
+				preferBuiltins: false,
 				browser: true,
 				extensions: ['.js', '.svelte', '.jsx', '.mjs'],
 				dedupe: ['svelte']
 			}),
-			commonjs(),
+			commonjs({preferBuiltins: false}),
 
 			legacy && babel({
 				extensions: ['.js', '.mjs', '.html', '.svelte'],
@@ -115,11 +116,12 @@ export default {
 				emitFiles: false // already emitted by client build
 			}),
 			resolve({
+				preferBuiltins: false,
 				dedupe: ['svelte'],
    				extensions: ['.js', '.svelte', '.jsx', '.mjs'],
 			}),
 			json(),
-			commonjs({preferBuiltins: true})
+			commonjs({preferBuiltins: false})
 		],
 		external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
 
