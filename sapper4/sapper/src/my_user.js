@@ -138,7 +138,8 @@ let nag_timeout = undefined;
 export function decrease_auth_nag_postponement()
 {
 	console.log('decrease_auth_nag_postponement');
-	$my_user.nag_postponement = ($my_user.nag_postponement || 0) - 1;
+	my_user.update(x => ({...x, 'nag_postponement': (x.nag_postponement || 0) - 1}));
+	const $my_user = get(my_user);
 	if ($my_user.nag_postponement <= 0)
 	{
 		if (nag_timeout) clearTimeout(nag_timeout);
@@ -150,3 +151,12 @@ export function decrease_auth_nag_postponement()
 	}
 }
 
+export function postpone_nag(by = 15)
+{
+	let backoff = (get(my_user).nag_backoff || 3);
+	my_user.update(x => ({
+		...x,
+		'nag_postponement': (x.nag_postponement || 0) + backoff + by,
+		nag_backoff: backoff + 15
+	}));
+}

@@ -1,5 +1,6 @@
 <script>
 	//import "@fontsource/aguafina-script/400.css";
+  	import { Col, Container, Row } from 'sveltestrap';
 	import SettingsModal from 'cmps/SettingsModal.svelte';
 	import TheNagModal from 'cmps/TheNagModal.svelte';
 	import Nav from 'cmps/Nav.svelte';
@@ -211,14 +212,29 @@
 			{logout_url}>
 
 
+
+<Container>
+  <Row>
+    <Col>
+   		<Nav {segment} {toggle_settings}/>
+    </Col>
+  </Row>
+  <Row>
+    <Col xs="3">
 		<SettingsModal bind:toggle_settings={toggle_settings}/>
 		<TheNagModal/>
-
-		<Nav {segment} {toggle_settings}/>
-		<hr>
+    </Col>
+    <Col xs="auto">
 		<main>
 			<slot></slot>
 		</main>
+    </Col>
+
+    <Col xs="3">.col-3</Col>
+  </Row>
+</Container>
+
+
 
 		{#if $my_user.auth_debug}
 			auth0 configuration:

@@ -1,8 +1,7 @@
 <script>
-	import {my_user,nag} from 'srcs/my_user.js';
+	import {my_user,nag,postpone_nag} from 'srcs/my_user.js';
 	import Settings from 'cmps/Settings.svelte';
 	import TheNagBody from 'cmps/TheNagBody.svelte';
-
 	import {
 		Button,
 		Modal,
@@ -11,9 +10,14 @@
 		ModalHeader
 	} from 'sveltestrap';
 
-
-	export let isOpen = false;
-	nag.on(() => isOpen = true);
+	let isOpen = false;
+	nag.on(() =>
+		{
+			postpone_nag();
+			alert("i'm gonna attempt to show a modal dialog. This seems to break in firefox. In that case, please reload the page.");
+			isOpen = true;
+		}
+	);
 
 	function success()
 	{
@@ -28,24 +32,20 @@
 	function later()
 	{
 		isOpen = false;
-		let backoff = ($my_user.nag_backoff || 0);
-		$my_user.nag_postponement += 3 + backoff;
-		$my_user.nag_backoff = backoff + 15;
+		//postpone_nag();
 	}
 
 	function never()
 	{
 		isOpen = false;
-		$my_user.nag_postponement = 999999999999;
+		postpone_nag(999999999999);
 	}
-
 
 </script>
 
 
-
-<Modal {isOpen} {later} fade={true} keyboard={true} scrollable={true}>
-	<ModalHeader {later}>Settings</ModalHeader>
+<Modal {isOpen} toggle={later} fade={false} keyboard={true} scrollable={true}>
+	<ModalHeader toggle={later}>Please enter your e-mail, or authenticate with google/facebook/etc, otherwise, you can lose access to your account.</ModalHeader>
 	<ModalBody>
 		<TheNagBody/>
 	</ModalBody>

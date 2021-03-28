@@ -15,3 +15,9 @@ export class EventDispatcher {
 		this.listeners.forEach(x => x(data));
 	}
 }
+
+/*
+
+
+https://github.com/sergiubucur/event-dispatcher/blob/master/EventDispatcher.js
+ */
