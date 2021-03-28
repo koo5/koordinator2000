@@ -26,6 +26,12 @@
 <h5>color theme</h5>
 
 <label>
+	<input type="checkbox" bind:checked={$my_user.override_browser_setting}/>
+	override browser setting
+</label>
+<br>
+
+<label>
 	<input type="checkbox" bind:checked={$my_user.invert}/>
 	invert light/dark
 </label>

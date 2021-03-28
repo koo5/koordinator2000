@@ -1,4 +1,5 @@
 import alias from '@rollup/plugin-alias';
+import json from '@rollup/plugin-json';
 import path from 'path';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
@@ -38,6 +39,7 @@ export default {
 		input: config.client.input(),
 		output: config.client.output(),
 		plugins: [
+
 			aliases,
 			replace({
 				'process.browser': true,
@@ -49,10 +51,12 @@ export default {
 					hydratable: true
 				}
 			}),
+			json(),
 			url({
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
 				publicPath: '/client/'
 			}),
+			
 			resolve({
 				browser: true,
 				extensions: ['.js', '.svelte', '.jsx', '.mjs'],
@@ -80,10 +84,11 @@ export default {
 			!dev && terser({
 				module: true
 			})
+			
 		],
 
 		preserveEntrySignatures: false,
-		onwarn,
+		onwarn
 
 	},
 
@@ -113,7 +118,8 @@ export default {
 				dedupe: ['svelte'],
    				extensions: ['.js', '.svelte', '.jsx', '.mjs'],
 			}),
-			commonjs()
+			json(),
+			commonjs({preferBuiltins: true})
 		],
 		external: Object.keys(pkg.dependencies).concat(require('module').builtinModules),
 

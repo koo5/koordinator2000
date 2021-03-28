@@ -2,6 +2,7 @@
 	import {
 		Button,
 	} from 'sveltestrap';
+	import {sanitize_html} from 'srcs/stuff.js';
 	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';
@@ -116,7 +117,7 @@
 	</h2>
 	<h5>Description</h5>
 	<div class="content_block">
-		<p>{@html campaign.description}</p>
+		<p>{@html sanitize_html(campaign.description)}</p>
 	</div>
 
 	<h5>My participation</h5>

@@ -12,6 +12,13 @@
 	import {my_user, ensure_we_exist, apply_newly_authenticated_user, event} from 'srcs/my_user.js';
 	import {onMount} from "svelte";
 	import {stores} from '@sapper/app'
+	import {theme} from 'srcs/browser_theme_setting.js'
+
+	theme().subscribe((x) =>
+	{
+		if (process.browser && !$my_user.override_browser_setting)
+			$my_user.invert = (x == 'dark');
+	});
 
 	const {page, session} = stores()
 
