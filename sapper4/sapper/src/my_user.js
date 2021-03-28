@@ -2,6 +2,7 @@ import {readable, writable, get} from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
 import {goto} from '@sapper/app';
 import {logout as auth0_logout} from '@dopry/svelte-auth0';
+import {EventDispatcher} from 'srcs/event_dispatcher.js';
 
 export const my_user = process.browser ?
 	localStorageSharedStore('my_user', {id: -1, auth_debug: false})
@@ -128,3 +129,24 @@ export function default_participations_display_style(my_user)
 		return my_user.default_participations_display_style;
 	return "tabular_breakdown";
 }
+
+
+
+export const nag = new EventDispatcher();
+let nag_timeout = undefined;
+
+export function decrease_auth_nag_postponement()
+{
+	console.log('decrease_auth_nag_postponement');
+	$my_user.nag_postponement = ($my_user.nag_postponement || 0) - 1;
+	if ($my_user.nag_postponement <= 0)
+	{
+		if (nag_timeout) clearTimeout(nag_timeout);
+		nag_timeout = setTimeout(() =>
+		{
+			nag_timeout = undefined;
+			nag.trigger();
+		}, 1000);
+	}
+}
+

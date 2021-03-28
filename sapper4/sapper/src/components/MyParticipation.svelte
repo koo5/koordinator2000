@@ -8,7 +8,7 @@
 		ModalFooter,
 		ModalHeader
 	} from 'sveltestrap';
-	import {my_user, get_my_participation} from 'srcs/my_user.js';
+	import {my_user, decrease_auth_nag_postponement, get_my_participation} from 'srcs/my_user.js';
 	import gql from 'graphql-tag';
 	import MutationForm from 'cmps/MutationForm.svelte';
 	import {createEventDispatcher} from 'svelte';
@@ -41,6 +41,12 @@
 		user_id: $my_user.id,
 		threshold: new_threshold
 	};
+
+	function on_participated()
+	{
+		dispatch('my_participation_upsert');
+		decrease_auth_nag_postponement();
+	}
 
 
 </script>
@@ -85,7 +91,7 @@ minimum suggested: {campaign.suggested_lowest_threshold}<br>
 {:else}
 
 
-	<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+	<MutationForm on:done={() => on_participated()} css_ref="inline"
 				  mutation={UPSERT}
 				  variables={upsert_vars}
 	>

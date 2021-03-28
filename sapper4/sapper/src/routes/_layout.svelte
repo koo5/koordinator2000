@@ -1,6 +1,7 @@
 <script>
 	//import "@fontsource/aguafina-script/400.css";
 	import SettingsModal from 'cmps/SettingsModal.svelte';
+	import TheNagModal from 'cmps/TheNagModal.svelte';
 	import Nav from 'cmps/Nav.svelte';
 	import {setClient} from 'svelte-apollo';
 	import {new_apollo_client} from 'srcs/apollo.js';
@@ -211,6 +212,7 @@
 
 
 		<SettingsModal bind:toggle_settings={toggle_settings}/>
+		<TheNagModal/>
 
 		<Nav {segment} {toggle_settings}/>
 		<hr>
