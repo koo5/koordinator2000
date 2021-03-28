@@ -79,7 +79,8 @@ async function free_user_id()
 	let r = await sign_user_object(
 		{
 			id: result['data']['insert_accounts_one']['id'],
-			name
+			name,
+			autoscroll = true
 		});
 	console.log("free_user_id result:" + JSON.stringify(r, null, ' '))
 	console.log()
