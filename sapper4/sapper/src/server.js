@@ -80,7 +80,7 @@ async function free_user_id()
 		{
 			id: result['data']['insert_accounts_one']['id'],
 			name,
-			autoscroll = true
+			autoscroll: true
 		});
 	console.log("free_user_id result:" + JSON.stringify(r, null, ' '))
 	console.log()
