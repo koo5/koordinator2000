@@ -9,14 +9,16 @@
 <table responsive>
 	<thead>
 	<tr>
+		<th scope="col">#</th>
 		<th scope="col">user</th>
 		<th scope="col">wants</th>
 		<th scope="col">status</th>
 	</tr>
 	</thead>
 	<tbody>
-	{#each campaign.participations as participation (participation.id)}
+	{#each campaign.participations as participation, idx (participation.id)}
 		<tr>
+			<td class={get_status_class(participation)}>{idx + 1}</td>
 			<td><a href="/users/{participation.account.id}">{participation.account.name}</a></td>
 			<td>
 				<ToolTipsy>{participation.threshold}
@@ -26,7 +28,7 @@
 					</div>
 				</ToolTipsy>
 			</td>
-			<td class={get_status_class(participation)}>
+			<td>
 				<ToolTipsy enabled="{!$my_user.hide_help}">
 				{get_tickmark(participation)} - {short_description(participation)}
 				<div slot="tooltip">
