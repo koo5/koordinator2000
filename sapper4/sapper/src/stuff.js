@@ -130,14 +130,10 @@ export function long_description(participation)
 	}
 }
 
-
-export function modal_before()
+export function modal_hack(isOpen)
 {
-
-}
-export function modal_hack(x)
-{
-	if (x)
+	/* https://github.com/bestguy/sveltestrap/issues/248 */
+	if (isOpen)
 		document.documentElement.style.removeProperty('--saturate');
 	else
 		document.documentElement.style.setProperty('--saturate', saturate_computate(get(my_user).saturate));

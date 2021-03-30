@@ -31,7 +31,7 @@
 <ul>
 	<SubscribedItemsInner {items} let:da={data}>
 		{#each data.accounts as user (user.id)}
-			<li>{user.id} - {user.name} - {user.email}
+			<li>{user.id} - {user.name} - <details><summary>...</summary>{user.email}</details>
 				<button class="button" on:click={() => impersonate(user.id)}>
 					Impersonate
 				</button>
