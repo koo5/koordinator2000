@@ -1,4 +1,5 @@
 <script>
+	import TestModal from 'cmps/TestModal.svelte';
 	let segment = 0;
 </script>
 <div class="content_block">
@@ -13,7 +14,10 @@
 	</ul>
 	<img src="less_sat_by_telepatx_d2n736h-fullview.jpg" alt="alt"/>
 
+	<TestModal/>
+
 </div>
+
 <style>
 
     ul {

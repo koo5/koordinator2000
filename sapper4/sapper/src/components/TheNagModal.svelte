@@ -2,6 +2,7 @@
 	import {my_user,nag,postpone_nag} from 'srcs/my_user.js';
 	import Settings from 'cmps/Settings.svelte';
 	import TheNagBody from 'cmps/TheNagBody.svelte';
+	import {modal_hack} from 'srcs/stuff.js';
 	import {
 		Button,
 		Modal,
@@ -11,10 +12,12 @@
 	} from 'sveltestrap';
 
 	let isOpen = false;
+	$: modal_hack(isOpen);
+
 	nag.on(() =>
 		{
-			postpone_nag();
-			alert("i'm gonna attempt to show a modal dialog. This seems to break in firefox. In that case, please reload the page.");
+			//postpone_nag();
+			//alert("i'm gonna attempt to show a modal dialog. This seems to break in firefox. In that case, please reload the page.");
 			isOpen = true;
 		}
 	);
@@ -32,7 +35,7 @@
 	function later()
 	{
 		isOpen = false;
-		//postpone_nag();
+		postpone_nag();
 	}
 
 	function never()

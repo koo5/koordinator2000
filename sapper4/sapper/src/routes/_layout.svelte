@@ -15,6 +15,7 @@
 	import {onMount} from "svelte";
 	import {stores} from '@sapper/app'
 	import {theme} from 'srcs/browser_theme_setting.js'
+	import {set_css_var, saturate_computate} from 'srcs/stuff.js';
 
 	theme().subscribe((x) =>
 	{
@@ -76,15 +77,10 @@
 	$: color_theme_invert = $my_user.invert;
 	$: color_theme_contrast = $my_user.contrast;
 	$: set_css_var('--hue_rotate', ((color_theme_invert ? 180 : 0) + (color_theme_hue_rotate || 0)) + "deg");
-	$: set_css_var('--saturate', (100 + (color_theme_saturate || 0)) + "%");
+	$: set_css_var('--saturate', saturate_computate(color_theme_saturate));
 	$: set_css_var('--invert', (color_theme_invert ? 100 : 0) + "%");
 	$: set_css_var('--contrast', (100 + (color_theme_contrast || 0)) + "%");
 
-	function set_css_var(name, value)
-	{
-		if (!process.browser) return;
-		document.documentElement.style.setProperty(name, value);
-	}
 
 	let toggle_settings;
 
@@ -211,29 +207,23 @@
 			{callback_url}
 			{logout_url}>
 
+	<SettingsModal bind:toggle_settings={toggle_settings}/>
+	<TheNagModal/>
 
-
-<Container>
-  <Row>
-    <Col>
-   		<Nav {segment} {toggle_settings}/>
-    </Col>
-  </Row>
-  <Row>
-    <Col xs="3">
-		<SettingsModal bind:toggle_settings={toggle_settings}/>
-		<TheNagModal/>
-    </Col>
-    <Col xs="auto">
-		<main>
-			<slot></slot>
-		</main>
-    </Col>
-
-    <Col xs="3">.col-3</Col>
-  </Row>
-</Container>
-
+	<Container>
+	  <Row>
+		<Col>
+			<Nav {segment} {toggle_settings}/>
+		</Col>
+	  </Row>
+	  <Row>
+		<Col xs="auto">
+			<main>
+				<slot></slot>
+			</main>
+		</Col>
+	  </Row>
+	</Container>
 
 
 		{#if $my_user.auth_debug}
@@ -247,8 +237,8 @@
 				callback_url = {callback_url}
 				logout_url = {logout_url}
 			</pre>
-
 		{/if}
+
 	</Auth0Context>
 
 {:else}
@@ -259,6 +249,7 @@
 		<div class="animate-flicker">Loading...</div>
 	</div>
 {/if}
+
 
 
 <svelte:head>

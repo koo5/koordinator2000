@@ -1,5 +1,7 @@
+import {my_user} from 'srcs/my_user.js';
 import {gql} from "srcs/apollo.js";
 import sanitizeHtml from 'sanitize-html';
+import {readable, writable, get} from 'svelte/store';
 
 export function sanitize_html(x)
 {
@@ -128,3 +130,27 @@ export function long_description(participation)
 	}
 }
 
+
+export function modal_before()
+{
+
+}
+export function modal_hack(x)
+{
+	if (x)
+		document.documentElement.style.removeProperty('--saturate');
+	else
+		document.documentElement.style.setProperty('--saturate', saturate_computate(get(my_user).saturate));
+}
+
+export function set_css_var(name, value)
+{
+	if (!process.browser) return;
+	document.documentElement.style.setProperty(name, value);
+}
+
+export function saturate_computate(x)
+{
+	const color_theme_saturate = x;
+	return (100 + (color_theme_saturate || 0)) + "%";
+}

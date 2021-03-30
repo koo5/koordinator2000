@@ -1,8 +1,4 @@
 <script>
-	import {my_user} from 'srcs/my_user.js';
-	import Settings from 'cmps/Settings.svelte';
-	import {modal_hack} from 'srcs/stuff.js';
-
 	import {
 		Button,
 		Modal,
@@ -12,15 +8,15 @@
 	} from 'sveltestrap';
 
 	export let settings_open = false;
-	$: modal_hack(settings_open);
 	export const toggle_settings = () => (settings_open = !settings_open);
-
 </script>
 
+<Button on:click={toggle_settings}>do not click this button</Button>
+
 <Modal isOpen={settings_open} toggle={toggle_settings} fade={false} keyboard={true} scrollable={true}>
-	<ModalHeader {toggle_settings}>Settings</ModalHeader>
+	<ModalHeader {toggle_settings}>hi</ModalHeader>
 	<ModalBody>
-		<Settings/>
+		hi there
 	</ModalBody>
 	<ModalFooter>
 		<Button color="secondary" on:click={toggle_settings}>Close</Button>

@@ -23,7 +23,7 @@
 
 	export let campaign_id;
 
-
+	$: my_user_id = $my_user.id
 	$: items = subscribe(
 		gql`
 		subscription ($_user_id: Int!, $campaign_id: Int!) {
@@ -33,13 +33,13 @@
   		`,
 		{
 			variables: {
-				_user_id: $my_user.id,
+				_user_id: my_user_id,
 				campaign_id
 			}
 		}
 	);
 
-	$: console.log(campaign_id);
+	//$: console.log(campaign_id);
 	$: dddd = $items.data;
 	$: campaign = dddd ? dddd.campaigns_by_pk : undefined;
 
