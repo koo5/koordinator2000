@@ -44,14 +44,6 @@
 		}
 	);
 
-	$: console.log(account_subscription);
-	$: {
-			if(account_subscription.loading){
-				console.log("Loading account data...");
-			}else if(account_subscription.data){
-				console.log(account_subscription.data);
-			}
-		}
 	export let user_id;
 
 
