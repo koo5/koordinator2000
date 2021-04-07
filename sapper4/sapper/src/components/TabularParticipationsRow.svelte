@@ -5,8 +5,7 @@
 
 
   export let participation;
-
-  const idx = participation.id;
+  export let idx;
 </script>
 
 <tr>

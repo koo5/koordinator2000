@@ -21,8 +21,8 @@
 	</tr>
 	</thead>
 	<tbody>
-	{#each le as participation}
-		<TabularParticipationsRow participation={participation}/>
+	{#each le as participation, idx}
+		<TabularParticipationsRow participation={participation} idx={idx}/>
 	{/each}
 	<tr style="font-weight:bold">
 		<td></td>
@@ -30,8 +30,8 @@
 		<td>{suggested}</td>
 		<td></td>
 	</tr>
-	{#each gt as participation}
-		<TabularParticipationsRow participation={participation}/>
+	{#each gt as participation, idx}
+		<TabularParticipationsRow participation={participation} idx={idx+le.length}/>
 	{/each}
 	</tbody>
 </table>
