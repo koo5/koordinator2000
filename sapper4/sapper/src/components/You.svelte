@@ -73,6 +73,3 @@
 		{JSON.stringify($my_user, null, '  ')}
 	</pre>
 	{/if}
-
-
-
