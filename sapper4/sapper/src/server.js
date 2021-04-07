@@ -1,9 +1,11 @@
 import * as config_file from './config.js';
+
 var config = config_file.config;
 
 import sirv from 'sirv';
 import polka from 'polka';
-const { promisify } = require('util');
+
+const {promisify} = require('util');
 const sleep = promisify(setTimeout);
 const bodyParser = require('body-parser')
 const send = require('@polka/send-type');
@@ -62,28 +64,29 @@ const apollo_client = new_apollo_client();
 async function free_user_id()
 {
 	let result;
-	while(!result)
+	let name;
+	while (!result)
 	{
-		const name = uniqueNamesGenerator({dictionaries: [adjectives, colors]});
-		console.log("free_user_id:" + name)
+		name = uniqueNamesGenerator({dictionaries: [adjectives, colors]});
+		console.log("free_user_id:" + name);
 		try
 		{
 			result = await apollo_client.mutate({
 					mutation: gql`
-				mutation MyMutation($name: String) {
-				  insert_accounts_one(object: {name: $name}) {
-					id
-				  }
-				}
-			`,
+						mutation MyMutation($name: String) {
+						  insert_accounts_one(object: {name: $name}) {
+							id
+						  }
+						}
+					`,
 					variables:
 						{
 							name: name
 						}
 				}
 			);
-		}
-		catch(error) {
+		} catch (error)
+		{
 			console.error(error);
 			sleep(2000);
 		}
@@ -108,15 +111,15 @@ async function sign_user_object(x)
 async function user_authenticity_jwt(id)
 {
 	return await new SignJWT({
-			'urn:id': id,
-/*  "https://hasura.io/jwt/claims": {
-    "x-hasura-allowed-roles": ["editor","user", "mod"],
-    "x-hasura-default-role": "user",
-    "x-hasura-user-id": "1234567890",
-    "x-hasura-org-id": "123",
-    "x-hasura-custom": "custom-value"
-  }*/
-  		})
+		'urn:id': id,
+		/*  "https://hasura.io/jwt/claims": {
+			"x-hasura-allowed-roles": ["editor","user", "mod"],
+			"x-hasura-default-role": "user",
+			"x-hasura-user-id": "1234567890",
+			"x-hasura-org-id": "123",
+			"x-hasura-custom": "custom-value"
+		  }*/
+	})
 		.setProtectedHeader({alg: pr.alg})
 		.setIssuedAt()
 		.setIssuer('urn:example:issuer')
@@ -193,7 +196,7 @@ async function grab_email(user_id, info)
 				email
 			}
 		}
-	),null,''));
+	), null, ''));
 }
 
 async function save_verified_authentication(user_id, provider, info)
@@ -201,7 +204,7 @@ async function save_verified_authentication(user_id, provider, info)
 	if (user_id == -1 || !user_id)
 		return;
 	let login_name = info.sub;
-	console.log(['save_verified_authentication',user_id, provider, login_name]);
+	console.log(['save_verified_authentication', user_id, provider, login_name]);
 	await apollo_client.mutate({
 			mutation: gql`
 				mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
