@@ -3,7 +3,8 @@ var config = config_file.config;
 
 import sirv from 'sirv';
 import polka from 'polka';
-
+const { promisify } = require('util');
+const sleep = promisify(setTimeout);
 const bodyParser = require('body-parser')
 const send = require('@polka/send-type');
 import compression from 'compression';
@@ -60,22 +61,33 @@ const apollo_client = new_apollo_client();
 
 async function free_user_id()
 {
-	const name = uniqueNamesGenerator({dictionaries: [adjectives, colors]});
-	console.log("free_user_id:" + name)
-	const result = await apollo_client.mutate({
-			mutation: gql`
+	let result;
+	while(!result)
+	{
+		const name = uniqueNamesGenerator({dictionaries: [adjectives, colors]});
+		console.log("free_user_id:" + name)
+		try
+		{
+			result = await apollo_client.mutate({
+					mutation: gql`
 				mutation MyMutation($name: String) {
 				  insert_accounts_one(object: {name: $name}) {
 					id
 				  }
 				}
 			`,
-			variables:
-				{
-					name: name
+					variables:
+						{
+							name: name
+						}
 				}
+			);
 		}
-	);
+		catch(error) {
+			console.error(error);
+			sleep(2000);
+		}
+	}
 	let r = await sign_user_object(
 		{
 			id: result['data']['insert_accounts_one']['id'],

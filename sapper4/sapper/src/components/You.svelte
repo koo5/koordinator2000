@@ -6,6 +6,8 @@
 	import {subscribe, gql} from "srcs/apollo.js";
 
 	$: my_user_id = $my_user.id
+
+	/* fixme, we should rather go for users.email column */
 	$: account_email_subscription = subscribe(
 		gql`
 			subscription ($my_user_id: Int) {

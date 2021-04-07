@@ -24,6 +24,7 @@
 </script>
 
 	<h5>account</h5>
+	<div class="content_block">
 	account ID: {user_id}
 	<br>
 	{#if $account_subscription.loading}
@@ -33,3 +34,4 @@
 	<br>
 	e-mail: {$account_subscription.data.accounts[0].email}
 	{/if}
+	</div>
