@@ -210,6 +210,9 @@
 			<Button color="secondary" type="submit">dismiss campaign</Button>
 		</MutationForm>
 	</div>
+
+	<a href="/campaign/{campaign.id}">details...</a>
+
 	<hr>
 </div>
 

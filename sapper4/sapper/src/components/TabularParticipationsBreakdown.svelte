@@ -1,7 +1,5 @@
 <script>
-	//import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import {Table} from 'sveltestrap';
-	//import {get_status_class,get_tickmark,short_description,long_description} from 'srcs/stuff.js';
 	//import {my_user} from 'srcs/my_user.js';
 	import TabularParticipationsRow from 'cmps/TabularParticipationsRow.svelte';
 

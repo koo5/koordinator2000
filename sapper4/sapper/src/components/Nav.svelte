@@ -63,6 +63,10 @@
 				</NavItem>
 
 				<NavItem>
+					<NavLink rel=prefetch href="about" active={segment === "about"}>About</NavLink>
+				</NavItem>
+
+				<NavItem>
 					<NavLink rel=prefetch href="{'javascript:void(0)'}" on:click={toggle_settings}>Settings</NavLink>
 				</NavItem>
 

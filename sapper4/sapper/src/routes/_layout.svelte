@@ -41,8 +41,6 @@
 	{
 		if (!process.browser)
 			return;
-		/*if (!isAuthenticated)
-			return;*/
 		let auth = {'auth0': {token, info}};
 		my_user.update((u) =>
 		{
@@ -130,9 +128,9 @@
 
     }
 
-    :global(h1) {
+    /*:global(h1) {
         font-size: 310%;
-    }
+    }*/
 
     @keyframes flickerAnimation {
         0% {

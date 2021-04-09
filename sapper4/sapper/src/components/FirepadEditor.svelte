@@ -147,6 +147,3 @@
 
 
 <div id="firepad-container" bind:this={firepad_container}></div>
-
-
-

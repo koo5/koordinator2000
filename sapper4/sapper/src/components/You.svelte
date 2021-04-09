@@ -29,7 +29,8 @@
 
 
 </script>
-
+	<b>Please enter your e-mail, or authenticate with google/facebook/etc</b>, otherwise, you can lose access to your account!
+	<br>
 	<h5>account</h5>
 	account ID: {$my_user.id}
 	<br>
@@ -41,8 +42,6 @@
 	</details>
 	<br>
 	<h5>authentication</h5>
-	<b>Please enter your e-mail, or authenticate with google/facebook/etc</b>, otherwise, you can lose access to your account.
-	<br>
 	E-mail: {$account_email_subscription?.data?.accounts?.[0]?.email}
 	<br>
 	{#if $my_user.id > 0}

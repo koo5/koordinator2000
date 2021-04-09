@@ -48,7 +48,7 @@
 
 
 <Modal {isOpen} toggle={later} fade={false} keyboard={true} scrollable={true}>
-	<ModalHeader toggle={later}>Please enter your e-mail, or authenticate with google/facebook/etc, otherwise, you can lose access to your account.</ModalHeader>
+	<ModalHeader toggle={later}>Please!</ModalHeader>
 	<ModalBody>
 		<TheNagBody/>
 	</ModalBody>
