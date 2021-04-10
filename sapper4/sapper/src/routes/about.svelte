@@ -2,38 +2,9 @@
 	<title>About</title>
 </svelte:head>
 
-<style>
+<h1>About Fullcracy/Koordinator</h1>
 
-    h1, h2, h3 {
-
-        /*border-left: 7vw solid #eef872;*/
-        border-left-color: rgb(238, 248, 114);
-        border-left-style: solid;
-        border-left-width: 2vw;
-        /*border-radius: 10em;*/
-        /*border-right-style: solid;
-		border-right-width: 7vw;
-		border-right-color: rgb(238, 248, 114);*/
-
-        font-family: serif;
-
-        margin-top: 1em;
-        margin-bottom: 1em;
-        padding: 0;
-        margin-left: clamp(0px, calc(((50% - 30rem) - 5em) + 6vw), calc((50% - 30rem) + 6vw));
-
-        /* margin-left: calc(calc(50% - 30rem) - min(calc(50% - 30rem), 6em)); */
-        /*margin-right: clamp(0px, calc((50% - 30rem) - 10em), calc(50% - 30rem));*/
-
-    }
-
-
-</style>
-
-
-<h1>About fullcracy/koordinator</h1>
-
-<h2>Talk</h2>
+<h3>Contact</h3>
 <div class="content_block">
 
 	<a href="https://github.com/koo5/koordinator2000/issues/">github</a><br>
@@ -41,16 +12,16 @@
 	<a href="https://discord.gg/QP9mhdEk">discord</a>.<br>
 
 </div>
-<h2>Help</h2>
+<h3>Help</h3>
 <div class="content_block">
 	<a href="https://www.codetriage.com/koo5/koordinator2000">
 		<img src='https://www.codetriage.com/koo5/koordinator2000/badges/users.svg' alt='codetriage'/>
 	</a>
 </div>
 
-<h2>Fund</h2>
+<h3>Fund</h3>
 
-<h3>Liberapay</h3>
+<h5>Liberapay</h5>
 <div class="content_block">
 	<script src="https://liberapay.com/koo5/widgets/button.js"></script>
 	{@html '<script src="https://liberapay.com/koo5/widgets/receiving.js"></script>'}
@@ -60,23 +31,17 @@
 </div>
 
 
-<h3>GitHub</h3>
-<div class="content_block">
-	<a href="https://github.com/sponsors/koo5">GitHub Sponsors</a>
-
-</div>
-
-<h2>Friend projects</h2>
+<h3>See also</h3>
 <div class="content_block">
 
 	<a rel=prefetch href="see_also">see_also</a>.
 
 </div>
 
-<h2>Thank You</h2>
+<h3>Thank You!</h3>
 <div class="content_block">
 
-	Thank you for you attention! Created by koo &amp; aindilis. <a href="https://github.com/koo5/koordinator2000/
+	Thank You for You attention! Created by koo &amp; aindilis. <a href="https://github.com/koo5/koordinator2000/
 blob/master/README.md">https://github.com/koo5/koordinator2000/blob/master/README.md</a>
 
 </div>
