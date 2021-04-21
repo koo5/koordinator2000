@@ -25,6 +25,8 @@ const onwarn = (warning, onwarn) =>
 const aliases = alias({
   resolve: ['.svelte', '.js'], //optional, by default this will just look for .js files or folders
   entries: [
+  /* this possibly also requires that you set "src" as "sources root", in Webstorm */
+    { find: 'src', replacement: 'src' },
     { find: 'srcs', replacement: 'src' },
     { find: 'cmps', replacement: 'src/components' },
   ]

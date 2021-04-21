@@ -24,3 +24,26 @@ Maybe instead of using the language of “boycott” we can use more positive la
 ```
 - http://techrights.org/2020/06/03/resolutions-or-revolutions/
 
+
+
+
+https://github.com/compdemocracy/polis/blob/dev/e2e/README.md
+
+
+
+
+
+    created BIGINT DEFAULT now_as_millis(),
+    modified BIGINT NOT NULL DEFAULT now_as_millis(),
+
+
+CREATE OR REPLACE FUNCTION now_as_millis() RETURNS BIGINT AS $$
+        DECLARE
+            temp TIMESTAMP := now();
+        BEGIN
+            -- NOTE: milliseconds includes the seconds, so subtracting seconds from milliseconds
+            -- SEE: http://www.postgresql.org/docs/8.4/static/functions-datetime.html
+            RETURN 1000*FLOOR(EXTRACT(EPOCH FROM temp)) + FLOOR(EXTRACT(MILLISECONDS FROM temp)) - 1000*FLOOR(EXTRACT(SECOND FROM temp));
+        END;
+$$ LANGUAGE plpgsql;
+
