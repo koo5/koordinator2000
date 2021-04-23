@@ -1,4 +1,4 @@
-var config_file = require('../../sapper4/sapper/src/config.js');
+var config_file = require('../sapper4/sapper/src/config.js');
 //console.log(config_file);
 var config = config_file.config;
 
