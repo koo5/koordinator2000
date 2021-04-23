@@ -1,86 +1,13 @@
-var config_file = require('../../sapper4/sapper/src/config.js');
-//console.log(config_file);
-var config = config_file.config;
-
+var gql = require('graphql-tag');
+var db_client = require('./db_client.js')
 var moment = require('moment');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-var counter = 3;
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
 
 
 
 
-
+var counter = 300;
 let verbose = false;
 
-
-var fetch = require('cross-fetch');
-var gql = require('graphql-tag');
-var apollo = require('@apollo/client');
-var timeout_link = require('apollo-link-timeout');
-
-const httpLink = new apollo.HttpLink({
-    uri: 'https://' + config.GRAPHQL_ENDPOINT,
-    headers: {
-      //"Authorization": `Bearer ${process.env.FAUNADB_SECRET}`,
-      ...config.PUBLIC_GRAPHQL_HEADERS
-    },
-    fetch
-  });
-
-const timeoutHttpLink = new timeout_link.default(10000).concat(httpLink);
-
-// Create GraphQL Client for FaunaDB, replace HttpLink configuration
-// with your own GraphQL endpoint configuration.
-const client = new apollo.ApolloClient({
-  cache: new apollo.InMemoryCache(),
-  link: timeoutHttpLink,
-  defaultOptions: {
-    query: {
-      fetchPolicy: 'no-cache',
-    },
-  }
-})
 
 
 
@@ -95,7 +22,7 @@ async function flip_bit(participation, val)
 		else
 			content = `Heads up! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
 
-		console.log(await client.mutate({
+		console.log(await db_client.mutate({
 			mutation: gql`
 				mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
 				  insert_campaign_notifications(objects: {campaign_id: $campaign_id, content: $content, account_id: $user_id}) {
@@ -110,7 +37,7 @@ async function flip_bit(participation, val)
 			}
 		}));
 
-		console.log(await client.mutate({
+		console.log(await db_client.mutate({
 			mutation: gql`
 				mutation MyMutation($_id: Int, $condition_is_fulfilled: Boolean) {
 				  update_participations(where: {id: {_eq: $_id}}, _set: {condition_is_fulfilled: $condition_is_fulfilled}){
@@ -128,7 +55,6 @@ async function flip_bit(participation, val)
 		console.log(e)
 	}
 }
-
 
 
 async function flip_stuff(data)
@@ -176,12 +102,9 @@ async function flip_stuff(data)
 }
 
 
-
-
-
 async function my_fetch()
 {
-	const { data } = await client.query({
+	const { data } = await db_client.query({
 		query: gql`
 			query GET_PARTICIPATIONS {
 			  campaigns(order_by: [{id: asc}]) {
@@ -218,8 +141,10 @@ async function run() {
 		console.log(e)
 		sleep = 20;
 	}
+	/* just to avoid mem/handle leaks .. should be fixed now */
 	if (counter-- == 0)
 		process.exit(0)
+	/* and repeat */
 	setTimeout(async () => {await run();}, sleep * 1000);
 };
 
@@ -227,16 +152,3 @@ async function run() {
 
 
 
-/*
-var cron = require('node-cron');
-cron.schedule('0 * * * * *', function() {
-  console.log('You will see this message every minute');
-});
-//cron.schedule('0,5,10,15,20,25,30,35,40,45,50,55 * * * * *', async function() {
-
-//cron.schedule('0,30 * * * * *', async function() {
-
-cron.schedule('0,15,30,45 * * * * *', run);
-
-(async () => {await run()})();
-*/
