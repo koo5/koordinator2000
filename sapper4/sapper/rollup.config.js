@@ -9,30 +9,29 @@ import svelte from 'rollup-plugin-svelte';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import config from 'sapper/config/rollup.js';
-import pkg from './package.json';
+//import pkg from './package.json';
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) =>
+{
+	console.log(warning.code);
+	warning.code === 'UNRESOLVED_IMPORT' ||
 	(warning.code === 'MISSING_EXPORT' && /'preload'/.test(warning.message)) ||
 	(warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
 	onwarn(warning);
+}
 
 
 
 const aliases = alias({
-  resolve: ['.svelte', '.js'], //optional, by default this will just look for .js files or folders
+  resolve: ['.svelte', '.js'],
   entries: [
-  /* this possibly also requires that you set "src" as "sources root", in Webstorm */
     { find: 'src', replacement: 'src' },
-    { find: 'srcs', replacement: 'src' },
-    { find: 'cmps', replacement: 'src/components' },
   ]
 });
-
-
 
 
 
@@ -44,6 +43,7 @@ export default {
 
 			aliases,
 			replace({
+				preventAssignment: true,
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
@@ -58,7 +58,7 @@ export default {
 				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
 				publicPath: '/client/'
 			}),
-			
+
 			resolve({
 				preferBuiltins: false,
 				browser: true,
@@ -87,7 +87,7 @@ export default {
 			!dev && terser({
 				module: true
 			})
-			
+
 		],
 
 		preserveEntrySignatures: false,
@@ -101,6 +101,7 @@ export default {
 		plugins: [
 			aliases,
 			replace({
+				preventAssignment: true,
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
