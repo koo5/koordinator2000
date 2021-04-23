@@ -2,7 +2,7 @@
 	import {
 		Button,
 	} from 'sveltestrap';
-	import {sanitize_html} from 'srcs/stuff.js';
+	import {sanitize_html} from 'src/stuff.js';
 	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from 'cmps/MutationForm.svelte';

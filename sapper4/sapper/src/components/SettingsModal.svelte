@@ -1,7 +1,7 @@
 <script>
 	import {my_user} from 'srcs/my_user.js';
 	import Settings from 'cmps/Settings.svelte';
-	import {modal_hack} from 'srcs/stuff.js';
+	import {modal_hack} from 'src/stuff.js';
 
 	import {
 		Button,

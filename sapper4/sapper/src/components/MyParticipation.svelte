@@ -14,7 +14,7 @@
 	import {createEventDispatcher} from 'svelte';
 
 	const dispatch = createEventDispatcher();
-	import {get_status_class, get_tickmark} from 'srcs/stuff.js';
+	import {get_status_class, get_tickmark} from 'src/stuff.js';
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;

@@ -5,7 +5,7 @@
 	import * as animateScroll from "svelte-scrollto";
 	import {subscribe, gql} from "srcs/apollo.js";
 	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
-	import {CAMPAIGN_FRAGMENT} from 'srcs/stuff.js';
+	import {CAMPAIGN_FRAGMENT} from 'src/stuff.js';
 
 
 	var my_timeout;

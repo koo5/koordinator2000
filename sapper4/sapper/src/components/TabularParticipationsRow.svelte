@@ -1,6 +1,6 @@
 <script>
   import ToolTipsy from 'cmps/ToolTipsy.svelte';
-  import {get_status_class,get_tickmark,short_description,long_description} from 'srcs/stuff.js';
+  import {get_status_class,get_tickmark,short_description,long_description} from 'src/stuff.js';
   import {my_user} from 'srcs/my_user.js';
 
 

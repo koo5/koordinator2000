@@ -2,7 +2,7 @@
 
 	import ToolTipsy from 'cmps/ToolTipsy.svelte';
 	import {my_user} from 'srcs/my_user.js';
-	import {get_status_class,get_tickmark} from 'srcs/stuff.js';
+	import {get_status_class,get_tickmark} from 'src/stuff.js';
 
 	export let participation;
 	$: status_class = get_status_class(participation);

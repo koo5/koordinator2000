@@ -3,7 +3,7 @@
 	import Auth0 from "cmps/Auth0.svelte";
 	import {login} from '@dopry/svelte-auth0';
 	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "srcs/apollo.js";
+	import {subscribe, gql} from "src/apollo.js";
 
 	$: my_user_id = $my_user.id
 
@@ -42,7 +42,14 @@
 	</details>
 	<br>
 	<h5>authentication</h5>
-	E-mail: {$account_email_subscription?.data?.accounts?.[0]?.email}
+	<div>
+		E-mail:
+		{#if $account_email_subscription.loading}
+			Loading account data...
+		{:else if $account_email_subscription.data}
+			{$account_email_subscription.data.accounts?.[0]?.email}
+		{/if}
+	</div>
 	<br>
 	{#if $my_user.id > 0}
 		<h5>Link your account to a social login:</h5>

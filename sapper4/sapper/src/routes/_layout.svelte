@@ -15,7 +15,7 @@
 	import {onMount} from "svelte";
 	import {stores} from '@sapper/app'
 	import {theme} from 'srcs/browser_theme_setting.js'
-	import {set_css_var, saturate_computate} from 'srcs/stuff.js';
+	import {set_css_var, saturate_computate} from 'src/stuff.js';
 
 	theme().subscribe((x) =>
 	{
