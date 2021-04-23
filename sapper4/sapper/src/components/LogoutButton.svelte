@@ -1,5 +1,5 @@
 <script>
-import {auth} from "srcs/utils/nhost.js"
+import {auth} from "src/utils/nhost.js"
 
 function nhost_logout(){
   /*

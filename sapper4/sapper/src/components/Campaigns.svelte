@@ -1,10 +1,10 @@
 <script type='js'>
-	import Campaign from 'cmps/Campaign.svelte';
-	import {my_user} from 'srcs/my_user.js';
+	import Campaign from 'src/components/Campaign.svelte';
+	import {my_user} from 'src/my_user.js';
 	import {onMount, onDestroy} from "svelte";
 	import * as animateScroll from "svelte-scrollto";
-	import {subscribe, gql} from "srcs/apollo.js";
-	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
+	import {subscribe, gql} from "src/apollo.js";
+	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
 	import {CAMPAIGN_FRAGMENT} from 'src/stuff.js';
 
 

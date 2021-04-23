@@ -1,6 +1,6 @@
 <script>
-	import Campaigns from "cmps/Campaigns.svelte";
-	import {my_user} from 'srcs/my_user.js';
+	import Campaigns from "src/components/Campaigns.svelte";
+	import {my_user} from 'src/my_user.js';
 
 </script>
 

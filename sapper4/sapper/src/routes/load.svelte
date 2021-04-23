@@ -1,8 +1,8 @@
 <script>
-	import {my_user} from 'srcs/my_user.js';
+	import {my_user} from 'src/my_user.js';
 	import gql from 'graphql-tag';
 	import {FormGroup, Label} from 'sveltestrap';
-	import MutationForm from 'cmps/MutationForm.svelte';
+	import MutationForm from 'src/components/MutationForm.svelte';
 
 	let files;
 	$: file = files?.[0];

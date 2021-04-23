@@ -1,5 +1,5 @@
 <script>
-	import You from "cmps/You.svelte";
+	import You from "src/components/You.svelte";
 </script>
 
 <div class="content_block">

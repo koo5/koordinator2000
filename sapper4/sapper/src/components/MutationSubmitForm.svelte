@@ -2,7 +2,7 @@
 
 	import {mutation as apollo_mutation} from 'svelte-apollo';
 	import {getContext} from 'svelte';
-	import {ensure_we_exist, apply_newly_authenticated_user, my_user} from 'srcs/my_user.js';
+	import {ensure_we_exist, apply_newly_authenticated_user, my_user} from 'src/my_user.js';
 	import {createEventDispatcher} from 'svelte';
 	const dispatch = createEventDispatcher();
 

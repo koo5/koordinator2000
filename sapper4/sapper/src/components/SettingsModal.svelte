@@ -1,6 +1,6 @@
 <script>
-	import {my_user} from 'srcs/my_user.js';
-	import Settings from 'cmps/Settings.svelte';
+	import {my_user} from 'src/my_user.js';
+	import Settings from 'src/components/Settings.svelte';
 	import {modal_hack} from 'src/stuff.js';
 
 	import {

@@ -55,7 +55,7 @@ async function load_keys()
 })();
 
 
-import {new_apollo_client} from 'srcs/apollo.js';
+import {new_apollo_client} from 'src/apollo.js';
 import gql from 'graphql-tag';
 
 const apollo_client = new_apollo_client();

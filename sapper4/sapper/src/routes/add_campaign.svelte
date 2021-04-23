@@ -1,6 +1,6 @@
 <script type='js'>
 
-	import AddCampaign from 'cmps/AddCampaign.svelte';
+	import AddCampaign from 'src/components/AddCampaign.svelte';
 
 </script>
 

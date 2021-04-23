@@ -6,10 +6,10 @@
 
 <script type='js'>
 
-	import Notification from 'cmps/Notification.svelte';
-	import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "srcs/apollo.js";
-	import {my_user} from 'srcs/my_user.js';
+	import Notification from 'src/components/Notification.svelte';
+	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
+	import {subscribe, gql} from "src/apollo.js";
+	import {my_user} from 'src/my_user.js';
 	$: my_user_id = $my_user.id
 
 	$: items = subscribe(

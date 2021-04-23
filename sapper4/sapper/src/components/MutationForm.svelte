@@ -1,7 +1,7 @@
 <script type='js'>
 
-	import GqlStatus from 'cmps/GqlStatus.svelte';
-	import MutationSubmitForm from 'cmps/MutationSubmitForm.svelte';
+	import GqlStatus from 'src/components/GqlStatus.svelte';
+	import MutationSubmitForm from 'src/components/MutationSubmitForm.svelte';
 
 	export let css_ref = undefined;
 	export let mutation;

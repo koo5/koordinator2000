@@ -1,20 +1,20 @@
 <script>
 	//import "@fontsource/aguafina-script/400.css";
   	import { Col, Container, Row } from 'sveltestrap';
-	import SettingsModal from 'cmps/SettingsModal.svelte';
-	import TheNagModal from 'cmps/TheNagModal.svelte';
-	import Nav from 'cmps/Nav.svelte';
+	import SettingsModal from 'src/components/SettingsModal.svelte';
+	import TheNagModal from 'src/components/TheNagModal.svelte';
+	import Nav from 'src/components/Nav.svelte';
 	import {setClient} from 'svelte-apollo';
-	import {new_apollo_client} from 'srcs/apollo.js';
+	import {new_apollo_client} from 'src/apollo.js';
 	import {
 		Auth0Context,
 		idToken,
 		userInfo,
 	} from '@dopry/svelte-auth0';
-	import {my_user, ensure_we_exist, apply_newly_authenticated_user, event} from 'srcs/my_user.js';
+	import {my_user, ensure_we_exist, apply_newly_authenticated_user, event} from 'src/my_user.js';
 	import {onMount} from "svelte";
 	import {stores} from '@sapper/app'
-	import {theme} from 'srcs/browser_theme_setting.js'
+	import {theme} from 'src/browser_theme_setting.js'
 	import {set_css_var, saturate_computate} from 'src/stuff.js';
 
 	theme().subscribe((x) =>

@@ -1,10 +1,12 @@
 <script>
-	import TestModal from 'cmps/TestModal.svelte';
+	import TestModal from 'src/components/TestModal.svelte';
 	let segment = 0;
 </script>
 <div class="content_block">
 
 	<ul>
+		<li><a href="login">login</a></li>
+
 		<li><a aria-current="{segment === 'about' ? 'page' : undefined}" href="about">about</a></li>
 		<li><a rel=prefetch aria-current="{segment === 'blog' ? 'page' : undefined}" href="blog">blog</a></li>
 		<li><a rel=prefetch aria-current="{segment === 'causes' ? 'page' : undefined}" href="causes">Causes</a></li>

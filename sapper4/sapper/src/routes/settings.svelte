@@ -1,5 +1,5 @@
 <script type='js'>
-	import Settings from 'cmps/Settings.svelte';
+	import Settings from 'src/components/Settings.svelte';
 </script>
 
 <Settings/>

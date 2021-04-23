@@ -1,5 +1,5 @@
 <script lang='js'>
-	import Auth0 from "cmps/Auth0.svelte";
+	import Auth0 from "src/components/Auth0.svelte";
 
 
 

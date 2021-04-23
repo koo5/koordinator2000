@@ -1,5 +1,5 @@
-import {my_user} from 'srcs/my_user.js';
-import {gql} from "srcs/apollo.js";
+import {my_user} from 'src/my_user.js';
+import {gql} from "src/apollo.js";
 import sanitizeHtml from 'sanitize-html';
 import {readable, writable, get} from 'svelte/store';
 

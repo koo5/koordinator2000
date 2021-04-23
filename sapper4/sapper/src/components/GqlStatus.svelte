@@ -2,7 +2,7 @@
 
 	import {setContext} from 'svelte';
 	import {slide} from 'svelte/transition';
-	import {my_user} from 'srcs/my_user.js';
+	import {my_user} from 'src/my_user.js';
 
 
 	let status = undefined;

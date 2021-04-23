@@ -1,6 +1,6 @@
 <script>
-	import PageReloadClock from "cmps/PageReloadClock.svelte";
-	import {my_user} from 'srcs/my_user.js';
+	import PageReloadClock from "src/components/PageReloadClock.svelte";
+	import {my_user} from 'src/my_user.js';
 	import {
 		Collapse,
 		Navbar,

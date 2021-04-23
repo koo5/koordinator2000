@@ -13,7 +13,7 @@
 	} from '@dopry/svelte-auth0';
 	import {get} from 'svelte/store';
 	import {stores} from '@sapper/app'
-	import {my_user, event} from 'srcs/my_user.js';
+	import {my_user, event} from 'src/my_user.js';
 
 	const {page, preloading, session} = stores()
 

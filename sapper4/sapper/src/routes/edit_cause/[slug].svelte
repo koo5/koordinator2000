@@ -6,7 +6,7 @@
 
 <script type='js'>
 
-	import EditCause from 'cmps/EditCause.svelte';
+	import EditCause from 'src/components/EditCause.svelte';
 
 	export let id;
 

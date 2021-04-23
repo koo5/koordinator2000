@@ -1,7 +1,7 @@
 <script>
 	import {Table} from 'sveltestrap';
-	//import {my_user} from 'srcs/my_user.js';
-	import TabularParticipationsRow from 'cmps/TabularParticipationsRow.svelte';
+	//import {my_user} from 'src/my_user.js';
+	import TabularParticipationsRow from 'src/components/TabularParticipationsRow.svelte';
 
 	export let campaign;
 

@@ -1,5 +1,5 @@
 <script type='js'>
-  import Users from 'cmps/Users.svelte';
+  import Users from 'src/components/Users.svelte';
 
 </script>
 

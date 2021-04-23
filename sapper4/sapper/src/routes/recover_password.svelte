@@ -1,6 +1,6 @@
 <script lang='js'>
   import { stores } from '@sapper/app'
-  import {auth} from "srcs/utils/nhost.js"
+  import {auth} from "src/utils/nhost.js"
 
   const { page } = stores()
 

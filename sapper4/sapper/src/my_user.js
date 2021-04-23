@@ -2,7 +2,7 @@ import {readable, writable, get} from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
 import {goto} from '@sapper/app';
 import {logout as auth0_logout} from '@dopry/svelte-auth0';
-import {EventDispatcher} from 'srcs/event_dispatcher.js';
+import {EventDispatcher} from 'src/event_dispatcher.js';
 
 export const my_user = process.browser ?
 	localStorageSharedStore('my_user', {id: -1, auth_debug: false})

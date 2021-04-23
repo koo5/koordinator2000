@@ -5,7 +5,7 @@
 </script>
 
 <script type='js'>
-	import Campaigns from 'cmps/Campaigns.svelte';
+	import Campaigns from 'src/components/Campaigns.svelte';
 
 </script>
 

@@ -1,7 +1,7 @@
 <script>
-	import {my_user,nag,postpone_nag} from 'srcs/my_user.js';
-	import Settings from 'cmps/Settings.svelte';
-	import TheNagBody from 'cmps/TheNagBody.svelte';
+	import {my_user,nag,postpone_nag} from 'src/my_user.js';
+	import Settings from 'src/components/Settings.svelte';
+	import TheNagBody from 'src/components/TheNagBody.svelte';
 	import {modal_hack} from 'src/stuff.js';
 	import {
 		Button,
