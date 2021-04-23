@@ -60,6 +60,7 @@
     "sapper": "^0.28.0",
     "sirv": "^1.0.0",
     "subscriptions-transport-ws": "^0.9.18",
+    "supports-color": "^9.0.0",
     "svelte": "^3.35.0",
     "svelte-apollo": "^0.4.0",
     "svelte-scrollto": "^0.2.0",
@@ -71,5 +72,8 @@
     "unique-names-generator": "^4.3.1",
     "url": "^0.11.0",
     "ws": "^7.4.2"
+  },
+  "dependencies": {
+    "nhost-js-sdk": "^3.1.0"
   }
 }
