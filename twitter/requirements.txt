@@ -209,7 +209,7 @@ pyFirmata==1.1.0
 pyflakes==1.6.0
 pygame==1.9.4
 PyGithub==1.53
-Pygments==2.2.0
+Pygments==2.7.4
 pygobject==3.26.1
 PyHamcrest==1.9.0
 PyJWT==1.7.1
