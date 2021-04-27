@@ -1,0 +1,32 @@
+# js -
+
+subscribe to campaigns
+	if list of hashtags changes
+		hysteresis - timer
+reconnect stream (or update live..)
+query old tweets ...
+	
+			
+# local db 
+tweets
+----------------
+jsonb
+
+
+cached_hashtag_timespans
+----------
+since     |      until    |     hashtag
+
+
+
+
+# koordinator db add:
+
+participations table
+----------------
+entity_uri   |   reference(json? not indexed..)
+
+entities table
+---------------
+uri    |   nick   |   
+
