@@ -332,3 +332,4 @@ xonsh==0.9.24
 youtube-dl==2018.3.14
 zipp==0.5.2
 zope.interface==4.6.0
+pandas

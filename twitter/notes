@@ -1,3 +1,14 @@
+# use:
+
+	https://github.com/rrwen/twitter2pg/blob/master/index.js
+		seems polished, uses postgres
+	
+	also possilble but not as worked out:
+		https://github.com/batuhaniskr/twitter-intelligence
+		https://github.com/jishubasak/Twitter-Data-Analysis-and-Streaming		
+		add psycopg2..
+		
+
 # js -
 
 subscribe to campaigns
@@ -30,3 +41,7 @@ entities table
 ---------------
 uri    |   nick   |   
 
+
+
+
+threshold - probably should equal number of "participating" twitter users - if you tweet about it, you're probably already doing something, or want to be doing, at any case you're investing some energy.. We'll see how that works out.
