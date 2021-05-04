@@ -5,7 +5,7 @@ var moment = require('moment');
 
 
 
-var counter = 300;
+var counter = 0;
 let verbose = false;
 
 
@@ -142,7 +142,7 @@ async function run() {
 		sleep = 20;
 	}
 	/* just to avoid mem/handle leaks .. should be fixed now */
-	if (counter-- == 0)
+	if (--counter == 0)
 		process.exit(0)
 	/* and repeat */
 	setTimeout(async () => {await run();}, sleep * 1000);
