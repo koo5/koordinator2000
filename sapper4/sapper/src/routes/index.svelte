@@ -1,5 +1,5 @@
 <script>
-	import Campaigns from "src/components/Campaigns.svelte";
+	import Campaigns from "src/components/CampaignsSearch.svelte";
 	import {my_user} from 'src/my_user.js';
 
 </script>

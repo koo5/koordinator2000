@@ -67,11 +67,16 @@
 
 	let not_button;
 
+	function xxx(x)
+	{
+		console.log(x);
+	}
+
 
 </script>
 
 categories:
-[all] [ecology] [human rights] [animal rights] [commerce & products] [politics]
+[all] [ecology] [human rights] [animal rights] [commerce & products] [tech] [politics]
 <br>
 items on page:
 [5] [15] [50] [500]
@@ -91,5 +96,14 @@ seeing:{JSON.stringify(seeing, null, '')}:
 <CampaignList ids={seeing}/>
 
 <center>
+	<button bind:this={not_button} color="secondary" on:click={more}>more...</button>
+
+	<!-- https://github.com/bestguy/sveltestrap/issues/275
+	<Button use:xxx color="secondary" on:click={more}>more...</Button>
 	<Button bind:this={not_button} color="secondary" on:click={more}>more...</Button>
+	-->
+			
 </center>
+<br/>
+<br/>
+
