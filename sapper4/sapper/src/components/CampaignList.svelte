@@ -1,11 +1,61 @@
 <script type='js'>
 	import Campaign from 'src/components/Campaign.svelte';
 	import {my_user} from 'src/my_user.js';
-	import {onMount, onDestroy} from "svelte";
 	import * as animateScroll from "svelte-scrollto";
 	import {subscribe, gql} from "src/apollo.js";
 	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
 	import {CAMPAIGN_FRAGMENT} from 'src/stuff.js';
+	import {Swiper, SwiperSlide} from 'swiper/svelte';
+	import SwiperCore, {EffectFade} from 'swiper';
+	import 'swiper/swiper-bundle.css';
+
+
+	export let ids;
+
+	// fixme, the dismissal filter works in hasura console, but not here, for some reason (still?)
+	const CAMPAIGN_LIST = gql`
+		subscription ($_user_id: Int, $_ids: [Int!]) {
+			campaigns(
+				where: {
+					id: {_in: $_ids}
+				}
+			)
+			${CAMPAIGN_FRAGMENT}
+		}
+  	`;
+
+	$: campaigns_query = subscribe(
+		CAMPAIGN_LIST,
+		{
+			variables: {
+				_user_id: my_user_id,
+				_ids: ids,
+			}
+		}
+	);
+
+
+	let sorted_campaigns = [];
+	$: sorted_campaigns = sort_campaigns(ids, $campaigns_query);
+	function sort_campaigns(ids, query_store)
+	{
+		if (query_store.loading)
+			return [];
+		let data = query_store.data;
+			if (!data) return [];
+		let campaigns = query_store.data.campaigns;
+		let by_ids = {}
+		campaigns.forEach((c) =>
+		{
+			by_ids[c.id] = c
+		});
+		let result = [];
+		ids.forEach((id) =>
+		{
+			result.push(by_ids[id]);
+		})
+		return result;
+	}
 
 
 	var my_timeout;
@@ -13,40 +63,8 @@
 	$: my_user_id = $my_user.id
 
 
-	import {Swiper, SwiperSlide} from 'swiper/svelte';
-	import SwiperCore, {EffectFade} from 'swiper';
-	import 'swiper/swiper-bundle.css';
 
 	SwiperCore.use([EffectFade]);
-
-
-	// fixme, the dismissal filter works in hasura console, but not here, for some reason (still?)
-	const CAMPAIGN_LIST = gql`
-		subscription ($_user_id: Int) {
-			campaigns(
-				order_by: [{id: asc}],
-				where: {
-					_and:
-					{
-						smazano: {_eq: false},
-						stealth: {_eq: false},
-						_not: {campaign_dismissals: {account_id: {_eq: $_user_id}}}
-					}
-				}
-			)
-			${CAMPAIGN_FRAGMENT}
-		}
-  	`;
-
-	$: items = subscribe(
-		CAMPAIGN_LIST,
-		{
-			variables: {
-				_user_id: my_user_id
-			}
-		}
-	);
-
 	function slideChange(x, campaign_id)
 	{
 
@@ -93,43 +111,15 @@
 		}
 	}
 
-
 </script>
 
-<style>
 
-	:global(.info_tooltip) {
-		/*background-color: #cccccc;*/
-		padding: 1em;
-	}
-
-	.campaign_swiper_slide {
-		max-width: 100%;
-		word-wrap: break-word;
-	}
-
-	:global(.confirmed) {
-		background-color: #aaffaa;
-	}
-
-	:global(.condition_is_fulfilled) {
-		background-color: #ccffcc;
-		/*background-color: #ccffcc;*/
-	}
-
-	:global(.condition_is_not_fulfilled) {
-		background-color: #ffffcc;
-	}
-
-
-</style>
-
-
+{ids}:
 <div bind:this="{campaign_containers}">
 
-	<SubscribedItemsInner {items} let:da={data}>
+	<SubscribedItemsInner items={campaigns_query}>
 
-		{#each data.campaigns as campaign (campaign.id)}
+		{#each sorted_campaigns as campaign (campaign.id)}
 
 			<Swiper data-campaign-id={campaign.id}
 					threshold={60}
@@ -192,3 +182,32 @@
 		{/each}
 	</SubscribedItemsInner>
 </div>
+
+
+<style>
+
+	:global(.info_tooltip) {
+		/*background-color: #cccccc;*/
+		padding: 1em;
+	}
+
+	.campaign_swiper_slide {
+		max-width: 100%;
+		word-wrap: break-word;
+	}
+
+	:global(.confirmed) {
+		background-color: #aaffaa;
+	}
+
+	:global(.condition_is_fulfilled) {
+		background-color: #ccffcc;
+		/*background-color: #ccffcc;*/
+	}
+
+	:global(.condition_is_not_fulfilled) {
+		background-color: #ffffcc;
+	}
+
+
+</style>

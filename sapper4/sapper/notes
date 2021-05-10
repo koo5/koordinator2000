@@ -1,4 +1,4 @@
-1)user loads the frontend, possibly from a completely static cnd
+1)user loads the frontend, possibly from a completely static cdn
 
 2)frontend sees that localStorage.user is undefined
 
@@ -108,9 +108,9 @@ https://github.com/hasura/graphql-engine/tree/master/community/sample-apps/fireb
 
 ssl
 	CloudFlare
-	
-	
-	
+
+
+
 https://www.onegraph.com/graphiql
 
 
@@ -122,10 +122,10 @@ pagination:
 		client keeps a list of already loaded id's. sends them (maybe as ranges when possible?) as part of the query.
 		no "offset", no routing, just the "endless wall".
 		initial request is obvious. then maybe on a scroll event, we trigger then next request
-		
+
 	https://blog.reactioncommerce.com/how-to-implement-graphql-pagination-and-sorting/
-	
-	
+
+
 
 
 https://www.apollographql.com/docs/react/data/mutations/#executing-a-mutation

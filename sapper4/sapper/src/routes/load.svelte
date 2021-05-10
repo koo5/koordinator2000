@@ -49,7 +49,7 @@
 </script>
 <h1>bulk campaign import</h1>
 <FormGroup>
-	<Label>Causes JSON file:
+	<Label>Campaigns JSON file:
 		<input type="file" bind:files>
 	</Label>
 </FormGroup>

@@ -41,7 +41,7 @@
 <h3>Thank You!</h3>
 <div class="content_block">
 
-	Thank You for You attention! Created by koo &amp; aindilis. <a href="https://github.com/koo5/koordinator2000/
+	Thank You for You attention! Created by koo5 &amp; aindilis &amp; stoopkid &amp; mst &amp; maybe some other people we have forgotten about.. <a href="https://github.com/koo5/koordinator2000/
 blob/master/README.md">https://github.com/koo5/koordinator2000/blob/master/README.md</a>
 
 </div>
