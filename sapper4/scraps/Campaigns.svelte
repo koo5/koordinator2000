@@ -20,7 +20,7 @@
 	SwiperCore.use([EffectFade]);
 
 
-	// fixme, the dismissal filter works in hasura console, but not here, for some reason
+	// fixme, the dismissal filter works in hasura console, but not here, for some reason (still?)
 	const CAMPAIGN_LIST = gql`
 		subscription ($_user_id: Int) {
 			campaigns(

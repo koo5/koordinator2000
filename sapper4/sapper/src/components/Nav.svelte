@@ -9,15 +9,6 @@
 		Nav,
 		NavItem,
 		NavLink,
-		UncontrolledDropdown,
-		DropdownToggle,
-		DropdownMenu,
-		DropdownItem,
-		Button,
-		Modal,
-		ModalBody,
-		ModalFooter,
-		ModalHeader
 	} from 'sveltestrap';
 
 	export let segment;
