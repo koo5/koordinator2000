@@ -7,6 +7,7 @@
 	import {query} from 'svelte-apollo';
 	import {my_user} from 'src/my_user.js';
 	import CampaignList from 'src/components/CampaignList.svelte';
+	import * as animateScroll from 'svelte-scrollto';
 
 
 	const CAMPAIGN_LIST = gql`
@@ -43,6 +44,7 @@
 
 	function more()
 	{
+		animateScroll.scrollTo({delay: 0, element: items_div});
 		seen = seen.concat(seeing);
 		not_button.blur();
 	}
@@ -72,6 +74,7 @@
 		console.log(x);
 	}
 
+	let items_div;
 
 </script>
 
@@ -88,12 +91,16 @@ sort by:
 [number of participants]
 <br>
 
+<div bind:this={items_div}>
+
 seen:{JSON.stringify(seen, null, '')}:
 <br>
 seeing:{JSON.stringify(seeing, null, '')}:
 <br>
 
 <CampaignList ids={seeing}/>
+
+</div>
 
 <center>
 	<button bind:this={not_button} color="secondary" on:click={more}>more...</button>
@@ -102,7 +109,7 @@ seeing:{JSON.stringify(seeing, null, '')}:
 	<Button use:xxx color="secondary" on:click={more}>more...</Button>
 	<Button bind:this={not_button} color="secondary" on:click={more}>more...</Button>
 	-->
-			
+
 </center>
 <br/>
 <br/>
