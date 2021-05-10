@@ -114,7 +114,6 @@
 </script>
 
 
-{ids}:
 <div bind:this="{campaign_containers}">
 
 	<SubscribedItemsInner items={campaigns_query}>
