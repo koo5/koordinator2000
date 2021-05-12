@@ -46,7 +46,7 @@
 	{
 		animateScroll.scrollTo({delay: 0, element: items_div});
 		seen = seen.concat(seeing);
-		not_button.blur();
+		more_button.blur();
 	}
 
 	let vars = {
@@ -67,7 +67,7 @@
 	$: items?.refetch(vars);
 
 
-	let not_button;
+	let more_button;
 
 	function xxx(x)
 	{
@@ -103,11 +103,11 @@ seeing:{JSON.stringify(seeing, null, '')}:
 </div>
 
 <center>
-	<button bind:this={not_button} color="secondary" on:click={more}>more...</button>
+	<button  class="btn btn-primary"  bind:this={more_button} color="secondary" aria-label="more..." on:click={more}>more...</button>
 
 	<!-- https://github.com/bestguy/sveltestrap/issues/275
 	<Button use:xxx color="secondary" on:click={more}>more...</Button>
-	<Button bind:this={not_button} color="secondary" on:click={more}>more...</Button>
+	<Button bind:this={more_button} color="secondary" on:click={more}>more...</Button>
 	-->
 
 </center>
