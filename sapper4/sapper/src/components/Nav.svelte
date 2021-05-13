@@ -26,8 +26,10 @@
 
 	{#if $my_user.auth_debug}|$my_user = {my_user_str}|{/if}
 
-	<Navbar color="light" light expand="md">
-		<NavbarBrand href="/"><img src="/favicon.ico" alt="logo"/></NavbarBrand>
+	<Navbar color="warning" light expand="md">
+		<NavbarBrand href="/">
+			<img src="/favicon.ico" alt="logo"  style="width:1em; height:1em;" />
+		</NavbarBrand>
 		<PageReloadClock/>
 		<NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
 		<Collapse isOpen={navbar_open} navbar expand="md" on:update={(e) => navbar_handleUpdate(e)}>

@@ -8,16 +8,21 @@
 	$: participations = add_idxs(campaign.participations);
 	function add_idxs(participations)
 	{
-		let i = 0;
+		let i = 1;
 		return participations.map(participation =>
 			({...participation, idx: i++})
 		);
 	}
 
-	$: suggested = campaign.suggested_optimal_threshold;
-	$: remaining = suggested - le.length;
-	$: le = participations.filter(participation => participation.idx <= suggested);
-	$: gt = participations.filter(participation => participation.idx > suggested);
+	$: suggested_participants = campaign.suggested_optimal_threshold + 1;
+	$: remaining = suggested_participants - le.length;
+	$: le = participations.filter(f);
+	$: gt = participations.filter(participation => !f(participation));
+
+	function f(participation)
+	{
+		return participation.idx <= suggested_participants && participation.threshold <= campaign.suggested_optimal_threshold;
+	}
 
 </script>
 <table responsive>
@@ -30,24 +35,24 @@
 	</tr>
 	</thead>
 	<tbody>
-	{#each le as participation, idx}
-		<TabularParticipationsRow participation={participation} idx={idx}/>
+	{#each le as participation (participation.idx)}
+		<TabularParticipationsRow participation={participation}/>
 	{/each}
 	<tr style="font-weight:bold">
 		<td colspan="4">
 		<b>
 		<center>
 			{#if remaining > 0}
-				{remaining} more people needed to reach the suggested {suggested + 1} participants
+				{remaining} more people with default threshold needed, to reach the goal of {suggested_participants} participants
 			{:else}
-				🎉 🎉 🎉 goal of {suggested + 1} participants reached! 🎉 🎉 🎉
+				— — — goal of {suggested_participants} participants reached! — — —
 			{/if}
 		</center>
 		</b>
 		</td>
 	</tr>
-	{#each gt as participation, idx}
-		<TabularParticipationsRow participation={participation} idx={idx+le.length}/>
+	{#each gt as participation (participation.idx)}
+		<TabularParticipationsRow participation={participation}/>
 	{/each}
 	</tbody>
 </table>
@@ -55,9 +60,12 @@
 	table {
 		margin: 0;
 		border: 1px inset rgba(128, 110, 164, 0.48);
+
 		border-radius: 0px 17px 12px 13px;
 		border-collapse: separate;
 		border-spacing: 1em 0;
 	}
+
+	table thead th { border-bottom: 1px solid #000; }
 
 </style>

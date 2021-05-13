@@ -86,21 +86,30 @@
 
 <style>
 
+	:global(#sapper) {
+		background-color: #ff8c00;
+
+    }
+
     :global(html) {
         margin: 0 auto;
-        background: #dddddd;
+        background-color: #ff8c00;
         filter: hue-rotate(var(--hue_rotate)) contrast(var(--contrast)) invert(var(--invert)) saturate(var(--saturate));
         height: 100%;
     }
 
     main {
-        background: white;
+        background: #ff8c00;
     }
 
     :global(.content_block) {
         margin: 0 auto;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
         max-width: 60rem;
-        padding: 3vh 3vw
+        padding: 3vh 3vw;
+        background: #ffffbb;
+    	box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
     }
 
     :global(h1, h2, h3, h4, h5) {
@@ -114,7 +123,7 @@
 		border-right-width: 7vw;
 		border-right-color: rgb(238, 248, 114);*/
 
-        background: #eee;
+        background: #ffdd99;
         /*margin: 1em;
         margin-left: -3vw;
         padding-left: 2vw;*/
@@ -123,8 +132,16 @@
         margin-bottom: 1em;
         padding-top: 0.5em;
         padding-bottom: 0.5em;
+
+
+        /*
+
+        todo, this was a fun experiment in making the headers all line up on small screen, but gradually break out to the left on larger screens, aiding navigation imo. But i could never get it right.
+
         padding-left: clamp(6vw, calc(((30rem - 50%) - 5em)), calc((30rem - 50%)));
         margin-left: clamp(0px, calc(((50% - 30rem) - 5em) + 6vw), calc((50% - 30rem) + 6vw));
+
+        */
 
     }
 
@@ -252,6 +269,12 @@
 
 <svelte:head>
 
+	<!-- bootstrap theme -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/materia/bootstrap.min.css" integrity="sha384-B4morbeopVCSpzeC1c4nyV0d0cqvlSAfyXVfrPJa25im5p+yEN/YmhlgQP/OyMZD" crossorigin="anonymous">
+
+
+
+	<!-- FireBase is npm-ed -->
 	<!-- <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script> -->
 	<!-- or -->
 	<!--

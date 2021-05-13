@@ -60,7 +60,7 @@ minimum suggested: {campaign.suggested_lowest_threshold}<br>
 
 {#if my_participation.id}
 
-	<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+	<MutationForm on:done={() => dispatch('my_participation_upsert')}
 				  mutation={UPSERT}
 				  variables={upsert_vars}
 	>
@@ -71,7 +71,7 @@ minimum suggested: {campaign.suggested_lowest_threshold}<br>
 		</Label>
 		<Button color="success" type="submit" disabled={update_button_disabled}>Update</Button>
 
-		<MutationForm on:done={() => dispatch('my_participation_upsert')} css_ref="inline"
+		<MutationForm on:done={() => dispatch('my_participation_upsert')}
 					  mutation={gql`
 								mutation MyMutation($id: Int!) {
 									delete_participations_by_pk(id: $id)

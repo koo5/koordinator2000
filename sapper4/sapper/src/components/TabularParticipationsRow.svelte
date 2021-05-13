@@ -5,11 +5,12 @@
 
 
   export let participation;
-  export let idx;
+
+
 </script>
 
 <tr>
-  <td class={get_status_class(participation)}>{idx + 1}</td>
+  <td class={get_status_class(participation)}>{participation.idx}</td>
 
   <td><a href="/users/{participation.account.id}">{participation.account.name}</a></td>
 

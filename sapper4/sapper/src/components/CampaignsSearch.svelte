@@ -2,6 +2,7 @@
 
 	import {
 		Button,
+		Card
 	} from 'sveltestrap';
 	import {subscribe, gql} from "src/apollo.js";
 	import {query} from 'svelte-apollo';
@@ -77,28 +78,31 @@
 	let items_div;
 
 </script>
+<div class="content_block">
 
-categories:
-[all] [ecology] [human rights] [animal rights] [commerce & products] [tech] [politics]
-<br>
-items on page:
-[5] [15] [50] [500]
-<br>
-sort by:
-[id]
-[title]
-[proximity]
-[number of participants]
-<br>
+	categories:
+	[all] [ecology] [human rights] [animal rights] [commerce & products] [tech] [politics]
+	<br>
+	items on page:
+	[5] [15] [50] [500]
+	<br>
+	sort by:
+	[id]
+	[title]
+	[proximity]
+	[number of participants]
+	<br>
+	seen:{JSON.stringify(seen, null, '')}:
+	<br>
+	seeing:{JSON.stringify(seeing, null, '')}:
+	<br>
+
 
 <div bind:this={items_div}>
 
-seen:{JSON.stringify(seen, null, '')}:
-<br>
-seeing:{JSON.stringify(seeing, null, '')}:
-<br>
-
 <CampaignList ids={seeing}/>
+
+</div>
 
 </div>
 

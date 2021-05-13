@@ -97,16 +97,22 @@
 </script>
 
 <div class="campaign">
-	<div class="content_block">
-		<ToolTipsy enabled="{!!$my_user.database_debug}" css_ref="dev">
-			<div slot="tooltip">
-				<small><pre>
-						{JSON.stringify(campaign, null, '  ')}
-					</pre>
-				</small>
-			</div>
-		</ToolTipsy>
-	</div>
+
+	{#if $my_user.database_debug}
+
+		<div class="content_block">
+			<ToolTipsy enabled="{!!$my_user.database_debug}" css_ref="dev">
+				<div slot="tooltip">
+					<small>
+						<pre>
+							{JSON.stringify(campaign, null, '  ')}
+						</pre>
+					</small>
+				</div>
+			</ToolTipsy>
+		</div>
+
+	{/if}
 
 	<h2>
 		{#if is_detail_view}
@@ -211,9 +217,8 @@
 		</MutationForm>
 	</div>
 
-	<a href="/campaign/{campaign.id}">details...</a>
+	<!-- <a href="/campaign/{campaign.id}">details...</a> -->
 
-	<hr>
 </div>
 
 
