@@ -70,10 +70,13 @@
 			await apply_newly_authenticated_user(u)
 	});
 
+	// this is to make sure that the reactivity only happens when the value changes, not when anything in my_user changes
 	$: color_theme_hue_rotate = $my_user.hue_rotate;
 	$: color_theme_saturate = $my_user.saturate;
 	$: color_theme_invert = $my_user.invert;
 	$: color_theme_contrast = $my_user.contrast;
+
+	//% maybe better way: https://youtu.be/jMcONG-IWNg?t=253
 	$: set_css_var('--hue_rotate', ((color_theme_invert ? 180 : 0) + (color_theme_hue_rotate || 0)) + "deg");
 	$: set_css_var('--saturate', saturate_computate(color_theme_saturate));
 	$: set_css_var('--invert', (color_theme_invert ? 100 : 0) + "%");
