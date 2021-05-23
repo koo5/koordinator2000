@@ -29,3 +29,26 @@ https://www.extinctionrebellion.cz/jednejme-okamzite/
 
 https://www.reddit.com/r/sveltejs/comments/negesu/sveltekit_authentication_with_social_providers/
 
+
+
+
+
+
+
+
+
+trust_ratings table:
+rater(account_id) ratee(account_id) trust(float) type(string)
+
+
+The UI will allow users to edit their rating of other users. (simple number input on user's page). type = user_to_user.
+
+
+Platform's ratings may be represented by some admin user. These will be computed based on how many social logins the user has authenticated with. type = social_logins.
+
+
+The default condition type w will sum up the ratings of all types coming from 3 entities: user itself, campaign maintainer, and platform admin.
+
+
+
+
