@@ -54,3 +54,13 @@ $$ LANGUAGE plpgsql;
 
 https://sveltematerialui.com/demo/dialog/
 
+
+
+
+
+
+
+
+sources:
+	https://github.com/axios/axios/issues/647
+	
