@@ -22,7 +22,7 @@ const {uniqueNamesGenerator, adjectives, colors, animals} = require('unique-name
 
 const {PORT, NODE_ENV} = process.env;
 const dev = NODE_ENV === 'development';
-var {PUBLIC_URL = "http://localhost:5000", MY_APP_KEYS} = config;
+var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = config;
 
 var sess = {
 	PUBLIC_URL,
@@ -31,28 +31,6 @@ var sess = {
 };
 //console.log(sess);
 
-if (MY_APP_KEYS == undefined)
-{
-	throw("must have keys")
-}
-const pr = MY_APP_KEYS["private"];
-const pu = MY_APP_KEYS["public"];
-
-
-var ecPrivateKey;
-var rsaPublicKey;
-
-
-async function load_keys()
-{
-	ecPrivateKey = await parseJwk(pr)
-	rsaPublicKey = await parseJwk(pu)
-}
-
-(async () =>
-{
-	await load_keys()
-})();
 
 
 import {new_apollo_client} from 'src/apollo.js';
