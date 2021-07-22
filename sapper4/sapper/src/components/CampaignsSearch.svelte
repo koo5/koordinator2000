@@ -36,10 +36,14 @@
 
 	let seen = [];
 	$: seeing = get_seeing($items?.data?.campaigns);
+
 	function get_seeing(campaigns)
 	{
 		let result = []
-		campaigns?.forEach((x) => {result.push(x.id)});
+		campaigns?.forEach((x) =>
+		{
+			result.push(x.id)
+		});
 		return result;
 	}
 
@@ -97,17 +101,18 @@
 	seeing:{JSON.stringify(seeing, null, '')}:
 	<br>
 
+</div>
 
 <div bind:this={items_div}>
 
-<CampaignList ids={seeing}/>
-
-</div>
+	<CampaignList ids={seeing}/>
 
 </div>
 
 <center>
-	<button  class="btn btn-primary"  bind:this={more_button} color="secondary" aria-label="more..." on:click={more}>more...</button>
+	<button class="btn btn-primary" bind:this={more_button} color="secondary" aria-label="more..." on:click={more}>
+		more...
+	</button>
 
 	<!-- https://github.com/bestguy/sveltestrap/issues/275
 	<Button use:xxx color="secondary" on:click={more}>more...</Button>

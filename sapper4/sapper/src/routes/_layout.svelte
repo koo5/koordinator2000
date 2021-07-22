@@ -90,19 +90,24 @@
 <style>
 
 	:global(#sapper) {
-		background-color: #ff8c00;
+		background-color: #ffeeee;
 
     }
 
     :global(html) {
         margin: 0 auto;
-        background-color: #ff8c00;
+        background-color: #ffeeee;
         filter: hue-rotate(var(--hue_rotate)) contrast(var(--contrast)) invert(var(--invert)) saturate(var(--saturate));
         height: 100%;
     }
 
     main {
-        background: #ff8c00;
+        background: #ffeeee;
+    }
+
+    :global(.navbar) {
+        background: #ffffee !important;
+        margin-bottom: 1em;
     }
 
     :global(.content_block) {
@@ -111,30 +116,31 @@
         margin-bottom: 0.5em;
         max-width: 60rem;
         padding: 3vh 3vw;
-        background: #ffffbb;
+        background: #ffffee;
     	box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
     }
 
     :global(h1, h2, h3, h4, h5) {
 		/*font-family: "Aguafina";*/
 
-        border-left-color: #ffcc88;
+        /*border-left-color: #ffffcc;
         border-left-style: solid;
-        border-left-width: 1vw;
-        border-radius: 100em 0em 0em 100em;
+        border-left-width: 0.5vw;*/
         /*border-right-style: solid;
 		border-right-width: 7vw;
 		border-right-color: rgb(238, 248, 114);*/
 
-        background: #ffdd99;
+        background: #dddddd;
+
+        margin: 1em;
         /*margin: 1em;
         margin-left: -3vw;
         padding-left: 2vw;*/
 
         margin-top: 1em;
         margin-bottom: 1em;
-        padding-top: 0.5em;
-        padding-bottom: 0.5em;
+        padding-top: 0;
+        padding-bottom: 0;
 
 
         /*

@@ -26,7 +26,7 @@
 
 	{#if $my_user.auth_debug}|$my_user = {my_user_str}|{/if}
 
-	<Navbar color="warning" light expand="md">
+	<Navbar light expand="md">
 		<NavbarBrand href="/">
 			<img src="/favicon.ico" alt="logo"  style="width:1em; height:1em;" />
 		</NavbarBrand>
@@ -71,6 +71,10 @@
 							You
 						{/if}
 					</NavLink>
+				</NavItem>
+
+				<NavItem>
+					<NavLink rel=prefetch href="login" active={segment === "login"}>Login</NavLink>
 				</NavItem>
 
 			</Nav>

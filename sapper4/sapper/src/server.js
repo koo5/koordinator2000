@@ -22,7 +22,7 @@ const {uniqueNamesGenerator, adjectives, colors, animals} = require('unique-name
 
 const {PORT, NODE_ENV} = process.env;
 const dev = NODE_ENV === 'development';
-var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = config;
+var {PUBLIC_URL = "http://localhost:5000", MY_APP_KEYS} = config;
 
 var sess = {
 	PUBLIC_URL,

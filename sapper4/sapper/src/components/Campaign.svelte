@@ -118,7 +118,7 @@
 		{#if is_detail_view}
 			{campaign.title}
 		{:else}
-			<a href="/campaign/{campaign.id}">{campaign.title}</a>
+			{campaign.title}<a href="/campaign/{campaign.id}">...</a>
 		{/if}
 	</h2>
 	<h5>Description</h5>
@@ -223,10 +223,6 @@
 
 
 <style>
-
-	.campaign {
-		border-style: line;
-	}
 
 	pre {
 		overflow-x: scroll;

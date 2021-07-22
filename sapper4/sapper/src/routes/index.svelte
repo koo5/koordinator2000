@@ -39,6 +39,7 @@
 				href="https://discord.gg/QP9mhdEk">discord</a>.
 	</p>
 </div>
+
 <h1>Campaigns:</h1>
 <Campaigns/>
 

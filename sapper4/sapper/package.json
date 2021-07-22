@@ -5,7 +5,7 @@
   "repository": "https://github.com/koo5/koordinator2000/",
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "dev": "sapper dev",
+    "dev": "sapper dev --port 5000",
     "build": "sapper build --legacy",
     "build_nolegacy": "sapper build",
     "export": "sapper export --legacy",
