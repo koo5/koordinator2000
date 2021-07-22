@@ -20,10 +20,6 @@ async function new_user()
 	//console.log('/get_free_user_id');
 	try
 	{
-		var res = await fetch('/get_free_user_id', {method: 'POST'})
-		//console.log(res);
-		var r = await res.json()
-		//console.log("r:" + JSON.stringify(r, null, '  '));
 	} catch (e)
 	{
 		console.error(e);
@@ -33,36 +29,7 @@ async function new_user()
 
 export async function event(event)
 {
-	//console.log('/event');
-	//console.log(event);
-	let res;
-	let res2;
-	try
-	{
-		res = fetch('/event', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Accept': 'application/json',
-			},
-			mode: "same-origin",
-			body: JSON.stringify({event: event})
-		});
-		//console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
-		res = await res;
-		//console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
-		try
-		{
-			res2 = await res.json()
-		} catch (ee)
-		{
-		}
-		//console.log("res2:" + (typeof res2) + ":" + JSON.stringify(res2, null, '  '));
-	} catch (e)
-	{
-		console.error(e);
-	}
-	return res2
+
 }
 
 
@@ -73,7 +40,7 @@ export async function ensure_we_exist()
 		console.log('i am ' + JSON.stringify(user, null, '  '));
 	if (user.id < 1)
 	{
-		return await new_user();
+		return null;
 	}
 	else
 		return null;
