@@ -17,14 +17,6 @@ import * as config_file from './config.js';
 
 function config()
 {
-	//  fuck sapper
-	if (process.browser)
-	{
-		const {session} = stores();
-		return get(session);
-	}
-	console.log ('process.browser')
-	console.log (process.browser)
 	return config_file.config;
 }
 
