@@ -26,7 +26,6 @@ var {PUBLIC_URL = "http://localhost:3000", MY_APP_KEYS} = config;
 
 var sess = {
 	PUBLIC_URL,
-	GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
 	PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS
 };
 //console.log(sess);
