@@ -34,9 +34,9 @@
 	<p>Koordinator is a <a href="https://github.com/koo5/koordinator2000/">work in progress</a>. You can click around,
 		view campaigns,
 		participate, see and confirm notifications, you can swipe left to dismimss and right to participate.. The basic
-		logic is implemented, but mostly it is still just a demo with some fake buttons and no authentication.
-		Come talk to us on <a href="https://webchat.freenode.net/#koordinator">IRC</a> and <a
-				href="https://discord.gg/QP9mhdEk">discord</a>.
+		logic is implemented, but largely it is still just a demo with some fake buttons and no authentication.
+		Come talk to us on <a
+				href="https://discord.gg/CQHQ94y4Er">discord</a>.
 	</p>
 </div>
 
