@@ -31,12 +31,8 @@ var sess = {
 };
 //console.log(sess);
 
-if (MY_APP_KEYS == undefined)
-{
-	throw("must have keys")
-}
-const pr = MY_APP_KEYS["private"];
-const pu = MY_APP_KEYS["public"];
+var pr;
+var pu;
 
 
 var ecPrivateKey;
@@ -49,10 +45,17 @@ async function load_keys()
 	rsaPublicKey = await parseJwk(pu)
 }
 
-(async () =>
+
+if (MY_APP_KEYS != undefined)
 {
-	await load_keys()
-})();
+	pr = MY_APP_KEYS["private"];
+	pu = MY_APP_KEYS["public"];
+	(async () =>
+	{
+		await load_keys()
+	})();
+}
+
 
 
 import {new_apollo_client} from 'src/apollo.js';
