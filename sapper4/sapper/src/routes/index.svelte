@@ -26,7 +26,7 @@
 		collect them. Here, you pledge your participation in campaigns, and you choose how many people is enough. For
 		example, you would not boycott a supermarket chain all alone. Here you can create a campaign and suggest a
 		threshold number. Maybe 50000 people? That should make a dent in their profits, if everyone starts at once and
-		keeps at it!</p>
+		keeps at it...</p>
 
 </div>
 <h2>It looks broken..</h2>

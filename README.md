@@ -291,7 +291,7 @@ CommitedUserNotificationTransmissionState {
 
 
 # sources of campaigns to add
-https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
+* https://causes.com/actions/1805436-donate-to-provide-solar-power-to-indigenous-communities-in-the-amazon
 https://www.ethicalconsumer.org/ethicalcampaigns/boycotts
 https://github.com/aindilis/elle-ethical-consumer/blob/master/sample.xml
 https://www.reddit.com/r/Anticonsumption/
@@ -304,6 +304,7 @@ https://www.reddit.com/r/Anticonsumption/comments/kqhq8x/boycott_nestl%C3%A9/
 https://www.reddit.com/r/Environmentalism/comments/kr0bpt/shells_hell/
 https://rejstrik-firem.kurzy.cz/24741647/nomad-international-s-r-o-v-likvidaci/
 https://play.google.com/store/apps/details?id=io.bobbele
+* todo add campaign: reddit must die / be continued / be replaced (archived threads, bad attempts at monetization, etc etc).
 
 # inspirations
 
