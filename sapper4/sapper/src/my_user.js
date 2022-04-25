@@ -15,11 +15,15 @@ export function impersonate(_id)
 	my_user.set({id: _id})
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 async function new_user()
 {
 	//console.log('/get_free_user_id');
 	try
 	{
+		await sleep(1000)
 		var res = await fetch('/get_free_user_id', {method: 'POST'})
 		//console.log(res);
 		var r = await res.json()
