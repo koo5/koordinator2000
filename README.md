@@ -338,3 +338,4 @@ Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used a
 * ????
 * no profit.
 
+# how to support "good" koordinations?
