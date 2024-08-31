@@ -277,13 +277,6 @@ CommitedUserNotificationTransmissionState {
 }
 ```
 
-
-# similar or related sw
-* https://github.com/researchstudio-sat/webofneeds
-* https://humanifa.com/soporte
-* https://github.com/peta-pico/debate-nanopubs
-
-
 # testcases that it makes sense to coordinate in small numbers of people
 * flashmobs
 * cooperative testcases..
@@ -339,3 +332,12 @@ Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used a
 * no profit.
 
 # how to support "good" koordinations?
+...
+
+
+# similar or related sw
+* https://github.com/researchstudio-sat/webofneeds
+* https://humanifa.com/soporte
+* https://github.com/peta-pico/debate-nanopubs
+* https://pol.is/
+* https://github.com/CitizenLabDotCo/citizenlab
