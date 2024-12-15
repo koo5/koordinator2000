@@ -1,4 +1,4 @@
-import * as config_file from './config.js';
+import * as config_file from '../frontend/src/config.js';
 
 var config = config_file.config;
 
