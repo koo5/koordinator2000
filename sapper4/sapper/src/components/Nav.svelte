@@ -2,6 +2,7 @@
 	import PageReloadClock from "src/components/PageReloadClock.svelte";
 	import { user } from '$lib/stores';
 	import { page } from '$app/stores';
+	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import {
 		Collapse,
 		Navbar,
@@ -21,9 +22,15 @@
 	let navbar_open = false;
 	function navbar_handleUpdate(event) {navbar_open = event.detail.isOpen;}
 
+	// Settings modal state
+	let settingsModalOpen = false;
+	
 	function toggle_settings() {
-		// This will be implemented later
-		console.log('Toggle settings');
+		settingsModalOpen = !settingsModalOpen;
+	}
+	
+	function closeSettingsModal() {
+		settingsModalOpen = false;
 	}
 </script>
 
@@ -85,3 +92,6 @@
 		</Nav>
 	</Collapse>
 </Navbar>
+
+<!-- Settings Modal -->
+<SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal} />

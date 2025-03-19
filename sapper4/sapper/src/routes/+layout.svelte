@@ -30,7 +30,7 @@
 	</div>
 {/if}
 
-<div class="app" class:dark-mode={$theme.dark}>
+<div class="app" class:dark-mode={$theme.dark} style="--saturation: {$theme.saturate}%">
 	<Nav {data} />
 
 	<main>
@@ -45,16 +45,23 @@
 </div>
 
 <style>
+	:root {
+		--primary-color: #ff3e00;
+		--background-color: white;
+		--text-color: #333;
+	}
+	
 	.app {
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
+		filter: saturate(calc(100% + var(--saturation, 0%)));
 	}
 
 	main {
 		position: relative;
 		max-width: 56em;
-		background-color: white;
+		background-color: var(--background-color);
 		padding: 2em;
 		margin: 0 auto;
 		box-sizing: border-box;
@@ -69,13 +76,15 @@
 	}
 
 	.dark-mode {
-		background-color: #222;
-		color: #eee;
+		--background-color: #222;
+		--text-color: #eee;
+		background-color: var(--background-color);
+		color: var(--text-color);
 	}
 
 	.dark-mode main {
 		background-color: #333;
-		color: #eee;
+		color: var(--text-color);
 	}
 
 	.loading-indicator {

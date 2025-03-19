@@ -14,6 +14,20 @@ export async function authFetch(url, options = {}) {
   // Add auth token if available
   if (typeof window !== 'undefined' && window.authToken) {
     fetchOptions.headers.Authorization = `Bearer ${window.authToken}`;
+  } else if (typeof localStorage !== 'undefined') {
+    // Try to get token from localStorage
+    try {
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      if (userData.jwt) {
+        fetchOptions.headers.Authorization = `Bearer ${userData.jwt}`;
+        // Also set it on window for future requests
+        if (typeof window !== 'undefined') {
+          window.authToken = userData.jwt;
+        }
+      }
+    } catch (e) {
+      console.error('Error parsing user data from localStorage', e);
+    }
   }
   
   // Make the request

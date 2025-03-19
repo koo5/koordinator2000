@@ -30,23 +30,30 @@ export async function load_keys() {
 
 const apollo_client = new_apollo_client();
 
-export async function free_user_id() {
+export async function free_user_id(email = null) {
 	let result;
 	let name;
 	while (!result) {
 		name = uniqueNamesGenerator({dictionaries: [adjectives, colors]});
 		console.log("free_user_id:" + name);
 		try {
+			// Create account object with name and optional email
+			const accountObject = { name };
+			if (email) {
+				accountObject.email = email;
+			}
+			
 			result = await apollo_client.mutate({
 				mutation: gql`
-					mutation MyMutation($name: String) {
-						insert_accounts_one(object: {name: $name}) {
+					mutation MyMutation($accountObject: accounts_insert_input!) {
+						insert_accounts_one(object: $accountObject) {
 							id
+							email
 						}
 					}
 				`,
 				variables: {
-					name: name
+					accountObject
 				}
 			});
 		} catch (error) {
@@ -54,9 +61,14 @@ export async function free_user_id() {
 			await new Promise(resolve => setTimeout(resolve, 2000));
 		}
 	}
+	
+	// Get the email from the result if it exists
+	const resultEmail = result?.data?.insert_accounts_one?.email || email;
+	
 	let r = await sign_user_object({
 		id: result['data']['insert_accounts_one']['id'],
 		name,
+		email: resultEmail,
 		autoscroll: true
 	});
 	console.log("free_user_id result:" + JSON.stringify(r, null, ' '));

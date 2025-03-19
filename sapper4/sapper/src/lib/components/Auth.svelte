@@ -45,12 +45,13 @@
       
       if (useCredentials && email && password) {
         // This would be a real login with credentials
-        // For now, we'll just use the free user ID endpoint
+        // For now, we'll just use the free user ID endpoint with email info
         const response = await fetch(getApiUrl('/get_free_user_id'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify({ email })
         });
         
         if (!response.ok) {
@@ -58,6 +59,8 @@
         }
         
         userData = await response.json();
+        // Add email to user data
+        userData.email = email;
       } else {
         // Get a free user ID (guest login)
         const response = await fetch(getApiUrl('/get_free_user_id'), {
