@@ -58,6 +58,7 @@
     "ws": "^7.5.10"
   },
   "dependencies": {
+    "html-minifier": "^4.0.0",
     "nhost-js-sdk": "^3.1.0"
   }
 }

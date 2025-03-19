@@ -12,6 +12,7 @@ const config = {
 		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
 		adapter: adapter(),
 		alias: {
+			'$lib': './src/lib',
 			'src': './src'
 		}
 	}
