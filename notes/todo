@@ -63,4 +63,14 @@ https://sveltematerialui.com/demo/dialog/
 
 sources:
 	https://github.com/axios/axios/issues/647
+
+
+
+
+
+
+describe this codebase in some detail. Note the technologies used, methods of authentication, database schema, intended audience.
+
+migrate this project into sveltekit.
+
 	
