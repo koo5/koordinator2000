@@ -5,44 +5,47 @@ no license!
 
 import { writable, get } from 'svelte/store';
 
-
 export function localStorageSharedStore(name_postfix, default_) {
 	const name = `svelte-shared-store:${name_postfix}`;
-
+	
+	// Create the base writable store with default value
+	const { subscribe, set, update: originalUpdate } = writable(default_);
+	
+	// Only use localStorage in browser environment
+	if (typeof window === 'undefined') {
+		// Return a simplified version for server-side rendering
+		return {
+			subscribe,
+			set,
+			update: originalUpdate
+		};
+	}
+	
+	// Browser-only functions
 	function setStorage(value) {
 		let str = JSON.stringify(value);
-		//console.log(str);
 		window.localStorage.setItem(name, str);
 	}
 
 	function getStorage() {
 		let item = window.localStorage.getItem(name);
-		/*
-		console.log("getStorage()");
-		console.log(item);
-		 */
 		let result = default_;
-		try
-		{
-			if (item != 'undefined' && item)
+		try {
+			if (item != 'undefined' && item) {
 				result = JSON.parse(item);
-			if (!result || !result.id)
+			}
+			if (!result || !result.id) {
 				result = default_;
-		}
-		catch (e)
-		{
+			}
+		} catch (e) {
 			console.log('trying to parse: "' + item + '"');
 			console.log(e);
 		}
-/*
-		console.log("getStorage result");
-		console.log(result);
-
- */
 		return result;
 	}
 
-	function start(){
+	// Initialize from localStorage and set up event listener
+	function start() {
 		function handleStorageEvent({ key, newValue }) {
 			if (key !== name) {
 				return;
@@ -51,26 +54,23 @@ export function localStorageSharedStore(name_postfix, default_) {
 		}
 
 		set(getStorage());
-		//console.log('111');
 		window.addEventListener('storage', handleStorageEvent);
-
 		return () => window.removeEventListener('storage', handleStorageEvent);
 	}
-
-	const { subscribe, set, update } = writable(null, start);
-
+	
+	// Create a new writable with the start function for browser environment
+	const browserStore = writable(default_, start);
+	
 	return {
-		subscribe,
+		subscribe: browserStore.subscribe,
 		set(value) {
-			//console.log(value);
 			setStorage(value);
-			set(value);
+			browserStore.set(value);
 		},
 		update(fn) {
-			let value2 = fn(get(this))
-			//console.log(value2);
-			setStorage(value2);
-			set(value2);
+			const value = fn(get({ subscribe: browserStore.subscribe }));
+			setStorage(value);
+			browserStore.set(value);
 		}
 	};
 }
