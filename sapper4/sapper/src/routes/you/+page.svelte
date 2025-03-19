@@ -1,5 +1,6 @@
 <script>
   import { user } from '$lib/stores';
+  import Auth from '$lib/components/Auth.svelte';
   
   export let data;
 </script>
@@ -8,41 +9,50 @@
   <title>Your Profile | Koordinator</title>
 </svelte:head>
 
-<div class="profile-container">
-  <h1>Your Profile</h1>
-  
-  {#if data.user}
-    <div class="profile-card">
-      <div class="profile-header">
-        <div class="avatar">
-          {data.user.name.charAt(0).toUpperCase()}
-        </div>
-        <h2>{data.user.name}</h2>
-      </div>
-      
-      <div class="profile-details">
-        <div class="detail-item">
-          <span class="label">User ID:</span>
-          <span class="value">{data.user.id}</span>
+<Auth let:logout>
+  <div class="profile-container">
+    <h1>Your Profile</h1>
+    
+    {#if data.user}
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar">
+            {data.user.name.charAt(0).toUpperCase()}
+          </div>
+          <h2>{data.user.name}</h2>
         </div>
         
-        {#if data.user.email}
+        <div class="profile-details">
           <div class="detail-item">
-            <span class="label">Email:</span>
-            <span class="value">{data.user.email}</span>
+            <span class="label">User ID:</span>
+            <span class="value">{data.user.id}</span>
           </div>
-        {/if}
+          
+          {#if data.user.email}
+            <div class="detail-item">
+              <span class="label">Email:</span>
+              <span class="value">{data.user.email}</span>
+            </div>
+          {/if}
+          
+          {#if data.user.jwt}
+            <div class="detail-item">
+              <span class="label">Auth Token:</span>
+              <span class="value token">{data.user.jwt.substring(0, 20)}...</span>
+            </div>
+          {/if}
+        </div>
+        
+        <div class="actions">
+          <button class="edit-button">Edit Profile</button>
+          <button class="logout-button" on:click={logout}>Logout</button>
+        </div>
       </div>
-      
-      <div class="actions">
-        <button class="edit-button">Edit Profile</button>
-        <button class="logout-button">Logout</button>
-      </div>
-    </div>
-  {:else}
-    <p>Loading user data...</p>
-  {/if}
-</div>
+    {:else}
+      <p>Loading user data...</p>
+    {/if}
+  </div>
+</Auth>
 
 <style>
   .profile-container {
@@ -114,6 +124,15 @@
   
   .value {
     flex: 1;
+    word-break: break-word;
+  }
+  
+  .token {
+    font-family: monospace;
+    font-size: 0.85em;
+    background-color: #f5f5f5;
+    padding: 2px 4px;
+    border-radius: 3px;
   }
   
   .actions {

@@ -76,9 +76,11 @@
 				</NavLink>
 			</NavItem>
 
-			<NavItem>
-				<NavLink href="/login" active={segment === "login"}>Login</NavLink>
-			</NavItem>
+			{#if !$user}
+				<NavItem>
+					<NavLink href="/login" active={segment === "login"}>Login</NavLink>
+				</NavItem>
+			{/if}
 
 		</Nav>
 	</Collapse>

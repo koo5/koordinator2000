@@ -7,6 +7,10 @@
   
   let email = '';
   let password = '';
+  
+  function handleCredentialLogin(login) {
+    login(true); // true indicates using credentials
+  }
 </script>
 
 <svelte:head>
@@ -22,7 +26,7 @@
         <div class="error">{error}</div>
       {/if}
       
-      <form on:submit|preventDefault={login}>
+      <form on:submit|preventDefault={() => handleCredentialLogin(login)}>
         <div class="form-group">
           <label for="email">Email</label>
           <input 
@@ -50,7 +54,7 @@
       
       <div class="alternative-login">
         <p>Or login with:</p>
-        <button class="guest-login" on:click={login}>Continue as Guest</button>
+        <button class="guest-login" on:click={() => login(false)}>Continue as Guest</button>
       </div>
       
       <div class="links">

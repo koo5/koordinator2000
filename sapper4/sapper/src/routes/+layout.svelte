@@ -1,9 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, navigating } from '$app/stores';
-	import { theme } from '$lib/stores';
+	import { theme, user } from '$lib/stores';
 	import Nav from '../components/Nav.svelte';
 	import Notification from '$lib/components/Notification.svelte';
+	import Auth from '$lib/components/Auth.svelte';
 	
 	export let data;
 	
@@ -11,6 +12,9 @@
 	onMount(() => {
 		// Initialize any client-side libraries or functionality here
 		console.log('SvelteKit app mounted');
+		
+		// Initialize global auth token for fetch requests
+		window.authToken = null;
 	});
 </script>
 
