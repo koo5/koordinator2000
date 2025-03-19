@@ -4,6 +4,7 @@
 import { handler } from './handler';
 import express from 'express';
 import * as config_file from './config.js';
+import moment from 'moment';
 
 const config = config_file.config;
 const { PORT = 5000 } = process.env;
@@ -13,9 +14,15 @@ const app = express();
 // Add middlewares as needed
 app.use(express.json());
 
+// Log all requests
+app.use((req, res, next) => {
+  console.log(`${moment().format()} - ${req.method} ${req.url}`);
+  next();
+});
+
 // Let SvelteKit handle everything else
 app.use(handler);
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server listening on port ${PORT} at ${moment().format()}`);
 });

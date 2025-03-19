@@ -1,11 +1,11 @@
-import * as config_file from './config.js';
 import moment from 'moment';
 import { minify } from 'html-minifier';
 import { building } from '$app/environment';
 import { free_user_id, process_event } from '$lib/auth';
+import { env } from '$lib/env';
+import * as config_file from './config.js';
 
 const config = config_file.config;
-const { PUBLIC_URL = "http://localhost:5000" } = config;
 
 // HTML minifier options
 const minification_options = {
@@ -34,9 +34,10 @@ export const handle = async ({ event, resolve }) => {
 	
 	// Add session data to locals
 	event.locals.session = {
-		PUBLIC_URL,
-		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
-		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS
+		PUBLIC_URL: env.PUBLIC_URL,
+		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT || env.PUBLIC_GRAPHQL_ENDPOINT,
+		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
+		BASE_URL: env.PUBLIC_BASE_URL
 	};
 	
 	return await resolve(event, {
