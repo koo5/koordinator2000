@@ -1,5 +1,4 @@
-import { SignJWT } from 'jose/jwt/sign';
-import { parseJwk } from 'jose/jwk/parse';
+import { SignJWT, parseJwk } from 'jose';
 import gql from 'graphql-tag';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
 import { new_apollo_client } from '../apollo.js';
