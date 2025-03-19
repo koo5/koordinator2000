@@ -22,10 +22,19 @@ export async function load_keys() {
 	rsaPublicKey = await parseJwk(pu);
 }
 
-// Load keys immediately
-(async () => {
-	await load_keys();
-})();
+// Initialize keys lazily
+let keysPromise;
+
+export function initKeys() {
+  if (typeof window !== 'undefined') {
+    // Only initialize keys in browser environment
+    if (!keysPromise) {
+      keysPromise = load_keys();
+    }
+    return keysPromise;
+  }
+  return Promise.resolve(); // Return resolved promise on server
+}
 
 const apollo_client = new_apollo_client();
 
@@ -75,11 +84,13 @@ export async function free_user_id(email = null) {
 }
 
 export async function sign_user_object(x) {
+	await initKeys(); // Ensure keys are loaded
 	const jwt = await user_authenticity_jwt(x.id);
 	return {...x, jwt};
 }
 
 export async function user_authenticity_jwt(id) {
+	await initKeys(); // Ensure keys are loaded
 	return await new SignJWT({
 		'urn:id': id,
 	})
