@@ -10,21 +10,24 @@ import gql from 'graphql-tag';
 import {readable} from 'svelte/store';
 import {subscribe as apollo_subscribe} from 'svelte-apollo';
 import {mutation} from 'svelte-apollo';
-import {onMount} from 'svelte';
+import {onMount, getContext} from 'svelte';
 import {my_user} from './my_user';
-import {stores} from '@sapper/app'
 import * as config_file from './config.js';
 
 function config()
 {
-	//  fuck sapper
-	if (process.browser)
+	if (typeof window !== 'undefined')
 	{
-		const {session} = stores();
-		return get(session);
+		// We're in the browser
+		try {
+			const session = getContext('sveltekit:app')?.session;
+			return session || config_file.config;
+		} catch (e) {
+			console.error('Error getting session from context:', e);
+			return config_file.config;
+		}
 	}
-	console.log ('process.browser')
-	console.log (process.browser)
+	console.log('Not in browser');
 	return config_file.config;
 }
 
@@ -77,7 +80,7 @@ function new_apollo_client()
 
 	const cache = new InMemoryCache();
 
-	const wsLink = process.browser ? new WebSocketLink({
+	const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
 		uri: "wss://" + config().GRAPHQL_ENDPOINT,
 		options: {
 			reconnect: true,
@@ -96,7 +99,7 @@ function new_apollo_client()
 
 	});
 
-	const link = process.browser ? split(
+	const link = typeof window !== 'undefined' ? split(
 		({query}) =>
 		{
 			const {kind, operation} = getMainDefinition(query);
