@@ -7,6 +7,32 @@ import * as config_file from './config.js';
 
 const config = config_file.config;
 
+// Helper to parse JWT token
+async function getUserFromRequest(event) {
+  try {
+    // Get the authorization header
+    const authHeader = event.request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      // Try to get from cookie
+      const cookies = event.cookies.getAll();
+      const authCookie = cookies.find(c => c.name === 'auth_token');
+      if (!authCookie?.value) return null;
+      
+      // Verify and decode the token
+      // This is a simplified example - in a real app, you'd verify the JWT
+      return JSON.parse(Buffer.from(authCookie.value.split('.')[1], 'base64').toString());
+    }
+    
+    const token = authHeader.slice(7);
+    // Verify and decode the token
+    // This is a simplified example - in a real app, you'd verify the JWT
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+  } catch (error) {
+    console.error('Error parsing auth token:', error);
+    return null;
+  }
+}
+
 // HTML minifier options
 const minification_options = {
 	collapseBooleanAttributes: true,
@@ -32,6 +58,9 @@ export const handle = async ({ event, resolve }) => {
 	// Log timestamp for each request
 	console.log(moment().format());
 	
+	// Get user from request if available
+	const user = await getUserFromRequest(event);
+	
 	// Add session data to locals
 	event.locals.session = {
 		PUBLIC_URL: env.PUBLIC_URL,
@@ -39,6 +68,11 @@ export const handle = async ({ event, resolve }) => {
 		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
 		BASE_URL: env.PUBLIC_BASE_URL
 	};
+	
+	// Add user to locals if authenticated
+	if (user) {
+		event.locals.user = user;
+	}
 	
 	return await resolve(event, {
 		transformPageChunk: ({ html, done }) => {

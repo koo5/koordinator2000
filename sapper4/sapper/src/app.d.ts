@@ -9,6 +9,13 @@ declare global {
 				GRAPHQL_ENDPOINT: string;
 				PUBLIC_GRAPHQL_HEADERS?: Record<string, string>;
 				BASE_URL: string;
+			},
+			user?: {
+				id: number;
+				name: string;
+				email?: string;
+				jwt?: string;
+				[key: string]: any;
 			}
 		}
 		// interface PageData {}
