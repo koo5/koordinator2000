@@ -1,12 +1,11 @@
 import moment from 'moment';
 import { minify } from 'html-minifier';
 import { building } from '$app/environment';
-import { free_user_id, process_event, initKeys } from '$lib/auth';
-
-// Initialize keys (this will be a no-op on the server)
-initKeys();
 import { env } from '$lib/env';
 import * as config_file from './config.js';
+
+// Import auth functions but don't initialize keys immediately
+import { free_user_id, process_event } from '$lib/auth';
 
 const config = config_file.config;
 

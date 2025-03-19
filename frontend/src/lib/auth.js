@@ -5,35 +5,46 @@ import { new_apollo_client } from '../apollo.js';
 import * as config_file from '../config.js';
 
 const config = config_file.config;
-const { MY_APP_KEYS } = config;
 
-if (MY_APP_KEYS == undefined) {
-	throw("must have keys");
-}
-
-const pr = MY_APP_KEYS["private"];
-const pu = MY_APP_KEYS["public"];
-
+// Initialize variables
 let ecPrivateKey;
 let rsaPublicKey;
-
-export async function load_keys() {
-	ecPrivateKey = await parseJwk(pr);
-	rsaPublicKey = await parseJwk(pu);
-}
-
-// Initialize keys lazily
-let keysPromise;
+let keysInitialized = false;
+let keysPromise = null;
 
 export function initKeys() {
-  if (typeof window !== 'undefined') {
-    // Only initialize keys in browser environment
-    if (!keysPromise) {
-      keysPromise = load_keys();
-    }
-    return keysPromise;
+  // Only initialize keys once and only in browser environment
+  if (!keysPromise && typeof window !== 'undefined') {
+    keysPromise = loadKeysInternal();
   }
-  return Promise.resolve(); // Return resolved promise on server
+  return keysPromise || Promise.resolve();
+}
+
+async function loadKeysInternal() {
+  try {
+    const { MY_APP_KEYS } = config;
+    
+    if (!MY_APP_KEYS) {
+      console.error("Missing MY_APP_KEYS configuration");
+      return false;
+    }
+    
+    const pr = MY_APP_KEYS["private"];
+    const pu = MY_APP_KEYS["public"];
+    
+    if (!pr || !pu) {
+      console.error("Missing private or public key in MY_APP_KEYS");
+      return false;
+    }
+    
+    ecPrivateKey = await parseJwk(pr);
+    rsaPublicKey = await parseJwk(pu);
+    keysInitialized = true;
+    return true;
+  } catch (error) {
+    console.error("Error initializing keys:", error);
+    return false;
+  }
 }
 
 const apollo_client = new_apollo_client();
@@ -84,22 +95,30 @@ export async function free_user_id(email = null) {
 }
 
 export async function sign_user_object(x) {
-	await initKeys(); // Ensure keys are loaded
-	const jwt = await user_authenticity_jwt(x.id);
-	return {...x, jwt};
+  await initKeys();
+  if (!keysInitialized && typeof window !== 'undefined') {
+    console.error("Keys not initialized");
+  }
+  const jwt = await user_authenticity_jwt(x.id);
+  return {...x, jwt};
 }
 
 export async function user_authenticity_jwt(id) {
-	await initKeys(); // Ensure keys are loaded
-	return await new SignJWT({
-		'urn:id': id,
-	})
-		.setProtectedHeader({alg: pr.alg})
-		.setIssuedAt()
-		.setIssuer('urn:example:issuer')
-		.setAudience('urn:example:audience')
-		.setExpirationTime('2h')
-		.sign(ecPrivateKey);
+  await initKeys();
+  if (!keysInitialized && typeof window !== 'undefined') {
+    console.error("Keys not initialized");
+    return "";
+  }
+  
+  return await new SignJWT({
+    'urn:id': id,
+  })
+    .setProtectedHeader({alg: config.MY_APP_KEYS.private.alg})
+    .setIssuedAt()
+    .setIssuer('urn:example:issuer')
+    .setAudience('urn:example:audience')
+    .setExpirationTime('2h')
+    .sign(ecPrivateKey);
 }
 
 export async function process_event(x) {
