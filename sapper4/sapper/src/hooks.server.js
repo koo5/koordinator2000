@@ -1,19 +1,11 @@
 import * as config_file from './config.js';
-import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
-import gql from 'graphql-tag';
 import moment from 'moment';
-import { SignJWT } from 'jose/jwt/sign';
-import { parseJwk } from 'jose/jwk/parse';
-import { new_apollo_client } from './apollo.js';
-
+import { minify } from 'html-minifier';
+import { building } from '$app/environment';
 import { free_user_id, process_event } from '$lib/auth';
 
 const config = config_file.config;
 const { PUBLIC_URL = "http://localhost:5000" } = config;
-
-import moment from 'moment';
-import { minify } from 'html-minifier';
-import { building } from '$app/environment';
 
 // HTML minifier options
 const minification_options = {
