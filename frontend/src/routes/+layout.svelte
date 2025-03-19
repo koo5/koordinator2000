@@ -2,19 +2,23 @@
 	import { onMount } from 'svelte';
 	import { page, navigating } from '$app/stores';
 	import { theme, user } from '$lib/stores';
+	import { initKeys } from '$lib/auth';
 	import Nav from '../components/Nav.svelte';
 	import Notification from '$lib/components/Notification.svelte';
-	import Auth from '$lib/components/Auth.svelte';
 	
 	export let data;
 	
 	// Handle any client-side initialization that was previously in client.js
 	onMount(() => {
-		// Initialize any client-side libraries or functionality here
-		console.log('SvelteKit app mounted');
+		// Initialize auth keys
+		initKeys();
 		
-		// Initialize global auth token for fetch requests
-		window.authToken = null;
+		// Set user from server data if available
+		if (data.user) {
+			user.set(data.user);
+		}
+		
+		console.log('SvelteKit app mounted');
 	});
 </script>
 

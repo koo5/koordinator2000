@@ -56,6 +56,13 @@ const minification_options = {
 };
 
 // SvelteKit hooks
+export function load({ locals }) {
+	return {
+		user: locals.user || null,
+		session: locals.session || {}
+	};
+}
+
 export const handle = async ({ event, resolve }) => {
 	// Log timestamp for each request
 	console.log(moment().format());
@@ -76,7 +83,7 @@ export const handle = async ({ event, resolve }) => {
 		event.locals.user = user;
 	}
 	
-	return await resolve(event, {
+	const response = await resolve(event, {
 		transformPageChunk: ({ html, done }) => {
 			if (done && building) {
 				return minify(html, minification_options);
@@ -84,4 +91,6 @@ export const handle = async ({ event, resolve }) => {
 			return html;
 		}
 	});
+	
+	return response;
 };

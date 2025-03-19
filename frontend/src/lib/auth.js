@@ -16,6 +16,7 @@ export function initKeys() {
   // Only initialize keys once and only in browser environment
   if (!keysPromise && typeof window !== 'undefined') {
     keysPromise = loadKeysInternal();
+    console.log("Auth keys initialization started");
   }
   return keysPromise || Promise.resolve();
 }
