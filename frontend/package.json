@@ -35,7 +35,7 @@
     "graphql-tag": "^2.11.0",
     "jose": "^4.15.5",
     "moment": "^2.29.1",
-    "popper.js": "^1.16.1",
+    "@popperjs/core": "^2.11.8",
     "sanitize-html": "github:apostrophecms/sanitize-html",
     "subscriptions-transport-ws": "^0.9.18",
     "supports-color": "^9.0.0",
@@ -55,6 +55,10 @@
   "dependencies": {
     "express": "^4.18.2",
     "html-minifier": "^4.0.0",
-    "nhost-js-sdk": "^3.1.0"
+    "nhost-js-sdk": "^3.1.0",
+    "joi": "^17.11.0",
+    "@sideway/address": "^5.0.0",
+    "@sideway/formula": "^3.0.1",
+    "@sideway/pinpoint": "^2.0.0"
   }
 }
