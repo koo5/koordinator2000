@@ -19,10 +19,6 @@ const config = {
 		alias: {
 			'$lib': './src/lib',
 			'src': './src'
-		},
-		// Override http methods in the Todo forms
-		methodOverride: {
-			allowed: ['PATCH', 'DELETE']
 		}
 	}
 };
