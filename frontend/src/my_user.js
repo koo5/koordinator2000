@@ -1,6 +1,6 @@
 import {readable, writable, get} from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
-import {goto} from '@sapper/app';
+import {goto} from '$app/navigation';
 import {logout as auth0_logout} from '@dopry/svelte-auth0';
 import {EventDispatcher} from 'src/event_dispatcher.js';
 
