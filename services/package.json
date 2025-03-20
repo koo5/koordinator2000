@@ -3,19 +3,24 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",
     "cookie-parser": "~1.4.4",
     "cross-fetch": "^3.1.5",
     "debug": "~2.6.9",
+    "dotenv": "^16.3.1",
     "graphql": "^15.4.0",
     "http-errors": "~1.6.3",
     "moment": "^2.29.1",
     "morgan": "~1.9.1",
+    "pg": "^8.11.3",
     "react": "^17.0.1"
   },
   "devDependencies": {
-    "apollo-link-timeout": "^4.0.0"
+    "apollo-link-timeout": "^4.0.0",
+    "nodemon": "^3.0.1"
   }
 }
