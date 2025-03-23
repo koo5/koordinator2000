@@ -1,4 +1,4 @@
-import { SignJWT, parseJwk } from 'jose';
+import { SignJWT, importJWK } from 'jose';
 import gql from 'graphql-tag';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
 import { new_apollo_client } from '../apollo.js';
@@ -38,8 +38,8 @@ async function loadKeysInternal() {
       return false;
     }
     
-    ecPrivateKey = await parseJwk(pr);
-    rsaPublicKey = await parseJwk(pu);
+    ecPrivateKey = await importJWK(pr);
+    rsaPublicKey = await importJWK(pu);
     keysInitialized = true;
     return true;
   } catch (error) {
