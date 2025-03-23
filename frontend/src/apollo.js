@@ -52,7 +52,7 @@ function subscribe(query, options)
 {
 //	console.log([query,options]);
 	var result;
-	if (process.browser)
+	if (typeof window !== 'undefined')
 		result = apollo_subscribe(query, options)
 	else
 		result = readable({loading: true});

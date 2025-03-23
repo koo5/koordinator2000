@@ -1,9 +1,10 @@
 import {writable} from 'svelte/store'
+import {browser} from '$app/environment';
 
-export let theme = () =>
+export function theme() 
 {
 	let r = writable('light');
-	if (!process.browser)
+	if (!browser)
 		return r;
 
 	// Set up our MediaQueryList
@@ -21,7 +22,7 @@ export let theme = () =>
 	//onDestroy(() => prefersDarkMode.removeListener(updateThemeOnChange))
 
 	// Debugging
-	r.subscribe(newTheme => console.log('Swapped to theme:', newTheme))
+	r.subscribe(newTheme => console.log('Switched to theme:', newTheme))
 
 	return r;
 }

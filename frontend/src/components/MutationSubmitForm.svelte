@@ -2,14 +2,15 @@
 
 	import {mutation as apollo_mutation} from 'svelte-apollo';
 	import {getContext} from 'svelte';
-	import {ensure_we_exist, apply_newly_authenticated_user, my_user} from 'src/my_user.js';
+	import {ensure_we_exist, apply_newly_authenticated_user, my_user} from '../my_user.js';
 	import {createEventDispatcher} from 'svelte';
+	import {browser} from '$app/environment';
 	const dispatch = createEventDispatcher();
 
 	export let css_ref;
 	export let mutation;
 	export let variables;
-	$: mutation2 = process.browser ? apollo_mutation(mutation) : 123;
+	$: mutation2 = browser ? apollo_mutation(mutation) : 123;
 	let status_displayer = getContext('graphql_status_displayer');
 	$: variables_str = JSON.stringify(variables, null, ' ');
 

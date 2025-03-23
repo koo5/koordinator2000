@@ -1,3 +1,6 @@
+/**
+ * Authentication module for handling JWT operations and user authentication
+ */
 import { SignJWT, importJWK } from 'jose';
 import gql from 'graphql-tag';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
@@ -7,21 +10,35 @@ import * as config_file from '../config.js';
 const config = config_file.config;
 
 // Initialize variables
-let ecPrivateKey;
-let rsaPublicKey;
-let keysInitialized = false;
-let keysPromise = null;
+/** @type {CryptoKey|null} */
+let ecPrivateKey = null;
+/** @type {CryptoKey|null} */
+let rsaPublicKey = null;
+/** @type {boolean} */
+let keys_initialized = false;
+/** @type {Promise<boolean>|null} */
+let keys_promise = null;
 
-export function initKeys() {
+/**
+ * Initialize cryptographic keys for JWT operations
+ * 
+ * @returns {Promise<void>} Promise that resolves when keys are initialized
+ */
+export function init_keys() {
   // Only initialize keys once and only in browser environment
-  if (!keysPromise && typeof window !== 'undefined') {
-    keysPromise = loadKeysInternal();
+  if (!keys_promise && typeof window !== 'undefined') {
+    keys_promise = load_keys_internal();
     console.log("Auth keys initialization started");
   }
-  return keysPromise || Promise.resolve();
+  return keys_promise || Promise.resolve();
 }
 
-async function loadKeysInternal() {
+/**
+ * Internal function to load and import cryptographic keys
+ * 
+ * @returns {Promise<boolean>} Promise that resolves to true if keys were successfully loaded
+ */
+async function load_keys_internal() {
   try {
     const { MY_APP_KEYS } = config;
     
@@ -40,7 +57,7 @@ async function loadKeysInternal() {
     
     ecPrivateKey = await importJWK(pr);
     rsaPublicKey = await importJWK(pu);
-    keysInitialized = true;
+    keys_initialized = true;
     return true;
   } catch (error) {
     console.error("Error initializing keys:", error);
@@ -95,18 +112,30 @@ export async function free_user_id(email = null) {
 	return r;
 }
 
+/**
+ * Signs a user object by adding a JWT
+ * 
+ * @param {UserObject} x - The user object to sign
+ * @returns {Promise<UserObject>} The user object with JWT added
+ */
 export async function sign_user_object(x) {
-  await initKeys();
-  if (!keysInitialized && typeof window !== 'undefined') {
+  await init_keys();
+  if (!keys_initialized && typeof window !== 'undefined') {
     console.error("Keys not initialized");
   }
   const jwt = await user_authenticity_jwt(x.id);
   return {...x, jwt};
 }
 
+/**
+ * Generate a JWT for a user ID
+ * 
+ * @param {number} id - The user ID to authenticate
+ * @returns {Promise<string>} The generated JWT token
+ */
 export async function user_authenticity_jwt(id) {
-  await initKeys();
-  if (!keysInitialized && typeof window !== 'undefined') {
+  await init_keys();
+  if (!keys_initialized && typeof window !== 'undefined') {
     console.error("Keys not initialized");
     return "";
   }

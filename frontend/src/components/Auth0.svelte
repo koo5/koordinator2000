@@ -12,15 +12,14 @@
 		userInfo,
 	} from '@dopry/svelte-auth0';
 	import {get} from 'svelte/store';
-	import {stores} from '@sapper/app'
-	import {my_user, event} from 'src/my_user.js';
-
-	const {page, preloading, session} = stores()
+	import {page} from '$app/stores';
+	import {my_user, event} from '../my_user.js';
+	import {browser} from '$app/environment';
 
 
 </script>
 
-{#if process.browser}
+{#if browser}
 
 		<br/>
 

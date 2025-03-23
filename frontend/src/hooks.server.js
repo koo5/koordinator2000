@@ -9,26 +9,62 @@ import { free_user_id, process_event } from '$lib/auth';
 
 const config = config_file.config;
 
-// Helper to parse JWT token
-async function getUserFromRequest(event) {
+/**
+ * Helper to extract and verify JWT token from request
+ * 
+ * @param {import('@sveltejs/kit').RequestEvent} event - The SvelteKit request event
+ * @returns {Promise<UserObject|null>} The user object or null if not authenticated
+ */
+async function get_user_from_request(event) {
   try {
     // Get the authorization header
-    const authHeader = event.request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
+    const auth_header = event.request.headers.get('authorization');
+    let token = null;
+    
+    if (auth_header?.startsWith('Bearer ')) {
+      token = auth_header.slice(7);
+    } else {
       // Try to get from cookie
       const cookies = event.cookies.getAll();
-      const authCookie = cookies.find(c => c.name === 'auth_token');
-      if (!authCookie?.value) return null;
-      
-      // Verify and decode the token
-      // This is a simplified example - in a real app, you'd verify the JWT
-      return JSON.parse(Buffer.from(authCookie.value.split('.')[1], 'base64').toString());
+      const auth_cookie = cookies.find(c => c.name === 'auth_token');
+      if (!auth_cookie?.value) return null;
+      token = auth_cookie.value;
     }
     
-    const token = authHeader.slice(7);
-    // Verify and decode the token
-    // This is a simplified example - in a real app, you'd verify the JWT
-    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    if (!token) return null;
+    
+    // In a production app, we'd verify the JWT signature here
+    // This is still insecure but better than before
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      console.error('Invalid JWT format');
+      return null;
+    }
+    
+    // Decode the payload (middle part)
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString());
+    
+    // Basic validation
+    const current_time = Math.floor(Date.now() / 1000);
+    
+    // Check if token is expired
+    if (payload.exp && payload.exp < current_time) {
+      console.error('Token expired');
+      return null;
+    }
+    
+    // Get user ID from token
+    const user_id = payload['urn:id'];
+    if (!user_id) {
+      console.error('Token missing user ID');
+      return null;
+    }
+    
+    // In a real app, we'd fetch additional user data here
+    return {
+      id: user_id,
+      jwt: token
+    };
   } catch (error) {
     console.error('Error parsing auth token:', error);
     return null;
@@ -63,12 +99,15 @@ export function load({ locals }) {
 	};
 }
 
+/**
+ * SvelteKit handle hook to process requests
+ */
 export const handle = async ({ event, resolve }) => {
 	// Log timestamp for each request
 	console.log(moment().format());
 	
 	// Get user from request if available
-	const user = await getUserFromRequest(event);
+	const user = await get_user_from_request(event);
 	
 	// Add session data to locals
 	event.locals.session = {

@@ -1,7 +1,8 @@
 <script lang="js">
 
 	import {onMount} from 'svelte';
-	import {my_user} from 'src/my_user.js';
+	import {my_user} from '../my_user.js';
+	import {browser} from '$app/environment';
 
 	import firebase from "@firebase/app";
 	import "firebase/database";
@@ -121,7 +122,7 @@
 
 	onMount(() =>
 	{
-		if (process.browser)
+		if (browser)
 		{
 			window.firebase = firebase;
 			init_firebase();
