@@ -18,6 +18,7 @@
 	} from '@dopry/svelte-auth0';
 	import { my_user, ensure_we_exist, apply_newly_authenticated_user, event } from '../my_user.js';
 	import { set_css_var, saturate_computate } from '../stuff.js';
+	import { initVersionCheck } from '$lib/version-check';
 	
 	export let data;
 	
@@ -83,6 +84,9 @@
 		if (u) {
 			await apply_newly_authenticated_user(u);
 		}
+		
+		// Verify SvelteKit versions
+		initVersionCheck();
 		
 		console.log('SvelteKit app mounted');
 	});

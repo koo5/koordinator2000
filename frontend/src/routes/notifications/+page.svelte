@@ -1,15 +1,8 @@
-<script context="module">
-	export async function preload({ params }) {
-		console.log(params);
-	}
-</script>
-
-<script type='js'>
-
-	import Notification from 'src/components/Notification.svelte';
-	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "src/apollo.js";
-	import {my_user} from 'src/my_user.js';
+<script>
+	import Notification from '../../components/Notification.svelte';
+	import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
+	import {subscribe, gql} from "../../apollo.js";
+	import {my_user} from '../../my_user.js';
 	$: my_user_id = $my_user.id
 
 	$: items = subscribe(

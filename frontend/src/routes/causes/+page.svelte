@@ -1,9 +1,9 @@
-<script type='js'>
+<script>
 
 
-	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
+	import SubscribedItemsInner from '../components/SubscribedItemsInner.svelte';
 	import {subscribe, gql} from "src/apollo.js";
-	import CampaignLink from 'src/components/CampaignLink.svelte';
+	import CampaignLink from '../components/CampaignLink.svelte';
 
 
 	$: items = subscribe(

@@ -1,5 +1,5 @@
 <script lang='js'>
-  import { stores } from '@sapper/app'
+  import { stores } from '$app/navigation'
   import {auth} from "src/utils/nhost.js"
 
   const { page } = stores()

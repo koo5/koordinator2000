@@ -1,9 +1,8 @@
-<script type='js'>
-	import MutationForm from 'src/components/MutationForm.svelte';
+<script>
+	import MutationForm from '../../components/MutationForm.svelte';
 	import gql from 'graphql-tag';
-	import {my_user} from 'src/my_user.js';
-	import { goto } from '@sapper/app';
-
+	import {my_user} from '../../my_user.js';
+	import { goto } from '$app/navigation';
 
 </script>
 
