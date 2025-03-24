@@ -4,6 +4,21 @@
  * @param {Object} options - Fetch options
  * @returns {Promise<Response>} - The fetch response
  */
+import { browser } from '$app/environment';
+
+// Use a module-level variable instead of window.authToken
+let authToken = null;
+
+// Function to set the auth token
+export function setAuthToken(token) {
+  authToken = token;
+}
+
+// Function to get the auth token
+export function getAuthToken() {
+  return authToken;
+}
+
 export async function authFetch(url, options = {}) {
   // Clone the options to avoid modifying the original
   const fetchOptions = { ...options };
@@ -12,18 +27,16 @@ export async function authFetch(url, options = {}) {
   fetchOptions.headers = fetchOptions.headers || {};
   
   // Add auth token if available
-  if (typeof window !== 'undefined' && window.authToken) {
-    fetchOptions.headers.Authorization = `Bearer ${window.authToken}`;
-  } else if (typeof localStorage !== 'undefined') {
-    // Try to get token from localStorage
+  if (authToken) {
+    fetchOptions.headers.Authorization = `Bearer ${authToken}`;
+  } else if (browser && typeof localStorage !== 'undefined') {
+    // Try to get token from localStorage (only in browser)
     try {
       const userData = JSON.parse(localStorage.getItem('user') || '{}');
       if (userData.jwt) {
         fetchOptions.headers.Authorization = `Bearer ${userData.jwt}`;
-        // Also set it on window for future requests
-        if (typeof window !== 'undefined') {
-          window.authToken = userData.jwt;
-        }
+        // Also set it for future requests
+        authToken = userData.jwt;
       }
     } catch (e) {
       console.error('Error parsing user data from localStorage', e);

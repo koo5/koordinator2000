@@ -1,10 +1,20 @@
 <script lang="js">
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+	
 	let md;
 	let value = 'Hello, **world**!';
 
 	const initializeRemarkable = () => {
-		md = new window.remarkable.Remarkable();
+		if (browser && typeof remarkable !== 'undefined') {
+			md = new remarkable.Remarkable();
+		}
 	}
+	
+	onMount(() => {
+		// Try to initialize on mount in case the script has already loaded
+		initializeRemarkable();
+	});
 </script>
 
 <svelte:head>

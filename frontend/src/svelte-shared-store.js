@@ -4,15 +4,16 @@ no license!
  */
 
 import { writable, get } from 'svelte/store';
+import { browser } from '$app/environment';
 
 export function localStorageSharedStore(name_postfix, default_) {
 	const name = `svelte-shared-store:${name_postfix}`;
 	
 	// Create the base writable store with default value
 	const { subscribe, set, update: originalUpdate } = writable(default_);
-	
+
 	// Only use localStorage in browser environment
-	if (typeof window === 'undefined') {
+	if (!browser) {
 		// Return a simplified version for server-side rendering
 		return {
 			subscribe,
@@ -23,12 +24,14 @@ export function localStorageSharedStore(name_postfix, default_) {
 	
 	// Browser-only functions
 	function setStorage(value) {
+		if (!browser) return;
 		let str = JSON.stringify(value);
-		window.localStorage.setItem(name, str);
+		localStorage.setItem(name, str);
 	}
 
 	function getStorage() {
-		let item = window.localStorage.getItem(name);
+		if (!browser) return default_;
+		let item = localStorage.getItem(name);
 		let result = default_;
 		try {
 			if (item != 'undefined' && item) {
@@ -46,6 +49,8 @@ export function localStorageSharedStore(name_postfix, default_) {
 
 	// Initialize from localStorage and set up event listener
 	function start() {
+		if (!browser) return () => {};
+		
 		function handleStorageEvent({ key, newValue }) {
 			if (key !== name) {
 				return;
@@ -54,8 +59,8 @@ export function localStorageSharedStore(name_postfix, default_) {
 		}
 
 		set(getStorage());
-		window.addEventListener('storage', handleStorageEvent);
-		return () => window.removeEventListener('storage', handleStorageEvent);
+		addEventListener('storage', handleStorageEvent);
+		return () => removeEventListener('storage', handleStorageEvent);
 	}
 	
 	// Create a new writable with the start function for browser environment

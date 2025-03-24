@@ -4,6 +4,8 @@
   import { page } from '$app/stores';
   import { user, addNotification } from '$lib/stores';
   import { getApiUrl } from '$lib/env';
+  import { browser } from '$app/environment';
+  import { setAuthToken } from '$lib/fetch-utils';
   
   export let redirectTo = '/';
   
@@ -13,6 +15,8 @@
   let password = '';
   
   onMount(async () => {
+    if (!browser) return;
+    
     try {
       // Check if user is already logged in
       const storedUser = localStorage.getItem('user');
@@ -20,9 +24,9 @@
         const userData = JSON.parse(storedUser);
         user.set(userData);
         
-        // Set auth header for future requests
+        // Set auth token for future requests
         if (userData.jwt) {
-          window.authToken = userData.jwt;
+          setAuthToken(userData.jwt);
         }
         
         if ($page.url.pathname === '/login') {
@@ -79,11 +83,13 @@
       
       // Store user data
       user.set(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+      if (browser) {
+        localStorage.setItem('user', JSON.stringify(userData));
+      }
       
-      // Set auth header for future requests
+      // Set auth token for future requests
       if (userData.jwt) {
-        window.authToken = userData.jwt;
+        setAuthToken(userData.jwt);
       }
       
       // Show success notification
@@ -102,8 +108,10 @@
   
   function logout() {
     user.set(null);
-    localStorage.removeItem('user');
-    window.authToken = null;
+    if (browser) {
+      localStorage.removeItem('user');
+    }
+    setAuthToken(null);
     addNotification('Successfully logged out', 'info');
     goto('/login');
   }

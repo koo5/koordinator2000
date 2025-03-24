@@ -20,6 +20,9 @@
 	import { set_css_var, saturate_computate } from '../stuff.js';
 	import { initVersionCheck } from '$lib/version-check';
 	
+	// Import Node.js compatibility polyfills
+	import '../polyfills.js';
+	
 	export let data;
 	
 	// Set up Auth0 configuration
@@ -97,13 +100,8 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/materia/bootstrap.min.css" 
 		integrity="sha384-B4morbeopVCSpzeC1c4nyV0d0cqvlSAfyXVfrPJa25im5p+yEN/YmhlgQP/OyMZD" crossorigin="anonymous">
 	
-	<!-- CodeMirror -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css"/>
-	
-	<!-- Firepad -->
-	<link rel="stylesheet" href="https://firepad.io/releases/v1.5.9/firepad.css"/>
-	<script src="https://firepad.io/releases/v1.5.9/firepad.js"></script>
+	<!-- Note: CodeMirror script is loaded in app.html -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firepad@1.5.9/dist/firepad.css" />
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>

@@ -1,14 +1,14 @@
-<script type='js'>
-
+<script>
 	import {
 		Button,
 		Card
 	} from 'sveltestrap';
-	import {subscribe, gql} from "src/apollo.js";
+	import {subscribe, gql} from "../apollo.js";
 	import {query} from 'svelte-apollo';
-	import {my_user} from 'src/my_user.js';
-	import CampaignList from 'src/components/CampaignList.svelte';
+	import {my_user} from '../my_user.js';
+	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
+	import { browser } from '$app/environment';
 
 
 	const CAMPAIGN_LIST = gql`
@@ -49,9 +49,11 @@
 
 	function more()
 	{
-		animateScroll.scrollTo({delay: 0, element: items_div});
+		if (browser) {
+			animateScroll.scrollTo({delay: 0, element: items_div});
+			more_button?.blur();
+		}
 		seen = seen.concat(seeing);
-		more_button.blur();
 	}
 
 	let vars = {

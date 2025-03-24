@@ -1,2 +1,4 @@
-// This file is intentionally empty as it's no longer needed in SvelteKit
+// Import polyfills for browser compatibility
+import './polyfills.js';
+
 // All client-side initialization has been moved to +layout.svelte

@@ -4,8 +4,23 @@ import { building } from '$app/environment';
 import { env } from '$lib/env';
 import * as config_file from './config.js';
 
-// Import auth functions but don't initialize keys immediately
-import { free_user_id, process_event } from '$lib/auth';
+// Define stubs for auth functions that will be dynamically imported in browser
+// This avoids SSR issues with browser-only code
+let free_user_id = async () => {};
+let process_event = async () => {};
+
+// Import browser check
+import { browser } from '$app/environment';
+
+// In browser environment, dynamically import the real functions
+if (browser) {
+  import('$lib/auth').then(auth => {
+    free_user_id = auth.free_user_id;
+    process_event = auth.process_event;
+  }).catch(err => {
+    console.error('Failed to import auth functions:', err);
+  });
+}
 
 const config = config_file.config;
 

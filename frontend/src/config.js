@@ -1,6 +1,8 @@
+import { browser } from '$app/environment';
+
 let config = {}
 
-if (typeof window === 'undefined') {  // Better check for server-side than !process.browser
+if (!browser) {  // Check for server-side environment
   // Use dynamic imports for server-side only dependencies
   try {
     // Use top-level await with dynamic imports

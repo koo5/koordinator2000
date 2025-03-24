@@ -1,8 +1,9 @@
 <script>
   import { goto } from '$app/navigation';
   import { user, addNotification } from '$lib/stores';
-  import { fetchJson } from '$lib/fetch-utils';
+  import { fetchJson, setAuthToken } from '$lib/fetch-utils';
   import { getApiUrl } from '$lib/env';
+  import { browser } from '$app/environment';
   
   let name = '';
   let email = '';
@@ -46,11 +47,13 @@
       
       // Store user data
       user.set(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+      if (browser) {
+        localStorage.setItem('user', JSON.stringify(userData));
+      }
       
-      // Set auth header for future requests
+      // Set auth token for future requests
       if (userData.jwt) {
-        window.authToken = userData.jwt;
+        setAuthToken(userData.jwt);
       }
       
       // Show success notification

@@ -21,6 +21,11 @@ When working with this codebase:
   - `import { goto } from '$app/navigation'`
   - `import { page } from '$app/stores'`
 
+## Architecture
+- the frontend uses a graphql endpoint provided by hasura
+- ACL should be handled by hasura
+- hasura is configured to use a postgres instance, database schema dump is in ../data/koordinator.sql
+
 ## Code Style Guidelines
 - **Framework**: SvelteKit application using client-side rendering
 - **Modules**: Use ES modules with `.js` extension
@@ -44,6 +49,17 @@ When working with this codebase:
 - Layout components use `+layout.svelte` files
 - Error pages use `+error.svelte` files
 - Load data with `load` functions in `+page.js` or `+page.server.js`
+
+## Utility Libraries
+This project includes several utility libraries in the `$lib` directory:
+- **route-utils.js**: Navigation, route handling, and API loading
+- **data-utils.js**: Data fetching with automatic error handling
+- **form-utils.js**: Form state management and validation
+- **error-utils.js**: Standardized error handling
+- **storage-utils.js**: Enhanced localStorage/sessionStorage
+- **utils.js**: Main export file that includes all utilities
+
+Import these utilities with: `import { functionName } from '$lib/utils'`
 
 ## Environment Setup
 See README.md for initial setup instructions. Create necessary `.env` files for local development.

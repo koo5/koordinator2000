@@ -5,7 +5,7 @@ import {WebSocketLink} from "apollo-link-ws";
 import {split} from "apollo-link";
 import {HttpLink} from "apollo-link-http";
 import {getMainDefinition} from "apollo-utilities";
-import fetch from 'node-fetch';
+// Use global fetch instead of node-fetch
 import gql from 'graphql-tag';
 import {readable} from 'svelte/store';
 import {subscribe as apollo_subscribe} from 'svelte-apollo';
@@ -13,10 +13,11 @@ import {mutation} from 'svelte-apollo';
 import {onMount, getContext} from 'svelte';
 import {my_user} from './my_user';
 import * as config_file from './config.js';
+import { browser } from '$app/environment';
 
 function config()
 {
-	if (typeof window !== 'undefined')
+	if (browser)
 	{
 		// We're in the browser
 		try {
@@ -52,7 +53,7 @@ function subscribe(query, options)
 {
 //	console.log([query,options]);
 	var result;
-	if (typeof window !== 'undefined')
+	if (browser)
 		result = apollo_subscribe(query, options)
 	else
 		result = readable({loading: true});
@@ -67,10 +68,8 @@ function new_apollo_client()
 
 	const headers = {
 		'content-type': 'application/json',
-		...(config().PUBLIC_GRAPHQL_HEADERS)
-
+		...(config().PUBLIC_GRAPHQL_HEADERS || {})
 		//role: 'public'
-
 	};
 
 	const getHeaders = () =>
@@ -80,7 +79,7 @@ function new_apollo_client()
 
 	const cache = new InMemoryCache();
 
-	const wsLink = typeof window !== 'undefined' ? new WebSocketLink({
+	const wsLink = browser ? new WebSocketLink({
 		uri: "wss://" + config().GRAPHQL_ENDPOINT,
 		options: {
 			reconnect: true,
@@ -95,11 +94,11 @@ function new_apollo_client()
 	const httpLink = new HttpLink({
 		uri: "https://" + config().GRAPHQL_ENDPOINT,
 		headers: getHeaders(),
-		fetch: fetch,
-
+		// No need to specify fetch - the library will use the global fetch API
+		// which is available in both browser and Node.js environments
 	});
 
-	const link = typeof window !== 'undefined' ? split(
+	const link = browser ? split(
 		({query}) =>
 		{
 			const {kind, operation} = getMainDefinition(query);

@@ -65,7 +65,14 @@ async function load_keys_internal() {
   }
 }
 
-const apollo_client = new_apollo_client();
+// Lazy load the Apollo client to avoid SSR issues
+let _apollo_client;
+function get_apollo_client() {
+  if (!_apollo_client) {
+    _apollo_client = new_apollo_client();
+  }
+  return _apollo_client;
+}
 
 export async function free_user_id(email = null) {
 	let result;
@@ -80,7 +87,7 @@ export async function free_user_id(email = null) {
 				accountObject.email = email;
 			}
 			
-			result = await apollo_client.mutate({
+			result = await get_apollo_client().mutate({
 				mutation: gql`
 					mutation MyMutation($accountObject: accounts_insert_input!) {
 						insert_accounts_one(object: $accountObject) {
@@ -169,7 +176,7 @@ export async function process_event(x) {
 
 export async function user_id_from_auth(provider, sub) {
 	var found_user_id = undefined;
-	let result = await apollo_client.query({
+	let result = await get_apollo_client().query({
 		query: gql`
 			query MyQuery($login_name: String, $provider: String) {
 				verified_user_authentications(where: {login_name: {_eq: $login_name}, provider: {_eq: $provider}}) {
@@ -194,7 +201,7 @@ export async function grab_email(user_id, info) {
 	if (user_id == -1 || !user_id)
 		return;
 	let email = info.email;
-	console.log(JSON.stringify(await apollo_client.mutate({
+	console.log(JSON.stringify(await get_apollo_client().mutate({
 		mutation: gql`
 			mutation MyMutation($user_id: Int, $email: String) {
 				update_accounts(where: {id: {_eq: $user_id}, email: {_is_null: true}}, _set: {email: $email})
@@ -216,7 +223,7 @@ export async function save_verified_authentication(user_id, provider, info) {
 		return;
 	let login_name = info.sub;
 	console.log(['save_verified_authentication', user_id, provider, login_name]);
-	await apollo_client.mutate({
+	await get_apollo_client().mutate({
 		mutation: gql`
 			mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
 				insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, account_id: $user_id})
