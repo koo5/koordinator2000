@@ -69,8 +69,11 @@
 	$: set_css_var('--invert', (color_theme_invert ? 100 : 0) + "%");
 	$: set_css_var('--contrast', (100 + (color_theme_contrast || 0)) + "%");
 	
-	// Settings modal toggle
-	let toggle_settings;
+	// Settings modal toggle function
+	let toggle_settings = () => {
+		// This is a placeholder that will be bound by the SettingsModal component
+		console.log('Settings toggle called but not bound yet');
+	};
 	
 	// Handle any client-side initialization
 	onMount(async () => {

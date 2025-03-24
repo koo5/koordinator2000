@@ -1,3 +1,7 @@
+# auth
+
+Users are identified by a jwt token. We have a somewhat special functionality, that any initial page load generates an anonymous user, who can immediately interact with the website. They can choose to log in, which will replace the initial anonymous user, or they can continue browsing the site and interacting. Anonymous users are obviously given a much lower value in our algorithms that estimate actual participation.
+
 1)user loads the frontend, possibly from a completely static cdn
 
 2)frontend sees that localStorage.user is undefined
@@ -22,7 +26,7 @@ https://github.com/dopry/svelte-oidc
 
 
 
-
+# swiper
 
 <!--
 alternatives:
@@ -43,19 +47,19 @@ https://www.reddit.com/r/sveltejs/comments/kwirbr/tinyx_a_tiny_state_manager_for
 
 
 
+# crypto
+
+https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
+
+
+https://github.com/hasura/graphql-engine/tree/master/community/sample-apps/firebase-jwt
 
 
 
-crypto:
-	https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9
 
 
 
-
-
-
-
-todo:
+# todo
 	nvm i lts # fixes the crypto?
 		https://github.com/panva/jose/discussions/150
 		console.log(publicKey.export({type:'spki',format:'pem'}))
@@ -89,25 +93,10 @@ todo:
 
 
 
-
----
-
-
-https://github.com/hasura/graphql-engine/tree/master/community/sample-apps/firebase-jwt
+# misc
 
 
 
-
-
-
-
-
-
-
-
-
-ssl
-	CloudFlare
 
 
 
@@ -135,9 +124,6 @@ https://www.apollographql.com/docs/react/data/mutations/#executing-a-mutation
 
 hasura alternatives:
 	https://news.ycombinator.com/item?id=29430720
-
-
-
 
 
 

@@ -1,6 +1,27 @@
 import { browser } from '$app/environment';
 
-let config = {}
+// Default configuration with fallbacks to prevent undefined errors
+let config = {
+  GRAPHQL_ENDPOINT: 'localhost:8080/v1/graphql',
+  PUBLIC_GRAPHQL_HEADERS: {},
+  MY_APP_KEYS: {
+    "private": {
+      "kty": "EC",
+      "crv": "P-256",
+      "alg": "ES256",
+      "x": "placeholder",
+      "y": "placeholder",
+      "d": "placeholder"
+    },
+    "public": {
+      "kty": "EC",
+      "crv": "P-256",
+      "alg": "ES256",
+      "x": "placeholder",
+      "y": "placeholder"
+    }
+  }
+};
 
 if (!browser) {  // Check for server-side environment
   // Use dynamic imports for server-side only dependencies

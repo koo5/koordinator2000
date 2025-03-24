@@ -6,8 +6,8 @@ const CACHE = `cache-${version}`;
 
 // Add list of files to cache for offline use
 const ASSETS = [
-  ...build, // the app itself
-  ...files  // everything in `static`
+  ...(build || []), // the app itself (with fallback for build)
+  ...(files || [])  // everything in `static` (with fallback for files)
 ];
 
 // Install the service worker
