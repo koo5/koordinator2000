@@ -3,10 +3,10 @@
 
 import { handler } from './handler';
 import express from 'express';
-import * as config_file from './config.js';
+import { private_env } from './private_env.js';
 import moment from 'moment';
 
-const config = config_file.config;
+const config = private_env;
 const { PORT = 5000 } = process.env;
 
 const app = express();

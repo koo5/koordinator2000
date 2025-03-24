@@ -1,6 +1,6 @@
 <script lang='js'>
   import { stores } from '$app/navigation'
-  import {auth} from "src/utils/nhost.js"
+  import {auth} from "../utils/nhost.js"
 
   const { page } = stores()
 

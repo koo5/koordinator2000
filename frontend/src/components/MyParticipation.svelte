@@ -8,13 +8,13 @@
 		ModalFooter,
 		ModalHeader
 	} from 'sveltestrap';
-	import {my_user, decrease_auth_nag_postponement, get_my_participation} from 'src/my_user.js';
+	import {my_user, decrease_auth_nag_postponement, get_my_participation} from '../my_user.js';
 	import gql from 'graphql-tag';
-	import MutationForm from 'src/components/MutationForm.svelte';
+	import MutationForm from './MutationForm.svelte';
 	import {createEventDispatcher} from 'svelte';
 
 	const dispatch = createEventDispatcher();
-	import {get_status_class, get_tickmark} from 'src/stuff.js';
+	import {get_status_class, get_tickmark} from '../stuff.js';
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;

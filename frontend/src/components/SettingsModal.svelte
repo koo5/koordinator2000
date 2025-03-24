@@ -1,7 +1,7 @@
 <script>
-	import {my_user} from 'src/my_user.js';
-	import Settings from 'src/components/Settings.svelte';
-	import {modal_hack} from 'src/stuff.js';
+	import {my_user} from '../my_user.js';
+	import Settings from './Settings.svelte';
+	import {modal_hack} from '../stuff.js';
 
 	import {
 		Button,

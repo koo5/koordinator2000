@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import { page, navigating } from '$app/stores';
 	import { theme, user } from '$lib/stores';
-	import { init_keys } from '$lib/auth';
 	import { browser } from '$app/environment';
 	import { Col, Container, Row } from 'sveltestrap';
 	import SettingsModal from '../components/SettingsModal.svelte';
@@ -10,7 +9,7 @@
 	import Nav from '../components/Nav.svelte';
 	import Notification from '$lib/components/Notification.svelte';
 	import { setClient } from 'svelte-apollo';
-	import { new_apollo_client } from '../apollo.js';
+	import { new_apollo_client } from '$lib/apollo.js';
 	import {
 		Auth0Context,
 		idToken,

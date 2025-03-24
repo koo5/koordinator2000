@@ -1,8 +1,8 @@
 <script>
-	import {my_user,nag,postpone_nag} from 'src/my_user.js';
-	import Settings from 'src/components/Settings.svelte';
-	import TheNagBody from 'src/components/TheNagBody.svelte';
-	import {modal_hack} from 'src/stuff.js';
+	import {my_user,nag,postpone_nag} from '../my_user.js';
+	import Settings from './Settings.svelte';
+	import TheNagBody from './TheNagBody.svelte';
+	import {modal_hack} from '../stuff.js';
 	import {
 		Button,
 		Modal,

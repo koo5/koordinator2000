@@ -1,9 +1,8 @@
 <script>
   import { goto } from '$app/navigation';
-  import { user, addNotification } from '$lib/stores';
-  import { fetchJson, setAuthToken } from '$lib/fetch-utils';
-  import { getApiUrl } from '$lib/env';
+  import { addNotification } from '$lib/stores';
   import { browser } from '$app/environment';
+  import { register } from '$lib/client/auth';
   
   let name = '';
   let email = '';
@@ -12,7 +11,7 @@
   let loading = false;
   let error = null;
   
-  async function register() {
+  async function handleRegister() {
     loading = true;
     error = null;
     
@@ -30,34 +29,8 @@
     }
     
     try {
-      // Register user
-      const response = await fetch(getApiUrl('/get_free_user_id'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, email })
-      });
-      
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
-      
-      const userData = await response.json();
-      
-      // Store user data
-      user.set(userData);
-      if (browser) {
-        localStorage.setItem('user', JSON.stringify(userData));
-      }
-      
-      // Set auth token for future requests
-      if (userData.jwt) {
-        setAuthToken(userData.jwt);
-      }
-      
-      // Show success notification
-      addNotification('Registration successful! Welcome to Koordinator.', 'success');
+      // Use the client-side register function
+      await register(name, email, password);
       
       // Redirect to home page
       goto('/');
@@ -82,7 +55,7 @@
       <div class="error">{error}</div>
     {/if}
     
-    <form on:submit|preventDefault={register}>
+    <form on:submit|preventDefault={handleRegister}>
       <div class="form-group">
         <label for="name">Username</label>
         <input 

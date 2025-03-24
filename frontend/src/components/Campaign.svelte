@@ -2,16 +2,16 @@
 	import {
 		Button,
 	} from 'sveltestrap';
-	import {sanitize_html} from 'src/stuff.js';
+	import {sanitize_html} from '../stuff.js';
 	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
-	import MutationForm from 'src/components/MutationForm.svelte';
-	import {subscribe, gql} from "src/apollo.js";
-	import {my_user, default_participations_display_style, get_my_participation} from 'src/my_user.js';
-	import ToolTipsy from 'src/components/ToolTipsy.svelte';
-	import ParticipationBadge from 'src/components/ParticipationBadge.svelte';
-	import DismissalBadge from 'src/components/DismissalBadge.svelte';
-	import TabularParticipationsBreakdown from 'src/components/TabularParticipationsBreakdown.svelte';
+	import MutationForm from './MutationForm.svelte';
+	import {subscribe, gql} from "$lib/apollo.js";
+	import {my_user, default_participations_display_style, get_my_participation} from '../my_user.js';
+	import ToolTipsy from './ToolTipsy.svelte';
+	import ParticipationBadge from './ParticipationBadge.svelte';
+	import DismissalBadge from './DismissalBadge.svelte';
+	import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
 	import ProgressBar from "@okrad/svelte-progressbar";
 	import {Progress} from 'sveltestrap';
 	//import {slide, fade} from 'svelte/transition';

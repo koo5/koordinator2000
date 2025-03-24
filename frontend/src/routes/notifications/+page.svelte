@@ -1,7 +1,7 @@
 <script>
 	import Notification from '../../components/Notification.svelte';
 	import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "../../apollo.js";
+	import {subscribe, gql} from "$lib/apollo.js";
 	import {my_user} from '../../my_user.js';
 	$: my_user_id = $my_user.id
 

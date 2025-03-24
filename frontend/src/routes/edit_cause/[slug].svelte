@@ -6,7 +6,7 @@
 
 <script type='js'>
 
-	import EditCause from 'src/components/EditCause.svelte';
+	import EditCause from '../../components/EditCause.svelte';
 
 	export let id;
 

@@ -1,7 +1,7 @@
 <script type='js'>
 
-	import MutationForm from 'src/components/MutationForm.svelte';
-	import { gql } from "src/apollo.js";
+	import MutationForm from './MutationForm.svelte';
+	import { gql } from "$lib/apollo.js";
 
 	export let notification;
 	let confirmed = false;

@@ -7,7 +7,7 @@
 - **Start Production Server**: `npm start`
 
 ## Environment Setup
-Create a `.env` file in the project root with these required variables:
+Create a `.public_env` file in the project root with these required variables:
 
 ```
 # GraphQL endpoint for Hasura (MUST have VITE_ prefix for client access)
@@ -34,15 +34,15 @@ node generate_key_pair.mjs
 
 The application uses a two-tier configuration system:
 
-1. **lib/env.js**: Basic environment handling
-   - Imports environment variables from SvelteKit's `$env/static/public`
+1. **lib/public_env.js**: Basic environment handling
+   - Imports environment variables from SvelteKit's `$public_env/static/public`
    - Provides fallback values for essential variables
    - Exports simple values without complex parsing
    - Used primarily for URLs and endpoint locations
 
-2. **config.js**: Application configuration
-   - Imports and extends values from env.js
-   - Imports private environment variables from `$env/static/private`
+2. **private_env.js**: Application configuration
+   - Imports and extends values from public_env.js
+   - Imports private environment variables from `$public_env/static/private`
    - Handles JSON parsing for structured data like headers and keys
    - Centralizes all configuration into a single exported object
    - Used by components that need the full configuration
@@ -52,12 +52,12 @@ The application uses a two-tier configuration system:
 This application follows SvelteKit's environment variable conventions with Vite:
 
 - **Public variables**: Must start with `VITE_` prefix
-  - Available in both server and client code via `import.meta.env`
+  - Available in both server and client code via `import.meta.public_env`
   - Safe to expose to browsers
   - Example: `VITE_PUBLIC_GRAPHQL_ENDPOINT`, `VITE_PUBLIC_GRAPHQL_HEADERS`
 
 - **Private variables**: No `VITE_` prefix
-  - Only available in server-side code via `$env/static/private`
+  - Only available in server-side code via `$public_env/static/private`
   - Never exposed to browsers
   - Used for secrets like private keys
   - Example: `MY_APP_KEYS` containing JWT signing private keys
@@ -87,7 +87,7 @@ This application uses Hasura Cloud for GraphQL:
    - Navigate to "Project Settings" > "API Access"
    - Copy or generate an admin secret
 
-2. Add the admin secret to your .env file:
+2. Add the admin secret to your .public_env file:
    ```
    VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-secret-here"}'
    ```
@@ -165,10 +165,10 @@ Some dependencies may try to use Node.js built-in modules (fs, path, url, etc.) 
 - **Polyfills**: The app includes minimal polyfills in `src/polyfills.js`
 - **Module Aliases**: Vite is configured to replace Node.js modules with browser-compatible versions
 - **Empty Modules**: For modules like 'fs', we provide empty implementations
-- **External Modules**: Node.js modules are marked as external in SSR config
+- **External Modules**: Node.js modules are marked as external in SSR private_env
 
 To handle these modules:
 1. Add required polyfills to `src/polyfills.js`
-2. Configure module replacements in `vite.config.js`
+2. Configure module replacements in `vite.private_env.js`
 3. Add empty module implementations in `src/lib/empty-polyfill.js` and `src/lib/empty-module.js`
 4. Always include `import './polyfills.js'` in client.js

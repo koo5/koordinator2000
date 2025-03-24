@@ -1,10 +1,10 @@
 <script type='js'>
-	import Campaign from 'src/components/Campaign.svelte';
-	import {my_user} from 'src/my_user.js';
+	import Campaign from './Campaign.svelte';
+	import {my_user} from '../my_user.js';
 	import * as animateScroll from "svelte-scrollto";
-	import {subscribe, gql} from "src/apollo.js";
-	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
-	import {CAMPAIGN_FRAGMENT} from 'src/stuff.js';
+	import {subscribe, gql} from "$lib/apollo.js";
+	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
+	import {CAMPAIGN_FRAGMENT} from '../stuff.js';
 	import {Swiper, SwiperSlide} from 'swiper/svelte';
 	import SwiperCore, {EffectFade} from 'swiper';
 	import 'swiper/swiper-bundle.css';

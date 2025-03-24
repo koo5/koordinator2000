@@ -1,8 +1,8 @@
 <script lang='js'>
 
-	import ToolTipsy from 'src/components/ToolTipsy.svelte';
-	import {my_user} from 'src/my_user.js';
-	import {get_status_class,get_tickmark} from 'src/stuff.js';
+	import ToolTipsy from './ToolTipsy.svelte';
+	import {my_user} from '../my_user.js';
+	import {get_status_class,get_tickmark} from '../stuff.js';
 
 	export let participation;
 	$: status_class = get_status_class(participation);

@@ -1,5 +1,5 @@
 <script>
-import {auth} from "src/utils/nhost.js"
+import {auth} from "../utils/nhost.js"
 
 /*
 https://docs.nhost.io/auth/email-templates#password-reset-email-template

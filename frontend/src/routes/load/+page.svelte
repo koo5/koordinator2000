@@ -2,7 +2,7 @@
 	import {my_user} from '../my_user.js';
 	import gql from 'graphql-tag';
 	import {FormGroup, Label} from 'sveltestrap';
-	import MutationForm from '../components/MutationForm.svelte';
+	import MutationForm from '../../components/MutationForm.svelte';
 
 	let files;
 	$: file = files?.[0];

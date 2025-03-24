@@ -1,5 +1,5 @@
 <script>
-import {auth} from "src/utils/nhost.js"
+import {auth} from "../utils/nhost.js"
 
 function nhost_register(){
   var form = document.getElementById("register_form")

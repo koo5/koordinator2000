@@ -3,7 +3,7 @@
 		Button,
 		Card
 	} from 'sveltestrap';
-	import {subscribe, gql} from "../apollo.js";
+	import {subscribe, gql} from "$lib/apollo.js";
 	import {query} from 'svelte-apollo';
 	import {my_user} from '../my_user.js';
 	import CampaignList from './CampaignList.svelte';

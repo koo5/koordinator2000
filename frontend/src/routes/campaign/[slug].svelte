@@ -16,10 +16,10 @@
 <script>
 
 
-	import Campaign from 'src/components/Campaign.svelte';
-	import {my_user} from 'src/my_user.js';
-	import {CAMPAIGN_FRAGMENT} from 'src/stuff.js';
-	import {subscribe, gql} from "src/apollo.js";
+	import Campaign from '../../components/Campaign.svelte';
+	import {my_user} from '../../my_user.js';
+	import {CAMPAIGN_FRAGMENT} from '../../stuff.js';
+	import {subscribe, gql} from "$lib/apollo.js";
 
 	export let campaign_id;
 

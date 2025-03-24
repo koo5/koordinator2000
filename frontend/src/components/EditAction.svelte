@@ -1,7 +1,7 @@
 <script type='js'>
-//	import BytemdEditor from "../components/BytemdEditor.svelte";
-	import FirepadEditor from "../components/FirepadEditor.svelte";
-	import RemarkableEditor from "../components/RemarkableEditor.svelte";
+//	import BytemdEditor from "./BytemdEditor.svelte";
+	import FirepadEditor from "./FirepadEditor.svelte";
+	import RemarkableEditor from "./RemarkableEditor.svelte";
 </script>
 
 <h1>FirepadEditor:</h1>

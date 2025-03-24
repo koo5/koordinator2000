@@ -14,7 +14,7 @@
 	}
 </script>
 <script>
-  import User from 'src/components/User.svelte';
+  import User from '../../components/User.svelte';
 
   export let user_id;
 

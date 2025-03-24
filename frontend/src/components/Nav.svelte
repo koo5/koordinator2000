@@ -1,5 +1,5 @@
 <script>
-	import PageReloadClock from "src/components/PageReloadClock.svelte";
+	import PageReloadClock from "./PageReloadClock.svelte";
 	import { user } from '$lib/stores';
 	import { page } from '$app/stores';
 	import SettingsModal from '$lib/components/SettingsModal.svelte';

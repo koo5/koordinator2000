@@ -2,7 +2,7 @@
 	import Campaign from '../../../components/Campaign.svelte';
 	import {my_user} from '../../../my_user.js';
 	import {CAMPAIGN_FRAGMENT} from '../../../stuff.js';
-	import {subscribe, gql} from "../../../apollo.js";
+	import {subscribe, gql} from "$lib/apollo.js";
 
 	export let data;
 	const campaign_id = data.campaign_id;

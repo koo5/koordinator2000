@@ -1,6 +1,6 @@
 <script>
 
-	import {my_user} from 'src/my_user.js';
+	import {my_user} from '../my_user.js';
 
 	export let css_ref = '';
 	export let enabled = true;

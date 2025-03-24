@@ -1,68 +1,29 @@
 import moment from 'moment';
 import { minify } from 'html-minifier';
 import { building } from '$app/environment';
-import { env } from '$lib/env';
-import * as config_file from './config.js';
-// Import server-side env variables 
-import { MY_APP_KEYS } from '$env/static/private';
+import { public_env } from '$lib/public_env.js';
+// Import server environment
+import { server_env } from '$lib/server/env.js';
 
-// Debug print environment variables
-console.log("Server environment variables: ", Object.keys(process.env)
-  .filter(key => key.startsWith('VITE_'))
-  .reduce((obj, key) => {
-    obj[key] = process.env[key];
-    return obj;
-  }, {})
-);
+// Log server information on startup
+console.log("Server startup - using GraphQL endpoint:", server_env.GRAPHQL_ENDPOINT);
+console.log("Server environment configured with keys:", Object.keys(server_env));
 
-// Verify MY_APP_KEYS exists - throw error if missing as this is critical
-if (!MY_APP_KEYS) {
-  throw new Error("CRITICAL ERROR: MY_APP_KEYS environment variable is missing. The application cannot start without this variable set.");
+// Verify keys are available since they are critical
+if (!server_env.MY_APP_KEYS) {
+  throw new Error("CRITICAL ERROR: MY_APP_KEYS environment variable is missing or invalid. The application cannot start without this variable set.");
 }
 
-// Also verify the key is in valid JSON format with required properties
-try {
-  const parsedKeys = JSON.parse(MY_APP_KEYS);
-  if (!parsedKeys || typeof parsedKeys !== 'object') {
-    throw new Error("MY_APP_KEYS must be a valid JSON object");
-  }
-  if (!parsedKeys.private || !parsedKeys.public) {
-    throw new Error("MY_APP_KEYS must contain both 'private' and 'public' key objects");
-  }
-  if (!parsedKeys.private.alg || !parsedKeys.private.d || !parsedKeys.private.x || !parsedKeys.private.y) {
-    throw new Error("MY_APP_KEYS.private is missing required key properties");
-  }
-  if (!parsedKeys.public.alg || !parsedKeys.public.x || !parsedKeys.public.y) {
-    throw new Error("MY_APP_KEYS.public is missing required key properties");
-  }
-  
-  console.log("MY_APP_KEYS validation successful - application can start");
-  
-  // Add the parsed keys to the config for server-side use
-  config_file.config.MY_APP_KEYS = parsedKeys;
-} catch (e) {
-  throw new Error(`CRITICAL ERROR: Invalid MY_APP_KEYS format: ${e.message}`);
-}
+// Import authentication functions from server directory
+import { init_keys } from '$lib/server/auth';
 
-// Define stubs for auth functions that will be dynamically imported in browser
-// This avoids SSR issues with browser-only code
-let free_user_id = async () => {};
-let process_event = async () => {};
+// Initialize authentication keys
+init_keys().catch(err => {
+  console.error('Failed to initialize auth keys:', err);
+});
 
-// Import browser check
-import { browser } from '$app/environment';
-
-// In browser environment, dynamically import the real functions
-if (browser) {
-  import('$lib/auth').then(auth => {
-    free_user_id = auth.free_user_id;
-    process_event = auth.process_event;
-  }).catch(err => {
-    console.error('Failed to import auth functions:', err);
-  });
-}
-
-const config = config_file.config;
+// Use the server environment for configuration
+const config = server_env;
 
 /**
  * Helper to extract and verify JWT token from request
@@ -167,11 +128,11 @@ export const handle = async ({ event, resolve }) => {
 	// Add session data to locals without any JWT keys
 	// MY_APP_KEYS should never be exposed to the client
 	event.locals.session = {
-		PUBLIC_URL: env.PUBLIC_URL,
+		PUBLIC_URL: public_env.PUBLIC_URL,
 		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Use the single endpoint
 		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Add GRAPHQL_ENDPOINT explicitly
 		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
-		BASE_URL: env.PUBLIC_BASE_URL
+		BASE_URL: public_env.PUBLIC_BASE_URL
 		// No MY_APP_KEYS here - this should remain server-side only
 	};
 	

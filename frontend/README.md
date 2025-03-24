@@ -10,7 +10,7 @@
 npm i
 ```
 
-2. Create a `.env` file in the project root with the following variables:
+2. Create a `.public_env` file in the project root with the following variables:
 ```
 GRAPHQL_ENDPOINT="https://your-hasura-instance.hasura.app/v1/graphql"
 PUBLIC_URL="http://localhost:5000"
@@ -29,7 +29,7 @@ MY_APP_KEYS='{"private":{"kty":"EC","crv":"P-256","alg":"ES256","x":"...","y":".
 ```
 node generate_key_pair.mjs
 ```
-Copy the output to PUBLIC_MY_APP_KEYS in your .env file.
+Copy the output to PUBLIC_MY_APP_KEYS in your .public_env file.
 
 4. Start the development server:
 ```
@@ -44,7 +44,7 @@ To obtain the required Hasura headers:
 2. Navigate to your project
 3. Go to "Project Settings" > "API Access"
 4. Generate or copy your Admin Secret
-5. Add the Admin Secret to your .env file in the PUBLIC_GRAPHQL_HEADERS variable as shown above
+5. Add the Admin Secret to your .public_env file in the PUBLIC_GRAPHQL_HEADERS variable as shown above
 
 For production environments, consider using more restricted permissions with x-hasura-role headers.
 

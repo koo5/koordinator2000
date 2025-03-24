@@ -1,5 +1,5 @@
 <script>
-	import {subscribe, gql} from "src/apollo.js";
+	import {subscribe, gql} from "$lib/apollo.js";
 
 	$: account_subscription = subscribe(
 		gql`

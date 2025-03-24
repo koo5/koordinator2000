@@ -1,8 +1,8 @@
 <script type='js'>
 
-	import {impersonate} from 'src/my_user.js';
-	import {subscribe, gql} from "src/apollo.js";
-	import SubscribedItemsInner from 'src/components/SubscribedItemsInner.svelte';
+	import {impersonate} from '../my_user.js';
+	import {subscribe, gql} from "$lib/apollo.js";
+	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 
 	const USER_LIST = gql`
     subscription {

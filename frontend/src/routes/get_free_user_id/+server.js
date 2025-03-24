@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { free_user_id } from '$lib/auth';
+import { free_user_id } from '$lib/server/auth';
 import moment from 'moment';
 
 /** @type {import('./$types').RequestHandler} */
