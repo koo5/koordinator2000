@@ -135,17 +135,14 @@ export async function free_user_id(email = null) {
 			});
 		} catch (error) {
 			console.error(error);
-			await new Promise(resolve => setTimeout(resolve, 12000));
+			await new Promise(resolve => setTimeout(resolve, 30000));
 		}
 	}
-	
-	// Get the email from the result if it exists
-	const resultEmail = result?.data?.insert_accounts_one?.email || email;
-	
+
 	let r = await sign_user_object({
 		id: result['data']['insert_accounts_one']['id'],
 		name,
-		email: resultEmail,
+		email: email,
 		autoscroll: true
 	});
 	console.log("free_user_id result:" + JSON.stringify(r, null, ' '));
