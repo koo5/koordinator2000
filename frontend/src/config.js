@@ -1,52 +1,45 @@
 import { browser } from '$app/environment';
+import { env } from '$lib/env';
 
-// Default configuration with fallbacks to prevent undefined errors
-let config = {
-  GRAPHQL_ENDPOINT: 'localhost:8080/v1/graphql',
-  PUBLIC_GRAPHQL_HEADERS: {},
-  MY_APP_KEYS: {
-    "private": {
-      "kty": "EC",
-      "crv": "P-256",
-      "alg": "ES256",
-      "x": "placeholder",
-      "y": "placeholder",
-      "d": "placeholder"
-    },
-    "public": {
-      "kty": "EC",
-      "crv": "P-256",
-      "alg": "ES256",
-      "x": "placeholder",
-      "y": "placeholder"
-    }
-  }
+// Default headers with content-type
+const defaultHeaders = {
+  'content-type': 'application/json'
 };
 
-if (!browser) {  // Check for server-side environment
-  // Use dynamic imports for server-side only dependencies
-  try {
-    // Use top-level await with dynamic imports
-    const importDotenv = async () => {
-      const dotenv = await import('dotenv');
-      const dotenvExpand = await import('dotenv-expand');
-      
-      const myEnv = dotenv.default.config();
-      dotenvExpand.default(myEnv);
-      
-      if (myEnv.parsed) {
-        myEnv.parsed.PUBLIC_GRAPHQL_HEADERS = JSON.parse(myEnv.parsed.PUBLIC_GRAPHQL_HEADERS || '{}');
-        myEnv.parsed.MY_APP_KEYS = JSON.parse(myEnv.parsed.MY_APP_KEYS || '{}');
-        config = myEnv.parsed;
-      }
-    };
-    
-    // Execute the async function
-    importDotenv();
-  } catch (error) {
-    console.error('Error loading environment variables:', error);
+// Try to get headers from environment
+let graphqlHeaders = defaultHeaders;
+
+// Safe environment variable access
+try {
+  if (browser) {
+    // In browser, try using import.meta.env
+    if (import.meta.env?.PUBLIC_GRAPHQL_HEADERS) {
+      graphqlHeaders = JSON.parse(import.meta.env.PUBLIC_GRAPHQL_HEADERS);
+    }
+  } else {
+    // In server, try using process.env or require
+    if (process.env?.PUBLIC_GRAPHQL_HEADERS) {
+      graphqlHeaders = JSON.parse(process.env.PUBLIC_GRAPHQL_HEADERS);
+    }
   }
+} catch (e) {
+  console.warn('Error parsing GRAPHQL_HEADERS, using defaults', e);
 }
 
-// Use ESM export syntax
-export { config }
+// Default configuration with fallbacks to prevent undefined errors
+export const config = {
+  // Use the single GRAPHQL_ENDPOINT from env.js
+  GRAPHQL_ENDPOINT: env.GRAPHQL_ENDPOINT,
+  
+  // Use parsed headers or defaults
+  PUBLIC_GRAPHQL_HEADERS: graphqlHeaders
+};
+
+// Only try to load MY_APP_KEYS on the server side
+// Frontend code should never directly use these keys
+if (!browser) {
+  // MY_APP_KEYS will be verified in hooks.server.js
+  // The application will not start if MY_APP_KEYS is missing
+  console.log('Server-side config initialized');
+}
+

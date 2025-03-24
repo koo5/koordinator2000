@@ -22,6 +22,9 @@ import * as jose from 'jose'
     // Print MY_APP_KEYS format for environment variables
     console.log("MY_APP_KEYS=" + JSON.stringify(keyPair, null, ''))
     console.log()
+    // Note: This should be in .env, not exposed to the client
+    console.log('# Warning: Keep the private key secure, for server-side use only!')
+    console.log()
     
     // Import the keys from JWK
     const ecPrivateKey = await jose.importJWK(keyPair.private, alg)

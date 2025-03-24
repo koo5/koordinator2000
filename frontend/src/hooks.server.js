@@ -3,6 +3,37 @@ import { minify } from 'html-minifier';
 import { building } from '$app/environment';
 import { env } from '$lib/env';
 import * as config_file from './config.js';
+// Import server-side env variables 
+import { MY_APP_KEYS } from '$env/static/private';
+
+// Verify MY_APP_KEYS exists - throw error if missing as this is critical
+if (!MY_APP_KEYS) {
+  throw new Error("CRITICAL ERROR: MY_APP_KEYS environment variable is missing. The application cannot start without this variable set.");
+}
+
+// Also verify the key is in valid JSON format with required properties
+try {
+  const parsedKeys = JSON.parse(MY_APP_KEYS);
+  if (!parsedKeys || typeof parsedKeys !== 'object') {
+    throw new Error("MY_APP_KEYS must be a valid JSON object");
+  }
+  if (!parsedKeys.private || !parsedKeys.public) {
+    throw new Error("MY_APP_KEYS must contain both 'private' and 'public' key objects");
+  }
+  if (!parsedKeys.private.alg || !parsedKeys.private.d || !parsedKeys.private.x || !parsedKeys.private.y) {
+    throw new Error("MY_APP_KEYS.private is missing required key properties");
+  }
+  if (!parsedKeys.public.alg || !parsedKeys.public.x || !parsedKeys.public.y) {
+    throw new Error("MY_APP_KEYS.public is missing required key properties");
+  }
+  
+  console.log("MY_APP_KEYS validation successful - application can start");
+  
+  // Add the parsed keys to the config for server-side use
+  config_file.config.MY_APP_KEYS = parsedKeys;
+} catch (e) {
+  throw new Error(`CRITICAL ERROR: Invalid MY_APP_KEYS format: ${e.message}`);
+}
 
 // Define stubs for auth functions that will be dynamically imported in browser
 // This avoids SSR issues with browser-only code
@@ -124,12 +155,14 @@ export const handle = async ({ event, resolve }) => {
 	// Get user from request if available
 	const user = await get_user_from_request(event);
 	
-	// Add session data to locals
+	// Add session data to locals without any JWT keys
+	// MY_APP_KEYS should never be exposed to the client
 	event.locals.session = {
 		PUBLIC_URL: env.PUBLIC_URL,
-		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT || env.PUBLIC_GRAPHQL_ENDPOINT,
+		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Use the single endpoint
 		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
 		BASE_URL: env.PUBLIC_BASE_URL
+		// No MY_APP_KEYS here - this should remain server-side only
 	};
 	
 	// Add user to locals if authenticated

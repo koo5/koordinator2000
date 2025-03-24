@@ -77,8 +77,9 @@
 	
 	// Handle any client-side initialization
 	onMount(async () => {
-		// Initialize auth keys
-		init_keys();
+		// Initialize auth module - note that private keys are only available server-side
+		// Client-side should only handle public operations
+		await init_keys();
 		
 		// Set user from server data if available
 		if (data.user) {

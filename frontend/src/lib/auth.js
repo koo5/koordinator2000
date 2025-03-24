@@ -6,6 +6,17 @@ import gql from 'graphql-tag';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
 import { new_apollo_client } from '../apollo.js';
 import * as config_file from '../config.js';
+import { browser } from '$app/environment';
+
+// Import getContext only in browser environment to avoid SSR issues
+let getContext;
+if (browser) {
+  import('svelte').then(svelte => {
+    getContext = svelte.getContext;
+  }).catch(err => {
+    console.error('Failed to import getContext:', err);
+  });
+}
 
 const config = config_file.config;
 
@@ -40,11 +51,33 @@ export function init_keys() {
  */
 async function load_keys_internal() {
   try {
-    const { MY_APP_KEYS } = config;
+    // Try to get MY_APP_KEYS from session first (passed from server)
+    let MY_APP_KEYS = null;
     
-    if (!MY_APP_KEYS) {
-      console.error("Missing MY_APP_KEYS configuration");
-      return false;
+    // In client-side code, we can't access MY_APP_KEYS directly
+    if (browser) {
+      // Client-side should delegate auth operations to server APIs
+      console.log('Client-side auth initialization - JWT operations will be handled server-side');
+      // Return true to allow client-side code to initialize (server will still verify keys)
+      return true;
+    }
+    
+    // Server-side only - MY_APP_KEYS must be available 
+    // The application should fail to start in hooks.server.js if MY_APP_KEYS is missing
+    if (!browser) {
+      // Get server-side keys from environment (should be set in hooks.server.js)
+      try {
+        // Attempt to parse the key
+        const parsedKeys = JSON.parse(MY_APP_KEYS);
+        if (!parsedKeys || !parsedKeys.private || !parsedKeys.public) {
+          throw new Error("Invalid MY_APP_KEYS format");
+        }
+        MY_APP_KEYS = parsedKeys;
+        console.log('Server-side auth keys initialized');
+      } catch (e) {
+        // Fatal error - cannot proceed without valid keys
+        throw new Error(`CRITICAL ERROR: Invalid MY_APP_KEYS format: ${e.message}`);
+      }
     }
     
     const pr = MY_APP_KEYS["private"];
@@ -150,7 +183,7 @@ export async function user_authenticity_jwt(id) {
   return await new SignJWT({
     'urn:id': id,
   })
-    .setProtectedHeader({alg: config.MY_APP_KEYS.private.alg})
+    .setProtectedHeader({alg: config.MY_APP_KEYS?.private?.alg || 'ES256'})
     .setIssuedAt()
     .setIssuer('urn:example:issuer')
     .setAudience('urn:example:audience')
