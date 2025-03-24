@@ -82,6 +82,9 @@ function new_apollo_client()
 
 	const cache = new InMemoryCache();
 
+	// Print the actual endpoint being used
+	console.log("GraphQL Endpoint:", config().GRAPHQL_ENDPOINT);
+	
 	// Create WebSocket link with error handling
 	const wsLink = browser ? new WebSocketLink({
 		uri: "wss://" + config().GRAPHQL_ENDPOINT,

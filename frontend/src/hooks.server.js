@@ -6,6 +6,15 @@ import * as config_file from './config.js';
 // Import server-side env variables 
 import { MY_APP_KEYS } from '$env/static/private';
 
+// Debug print environment variables
+console.log("Server environment variables: ", Object.keys(process.env)
+  .filter(key => key.startsWith('VITE_'))
+  .reduce((obj, key) => {
+    obj[key] = process.env[key];
+    return obj;
+  }, {})
+);
+
 // Verify MY_APP_KEYS exists - throw error if missing as this is critical
 if (!MY_APP_KEYS) {
   throw new Error("CRITICAL ERROR: MY_APP_KEYS environment variable is missing. The application cannot start without this variable set.");
@@ -160,10 +169,17 @@ export const handle = async ({ event, resolve }) => {
 	event.locals.session = {
 		PUBLIC_URL: env.PUBLIC_URL,
 		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Use the single endpoint
+		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Add GRAPHQL_ENDPOINT explicitly
 		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
 		BASE_URL: env.PUBLIC_BASE_URL
 		// No MY_APP_KEYS here - this should remain server-side only
 	};
+	
+	// Debug: Print what's being passed to locals
+	console.log("Setting session data:", {
+		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
+		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT
+	});
 	
 	// Add user to locals if authenticated
 	if (user) {

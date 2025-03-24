@@ -17,13 +17,7 @@ export default defineConfig({
 			'source-map-js': './src/lib/empty-module.js'
 		}
 	},
-	
-	// Handle Global object for browser compatibility
-	define: {
-		// Define environment variables
-		'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-	},
-	
+
 	// Properly handle Node.js built-ins for browser
 	optimizeDeps: {
 		esbuildOptions: {

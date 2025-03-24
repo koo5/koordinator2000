@@ -10,18 +10,20 @@
 Create a `.env` file in the project root with these required variables:
 
 ```
-# GraphQL endpoint for Hasura
-PUBLIC_GRAPHQL_ENDPOINT="https://your-hasura-instance.hasura.app/v1/graphql"
-PUBLIC_URL="http://localhost:5000"
-PUBLIC_BASE_URL="/"
+# GraphQL endpoint for Hasura (MUST have VITE_ prefix for client access)
+VITE_PUBLIC_GRAPHQL_ENDPOINT="your-hasura-instance.hasura.app/v1/graphql"
+VITE_PUBLIC_URL="http://localhost:5000"
+VITE_PUBLIC_BASE_URL="/"
 
 # Hasura GraphQL Headers with Admin Secret
-PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-hasura-admin-secret"}'
+VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-hasura-admin-secret"}'
 
 # App keys - generate using generate_key_pair.mjs
 # This should be a server-side environment variable - NOT public!
 MY_APP_KEYS='{"private":{...},"public":{...}}'
 ```
+
+⚠️ **IMPORTANT**: SvelteKit with Vite requires client-accessible environment variables to have the `VITE_` prefix. Variables without this prefix will only be available server-side.
 
 To generate the keys, run:
 ```
@@ -47,15 +49,15 @@ The application uses a two-tier configuration system:
 
 ### Environment Variable Security
 
-This application follows SvelteKit's environment variable conventions:
+This application follows SvelteKit's environment variable conventions with Vite:
 
-- **Public variables** (`$env/static/public`): Start with `PUBLIC_` prefix
-  - Available in both server and client code
+- **Public variables**: Must start with `VITE_` prefix
+  - Available in both server and client code via `import.meta.env`
   - Safe to expose to browsers
-  - Example: `PUBLIC_GRAPHQL_ENDPOINT`, `PUBLIC_GRAPHQL_HEADERS`
+  - Example: `VITE_PUBLIC_GRAPHQL_ENDPOINT`, `VITE_PUBLIC_GRAPHQL_HEADERS`
 
-- **Private variables** (`$env/static/private`): No `PUBLIC_` prefix
-  - Only available in server-side code
+- **Private variables**: No `VITE_` prefix
+  - Only available in server-side code via `$env/static/private`
   - Never exposed to browsers
   - Used for secrets like private keys
   - Example: `MY_APP_KEYS` containing JWT signing private keys
@@ -87,12 +89,12 @@ This application uses Hasura Cloud for GraphQL:
 
 2. Add the admin secret to your .env file:
    ```
-   PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-secret-here"}'
+   VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-secret-here"}'
    ```
 
 3. For production, consider using role-based headers instead:
    ```
-   PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-role":"user","x-hasura-user-id":"${userId}"}'
+   VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-role":"user","x-hasura-user-id":"${userId}"}'
    ```
 
 ## Migration Status
