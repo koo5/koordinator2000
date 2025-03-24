@@ -156,3 +156,17 @@ Components like FirepadEditor that use browser-only APIs need special handling:
 - Use dynamic imports for browser-only modules
 - Use `browser` check before initializing browser-only features
 - Handle errors gracefully during SSR
+
+## Node.js Modules in Browser
+Some dependencies may try to use Node.js built-in modules (fs, path, url, etc.) which aren't available in browsers:
+
+- **Polyfills**: The app includes minimal polyfills in `src/polyfills.js`
+- **Module Aliases**: Vite is configured to replace Node.js modules with browser-compatible versions
+- **Empty Modules**: For modules like 'fs', we provide empty implementations
+- **External Modules**: Node.js modules are marked as external in SSR config
+
+To handle these modules:
+1. Add required polyfills to `src/polyfills.js`
+2. Configure module replacements in `vite.config.js`
+3. Add empty module implementations in `src/lib/empty-polyfill.js` and `src/lib/empty-module.js`
+4. Always include `import './polyfills.js'` in client.js

@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store';
 import { localStorageSharedStore } from '../svelte-shared-store';
 
+export const debug = writable(false);
 // User store
 export const user = writable(null);
 

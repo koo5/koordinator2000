@@ -62,6 +62,9 @@ function subscribe(query, options)
 }
 
 
+// Track GraphQL connection status
+export let graphqlConnectionError = false;
+
 function new_apollo_client()
 {
 	//console.log(config());
@@ -79,18 +82,29 @@ function new_apollo_client()
 
 	const cache = new InMemoryCache();
 
+	// Create WebSocket link with error handling
 	const wsLink = browser ? new WebSocketLink({
 		uri: "wss://" + config().GRAPHQL_ENDPOINT,
 		options: {
 			reconnect: true,
 			lazy: true,
-			connectionParams: () =>
-			{
+			connectionParams: () => {
 				return {headers: getHeaders()};
 			},
+			// Add connection event handlers
+			connectionCallback: (err) => {
+				if (err) {
+					console.error("WebSocket connection error:", err);
+					graphqlConnectionError = true;
+				} else {
+					console.log("WebSocket connected successfully");
+					graphqlConnectionError = false;
+				}
+			}
 		},
 	}) : null;
 
+	// Create HTTP link with error handling
 	const httpLink = new HttpLink({
 		uri: "https://" + config().GRAPHQL_ENDPOINT,
 		headers: getHeaders(),
@@ -98,21 +112,100 @@ function new_apollo_client()
 		// which is available in both browser and Node.js environments
 	});
 
-	const link = browser ? split(
-		({query}) =>
-		{
-			const {kind, operation} = getMainDefinition(query);
-			return kind === "OperationDefinition" && (operation === "subscription" || operation === "mutation");
-		},
-		wsLink,
-		httpLink
-	) : httpLink;
+	// Simple error handler function 
+	const handleErrors = ({ networkError, graphQLErrors }) => {
+		if (networkError) {
+			console.error(`[Network error]: ${networkError}`);
+			graphqlConnectionError = true;
+		}
+		
+		if (graphQLErrors) {
+			graphQLErrors.forEach(({ message, locations, path }) => {
+				console.error(
+					`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+				);
+			});
+			// Only mark as connection error if it's a connection-related issue
+			if (graphQLErrors.some(err => 
+				err.message.includes('connect') || 
+				err.message.includes('network') ||
+				err.message.includes('timeout'))) {
+				graphqlConnectionError = true;
+			}
+		}
+	};
 
-	return new ApolloClient({
+	// Create a custom error-handling link
+	const errorLink = {
+		request: (operation, forward) => {
+			return forward(operation).map(result => {
+				if (result.errors) {
+					handleErrors({ graphQLErrors: result.errors });
+				}
+				return result;
+			});
+		}
+	};
+
+	// Create combined link with error handling
+	const link = browser ? 
+		split(
+			({query}) => {
+				const {kind, operation} = getMainDefinition(query);
+				return kind === "OperationDefinition" && (operation === "subscription" || operation === "mutation");
+			},
+			wsLink,
+			httpLink
+		) : httpLink;
+
+	const client = new ApolloClient({
 		ssrMode: true,
 		link,
-		cache
+		cache,
+		// Add error handling for fetch policy
+		defaultOptions: {
+			watchQuery: {
+				fetchPolicy: 'network-only',
+				errorPolicy: 'all',
+				onError: (error) => {
+					console.error('Watch query error:', error);
+					if (error.networkError) {
+						graphqlConnectionError = true;
+					}
+				}
+			},
+			query: {
+				fetchPolicy: 'network-only',
+				errorPolicy: 'all',
+				onError: (error) => {
+					console.error('Query error:', error);
+					if (error.networkError) {
+						graphqlConnectionError = true;
+					}
+				}
+			},
+			mutate: {
+				errorPolicy: 'all',
+				onError: (error) => {
+					console.error('Mutation error:', error);
+					if (error.networkError) {
+						graphqlConnectionError = true;
+					}
+				}
+			}
+		}
 	});
+	
+	// Set up a network status listener
+	client.onNetworkStatusChange = (status) => {
+		if (status === 8) { // 8 = error
+			graphqlConnectionError = true;
+		} else if (status === 7) { // 7 = ready/success
+			graphqlConnectionError = false;
+		}
+	};
+	
+	return client;
 }
 
 

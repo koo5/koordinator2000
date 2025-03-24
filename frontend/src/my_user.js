@@ -16,20 +16,73 @@ export function impersonate(_id)
 	my_user.set({id: _id})
 }
 
-async function new_user()
-{
-	//console.log('/get_free_user_id');
-	try
-	{
-		var res = await fetch('/get_free_user_id', {method: 'POST'})
-		//console.log(res);
-		var r = await res.json()
-		//console.log("r:" + JSON.stringify(r, null, '  '));
-	} catch (e)
-	{
-		console.error(e);
-	}
-	return r
+// Track requests to prevent multiple simultaneous user creations
+let userCreationInProgress = false;
+let lastUserCreationAttempt = 0;
+const USER_CREATION_COOLDOWN = 10000; // 10 seconds
+
+/**
+ * Creates a new user through the server endpoint
+ * This function is completely independent of GraphQL
+ */
+async function new_user() {
+    const now = Date.now();
+    
+    // Prevent multiple concurrent requests
+    if (userCreationInProgress) {
+        console.warn('User creation already in progress, skipping duplicate request');
+        throw new Error('User creation already in progress');
+    }
+    
+    // Rate limit user creation attempts
+    if (now - lastUserCreationAttempt < USER_CREATION_COOLDOWN) {
+        console.warn('Too many user creation attempts, please wait before trying again');
+        throw new Error('User creation rate limit exceeded');
+    }
+    
+    // Update timestamps and flags
+    userCreationInProgress = true;
+    lastUserCreationAttempt = now;
+    
+    try {
+        // Set a timeout to prevent hanging requests
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 8 second timeout
+        
+        console.log('Attempting to create new user...');
+        const res = await fetch('/get_free_user_id', {
+            method: 'POST',
+            signal: controller.signal,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        // Clear the timeout
+        clearTimeout(timeoutId);
+        
+        // Handle unsuccessful responses
+        if (!res.ok) {
+            throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+        }
+        
+        // Parse and validate the response
+        const result = await res.json();
+        if (!result || typeof result.id !== 'number' || result.id <= 0) {
+            throw new Error('Invalid user response: missing or invalid id property');
+        }
+        
+        console.log("Successfully created new user with ID:", result.id);
+        return result;
+    } 
+    catch (error) {
+        console.error("Error creating new user:", error.message);
+        throw error;
+    }
+    finally {
+        // Always reset the in-progress flag, even if there was an error
+        userCreationInProgress = false;
+    }
 }
 
 export async function event(event)
@@ -67,22 +120,50 @@ export async function event(event)
 }
 
 
+// User registration is completely independent of GraphQL 
+// and should be handled separately
 export async function ensure_we_exist()
 {
 	const user = get(my_user);
 	if (my_user.auth_debug)
 		console.log('i am ' + JSON.stringify(user, null, '  '));
+	
+	// Only attempt to create a new user if we don't have a valid ID
 	if (user.id < 1)
 	{
-		return await new_user();
+		try {
+			// Try to create a new user using the server endpoint
+			const result = await new_user();
+			if (result && result.id > 0) {
+				console.log('Created new user with ID:', result.id);
+				return result;
+			} else {
+				console.error('Failed to create new user: Invalid response');
+				return null;
+			}
+		} catch (e) {
+			console.error('Error during user creation:', e);
+			return null;
+		}
 	}
-	else
+	else {
+		// User already exists
+		console.log('User already exists with ID:', user.id);
 		return null;
+	}
 }
 
 export async function apply_newly_authenticated_user(newly_authenticated_user)
 {
-	my_user.set(newly_authenticated_user);
+	// Only apply if we actually have a valid user with ID
+	if (newly_authenticated_user && newly_authenticated_user.id > 0) {
+		console.log('Applying new authenticated user with ID:', newly_authenticated_user.id);
+		my_user.set(newly_authenticated_user);
+		return true;
+	} else {
+		console.warn('Not applying invalid user data:', newly_authenticated_user);
+		return false;
+	}
 }
 
 export async function logout()

@@ -1,7 +1,7 @@
 <script>
 	import Campaigns from "../components/CampaignsSearch.svelte";
 	import { my_user } from '../my_user.js';
-	import { addNotification } from '$lib/stores';
+	import { debug, addNotification } from '$lib/stores';
 	
 	function showWelcomeNotification() {
 		addNotification('Welcome to Koordinator!', 'success');
@@ -20,9 +20,11 @@
 			Your automatically-assigned username is "{$my_user.name}".
 		{/if}
 	</p>
+	{#if $debug}
 	<button on:click={showWelcomeNotification}>
 		Show Welcome Notification
 	</button>
+	{/if}
 </div>
 <h2>Where am I?</h2>
 <div class="content_block">

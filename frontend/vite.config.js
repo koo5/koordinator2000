@@ -8,7 +8,13 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			// SvelteKit provides its own fetch polyfill
-			'node-fetch': 'isomorphic-fetch'
+			'node-fetch': 'isomorphic-fetch',
+			
+			// Provide browser versions of Node.js built-ins
+			path: 'path-browserify',
+			url: 'url-polyfill',
+			fs: './src/lib/empty-polyfill.js',
+			'source-map-js': './src/lib/empty-module.js'
 		}
 	},
 	
@@ -21,8 +27,16 @@ export default defineConfig({
 	// Properly handle Node.js built-ins for browser
 	optimizeDeps: {
 		esbuildOptions: {
-			// Empty define to avoid window references during SSR
-		}
+			// Define empty modules for Node.js built-ins
+			define: {
+				global: 'globalThis'
+			}
+		},
+		include: [
+			// Ensure these are pre-bundled
+			'path-browserify',
+			'url-polyfill'
+		]
 	},
 	
 	// Add externalization warnings to help debug
@@ -52,7 +66,11 @@ export default defineConfig({
 			'firebase/database',
 			'firebase',
 			'codemirror',
-			'remarkable'
+			'remarkable',
+			'path',
+			'fs',
+			'url',
+			'source-map-js'
 		]
 	}
 });

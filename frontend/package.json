@@ -36,6 +36,7 @@
     "graphql-tag": "^2.11.0",
     "jose": "^4.15.5",
     "moment": "^2.29.1",
+    "path-browserify": "^1.0.1",
     "sanitize-html": "github:apostrophecms/sanitize-html",
     "subscriptions-transport-ws": "^0.9.18",
     "supports-color": "^9.0.0",
@@ -49,6 +50,7 @@
     "underscore": "^1.12.0",
     "unique-names-generator": "^4.3.1",
     "url": "^0.11.0",
+    "url-polyfill": "^1.1.13",
     "vite": "^4.3.0",
     "ws": "^7.5.10"
   },

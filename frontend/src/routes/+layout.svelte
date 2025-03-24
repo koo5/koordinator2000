@@ -86,10 +86,14 @@
 			user.set(data.user);
 		}
 		
-		// Ensure user exists
-		let u = await ensure_we_exist();
-		if (u) {
-			await apply_newly_authenticated_user(u);
+		// Check if we need to create a user
+		try {
+			let u = await ensure_we_exist();
+			if (u) {
+				await apply_newly_authenticated_user(u);
+			}
+		} catch (e) {
+			console.error('Error during user initialization:', e);
 		}
 		
 		// Verify SvelteKit versions
