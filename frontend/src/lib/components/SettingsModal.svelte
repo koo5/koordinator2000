@@ -21,8 +21,8 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if isOpen}
-  <div class="modal-backdrop" on:click={closeModal}>
-    <div class="modal-content" on:click|stopPropagation>
+  <div class="modal-backdrop" on:click={closeModal} on:keydown={() => {}}>
+    <div class="modal-content" on:click|stopPropagation on:keydown={() => {}}>
       <div class="modal-header">
         <h2>Settings</h2>
         <button class="close-button" on:click={closeModal}>×</button>

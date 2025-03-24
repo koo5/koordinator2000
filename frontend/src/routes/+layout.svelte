@@ -76,9 +76,8 @@
 	
 	// Handle any client-side initialization
 	onMount(async () => {
-		// Initialize auth module - note that private keys are only available server-side
+		// Note: private keys are only available server-side
 		// Client-side should only handle public operations
-		await init_keys();
 		
 		// Set user from server data if available
 		if (data.user) {
@@ -177,12 +176,7 @@
 		--text-color: #333;
 	}
 	
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-		filter: saturate(calc(100% + var(--saturation, 0%)));
-	}
+	/* Removed unused .app selector */
 
 	main {
 		position: relative;
@@ -192,19 +186,9 @@
 		flex: 1;
 	}
 
-	footer {
-		text-align: center;
-		padding: 1em;
-		font-size: 0.8em;
-		color: #888;
-	}
+	/* Removed unused footer selector */
 
-	.dark-mode {
-		--background-color: #222;
-		--text-color: #eee;
-		background-color: var(--background-color);
-		color: var(--text-color);
-	}
+	/* Removed unused .dark-mode selector */
 
 	.loading-indicator {
 		position: fixed;

@@ -13,7 +13,7 @@
 		NavLink,
 	} from 'sveltestrap';
 
-	export let data;
+	export const data = {}; // Changed to const as it's for external reference only
 
 	$: my_user_str = JSON.stringify($user, null, ' ');
 	$: currentPath = $page.url.pathname;
