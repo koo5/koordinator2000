@@ -2,7 +2,7 @@
 	import Campaigns from "../components/CampaignsSearch.svelte";
 	import { my_user } from '../my_user.js';
 	import { debug, addNotification } from '$lib/stores';
-	
+
 </script>
 
 <svelte:head>

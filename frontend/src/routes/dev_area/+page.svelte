@@ -1,6 +1,41 @@
 <script>
 	import TestModal from '../../components/TestModal.svelte';
+	import {my_user} from '../../my_user.js';
+	import {CAMPAIGN_FRAGMENT} from '../../stuff.js';
+	import {subscribe, gql} from "$lib/apollo.js";
+	
 	let segment = 0;
+	let currentData = null;
+	let error = null;
+	
+	// Query to test the campaign data structure
+	$: my_user_id = $my_user.id;
+	$: campaign_test = subscribe(
+		gql`
+			subscription ($_user_id: Int!) {
+				campaigns(limit: 1) ${CAMPAIGN_FRAGMENT}
+			}
+		`,
+		{
+			variables: {
+				_user_id: my_user_id
+			}
+		}
+	);
+	
+	// Show headers being used
+	import { public_env } from '$lib/public_env.js';
+	let graphqlHeaders = JSON.stringify(public_env.PUBLIC_GRAPHQL_HEADERS, null, 2);
+	
+	// Update when data changes
+	$: {
+		if ($campaign_test.data) {
+			currentData = JSON.stringify($campaign_test.data, null, 2);
+		}
+		if ($campaign_test.error) {
+			error = $campaign_test.error.message;
+		}
+	}
 </script>
 <div class="content_block">
 
@@ -17,6 +52,31 @@
 	<img src="/less_sat_by_telepatx_d2n736h-fullview.jpg" alt="alt"/>
 
 	<TestModal/>
+
+	<h2>GraphQL Schema Debug</h2>
+	
+	<div>
+		<h3>Error Output:</h3>
+		{#if error}
+			<pre style="background-color: #ffeeee; padding: 10px; border: 1px solid #ff0000;">{error}</pre>
+		{:else}
+			<p>No errors</p>
+		{/if}
+	</div>
+	
+	<div>
+		<h3>GraphQL Headers:</h3>
+		<pre style="background-color: #eeeeff; padding: 10px; border: 1px solid #ccc;">{graphqlHeaders}</pre>
+	</div>
+	
+	<div>
+		<h3>Data Structure:</h3>
+		{#if currentData}
+			<pre style="background-color: #eeffee; padding: 10px; border: 1px solid #ccc; max-height: 400px; overflow: auto;">{currentData}</pre>
+		{:else}
+			<p>No data yet...</p>
+		{/if}
+	</div>
 
 </div>
 

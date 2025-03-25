@@ -9,6 +9,7 @@
 	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
 	import { browser } from '$app/environment';
+	import { debug } from '$lib/stores';
 
 
 	const CAMPAIGN_LIST = gql`
@@ -97,11 +98,15 @@
 	[title]
 	[proximity]
 	[number of participants]
+
+	{#if $debug}
+
 	<br>
 	seen:{JSON.stringify(seen, null, '')}:
 	<br>
 	seeing:{JSON.stringify(seeing, null, '')}:
 	<br>
+	{/if}
 
 </div>
 

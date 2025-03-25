@@ -10,7 +10,7 @@
 {#if enabled}
 
 	<span class='tooltipsy'>
-		<slot></slot><small>(?)</small>
+		<slot></slot>
 		<div class="tooltiptext {css_ref}">
 			<slot name="tooltip">tooltip</slot>
 		</div>
