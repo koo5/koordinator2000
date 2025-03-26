@@ -56,8 +56,10 @@ async function flip_bit(participation, val)
 	}
 }
 
-
-async function flip_stuff(data)
+/*
+walk the list of participations sorted by threshold. Any participation with threshold < current index is fulfilled.
+*/
+async function update_participations(data)
 {
 	for (const campaign of data.campaigns)
 	{
@@ -134,7 +136,7 @@ async function run() {
 	try
 	{
 		let data = await my_fetch();
-		await flip_stuff(data);
+		await update_participations(data);
 	}
 	catch (e)
 	{
