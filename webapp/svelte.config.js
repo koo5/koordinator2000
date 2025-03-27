@@ -32,9 +32,13 @@ const config = {
     }
   },
 
-  // Svelte 4 configuration
+  // Svelte 5 configuration with runes explicitly disabled
   compilerOptions: {
-    // Standard Svelte 4 compiler options
+    runes: false,
+    // Legacy mode enabled to ensure compatibility with existing code
+    legacy: {
+      componentApi: true
+    }
   }
 };
 
