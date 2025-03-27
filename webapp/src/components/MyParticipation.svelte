@@ -111,11 +111,11 @@ minimum suggested: {campaign.suggested_lowest_threshold}<br>
 
 
 <p>
-	{get_tickmark(my_participation)}
+	{get_tickmark(my_participation, campaign.collect_confirmations)}
 	{#if my_participation.threshold != undefined}
 		{#if my_participation.condition_is_fulfilled}
-			{#if my_participation.confirmed}
-				<span class="confirmed">My participation is confirmed.</span>
+			{#if !campaign.collect_confirmations || my_participation.confirmed}
+				<span class="confirmed">My participation is {campaign.collect_confirmations ? 'confirmed' : 'active'}.</span>
 			{:else}
 				<span class="condition_is_fulfilled">My threshold is reached, waiting for <a href="/notifications">confirmation.</a></span>
 			{/if}
@@ -126,6 +126,4 @@ minimum suggested: {campaign.suggested_lowest_threshold}<br>
 		I'm not participating.
 	{/if}
 </p>
-
-
 

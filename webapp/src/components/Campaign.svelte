@@ -138,22 +138,27 @@
 		<i>We want {suggested_mass} people:</i><br>
 
 		<Progress multi>
-			<Progress bar color="success"
-					  value={confirmed_contributing_count}
-					  max={suggested_mass}
-					  confirmed
-			>
-				{confirmed_contributing_count}</Progress>
+			{#if campaign.collect_confirmations}
+				<Progress bar color="success"
+						  value={confirmed_contributing_count}
+						  max={suggested_mass}
+						  confirmed
+				>
+					{confirmed_contributing_count}</Progress>
+			{/if}
 			<!-- how to make the below the "light green" "unconfirmed participation"? -->
 			<Progress bar color="warning"
 					  value={unconfirmed_contributing_count}
 					  max={suggested_mass}
 					  unconfirmed
 			>
-
 				{unconfirmed_contributing_count}</Progress>
 		</Progress>
-		{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>
+		{#if campaign.collect_confirmations}
+			{confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br>
+		{:else}
+			{unconfirmed_contributing_count_str} participants.<br>
+		{/if}
 
 	</div>
 	<h5>Participants</h5>
@@ -163,8 +168,11 @@
 			<div slot="tooltip">
 				<div class="help_tooltip">
 					Help:
-					<br/> "✅" - participating, confirmed<br/> "✉" - condition fulfilled,
-					waiting for confirmation<br/> "👁" - condition was not fulfilled yet/waiting<br/> 👎 -
+					<br/> "✅" - participating, {campaign.collect_confirmations ? 'confirmed' : 'threshold reached'}
+					{#if campaign.collect_confirmations}
+					<br/> "✉" - condition fulfilled, waiting for confirmation
+					{/if}
+					<br/> "👁" - condition was not fulfilled yet/waiting<br/> 👎 -
 					disagreement/dismissal
 				</div>
 			</div>
@@ -178,7 +186,7 @@
 			{#each campaign.participations as participation (participation.id)}
 				<span
 				>
-					<ParticipationBadge {participation}/>
+					<ParticipationBadge {participation} {campaign}/>
 				</span>
 			{/each}
 		{:else}

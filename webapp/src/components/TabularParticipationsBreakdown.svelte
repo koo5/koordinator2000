@@ -36,7 +36,7 @@
 	</thead>
 	<tbody>
 	{#each le as participation (participation.idx)}
-		<TabularParticipationsRow participation={participation}/>
+		<TabularParticipationsRow participation={participation} {campaign}/>
 	{/each}
 	<tr style="font-weight:bold">
 		<td colspan="4">
@@ -52,7 +52,7 @@
 		</td>
 	</tr>
 	{#each gt as participation (participation.idx)}
-		<TabularParticipationsRow participation={participation}/>
+		<TabularParticipationsRow participation={participation} {campaign}/>
 	{/each}
 	</tbody>
 </table>

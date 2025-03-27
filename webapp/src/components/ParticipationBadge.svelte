@@ -5,8 +5,9 @@
 	import {get_status_class,get_tickmark} from '../stuff.js';
 
 	export let participation;
-	$: status_class = get_status_class(participation);
-	$: tickmark = get_tickmark(participation);
+	export let campaign;
+	$: status_class = get_status_class(participation, campaign?.collect_confirmations);
+	$: tickmark = get_tickmark(participation, campaign?.collect_confirmations);
 	$: my_badge = $my_user.id == participation.account.id;
 
 </script>
