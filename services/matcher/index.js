@@ -5,8 +5,8 @@ async function main() {
   try {
     console.log('Starting application...');
     
-    // Apply database migrations
-    console.log('Applying database migrations...');
+    // Apply service-specific database migrations
+    console.log('Applying service-specific migrations...');
     await applyMigrations();
     
     // Start your application logic here

@@ -5,3 +5,5 @@ yarn-error.log
 /__sapper__/
 .env
 .svelte-kit
+jwtRS256.key.pub
+jwtRS256.key

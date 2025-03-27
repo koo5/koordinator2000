@@ -1,37 +1,40 @@
-# What?
+# Kooordinator
 
-dev version/demo: https://fullcracy.xyz
+## Information for users
 
-readme: https://github.com/koo5/koordinator2000/
+### Introduction
 
-It's like kickstarter, but not for collecting money, rather it's for coordinating collective actions, like boycotting/supporting companies or pressuring governments. Actions that only make sense if a critical mass of people is ensured.
+Koordinator is like kickstarter, but not for collecting money, rather it's for coordinating collective action, like boycotting or supporting companies, or pressuring governments. Actions that only make sense if a critical mass of people participates.
 
-## Politics
+### Politics
 
 For example, you would vote for a tiny progressive political party, if you knew that your vote would matter. You will probably waste your vote, unless you can know that there is a large enough mass of people to make it count. In some places, this is ensured by the voting system. In others, you have to coordinate with other voters yourself. 
 
-## Consumers
+### Consumers
 
 The same principle applies to influencing commercial entities by boycotts and support campaigns. If you are alone in choosig to buy the more ethical brand every time, because everyone thinks they are alone in it, you'll soon be out of money, and the less ethical brand will still be going strong, but if enough people focus on the same issue at the same time, changes will happen. This is usually only achieved in extraordinary situations, with a lot of noise, but the year is 2020, almost everyone is on-line, and we can make highly coordinated consumer habit changes the norm.
 
-## Companies
+### Companies
 
 The same issue is percieved by companies. If there isn't a long-term pressure from customers to change, then, for example, choosing a more ethical supplier and raising prices only means losing money while another company takes its place. A company can start it's own campaign to coordinate with other companies, or it can be influenced by positive or nagative campaigns. Campaigns should have discernible goals. Public pressure can stop when a goal is reached. Stop buying products of X until X changes a particular practice, supplier, etc, or promise to start buying products of X when X changes.
 
-## Campaigns
+### Campaigns
 
-Express your support for campaigns(actions). Participation costs you money or time, so express under what conditions you are willing to invest it. For example, i will only switch to the more expensive, more ethical brand if 10000 other people do. This site's goal is to let you express it in a way that computers can understand it, so you can be automatically informed when your conditions are satisfied. Track progress, evaluate outcomes, build trust, and repeat.
+Express your support for campaigns(actions). Participation costs you money or time, and you cannot spread yourself too thin, so express under what conditions you are ready to pitch in. For example, i will only switch to the more expensive, more ethical brand if 10000 other people do so. This site's goal is to let you express it in a way that computers can understand it, so that you can be automatically informed when your conditions are satisfied. Track progress, evaluate outcomes, build trust, and repeat.
 
-## How to reach critical mass
 
-### 1
-First, the website has to be finished and polished. And ideally a mobile app too. 
-### 2
-Some worthwhile campaigns should be collected, as examples, to give people reason to click around and share.
-### 3
-A real-world (or virtual-world cause that has already reached a critical mass of supporters has to be identified. Something that would benefit from additional coordination. An example from Czech Republic is the 2019 event of 250 000 people gathering to protest against prime minister Babiš, and to block the many products of His Agrofert holding. A reasonably sized effort also happened outside of streets and social media, for example a chrome extension that helps online shoppers avoid Agrofert's products. Eventually the momentum all but died out, without effect. I postulate that things would have evolved differently if each of those 250 000 people that gathered would be introduced to the application and encouraged to coordinate through it. I postulate that the biggest obstacle to an individual's effort is this lack of confidence in other's sustained effort, and by extension, each of us includes this shared lack of confidence in our calculations.
+## Information for early adopters / developers
 
-## extensibility, decentralization
+### How to reach critical mass
+
+#### 1
+First, the website has to be finished and polished. And ideally a mobile app too (tauri). 
+#### 2
+Some worthwhile campaigns should be collected, to give people reason to interact and share.
+#### 3
+A real-world cause that has already reached a critical mass of supporters has to be identified. Something that would benefit from additional coordination. An example from Czech Republic is the 2019 event of 250 000 people gathering to protest against prime minister Babiš, and to block the many products of His Agrofert holding. A reasonably sized effort also happened outside of streets and social media, for example a chrome extension that helps online shoppers avoid Agrofert's products. Eventually the momentum all but died out, without effect. I postulate that things would have evolved differently if each of those 250 000 people that gathered would be introduced to the application and encouraged to coordinate through it. I postulate that the biggest obstacle to an individual's effort is this lack of confidence in other's sustained efforts, and by extension, each of us includes this shared lack of confidence in our calculations.
+
+### extensibility
 
 If you are tech-saavy, you are encouraged to try to:
 *  publish your own statements of participation
@@ -53,12 +56,8 @@ At some point, a need may arise to have somebody:
 * expressed their intent to participate through other similar platforms
 etc.
 
-
-We could already start communicating in a fully decentralized fashion, even, let's say, abstracting away the semi-centralized physical nature of the internet with things like IPFS. But that's not the point here. But: Participations, Conditions and Users - we can build the initial version with just the simplest structures and mechanics, ie, just "Participation upon notice", no confirmations, User objects corresponding to signed-up users, but: "praticipation after confirmation" will be useful to express campaigns that require exact time/space coordination, for example, organizing an online flashmob. The idea of what constitutes an individual will likewise require extending over time, especially if we ever need to handle spam or to handle attempts to skew our estimates / mess with campaigns. So: this should be open protocol. I want an easily extensible UI, so we can quickly experiment with different data structures. If you want to do something different with data from "our" users, you should be able to, if the users consent. All these issues are the focus of https://solidproject.org/
-
-"""People can express trust boundaries in shapes such that apps and query engines receive boundaries of which sources to trust for what information. By default, this might just be the user’s pod. Others’ pods might be consulted for their personal information, such as name, location, birth date, but not for things such as preferences, annotations, etc. Such limits will affect both performance and trust positively, at the cost of perhaps missing some results that might still be trustworthy, but were not part of the shape. In any case, documenting the provenance of query results and their individual components remains important in decentralized networks.""" - https://ruben.verborgh.org/blog/2019/06/17/shaping-linked-data-apps/
-
-"""dokieli implements the W3C Web Annotation specifications Wherever your article is published, readers can leave annotations and replies if they have their own personal datastore to save them to. If your article is published on a personal storage space, you can offer to store annotations and replies on their behalf, and enable anonymous responses too. """ - https://dokie.li/
+### decentralization
+We could already start communicating in a fully decentralized fashion, even, let's say, abstracting away the semi-centralized physical nature of the internet with things like IPFS. But that's not the point here. But: Participations, Conditions and Users - we can build the initial version with just the simplest structures and mechanics, ie, just "Participation upon notice", no confirmations, User objects corresponding to signed-up users, but: "praticipation after confirmation" will be useful to express campaigns that require exact time/space coordination, for example, organizing an online flashmob. The idea of what constitutes an individual will likewise require extending over time, especially as we need to handle spam or to handle attempts to skew our estimates / mess with campaigns. So: this should be open protocol. I want an easily extensible UI, so we can quickly experiment with different data structures. If you want to do something different with data from "our" users, you should be able to, if the users consent. All these issues are the focus of https://solidproject.org/ and my own RDF experiments.
 
 
 ### "number of participants":
@@ -315,6 +314,14 @@ https://www.reddit.com/r/thevenusproject
 
 Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used as an overlay over the core data model, to allow users and admins to express nuanced matters of provenance, trust and identity, help fight off bots, enable federation, express forecasts etc.
 
+## Environment Configuration
+
+Environment variables are stored in a `.env` file at the project root. This file contains shared configuration used across all services. Copy `.env.example` to `.env` and update the values as needed.
+
+## Database Migrations
+
+The project uses a dedicated migration system to manage database schema changes. See [db/README.md](db/README.md) for details on how to create and apply migrations.
+
 
 # todo?
 
@@ -341,3 +348,8 @@ Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used a
 * https://github.com/peta-pico/debate-nanopubs
 * https://pol.is/
 * https://github.com/CitizenLabDotCo/citizenlab
+
+
+# links
+* project: https://github.com/koo5/koordinator2000/
+* dev instance: https://koord.ueueeu.eu/

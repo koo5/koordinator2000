@@ -9,7 +9,7 @@
     "dev": "vite dev --port 5000",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node build"
+    "start": "vite start --port 5000"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.6",

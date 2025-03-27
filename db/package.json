@@ -1,0 +1,24 @@
+{
+  "name": "koordinator2000-db",
+  "version": "1.0.0",
+  "description": "Database migration tools for Koordinator2000",
+  "main": "index.js",
+  "scripts": {
+    "migrate": "node migrate.js",
+    "migrate:create": "node create-migration.js",
+    "migrate:rollback": "node rollback.js",
+    "migrate:baseline": "node baseline.js",
+    "seed": "node seed.js",
+    "deploy": "node deploy.js",
+    "deploy:insecure": "node run-without-ssl-check.js",
+    "deploy:existing": "node baseline.js && node run-without-ssl-check.js"
+  },
+  "bin": {
+    "koordinator-db-deploy": "./deploy.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "pg": "^8.11.3",
+    "yargs": "^17.7.2"
+  }
+}
