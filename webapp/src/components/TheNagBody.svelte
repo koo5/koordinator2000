@@ -1,7 +1,7 @@
 <script>
-	import You from "./You.svelte";
+  import You from "./You.svelte";
 </script>
 
-	<You/>
+  <You/>
 
 

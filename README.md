@@ -43,11 +43,11 @@ If you are tech-saavy, you are encouraged to try to:
 * extend the data scheme of participation conditions
 currently, the only method of specifying your conditions is the "number of others willing to participate" (todo: fill in the actual rdf predicate name), which more precisely means: "number of others whose number of others willing to participate has been reached". And these "others", precisely, are other users who expressed their identify by logging into this website with their google/facebook/etc account. 
 
-	condition := condition or condition
-	condition := condition and condition
-	condition := number of participants
-	condition := number of confirmed participants
-	condition := number of estimated participants
+  condition := condition or condition
+  condition := condition and condition
+  condition := number of participants
+  condition := number of confirmed participants
+  condition := number of estimated participants
 *...
 
 At some point, a need may arise to have somebody:
@@ -61,167 +61,167 @@ We could already start communicating in a fully decentralized fashion, even, let
 
 
 ### "number of participants":
-	```
-	total number of participants whose "number of participants" have been met.
-	determined by:
-		given a list of thresholds
-		sort the list from lowest to highest
-		for idx starting with len(list) - 1 and ending at 0:
-			threshold = list[idx]
-			#number of other supporters is the count of remaining items whose threshold <= threshold
-			num_supporters = 0
-			for idx2 starting with len(list) - 2 and ending at 0:
-				if list[idx2] <= threshold:
-					num_supporters += 1
-			if num_supporters >= threshold:
-				return idx
-	```
-			
+  ```
+  total number of participants whose "number of participants" have been met.
+  determined by:
+    given a list of thresholds
+    sort the list from lowest to highest
+    for idx starting with len(list) - 1 and ending at 0:
+      threshold = list[idx]
+      #number of other supporters is the count of remaining items whose threshold <= threshold
+      num_supporters = 0
+      for idx2 starting with len(list) - 2 and ending at 0:
+        if list[idx2] <= threshold:
+          num_supporters += 1
+      if num_supporters >= threshold:
+        return idx
+  ```
+      
 ### "number of confirmed participants":
-	```
-	given a list of participation statements:
-		if confirmed is true:
-			sum += 1
-	if sum >= threshold:
-		alert user, ask for confirmation of participation, set confirmed to true
-	```
-		
+  ```
+  given a list of participation statements:
+    if confirmed is true:
+      sum += 1
+  if sum >= threshold:
+    alert user, ask for confirmation of participation, set confirmed to true
+  ```
+    
 
 ### "number of estimated participants":
-	```
-	estimation would initially be in hands of the user that created the campaign
-	```
+  ```
+  estimation would initially be in hands of the user that created the campaign
+  ```
 
 ## the data schema/ontology in detail
 Location:
-	a string or an uri or possibly some api-specific identifier
-	not sure if there is any free ontology or service we can use to autocomplete and disambiguate.
-	possibly: https://www.geonames.org (or https://cloud.google.com/maps-platform/places)
-	may be helpful but lacks details: https://bioportal.bioontology.org/ontologies/GEO
-	user location can have default value obtained through browser Geolocation API or ip geolocation:
-		https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
-		https://medium.com/@ipdata_co/what-is-the-best-commercial-ip-geolocation-api-d8195cda7027
+  a string or an uri or possibly some api-specific identifier
+  not sure if there is any free ontology or service we can use to autocomplete and disambiguate.
+  possibly: https://www.geonames.org (or https://cloud.google.com/maps-platform/places)
+  may be helpful but lacks details: https://bioportal.bioontology.org/ontologies/GEO
+  user location can have default value obtained through browser Geolocation API or ip geolocation:
+    https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
+    https://medium.com/@ipdata_co/what-is-the-best-commercial-ip-geolocation-api-d8195cda7027
 
 User:
-	obviously some internal id: int or uri
-	username: maybe i'd leave this out
-	full name: string, in case anyone would want to fill that in, eventually
-	google/facebook etc logins
-	
+  obviously some internal id: int or uri
+  username: maybe i'd leave this out
+  full name: string, in case anyone would want to fill that in, eventually
+  google/facebook etc logins
+  
 
 Campaign_description:
-	content: Prose
-	timestamp: Datetime
-	created_by: User
+  content: Prose
+  timestamp: Datetime
+  created_by: User
 
 Campaign:
-	Campaign describes an action or set of actions that each participant can take, and goals or possible results.
-	
-	relevant_to_location: Location,	can be specified multiple times
-	created: Datetime
-	owner: User
-	picture: file path?
-	title: string
-	description: Campaign_description
-	
+  Campaign describes an action or set of actions that each participant can take, and goals or possible results.
+  
+  relevant_to_location: Location,  can be specified multiple times
+  created: Datetime
+  owner: User
+  picture: file path?
+  title: string
+  description: Campaign_description
+  
 kinds of participation proclamations:
-	maybe we should initially stick to just the simplest kind:
-		
-	Participation upon notice:
-		the simplest kind. You proclaim that you'll start participating as soon as there is an X number of other participants. You will be alerted when this becomes the case. You can always amend or retract your proclamation.
-	
-		number of people: int
-			this may be the simplest way to include for example a spouse or a friend
-		user: User
-		number_of_other_participants_condition: int
-			this would be the simplest thing to do, if we limit types of participation to just "Participation upon notice"
-			
-		
-		
+  maybe we should initially stick to just the simplest kind:
+    
+  Participation upon notice:
+    the simplest kind. You proclaim that you'll start participating as soon as there is an X number of other participants. You will be alerted when this becomes the case. You can always amend or retract your proclamation.
+  
+    number of people: int
+      this may be the simplest way to include for example a spouse or a friend
+    user: User
+    number_of_other_participants_condition: int
+      this would be the simplest thing to do, if we limit types of participation to just "Participation upon notice"
+      
+    
+    
 
 ## components of the UI
 ```
 pages/windows:
 
-	landing/welcome page:
-		show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
-		lists let's say 3 campaigns ordered by "landing page order". determined by:
-			"featuredness": an int property of Campaign, set by site admin in the db
-			later:user location
-			
-			<CampaignPreview v-for:$featured_campaigns
-			?c a Campaign...					
-		
+  landing/welcome page:
+    show featured campaigns. Ideally would be smart enough to select what's featured based on user location.
+    lists let's say 3 campaigns ordered by "landing page order". determined by:
+      "featuredness": an int property of Campaign, set by site admin in the db
+      later:user location
+      
+      <CampaignPreview v-for:$featured_campaigns
+      ?c a Campaign...          
+    
 
-	browse campaigns:
-		sorting:
-			by creation datetime
+  browse campaigns:
+    sorting:
+      by creation datetime
 
-		later:
-			filtering:
-				location-specific campaigns: (lists all campaigns related to a location)
-					countries, cities
+    later:
+      filtering:
+        location-specific campaigns: (lists all campaigns related to a location)
+          countries, cities
 
-			fulltext search
-		
+      fulltext search
+    
 --
 
-	campaign detail:
-		title
-		locations
-		description
-		references/links
-		event datetime (if applicable)
-		author
-		list of participants
-		
-		it would be nice to have at least this fully versioned/with auditable changes
-	
+  campaign detail:
+    title
+    locations
+    description
+    references/links
+    event datetime (if applicable)
+    author
+    list of participants
+    
+    it would be nice to have at least this fully versioned/with auditable changes
+  
 --
 
-	add/edit campaign:
+  add/edit campaign:
 
-		edit basic info
-		
-		work with participation estimates:
-			a Campaign should have one number that the owner should strive to make it reflect the actual number of currently participating individuals. In the UI, it would be the one number displayed prominently, while clicking on it could show a breakdown. It would be a sum of several aspects:
-				Unique IPs of anonymous/pseudonymous users
-				number of socially-logged-in users
-				estimate of unique participants expressed on other sites
-				estimate of "offline" participants
-				any adjustments, adding an adjustment of -10000 "users" that turned out to be a botnet
-		
-		possibly:
-			event/observation condition objects administered by campaign owner or site admin:
-				only plaintext for now, for example: "l'oreal stops testing on animals"
-				state:
-					* fulfilled
-					* unfulfilled
-				these could be referenced the conditions section of participation statements, for example, the Campaign is "Start buying L'Oreal", and this Campaign has an attached event condition "l'oreal stops testing on animals", and clicking "participate" automatically makes that the condition of the users participation.
-				This shows to the company the positive support that it has for changing its practices. When the campaign owner sets the state to "fulfilled", all participants are noticed that it's time to act.
+    edit basic info
+    
+    work with participation estimates:
+      a Campaign should have one number that the owner should strive to make it reflect the actual number of currently participating individuals. In the UI, it would be the one number displayed prominently, while clicking on it could show a breakdown. It would be a sum of several aspects:
+        Unique IPs of anonymous/pseudonymous users
+        number of socially-logged-in users
+        estimate of unique participants expressed on other sites
+        estimate of "offline" participants
+        any adjustments, adding an adjustment of -10000 "users" that turned out to be a botnet
+    
+    possibly:
+      event/observation condition objects administered by campaign owner or site admin:
+        only plaintext for now, for example: "l'oreal stops testing on animals"
+        state:
+          * fulfilled
+          * unfulfilled
+        these could be referenced the conditions section of participation statements, for example, the Campaign is "Start buying L'Oreal", and this Campaign has an attached event condition "l'oreal stops testing on animals", and clicking "participate" automatically makes that the condition of the users participation.
+        This shows to the company the positive support that it has for changing its practices. When the campaign owner sets the state to "fulfilled", all participants are noticed that it's time to act.
 
 --
 
-	participation:
-		campaign: (title/link) (for example: "start buying l'oreal products")
-		conditions:
-		my identity:
-			
-			we need to lower the barrier as much as possible, so even without login, people can obviously browse campaigns, and click "participate" somewhere, but then, they should decide how much energy/privacy they want to invest in that participation statement. We can always store their IP address, which, in larger numbers/statistically/with some data clenup, could serve quite well in some cases. Ie, if i get 200K unique czech IPs at day of massive demonstration, and i don't have much reason to suspect that anyone would really profit from screwing up my estimates with a botnet, or, say, i'm able to determine that most of these IPs belonged to relatively secure devices, ie smartphones, then it's a reasonably good basis for publishing that number as an estimation of number of actually participating people.
-			Campaign authors/site admins should have control over what numbers to display, ie, anything between raw number of IPs to manually entered numbers. The success of their campaign relies on keeping these numbers accurate.
-			
-			choices:
-				* anonymous
-				* nickname
-				* facebook profile (can trigger login)
-			privacy:
-				* public
-				* only known to this pod
-		how to be notified when threshold is reached:
-	
+  participation:
+    campaign: (title/link) (for example: "start buying l'oreal products")
+    conditions:
+    my identity:
+      
+      we need to lower the barrier as much as possible, so even without login, people can obviously browse campaigns, and click "participate" somewhere, but then, they should decide how much energy/privacy they want to invest in that participation statement. We can always store their IP address, which, in larger numbers/statistically/with some data clenup, could serve quite well in some cases. Ie, if i get 200K unique czech IPs at day of massive demonstration, and i don't have much reason to suspect that anyone would really profit from screwing up my estimates with a botnet, or, say, i'm able to determine that most of these IPs belonged to relatively secure devices, ie smartphones, then it's a reasonably good basis for publishing that number as an estimation of number of actually participating people.
+      Campaign authors/site admins should have control over what numbers to display, ie, anything between raw number of IPs to manually entered numbers. The success of their campaign relies on keeping these numbers accurate.
+      
+      choices:
+        * anonymous
+        * nickname
+        * facebook profile (can trigger login)
+      privacy:
+        * public
+        * only known to this pod
+    how to be notified when threshold is reached:
+  
 --
 
-	about this site/support quor (tbd later).
+  about this site/support quor (tbd later).
 
 --
 ```

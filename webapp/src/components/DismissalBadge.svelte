@@ -1,6 +1,6 @@
 <script lang='js'>
 
-	export let dismissal;
+  export let dismissal;
 
 </script>
 
@@ -11,8 +11,8 @@
 </span>
 
 <style>
-	.dismissal {
-		background-color: rgb(210,210,255);
+  .dismissal {
+    background-color: rgb(210,210,255);
     }
 
 </style>

@@ -1,64 +1,64 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<meta name="theme-color" content="#333333">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#333333">
 
-	<!-- This contains the contents of the <svelte:head> component, if
-	     the current page has one -->
-	%sveltekit.head%
+  <!-- This contains the contents of the <svelte:head> component, if
+       the current page has one -->
+  %sveltekit.head%
 
-	<link rel="stylesheet" href="%sveltekit.assets%/global.css" id="global-css">
+  <link rel="stylesheet" href="%sveltekit.assets%/global.css" id="global-css">
 
-	<link rel="manifest" href="%sveltekit.assets%/manifest.json" crossorigin="use-credentials">
-	<link rel="icon" type="image/png" href="%sveltekit.assets%/favicon.png">
-	
-	<!-- Client-side only scripts -->
-	<script>
-		// Only execute this script after the DOM is loaded to ensure browser-only execution
-		document.addEventListener('DOMContentLoaded', function() {
-			// Set up global object for compatibility
-			window.global = window;
-			
-			// Load Firebase dependencies
-			const firebaseApp = document.createElement('script');
-			firebaseApp.src = 'https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js';
-			document.head.appendChild(firebaseApp);
-			
-			const firebaseAuth = document.createElement('script');
-			firebaseAuth.src = 'https://www.gstatic.com/firebasejs/7.13.2/firebase-auth.js';
-			document.head.appendChild(firebaseAuth);
-			
-			const firebaseDb = document.createElement('script');
-			firebaseDb.src = 'https://www.gstatic.com/firebasejs/7.13.2/firebase-database.js';
-			document.head.appendChild(firebaseDb);
-			
-			// Load CodeMirror
-			const codeMirror = document.createElement('script');
-			codeMirror.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js';
-			document.head.appendChild(codeMirror);
-			
-			const codeMirrorCss = document.createElement('link');
-			codeMirrorCss.rel = 'stylesheet';
-			codeMirrorCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css';
-			document.head.appendChild(codeMirrorCss);
-			
-			// Load Firepad
-			const firepadCss = document.createElement('link');
-			firepadCss.rel = 'stylesheet';
-			firepadCss.href = '/firepad/firepad.css';
-			document.head.appendChild(firepadCss);
-			
-			const firepadJs = document.createElement('script');
-			firepadJs.src = '/firepad/firepad.min.js';
-			document.head.appendChild(firepadJs);
-		});
-	</script>
+  <link rel="manifest" href="%sveltekit.assets%/manifest.json" crossorigin="use-credentials">
+  <link rel="icon" type="image/png" href="%sveltekit.assets%/favicon.png">
+  
+  <!-- Client-side only scripts -->
+  <script>
+    // Only execute this script after the DOM is loaded to ensure browser-only execution
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up global object for compatibility
+      window.global = window;
+      
+      // Load Firebase dependencies
+      const firebaseApp = document.createElement('script');
+      firebaseApp.src = 'https://www.gstatic.com/firebasejs/7.13.2/firebase-app.js';
+      document.head.appendChild(firebaseApp);
+      
+      const firebaseAuth = document.createElement('script');
+      firebaseAuth.src = 'https://www.gstatic.com/firebasejs/7.13.2/firebase-auth.js';
+      document.head.appendChild(firebaseAuth);
+      
+      const firebaseDb = document.createElement('script');
+      firebaseDb.src = 'https://www.gstatic.com/firebasejs/7.13.2/firebase-database.js';
+      document.head.appendChild(firebaseDb);
+      
+      // Load CodeMirror
+      const codeMirror = document.createElement('script');
+      codeMirror.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js';
+      document.head.appendChild(codeMirror);
+      
+      const codeMirrorCss = document.createElement('link');
+      codeMirrorCss.rel = 'stylesheet';
+      codeMirrorCss.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css';
+      document.head.appendChild(codeMirrorCss);
+      
+      // Load Firepad
+      const firepadCss = document.createElement('link');
+      firepadCss.rel = 'stylesheet';
+      firepadCss.href = '/firepad/firepad.css';
+      document.head.appendChild(firepadCss);
+      
+      const firepadJs = document.createElement('script');
+      firepadJs.src = '/firepad/firepad.min.js';
+      document.head.appendChild(firepadJs);
+    });
+  </script>
 </head>
 <body>
 <div style="display: contents">
-	%sveltekit.body%
+  %sveltekit.body%
 </div>
 </body>
 </html>

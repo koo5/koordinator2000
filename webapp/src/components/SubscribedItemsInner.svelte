@@ -1,18 +1,18 @@
 <script type='js'>
-	export let items;
+  export let items;
 </script>
 
 {#if $items.loading}
-	<div class="content_block">
-		<div class="animate-flicker">
-			Loading...
-		</div>
-		<p>If it doesn't load, maybe it crashed, or maybe you overloaded our <a href="http://nhost.io">DB hosting!</a>.
-			Please try again in a minute.</p>
-			<a href="/about">Come chat.</a>
-	</div>
+  <div class="content_block">
+    <div class="animate-flicker">
+      Loading...
+    </div>
+    <p>If it doesn't load, maybe it crashed, or maybe you overloaded our <a href="http://nhost.io">DB hosting!</a>.
+      Please try again in a minute.</p>
+      <a href="/about">Come chat.</a>
+  </div>
 {:else if $items.data}
-	<slot da={($items.data)}>???</slot>
+  <slot da={($items.data)}>???</slot>
 {:else}
-	<pre>{JSON.stringify($items.error, null, '  ')}</pre>
+  <pre>{JSON.stringify($items.error, null, '  ')}</pre>
 {/if}

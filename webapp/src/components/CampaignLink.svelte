@@ -1,6 +1,6 @@
 <script>
 
-	export let campaign;
+  export let campaign;
 
 </script>
 

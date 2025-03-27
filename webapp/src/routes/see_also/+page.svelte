@@ -15,7 +15,7 @@
 * frdcsa.org/
 * opennars.org/
 ## other
-	https://www.reddit.com/r/Anticonsumption/
+  https://www.reddit.com/r/Anticonsumption/
 
 </pre>
 
@@ -23,7 +23,7 @@
 <!--
 
 ?
-	https://www.infoq.com/news/2020/05/svelte-markdown-mdx-compiler/
+  https://www.infoq.com/news/2020/05/svelte-markdown-mdx-compiler/
 
 
 

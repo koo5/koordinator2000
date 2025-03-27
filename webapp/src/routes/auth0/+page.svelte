@@ -1,5 +1,5 @@
 <script lang='js'>
-	import Auth0 from "../components/Auth0.svelte";
+  import Auth0 from "../components/Auth0.svelte";
 
 
 
@@ -12,6 +12,6 @@
 <!--
 
 ?
-	https://www.onegraph.com/graphiql
+  https://www.onegraph.com/graphiql
 
 -->
