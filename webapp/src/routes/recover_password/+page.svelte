@@ -1,8 +1,6 @@
 <script lang='js'>
-  import { stores } from '$app/navigation'
-  import {auth} from "../utils/nhost.js"
-
-  const { page } = stores()
+  import { page } from '$app/stores'
+  import {auth} from "../../utils/nhost.js"
 
 
   function nhost_change_password(){
