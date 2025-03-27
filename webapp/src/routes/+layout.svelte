@@ -7,7 +7,6 @@
 	import SettingsModal from '../components/SettingsModal.svelte';
 	import TheNagModal from '../components/TheNagModal.svelte';
 	import Nav from '../components/Nav.svelte';
-	import Notification from '$lib/components/Notification.svelte';
 	import { setClient } from 'svelte-apollo';
 	import { new_apollo_client } from '$lib/apollo.js';
 	import {
@@ -18,10 +17,7 @@
 	import { my_user, ensure_we_exist, apply_newly_authenticated_user, event } from '../my_user.js';
 	import { set_css_var, saturate_computate } from '../stuff.js';
 	import { initVersionCheck } from '$lib/version-check';
-	
-	// Import Node.js compatibility polyfills
-	import '../polyfills.js';
-	
+
 	export let data;
 	
 	// Set up Auth0 configuration

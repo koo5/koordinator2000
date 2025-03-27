@@ -100,12 +100,14 @@ export function short_description(participation, collect_confirmations = true)
 	{
 		if (participation.condition_is_fulfilled)
 		{
-			if (!collect_confirmations || participation.confirmed)
-			{
-				return 'participation confirmed!'
+			if (collect_confirmations) {
+				if (participation.confirmed) {
+					return 'participation confirmed!'
+				} else
+					return "awaiting confirmation.."
 			}
 			else
-				return "awaiting confirmation.."
+				return "threshold reached"
 		}
 		else
 			return "more participants needed..."
@@ -120,12 +122,15 @@ export function long_description(participation, collect_confirmations = true)
 	{
 		if (participation.condition_is_fulfilled)
 		{
-			if (!collect_confirmations || participation.confirmed)
+			if (!collect_confirmations)
 			{
 				return "threshold is reached, participation is confirmed"
 			}
-			else
+			else if (!participation.confirmed) {
 				return "threshold is reached, waiting for confirmation"
+			}
+			else
+				return "threshold is reached"
 		}
 		else
 			return "this user is waiting for more participants..."
