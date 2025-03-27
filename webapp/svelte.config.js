@@ -34,11 +34,7 @@ const config = {
 
   // Svelte 5 configuration with runes explicitly disabled
   compilerOptions: {
-    runes: false,
-    // Legacy mode enabled to ensure compatibility with existing code
-    legacy: {
-      componentApi: true
-    }
+    runes: false
   }
 };
 

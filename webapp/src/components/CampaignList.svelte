@@ -1,13 +1,14 @@
 <script lang='js'>
   import Campaign from './Campaign.svelte';
   import {my_user} from '../my_user.js';
-  import * as animateScroll from "svelte-scrollto";
+  // Removed svelte-scrollto dependency
   import {subscribe, gql} from "$lib/apollo.js";
   import SubscribedItemsInner from './SubscribedItemsInner.svelte';
   import {CAMPAIGN_FRAGMENT} from '../stuff.js';
-  import {Swiper, SwiperSlide} from 'swiper/svelte';
-  import SwiperCore, {EffectFade} from 'swiper';
-  import 'swiper/swiper-bundle.css';
+  import { Swiper, SwiperSlide } from 'swiper/svelte';
+  import { EffectFade } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-fade';
 
 
   export let ids;
@@ -64,7 +65,7 @@
 
 
 
-  SwiperCore.use([EffectFade]);
+  // Module import automatically handles setup
   function slideChange(x, campaign_id)
   {
 
@@ -104,7 +105,7 @@
         if (!next_ch) return;
         my_timeout = setTimeout(() =>
         {
-          animateScroll.scrollTo({delay: 0, element: next_ch});
+          next_ch.scrollIntoView({ behavior: 'smooth' });
         }, 500);
         return; // hmm this could maybe also be done by navigating to a hash (the element id)
       }
@@ -128,7 +129,8 @@
           grabCursor={true}
           watchOverflow={true}
           speed={1500}
-          freeModeMomentum={false}
+          modules={[EffectFade]}
+          effect="fade"
           fadeEffect={ {crossFade: true} }
           on:slideChange={(x) => slideChange(x,campaign.id)}
       >

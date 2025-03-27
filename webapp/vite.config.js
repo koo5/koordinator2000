@@ -21,9 +21,7 @@ export default defineConfig({
       
       // Provide browser versions of Node.js built-ins
       path: 'path-browserify',
-      url: 'url-polyfill',
-      fs: './src/lib/empty-polyfill.js',
-      'source-map-js': './src/lib/empty-module.js'
+      url: 'url-polyfill'
     }
   },
 
@@ -72,10 +70,7 @@ export default defineConfig({
       'firebase',
       'codemirror',
       'remarkable',
-      'path',
-      'fs',
-      'url',
-      'source-map-js'
+      'path'
     ]
   }
 });

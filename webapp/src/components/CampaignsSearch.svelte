@@ -1,13 +1,10 @@
 <script>
-  import {
-    Button,
-    Card
-  } from 'sveltestrap';
+  // Removed sveltestrap imports
   import {subscribe, gql} from "$lib/apollo.js";
   import {query} from 'svelte-apollo';
   import {my_user} from '../my_user.js';
   import CampaignList from './CampaignList.svelte';
-  import * as animateScroll from 'svelte-scrollto';
+  // Removed svelte-scrollto dependency
   import { browser } from '$app/environment';
   import { debug } from '$lib/stores';
 
@@ -51,7 +48,7 @@
   function more()
   {
     if (browser) {
-      animateScroll.scrollTo({delay: 0, element: items_div});
+      items_div.scrollIntoView({ behavior: 'smooth' });
       more_button?.blur();
     }
     seen = seen.concat(seeing);

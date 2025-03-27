@@ -1,5 +1,6 @@
-// Minimal browser polyfills for Node.js compatibility
-import { browser } from '$app/environment';
+// DEPRECATED: This file is no longer used with Vite 6 and SvelteKit 2.x
+// These polyfills are no longer necessary and should be removed in a future cleanup
+// import { browser } from '$app/environment';
 
 // Only run in browser environment
 if (browser) {
