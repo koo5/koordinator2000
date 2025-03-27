@@ -19,6 +19,7 @@ export const CAMPAIGN_FRAGMENT = `
 			suggested_lowest_threshold,
 			suggested_highest_threshold,
 			suggested_optimal_threshold,
+			collect_confirmations,
 			participations(order_by: [{threshold: asc}], where:{ account:{smazano:{_eq: false}}} ) {
 			  id
 			  threshold
@@ -56,11 +57,11 @@ export const CAMPAIGN_FRAGMENT = `
 `;
 
 
-export function get_status_class(participation)
+export function get_status_class(participation, collect_confirmations = true)
 {
 	if (participation.condition_is_fulfilled)
 	{
-		if (participation.confirmed)
+		if (!collect_confirmations || participation.confirmed)
 		{
 			return "confirmed"
 		}
@@ -71,7 +72,7 @@ export function get_status_class(participation)
 		return "condition_is_not_fulfilled"
 }
 
-export function get_tickmark(participation)
+export function get_tickmark(participation, collect_confirmations = true)
 {
 	if (!participation || participation.threshold === undefined)
 		return ""
@@ -79,7 +80,7 @@ export function get_tickmark(participation)
 	{
 		if (participation.condition_is_fulfilled)
 		{
-			if (participation.confirmed)
+			if (!collect_confirmations || participation.confirmed)
 			{
 				return '✅'
 			}
@@ -91,7 +92,7 @@ export function get_tickmark(participation)
 	}
 }
 
-export function short_description(participation)
+export function short_description(participation, collect_confirmations = true)
 {
 	if (!participation || participation.threshold === undefined)
 		return ""
@@ -99,7 +100,7 @@ export function short_description(participation)
 	{
 		if (participation.condition_is_fulfilled)
 		{
-			if (participation.confirmed)
+			if (!collect_confirmations || participation.confirmed)
 			{
 				return 'participation confirmed!'
 			}
@@ -111,7 +112,7 @@ export function short_description(participation)
 	}
 }
 
-export function long_description(participation)
+export function long_description(participation, collect_confirmations = true)
 {
 	if (!participation || participation.threshold === undefined)
 		return ""
@@ -119,7 +120,7 @@ export function long_description(participation)
 	{
 		if (participation.condition_is_fulfilled)
 		{
-			if (participation.confirmed)
+			if (!collect_confirmations || participation.confirmed)
 			{
 				return "threshold is reached, participation is confirmed"
 			}

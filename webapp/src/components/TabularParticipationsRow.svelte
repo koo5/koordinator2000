@@ -5,12 +5,13 @@
 
 
   export let participation;
+  export let campaign;
 
 
 </script>
 
 <tr>
-  <td class={get_status_class(participation)}>{participation.idx}</td>
+  <td class={get_status_class(participation, campaign?.collect_confirmations)}>{participation.idx}</td>
 
   <td><a href="/users/{participation.account.id}">{participation.account.name}</a></td>
 
@@ -25,10 +26,10 @@
 
   <td>
     <ToolTipsy enabled="{!$my_user.hide_help}">
-    {get_tickmark(participation)} - {short_description(participation)}
+    {get_tickmark(participation, campaign?.collect_confirmations)} - {short_description(participation, campaign?.collect_confirmations)}
     <div slot="tooltip">
       <div class="help_tooltip">
-        {long_description(participation)}
+        {long_description(participation, campaign?.collect_confirmations)}
       </div>
     </div>
     </ToolTipsy>

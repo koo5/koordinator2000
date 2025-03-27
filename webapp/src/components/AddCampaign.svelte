@@ -11,7 +11,8 @@
 		  $title: String = "",
 		  $suggested_lowest_threshold: bigint,
 		  $suggested_highest_threshold: bigint,
-		  $suggested_optimal_threshold: bigint
+		  $suggested_optimal_threshold: bigint,
+		  $collect_confirmations: Boolean = false
 	  )
 	  {
 		  insert_campaigns_one(object: {
@@ -20,7 +21,8 @@
 				title: $title,
 				suggested_lowest_threshold: $suggested_lowest_threshold,
 				suggested_highest_threshold: $suggested_highest_threshold,
-				suggested_optimal_threshold: $suggested_optimal_threshold
+				suggested_optimal_threshold: $suggested_optimal_threshold,
+				collect_confirmations: $collect_confirmations
 			})
 			{
 				id
@@ -33,6 +35,7 @@
 	let suggested_lowest_threshold = 8;
 	let suggested_highest_threshold = 8000000000;
 	let suggested_optimal_threshold = 800;
+	let collect_confirmations = false;
 
 	onMount(async () =>
 	{
@@ -61,7 +64,8 @@
 		maintainer_id: my_user.id,
 		suggested_lowest_threshold,
 		suggested_highest_threshold,
-		suggested_optimal_threshold
+		suggested_optimal_threshold,
+		collect_confirmations
 	}}
 	on:done={(result)=>{
 		clearForm();
@@ -91,7 +95,10 @@
 	<label for="xxxxx">Suggested threshold:</label>
 	<br>
 	<input type="number" id="xxxxx" bind:value={suggested_optimal_threshold}/>
+	<br>
+	<label for="collect_confirmations">Collect confirmations:</label>
+	<br>
+	<input type="checkbox" id="collect_confirmations" bind:checked={collect_confirmations}/>
 	<br/>
 	<button type="submit">Add Campaign</button>
 </MutationForm>
-
