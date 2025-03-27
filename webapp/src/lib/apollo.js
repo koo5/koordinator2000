@@ -9,8 +9,8 @@ import {HttpLink} from "apollo-link-http";
 import {getMainDefinition} from "apollo-utilities";
 import gql from 'graphql-tag';
 import {readable} from 'svelte/store';
-import {subscribe as apollo_subscribe} from 'svelte-apollo';
-import {mutation} from 'svelte-apollo';
+// Import from compat wrapper instead of directly from svelte-apollo
+import {subscribe as apollo_subscribe, mutation} from './apollo-compat-wrapper.svelte';
 import { public_env } from '$lib/public_env.js';
 import { browser } from '$app/environment';
 
@@ -22,10 +22,12 @@ export let graphqlConnectionError = false;
  */
 function subscribe(query, options) {
   var result;
-  if (browser)
-    result = apollo_subscribe(query, options)
-  else
+  if (browser) {
+    // Use query from the wrapper instead
+    result = apollo_subscribe(query, options);
+  } else {
     result = readable({loading: true});
+  }
   return result;
 }
 

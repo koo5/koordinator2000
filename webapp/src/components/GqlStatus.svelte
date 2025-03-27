@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
 
   import {setContext} from 'svelte';
   import {slide} from 'svelte/transition';

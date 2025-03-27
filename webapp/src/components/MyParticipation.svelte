@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
   import {
     Button,
     Label,

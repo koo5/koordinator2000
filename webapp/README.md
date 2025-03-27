@@ -54,6 +54,43 @@ For production environments, consider using more restricted permissions with x-h
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm start` - Start production server
+- `npm run check` - Run svelte-check for static analysis
+- `npm run typecheck` - Run TypeScript type checking
 
 See CLAUDE.md for more detailed development guidelines.
+
+## Svelte 5 and TypeScript Support
+
+This project has been upgraded to use Svelte 5 with TypeScript. The configuration has been designed to allow a gradual migration while maintaining compatibility with existing libraries.
+
+### Key Points:
+
+1. **Opt-In Approach**: We've configured the project to use an opt-in approach for Svelte 5 Runes by disabling global runes mode. To use runes in a component, explicitly add the `runes` attribute to the script tag:
+
+   ```svelte
+   <script lang="ts">
+     // Now you can use runes here
+   </script>
+   ```
+
+2. **Compatibility Mode**: The Svelte configuration includes compatibility settings to support both new Svelte 5 components and legacy Svelte 3/4 components.
+
+3. **External Libraries**: Some external libraries (like svelte-apollo) may have compatibility issues with Svelte 5. We've provided wrapper components as needed to bridge these gaps.
+
+For detailed guidance on working with Svelte 5 and TypeScript in this project, see `SVELTE5-TYPESCRIPT-GUIDE.md`.
+
+### UI Component Library
+
+The project includes a comprehensive UI component library built with Svelte 5 Runes and TypeScript. Components include:
+
+- Button
+- Card
+- Badge
+- Input
+- Form
+- Select
+- Checkbox
+- TextArea
+
+These components are fully typed and use Svelte 5's reactive primitives. See the component library documentation in `/src/components/ui/README.md` for details and usage examples.
 

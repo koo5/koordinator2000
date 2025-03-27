@@ -1,5 +1,4 @@
-<script type='js'>
-
+<script lang='js'>
   import MutationForm from './MutationForm.svelte';
   import { gql } from "$lib/apollo.js";
 
@@ -48,7 +47,7 @@
 
 <span class="{notification.read ? 'notification-read' : 'notification-unread'}">{notification.content}</span>
 
-{#if {my_participation}}
+{#if my_participation}
   <MutationForm
       mutation={gql`
         mutation MyMutation($id: Int!, $confirmed: Boolean) {

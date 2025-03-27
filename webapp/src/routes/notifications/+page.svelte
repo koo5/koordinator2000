@@ -1,5 +1,5 @@
 <script>
-  import Notification from '../../components/Notification.svelte';
+  import UserNotification from '../../components/UserNotification.svelte';
   import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
   import {subscribe, gql} from "$lib/apollo.js";
   import {my_user} from '../../my_user.js';
@@ -35,7 +35,7 @@
 <ul>
   <SubscribedItemsInner {items} let:da={data}>
     {#each data.campaign_notifications as notification (notification.id)}
-      <Notification {notification}/>
+      <UserNotification {notification}/>
     {:else}
       <li>No notifications found</li>
     {/each}

@@ -33,8 +33,10 @@ export default defineConfig({
     ]
   },
   
-  // Add externalization warnings to help debug
+  // Build configuration for Vite 6
   build: {
+    // Ensure build works with older browsers if needed
+    target: 'es2020',
     rollupOptions: {
       // External packages that should not be bundled
       external: []

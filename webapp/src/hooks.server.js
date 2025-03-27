@@ -130,7 +130,6 @@ export const handle = async ({ event, resolve }) => {
   event.locals.session = {
     PUBLIC_URL: public_env.PUBLIC_URL,
     GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Use the single endpoint
-    GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Add GRAPHQL_ENDPOINT explicitly
     PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
     BASE_URL: public_env.PUBLIC_BASE_URL
     // No MY_APP_KEYS here - this should remain server-side only
@@ -138,7 +137,6 @@ export const handle = async ({ event, resolve }) => {
   
   // Debug: Print what's being passed to locals
   console.log("Setting session data:", {
-    GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
     GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT
   });
   

@@ -4,7 +4,7 @@
   }
 </script>
 
-<script type='js'>
+<script lang='js'>
 
   import EditCause from '../../components/EditCause.svelte';
 

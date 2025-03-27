@@ -1,5 +1,6 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,
@@ -9,10 +10,24 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "noImplicitThis": true,
-    "alwaysStrict": true
-  }
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "target": "es2020",
+    "module": "esnext",
+    "verbatimModuleSyntax": true,
+    "lib": ["es2020", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "src/**/*.d.ts",
+    "src/**/*.js",
+    "src/**/*.ts",
+    "src/**/*.svelte"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
   // Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 }

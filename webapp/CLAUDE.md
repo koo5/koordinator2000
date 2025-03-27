@@ -120,7 +120,7 @@ When working with this codebase:
 
 ## Code Style Guidelines
 - **Framework**: SvelteKit application using client-side rendering
-- **Modules**: Use ES modules with `.js` extension
+- **Modules**: Use ES modules with `.js` or `.ts` extension
 - **Imports**: Prefer relative imports (`../`) or alias imports (`$lib/`)
 - **Component Files**: Use `.svelte` extension with PascalCase naming
 - **Variables/Functions**: Use snake_case for variables and functions
@@ -128,11 +128,13 @@ When working with this codebase:
 - **Error Handling**: Use try/catch blocks with console.error for error logging
 - **Store Pattern**: Use Svelte stores and shared local storage stores
 - **TypeScript**: Use TypeScript with at least noImplicitAny and strictNullChecks
-- **Type Definitions**: Define types in app.d.ts or types.d.ts
+- **Type Definitions**: Define types in app.d.ts, types.d.ts, or dedicated type files
 - **Navigation**: Use SvelteKit's imports from `$app/navigation` for navigation
 - **Environment**: Use `browser` from `$app/environment` (not process.browser)
 - **Authentication**: Custom auth implementation with Auth0 integration
 - **GraphQL**: Apollo client for data fetching
+- **Component API**: Use Svelte 5 Runes API for new components, maintain legacy API for older ones
+- **UI Components**: Use the UI component library in `/src/components/ui` for consistent design
 
 ## SvelteKit Conventions
 - Pages use `+page.svelte` and `+page.js` files in route directories
@@ -172,3 +174,83 @@ To handle these modules:
 2. Configure module replacements in `vite.private_env.js`
 3. Add empty module implementations in `src/lib/empty-polyfill.js` and `src/lib/empty-module.js`
 4. Always include `import './polyfills.js'` in client.js
+
+## Svelte 5 with TypeScript Integration
+
+This project uses Svelte 5 with TypeScript for enhanced developer experience and type safety. We've implemented a hybrid approach to support both new Svelte 5 runes components and legacy Svelte components.
+
+### Configuration
+
+The `svelte.config.js` has been configured to:
+
+1. Use an opt-in approach for runes (not enabled globally)
+2. Maintain legacy component API compatibility
+3. Support interoperability between runes and non-runes components
+
+```js
+compilerOptions: {
+  // Don't globally enable runes mode to allow external libraries to work
+  runes: false,
+  
+  // Compatibility settings
+  compatibility: {
+    componentApi: true,
+    events: true,
+    css: true
+  }
+}
+```
+
+### Using Runes
+
+To use Svelte 5 runes in a component:
+
+```svelte
+<script lang="ts">
+  // Define props
+  const props = $props<{
+    title: string;
+    count?: number;
+  }>();
+  
+  // State
+  const counter = $state(0);
+  
+  // Derived values
+  const doubled = $derived(counter * 2);
+  
+  // Effects
+  $effect(() => {
+    console.log(`Counter is now ${counter}`);
+  });
+  
+  // Functions with TypeScript
+  function increment(): void {
+    counter++;
+  }
+</script>
+```
+
+### UI Component Library
+
+The project includes a comprehensive UI component library in `/src/components/ui/`:
+
+- Basic Components: Button, Card, Badge
+- Form Components: Input, Select, Checkbox, TextArea, Form
+- Validation: Type-safe validator functions for forms
+
+All components are fully typed with TypeScript and use Svelte 5 runes for reactivity. See `/src/components/ui/README.md` for documentation and usage examples.
+
+### External Library Compatibility
+
+Some external libraries like `svelte-apollo` may have compatibility issues with Svelte 5. For these cases:
+
+1. We've provided wrapper components that bridge between runes and legacy APIs
+2. Use the wrapper components instead of directly importing from the library
+3. Compatibility wrappers are located in `/src/lib/`
+
+For detailed guidance, see the following documentation:
+
+1. `SVELTE5-TYPESCRIPT-GUIDE.md` - General guide to using TypeScript with Svelte 5
+2. `SVELTE5-RUNES-STATE.md` - Specific guidance on state management with Svelte 5 Runes
+3. `SVELTE5-VS-OTHER-FRAMEWORKS.md` - Comparison of Svelte 5 state to other frameworks

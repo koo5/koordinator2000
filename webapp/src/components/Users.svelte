@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
 
   import {impersonate} from '../my_user.js';
   import {subscribe, gql} from "$lib/apollo.js";

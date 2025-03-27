@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
   import Campaign from 'src/components/Campaign.svelte';
   import {my_user} from 'src/my_user.js';
   import {onMount, onDestroy} from "svelte";

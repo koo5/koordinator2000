@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
 
   import FirepadEditor from './FirepadEditor.svelte';
   import gql from 'graphql-tag';

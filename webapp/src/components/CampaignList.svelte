@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
   import Campaign from './Campaign.svelte';
   import {my_user} from '../my_user.js';
   import * as animateScroll from "svelte-scrollto";

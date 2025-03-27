@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
 
   import GqlStatus from './GqlStatus.svelte';
   import MutationSubmitForm from './MutationSubmitForm.svelte';

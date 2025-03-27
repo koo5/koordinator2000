@@ -4,7 +4,7 @@
     Card
   } from 'sveltestrap';
   import {subscribe, gql} from "$lib/apollo.js";
-  import {query} from 'svelte-apollo';
+  import {query} from '$lib/apollo-compat-wrapper.svelte';
   import {my_user} from '../my_user.js';
   import CampaignList from './CampaignList.svelte';
   import * as animateScroll from 'svelte-scrollto';

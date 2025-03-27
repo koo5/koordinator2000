@@ -1,28 +1,23 @@
-<script lang='js'>
+<script lang='ts'>
   import {
     Button,
   } from 'sveltestrap';
-  import {sanitize_html} from '../stuff.js';
-  import {readable} from 'svelte/store';
+  import { sanitize_html } from '../stuff.js';
+  import { readable } from 'svelte/store';
   import MyParticipation from './MyParticipation.svelte';
   import MutationForm from './MutationForm.svelte';
-  import {subscribe, gql} from "$lib/apollo.js";
-  import {my_user, default_participations_display_style, get_my_participation} from '../my_user.js';
+  import { subscribe, gql } from "$lib/apollo.js";
+  import { my_user, default_participations_display_style, get_my_participation } from '../my_user';
   import ToolTipsy from './ToolTipsy.svelte';
   import ParticipationBadge from './ParticipationBadge.svelte';
   import DismissalBadge from './DismissalBadge.svelte';
   import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
   import ProgressBar from "@okrad/svelte-progressbar";
-  import {Progress} from 'sveltestrap';
-  //import {slide, fade} from 'svelte/transition';
-  /*import { flip } from 'svelte/animate';
-  import { crossfade } from 'svelte/transition';
-  import { quintOut } from 'svelte/easing';*/
+  import { Progress } from 'sveltestrap';
+  import type { Campaign as CampaignType, Participation } from '../types';
 
-
-  export let campaign;
+  export let campaign: CampaignType;
   export let is_detail_view = false;
-
 
   $: my_participation = get_my_participation(campaign, $my_user);
 
@@ -57,9 +52,9 @@
   const CONTRIBUTING_COUNT = gql`
     subscription ($threshold: Int, $campaign_id: Int, $confirmed: Boolean) {
       participations_aggregate(where: {threshold: {_lt: $threshold}, confirmed: {_eq: $confirmed}, campaign_id: {_eq: $campaign_id}, account: {smazano: {_eq: false}}}) {
-      aggregate {
-        count
-      }
+        aggregate {
+          count
+        }
       }
     }
   `;
@@ -88,11 +83,11 @@
   const CAMPAIGN_DISMISSAL = gql`
     mutation MyMutation($campaign_id: Int, $user_id: Int) {
       insert_campaign_dismissals_one(object: {campaign_id: $campaign_id, account_id: $user_id}) {
-      campaign_id
-      account_id
+        campaign_id
+        account_id
       }
     }
-  `
+  `;
 
 </script>
 
@@ -130,7 +125,7 @@
   <div class="content_block">
     <i>I will join when other people join:</i><br>
 
-    <MyParticipation campaign={campaign} on:my_participation_upsert/>
+    <MyParticipation {campaign} on:my_participation_upsert/>
 
   </div>
   <h5>Progress</h5>
@@ -148,9 +143,9 @@
       {/if}
       <!-- how to make the below the "light green" "unconfirmed participation"? -->
       <Progress bar color="warning"
-            value={unconfirmed_contributing_count}
-            max={suggested_mass}
-            unconfirmed
+              value={unconfirmed_contributing_count}
+              max={suggested_mass}
+              unconfirmed
       >
         {unconfirmed_contributing_count}</Progress>
     </Progress>
@@ -208,9 +203,8 @@
     </ToolTipsy>
 
     {#each campaign.campaign_dismissals as dismissal (dismissal.account_id)}
-      <span
-      >
-        <DismissalBadge {dismissal}/>
+      <span>
+        <DismissalBadge dismissal={dismissal}/>
       </span>
     {/each}
     <br/>

@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
   import SubscribedItemsInner from 'cmps/SubscribedItemsInner.svelte';
   import { my_user } from 'srcs/my_user.js';
 

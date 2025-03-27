@@ -2,7 +2,7 @@
   import PageReloadClock from "./PageReloadClock.svelte";
   import { user } from '$lib/stores';
   import { page } from '$app/stores';
-  import SettingsModal from '$lib/components/SettingsModal.svelte';
+  import SettingsModal from './SettingsModal.svelte';
   import {
     Collapse,
     Navbar,
@@ -63,6 +63,10 @@
 
       <NavItem>
         <NavLink href="/dev_area" active={segment === "dev_area"}>Dev area</NavLink>
+      </NavItem>
+
+      <NavItem>
+        <NavLink href="/svelte5-demo" active={segment === "svelte5-demo"}>Svelte 5 Demo</NavLink>
       </NavItem>
 
       <NavItem>

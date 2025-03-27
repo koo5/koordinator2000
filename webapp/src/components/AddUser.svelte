@@ -1,6 +1,6 @@
-<script type='js'>
+<script lang='js'>
   import { onMount } from 'svelte';
-  import { mutation } from 'svelte-apollo';
+  import { mutation } from '$lib/apollo-compat-wrapper.svelte';
   import gql from 'graphql-tag';
 
   const ADD_USER = gql`

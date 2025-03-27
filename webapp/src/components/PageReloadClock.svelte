@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
   import { onMount } from "svelte";
   import { my_user } from '../my_user.js';
 

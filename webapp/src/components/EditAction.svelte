@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
 //  import BytemdEditor from "./BytemdEditor.svelte";
   import FirepadEditor from "./FirepadEditor.svelte";
   import RemarkableEditor from "./RemarkableEditor.svelte";

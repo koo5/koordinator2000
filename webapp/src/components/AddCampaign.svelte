@@ -1,8 +1,8 @@
-<script type='js'>
+<script lang='ts'>
   import {onMount} from 'svelte';
   import MutationForm from './MutationForm.svelte';
   import gql from 'graphql-tag';
-  import {my_user} from '../my_user.js';
+  import {my_user} from '../my_user';
 
   const ADD = gql`
   mutation MyMutation(
@@ -37,13 +37,11 @@
   let suggested_optimal_threshold = 800;
   let collect_confirmations = false;
 
-  onMount(async () =>
-  {
-    clearForm()
+  onMount(async (): Promise<void> => {
+    clearForm();
   });
 
-  function clearForm()
-  {
+  function clearForm(): void {
     title = 'campaign' + Date.now();
     description = 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ';
   }
@@ -61,13 +59,13 @@
   variables={{
     title,
     description,
-    maintainer_id: my_user.id,
+    maintainer_id: $my_user.id,
     suggested_lowest_threshold,
     suggested_highest_threshold,
     suggested_optimal_threshold,
     collect_confirmations
   }}
-  on:done={(result)=>{
+  on:done={(result) => {
     clearForm();
   }}
 >

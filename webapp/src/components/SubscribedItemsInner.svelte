@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='js'>
   export let items;
 </script>
 

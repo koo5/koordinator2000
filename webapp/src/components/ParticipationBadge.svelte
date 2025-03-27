@@ -1,11 +1,11 @@
-<script lang='js'>
-
+<script lang='ts'>
   import ToolTipsy from './ToolTipsy.svelte';
-  import {my_user} from '../my_user.js';
-  import {get_status_class,get_tickmark} from '../stuff.js';
+  import { my_user } from '../my_user';
+  import { get_status_class, get_tickmark } from '../stuff.js';
+  import type { Participation, Campaign } from '../types';
 
-  export let participation;
-  export let campaign;
+  export let participation: Participation;
+  export let campaign: Campaign;
   $: status_class = get_status_class(participation, campaign?.collect_confirmations);
   $: tickmark = get_tickmark(participation, campaign?.collect_confirmations);
   $: my_badge = $my_user.id == participation.account.id;
@@ -37,7 +37,6 @@
 <span> </span>
 
 <style>
-
     .participation_badge {
         border-radius: 1px;
     }
@@ -46,5 +45,4 @@
         font-family: bold;
         font-size: 180%;
     }
-
 </style>
