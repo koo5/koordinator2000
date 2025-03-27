@@ -3,3 +3,4 @@
 aider
 .env
 **/node_modules
+.svelte-kit
