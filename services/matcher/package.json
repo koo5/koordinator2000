@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "bun index.js",
+    "dev": "bun --watch index.js"
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",

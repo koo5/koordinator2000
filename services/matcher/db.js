@@ -1,13 +1,26 @@
 const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv');
+
+// Load environment variables from root .env file if not already loaded
+const rootEnvPath = path.join(__dirname, '../../.env');
+if (fs.existsSync(rootEnvPath)) {
+  dotenv.config({ path: rootEnvPath });
+}
 
 // Get connection string from environment variable
-const connectionString = process.env.POSTGRES || 'postgresql://localhost:5432/myapp';
+// Check multiple environment variable names for backward compatibility
+const connectionString = process.env.DATABASE_URL || process.env.POSTGRES || 'postgresql://localhost:5432/myapp';
+
+// Print connection information (with password masked)
+const connectionInfo = connectionString.replace(/\/\/([^:]+):([^@]+)@/, '//\\1:******@');
+console.log(`[Matcher Service] Connecting to database: ${connectionInfo}`);
 
 // Create a new pool instance
 const pool = new Pool({
-  connectionString,
+  connectionString
+  // SSL settings are already included in the connection string via sslmode
 });
 
 // Test the connection

@@ -1,0 +1,7 @@
+"""People can express trust boundaries in shapes such that apps and query engines receive boundaries of which sources to trust for what information. By default, this might just be the user’s pod. Others’ pods might be consulted for their personal information, such as name, location, birth date, but not for things such as preferences, annotations, etc. Such limits will affect both performance and trust positively, at the cost of perhaps missing some results that might still be trustworthy, but were not part of the shape. In any case, documenting the provenance of query results and their individual components remains important in decentralized networks.""" - https://ruben.verborgh.org/blog/2019/06/17/shaping-linked-data-apps/
+
+
+"""dokieli implements the W3C Web Annotation specifications Wherever your article is published, readers can leave annotations and replies if they have their own personal datastore to save them to. If your article is published on a personal storage space, you can offer to store annotations and replies on their behalf, and enable anonymous responses too. """ - https://dokie.li/
+
+
+

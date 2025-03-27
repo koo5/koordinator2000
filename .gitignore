@@ -1,3 +1,5 @@
 .idea
 .aider*
 aider
+.env
+**/node_modules
