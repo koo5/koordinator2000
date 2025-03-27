@@ -1,6 +1,6 @@
 <script lang='js'>
 
-  import {mutation as apollo_mutation} from '$lib/apollo-compat-wrapper.svelte';
+  import {mutation as apollo_mutation} from 'svelte-apollo';
   import {getContext} from 'svelte';
   import {ensure_we_exist, apply_newly_authenticated_user, my_user} from '../my_user.js';
   import {createEventDispatcher} from 'svelte';

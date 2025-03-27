@@ -1,28 +1,22 @@
 <script lang="ts">
-  // Card component with TypeScript and Svelte 5 runes
+  // Card component with TypeScript
   
-  const props = $props<{
-    title?: string;
-    subtitle?: string;
-    image?: string;
-    imageAlt?: string;
-    imagePosition?: 'top' | 'bottom';
-    elevation?: 0 | 1 | 2 | 3 | 4 | 5;
-    border?: boolean;
-    rounded?: boolean;
-    clickable?: boolean;
-    href?: string;
-  }>();
+  export let title: string | undefined = undefined;
+  export let subtitle: string | undefined = undefined;
+  export let image: string | undefined = undefined;
+  export let imageAlt: string | undefined = undefined;
+  export let imagePosition: 'top' | 'bottom' = 'top';
+  export let elevation: 0 | 1 | 2 | 3 | 4 | 5 = 1;
+  export let border = true;
+  export let rounded = true;
+  export let clickable = false;
+  export let href: string | undefined = undefined;
   
-  // Default values
-  const imagePosition = $derived(props.imagePosition || 'top');
-  const elevation = $derived(props.elevation || 1);
-  const border = $derived(props.border !== false);
-  const rounded = $derived(props.rounded !== false);
-  const clickable = $derived(!!props.clickable || !!props.href);
+  // Derived values
+  $: clickableState = clickable || !!href;
   
   // Computed classes
-  const cardClass = $derived(() => {
+  $: cardClass = (() => {
     const classes = ['card'];
     
     // Elevation
@@ -41,12 +35,12 @@
     }
     
     // Clickable card
-    if (clickable) {
+    if (clickableState) {
       classes.push('clickable');
     }
     
     return classes.join(' ');
-  });
+  })();
   
   // Check if we have slots
   let hasHeaderSlot = false;
@@ -55,13 +49,15 @@
   
   // Event handlers
   function handleClick() {
-    if (props.href) {
-      window.location.href = props.href;
+    if (href) {
+      window.location.href = href;
     }
   }
   
-  $effect(() => {
-    // This will run on mount to check for slots
+  import { onMount } from 'svelte';
+  
+  onMount(() => {
+    // Check for slots
     hasHeaderSlot = !!document.querySelector('[slot="header"]');
     hasFooterSlot = !!document.querySelector('[slot="footer"]');
     hasDefaultSlot = !!document.querySelector('[slot="default"]');
@@ -70,26 +66,26 @@
 
 <div 
   class={cardClass}
-  on:click={clickable ? handleClick : undefined}
-  role={clickable ? 'button' : undefined}
-  tabindex={clickable ? 0 : undefined}
+  on:click={clickableState ? handleClick : undefined}
+  role={clickableState ? 'button' : undefined}
+  tabindex={clickableState ? 0 : undefined}
 >
-  {#if props.image && imagePosition === 'top'}
+  {#if image && imagePosition === 'top'}
     <div class="card-image">
-      <img src={props.image} alt={props.imageAlt || ''} />
+      <img src={image} alt={imageAlt || ''} />
     </div>
   {/if}
   
-  {#if props.title || props.subtitle || hasHeaderSlot}
+  {#if title || subtitle || hasHeaderSlot}
     <div class="card-header">
       {#if hasHeaderSlot}
         <slot name="header"></slot>
       {:else}
-        {#if props.title}
-          <h3 class="card-title">{props.title}</h3>
+        {#if title}
+          <h3 class="card-title">{title}</h3>
         {/if}
-        {#if props.subtitle}
-          <p class="card-subtitle">{props.subtitle}</p>
+        {#if subtitle}
+          <p class="card-subtitle">{subtitle}</p>
         {/if}
       {/if}
     </div>
@@ -105,9 +101,9 @@
     </div>
   {/if}
   
-  {#if props.image && imagePosition === 'bottom'}
+  {#if image && imagePosition === 'bottom'}
     <div class="card-image">
-      <img src={props.image} alt={props.imageAlt || ''} />
+      <img src={image} alt={imageAlt || ''} />
     </div>
   {/if}
 </div>

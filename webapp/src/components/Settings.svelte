@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang='js'>
   import {my_user, default_participations_display_style} from '../my_user.js';
   import { theme, user, addNotification } from '$lib/stores';
   

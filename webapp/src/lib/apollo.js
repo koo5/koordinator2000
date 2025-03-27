@@ -9,8 +9,7 @@ import {HttpLink} from "apollo-link-http";
 import {getMainDefinition} from "apollo-utilities";
 import gql from 'graphql-tag';
 import {readable} from 'svelte/store';
-// Import from compat wrapper instead of directly from svelte-apollo
-import {subscribe as apollo_subscribe, mutation} from './apollo-compat-wrapper.svelte';
+import {query, mutation} from 'svelte-apollo';
 import { public_env } from '$lib/public_env.js';
 import { browser } from '$app/environment';
 
@@ -20,11 +19,11 @@ export let graphqlConnectionError = false;
 /**
  * Subscribe to a GraphQL query
  */
-function subscribe(query, options) {
+function subscribe(queryObj, options) {
   var result;
   if (browser) {
-    // Use query from the wrapper instead
-    result = apollo_subscribe(query, options);
+    // Use direct query from svelte-apollo
+    result = query(queryObj, options);
   } else {
     result = readable({loading: true});
   }

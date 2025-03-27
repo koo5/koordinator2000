@@ -8,7 +8,7 @@
   import TheNagModal from '../components/TheNagModal.svelte';
   import Nav from '../components/Nav.svelte';
   // Notification system is handled by lib/stores.js
-  import { setClient } from '$lib/apollo-compat-wrapper.svelte';
+  import { setClient } from 'svelte-apollo';
   import { new_apollo_client } from '$lib/apollo.js';
   import {
     Auth0Context,

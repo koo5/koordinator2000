@@ -1,28 +1,19 @@
 <script lang="ts">
-  // Badge component with TypeScript and Svelte 5 runes
+  // Badge component with TypeScript
   
   type BadgeVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
   type BadgeSize = 'sm' | 'md' | 'lg';
   
-  const props = $props<{
-    variant?: BadgeVariant;
-    size?: BadgeSize;
-    outline?: boolean;
-    pill?: boolean;
-    href?: string;
-    icon?: string;
-    iconPosition?: 'left' | 'right';
-  }>();
-  
-  // Default values
-  const variant = $derived(props.variant || 'primary');
-  const size = $derived(props.size || 'md');
-  const outline = $derived(props.outline || false);
-  const pill = $derived(props.pill || false);
-  const iconPosition = $derived(props.iconPosition || 'left');
+  export let variant: BadgeVariant = 'primary';
+  export let size: BadgeSize = 'md';
+  export let outline = false;
+  export let pill = false;
+  export let href: string | undefined = undefined;
+  export let icon: string | undefined = undefined;
+  export let iconPosition: 'left' | 'right' = 'left';
   
   // Class construction
-  const badgeClass = $derived(() => {
+  $: badgeClass = (() => {
     let classes = ['badge'];
     
     // Variant
@@ -43,31 +34,31 @@
     }
     
     return classes.join(' ');
-  });
+  })();
 </script>
 
-{#if props.href}
-  <a href={props.href} class={badgeClass}>
-    {#if props.icon && iconPosition === 'left'}
-      <i class="{props.icon}"></i>
+{#if href}
+  <a {href} class={badgeClass}>
+    {#if icon && iconPosition === 'left'}
+      <i class="{icon}"></i>
     {/if}
     
     <slot></slot>
     
-    {#if props.icon && iconPosition === 'right'}
-      <i class="{props.icon}"></i>
+    {#if icon && iconPosition === 'right'}
+      <i class="{icon}"></i>
     {/if}
   </a>
 {:else}
   <span class={badgeClass}>
-    {#if props.icon && iconPosition === 'left'}
-      <i class="{props.icon}"></i>
+    {#if icon && iconPosition === 'left'}
+      <i class="{icon}"></i>
     {/if}
     
     <slot></slot>
     
-    {#if props.icon && iconPosition === 'right'}
-      <i class="{props.icon}"></i>
+    {#if icon && iconPosition === 'right'}
+      <i class="{icon}"></i>
     {/if}
   </span>
 {/if}

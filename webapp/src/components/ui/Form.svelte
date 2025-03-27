@@ -1,7 +1,7 @@
 <script lang="ts">
-  // Form component with TypeScript and Svelte 5 runes
+  // Form component with TypeScript
 
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher, onMount } from 'svelte';
   import type { ValidatorFn } from './index';
 
   // Types for form handling
@@ -13,48 +13,42 @@
   // Cross-field validator function type
   type FormValidatorFn = (values: FormValues) => FormErrors;
 
-  const props = $props<{
-    id?: string;
-    initialValues?: FormValues;
-    validators?: FormValidatorFn[];
-    noValidate?: boolean;
-    autocomplete?: 'on' | 'off';
-    method?: 'get' | 'post';
-    action?: string;
-    enableReinitialize?: boolean;
-    validateOnChange?: boolean;
-    validateOnBlur?: boolean;
-    validateOnSubmit?: boolean;
-    submitButtonText?: string;
-    resetButtonText?: string;
-    showResetButton?: boolean;
-  }>();
+  // Props
+  export let id: string | undefined = undefined;
+  export let initialValues: FormValues | undefined = undefined;
+  export let validators: FormValidatorFn[] | undefined = undefined;
+  export let noValidate = true;
+  export let autocomplete: 'on' | 'off' | undefined = undefined;
+  export let method: 'get' | 'post' | undefined = undefined;
+  export let action: string | undefined = undefined;
+  export let enableReinitialize = false;
+  export let validateOnChange = false;
+  export let validateOnBlur = false;
+  export let validateOnSubmit = true;
+  export let submitButtonText: string | undefined = undefined;
+  export let resetButtonText: string | undefined = undefined;
+  export let showResetButton = false;
 
-  // Default values
-  const id = $derived(props.id || `form-${Math.random().toString(36).substring(2, 9)}`);
-  const noValidate = $derived(props.noValidate !== false);
-  const validateOnChange = $derived(props.validateOnChange || false);
-  const validateOnBlur = $derived(props.validateOnBlur || false);
-  const validateOnSubmit = $derived(props.validateOnSubmit !== false);
-  const showResetButton = $derived(props.showResetButton || false);
+  // Derived values
+  $: formId = id || `form-${Math.random().toString(36).substring(2, 9)}`;
 
   // Form state
-  let values = $state<FormValues>(props.initialValues || {});
-  let errors = $state<FormErrors>({});
-  let touched = $state<Record<string, boolean>>({});
-  let submitting = $state(false);
-  let submitted = $state(false);
-  let isValid = $state(true);
+  let values: FormValues = initialValues || {};
+  let errors: FormErrors = {};
+  let touched: Record<string, boolean> = {};
+  let submitting = false;
+  let submitted = false;
+  let isValid = true;
 
   // Form state derivations
-  const dirty = $derived(Object.keys(values).length > 0);
-  const pristine = $derived(!dirty);
-  const hasErrors = $derived(Object.values(errors).some(error => error !== null));
+  $: dirty = Object.keys(values).length > 0;
+  $: pristine = !dirty;
+  $: hasErrors = Object.values(errors).some(error => error !== null);
 
   // Reset the form
   function resetForm(): void {
     // Reset values to initial state
-    values = props.initialValues || {};
+    values = initialValues || {};
     errors = {};
     touched = {};
     submitted = false;
@@ -75,8 +69,8 @@
     }
 
     // Run form-level validators
-    if (props.validators && props.validators.length > 0) {
-      for (const validator of props.validators) {
+    if (validators && validators.length > 0) {
+      for (const validator of validators) {
         const validationErrors = validator(values);
 
         // Merge errors
@@ -241,11 +235,10 @@
   });
 
   // Effect to update values when initialValues change if enableReinitialize is true
-  $effect(() => {
-    if (props.enableReinitialize && props.initialValues) {
-      values = props.initialValues;
-    }
-  });
+  // Watch for initialValues changes if enableReinitialize is true
+  $: if (enableReinitialize && initialValues) {
+    values = initialValues;
+  }
 
   // Create a dispatcher to emit events
   const dispatch = createEventDispatcher<{
@@ -260,10 +253,10 @@
 </script>
 
 <form
-  {id}
-  method={props.method}
-  action={props.action}
-  autocomplete={props.autocomplete}
+  id={formId}
+  {method}
+  {action}
+  {autocomplete}
   novalidate={noValidate}
   on:submit={handleSubmit}
   on:change={handleChange}
@@ -285,7 +278,7 @@
   {#if !$$slots.actions}
     <div class="form-actions">
       <button type="submit" class="btn btn-primary" disabled={submitting}>
-        {submitting ? 'Submitting...' : (props.submitButtonText || 'Submit')}
+        {submitting ? 'Submitting...' : (submitButtonText || 'Submit')}
       </button>
 
       {#if showResetButton}
@@ -294,7 +287,7 @@
           class="btn btn-secondary"
           on:click={resetForm}
           disabled={submitting || pristine}>
-          {props.resetButtonText || 'Reset'}
+          {resetButtonText || 'Reset'}
         </button>
       {/if}
     </div>

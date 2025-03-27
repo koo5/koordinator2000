@@ -1,33 +1,22 @@
 <script lang="ts">
-  // Button component with TypeScript and Svelte 5 runes
+  // Button component with TypeScript
   
   type ButtonVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'link';
   type ButtonSize = 'sm' | 'md' | 'lg';
   
-  const props = $props<{
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    outline?: boolean;
-    disabled?: boolean;
-    type?: 'button' | 'submit' | 'reset';
-    href?: string;
-    block?: boolean;
-    loading?: boolean;
-    icon?: string;
-    ariaLabel?: string;
-  }>();
-  
-  // Default values
-  const variant = $derived(props.variant || 'primary');
-  const size = $derived(props.size || 'md');
-  const type = $derived(props.type || 'button');
-  const disabled = $derived(props.disabled || false);
-  const outline = $derived(props.outline || false);
-  const block = $derived(props.block || false);
-  const loading = $derived(props.loading || false);
+  export let variant: ButtonVariant = 'primary';
+  export let size: ButtonSize = 'md';
+  export let outline = false;
+  export let disabled = false;
+  export let type: 'button' | 'submit' | 'reset' = 'button';
+  export let href: string | undefined = undefined;
+  export let block = false;
+  export let loading = false;
+  export let icon: string | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
   
   // Class construction
-  const buttonClass = $derived(() => {
+  $: buttonClass = (() => {
     let classes = ['btn'];
     
     // Variant
@@ -53,17 +42,17 @@
     }
     
     return classes.join(' ');
-  });
+  })();
 </script>
 
-{#if props.href}
+{#if href}
   <a 
-    href={props.href} 
+    {href} 
     class={buttonClass}
     role="button"
     aria-disabled={disabled}
     tabindex={disabled ? '-1' : undefined}
-    aria-label={props.ariaLabel}
+    aria-label={ariaLabel}
     on:click
     on:mouseenter
     on:mouseleave
@@ -72,8 +61,8 @@
       <span class="spinner"></span>
     {/if}
     
-    {#if props.icon}
-      <i class="{props.icon}"></i>
+    {#if icon}
+      <i class="{icon}"></i>
     {/if}
     
     <slot></slot>
@@ -83,7 +72,7 @@
     {type}
     class={buttonClass}
     disabled={disabled || loading}
-    aria-label={props.ariaLabel}
+    aria-label={ariaLabel}
     on:click
     on:mouseenter
     on:mouseleave
@@ -92,8 +81,8 @@
       <span class="spinner"></span>
     {/if}
     
-    {#if props.icon}
-      <i class="{props.icon}"></i>
+    {#if icon}
+      <i class="{icon}"></i>
     {/if}
     
     <slot></slot>

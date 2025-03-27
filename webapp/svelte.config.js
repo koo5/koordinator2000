@@ -32,11 +32,9 @@ const config = {
     }
   },
 
-  // Svelte 5 specific options
+  // Svelte 4 configuration
   compilerOptions: {
-    // Don't globally enable runes mode to allow external libraries to work
-    // Instead we'll opt-in per file with <script lang="ts">
-    runes: false,
+    // Standard Svelte 4 compiler options
   }
 };
 
