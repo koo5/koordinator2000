@@ -8,10 +8,12 @@
     Navbar,
     NavbarToggler,
     NavbarBrand,
-    Nav,
     NavItem,
     NavLink,
-  } from 'sveltestrap';
+  } from '../components/ui';
+  
+  // Import our own Nav component to avoid name conflict
+  import { default as NavComponent } from '../components/ui/Nav.svelte';
 
   export const data = {}; // Changed to const as it's for external reference only
 
@@ -43,7 +45,7 @@
   <PageReloadClock/>
   <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
   <Collapse isOpen={navbar_open} navbar expand="md" on:update={(e) => navbar_handleUpdate(e)}>
-    <Nav class="ml-auto" navbar>
+    <NavComponent class="ml-auto" navbar>
 
       <NavItem>
         <NavLink href="/" active={segment === undefined}>Home</NavLink>

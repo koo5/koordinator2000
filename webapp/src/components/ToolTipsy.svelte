@@ -20,11 +20,7 @@
   <slot></slot>
 {/if}
 
-<!--
-todo
-  https://dev.to/gokayokyay/how-to-use-popper-with-svelte-in-a-sveltish-way-with-actions-2h02?utm_source=dormosheio&utm_campaign=dormosheio
-
--->
+<!-- Simple CSS tooltip implementation -->
 
 
 <style>

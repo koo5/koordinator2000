@@ -95,3 +95,14 @@ export function debounce(fn, delay) {
 export function generateId(length = 8) {
   return Math.random().toString(36).substring(2, 2 + length);
 }
+
+/**
+ * Utility function for creating class name strings from various input types
+ * @param {...(string|boolean|null|undefined)} args - Class names or conditions
+ * @returns {string} - Space-separated class string
+ */
+export function classnames(...args) {
+  return args
+    .filter(Boolean) // Remove falsy values
+    .join(' ');
+}

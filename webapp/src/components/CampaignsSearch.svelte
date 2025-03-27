@@ -1,8 +1,5 @@
 <script>
-  import {
-    Button,
-    Card
-  } from 'sveltestrap';
+  // Simple component, not using sveltestrap components
   import {subscribe, gql} from "$lib/apollo.js";
   import {query} from 'svelte-apollo';
   import {my_user} from '../my_user.js';
