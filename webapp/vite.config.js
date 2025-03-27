@@ -46,7 +46,8 @@ export default defineConfig({
 		fs: {
 			// Allow serving files from one level up to the project root
 			allow: ['..']
-		}
+		},
+		allowedHosts: 'all'
 	},
 	
 	// Fix SSR issues with browser-only modules
