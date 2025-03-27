@@ -10,7 +10,7 @@
 npm i
 ```
 
-2. Create a `.public_env` file in the project root with the following variables:
+2. Create an `.env` file with the following variables:
 ```
 GRAPHQL_ENDPOINT="https://your-hasura-instance.hasura.app/v1/graphql"
 PUBLIC_URL="http://localhost:5000"

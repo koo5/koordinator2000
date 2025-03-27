@@ -1,0 +1,30 @@
+
+* upgrade sveltekit if possible, fix up prod server/build
+https://vite.dev/guide/ssr.html ?
+
+* replace sveltestrap (depends on svelte 3)
+
+* apollo: see if we can upgrade to svelte 5
+
+* finish auth and permissions
+
+* replace auth0 with lucia or similar, or keep both
+
+* fix code duplication
+
+* modernize design
+
+* add tests
+
+* revive collaborative text editor
+
+* integrate emailing or other platforms (e.g. discord, slack, etc.)
+
+* add a system for participation estimations
+
+* e2e testing
+
+* finish campaign category system
+
+* add a system for privacy settigns / federation
+
