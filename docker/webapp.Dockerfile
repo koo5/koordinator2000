@@ -2,6 +2,10 @@ FROM ubuntu:24.04
 
 ARG UID=1000
 ARG GID=1000
+# Add NODE_ENV argument with default value "development"
+ARG NODE_ENV=development
+
+RUN mkdir -p /tmp && chmod 1777 /tmp
 
 RUN apt update && apt install -y curl tini unzip git
 ENTRYPOINT ["/usr/bin/tini", "--"]
@@ -28,6 +32,9 @@ RUN curl -fsSL https://bun.sh/install | bash
 # Copy application files
 COPY webapp /app/webapp
 COPY docker/webapp-start.sh /app/
+
+# Set a default environment mode that can be overridden at runtime
+ENV NODE_ENV=${NODE_ENV:-development}
 
 EXPOSE 5000
 

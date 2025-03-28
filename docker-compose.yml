@@ -20,6 +20,8 @@ services:
       - "5000:5000"
     volumes:
       - ./webapp:/app/webapp
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
 
   # Matcher service
   matcher:
