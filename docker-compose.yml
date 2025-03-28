@@ -35,3 +35,45 @@ services:
     volumes:
       - ./services/matcher:/app/services/matcher
       - ./.env:/app/services/matcher/.env
+      
+  # Keycloak database
+  keycloak-db:
+    image: postgres:16-alpine
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak_password  # Change this in production
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Keycloak service
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    command: 
+      - start-dev
+      - --import-realm  # This allows importing realms from the mounted volume
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realms:/opt/keycloak/data/import  # For importing realms
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak_password  # Must match the password set in keycloak-db
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_password  # Change this in production
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY: edge
+
+volumes:
+  keycloak-db-data:

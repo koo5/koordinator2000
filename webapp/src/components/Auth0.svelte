@@ -9,7 +9,7 @@
 		login,
 		logout,
 		userInfo,
-	} from '@dopry/svelte-auth0';
+	} from '$lib/auth0-stub';
 	import {get} from 'svelte/store';
 	import {page} from '$app/stores';
 	import {my_user, event} from '../my_user.js';

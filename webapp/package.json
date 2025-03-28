@@ -13,9 +13,8 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.3.6",
-    "@dopry/svelte-auth0": "git+https://github.com/koo5/svelte-auth0.git",
+    "@auth/core": "^0.38.0",
     "@fontsource/aguafina-script": "^4.2.2",
-    "@okrad/svelte-progressbar": "^1.11.1",
     "@polka/send-type": "^0.5.2",
     "@popperjs/core": "^2.11.8",
     "@sveltejs/adapter-node": "^5.2.12",
@@ -36,6 +35,7 @@
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
     "jose": "^4.15.5",
+    "keycloak-js": "^26.1.4",
     "moment": "^2.29.1",
     "path-browserify": "^1.0.1",
     "sanitize-html": "github:apostrophecms/sanitize-html",
