@@ -3,9 +3,8 @@
  * This file should only be imported by server-side code
  */
 import { SignJWT, importJWK } from 'jose';
-import gql from 'graphql-tag';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
-import { get_server_apollo_client } from '$lib/server/apollo.js';
+import { getServerClient, gql, serverQuery as query, serverMutation as mutate } from '$lib/server/urql.js';
 import { server_env } from '$lib/server/env.js';
 
 // Initialize variables for JWT operations
@@ -82,13 +81,13 @@ export async function free_user_id(email = null) {
         accountObject.email = email;
       }
       
-      // Use server Apollo client for admin access
-      const apollo = get_server_apollo_client();
-      console.log("Server Apollo client initialized:", !!apollo);
+      // Use server URQL client for admin access
+      const client = getServerClient();
+      console.log("Server URQL client initialized:", !!client);
       console.log("GraphQL mutation variables:", { accountObject });
       
-      result = await apollo.mutate({
-        mutation: gql`
+      const mutationResult = await mutate(
+        gql`
           mutation MyMutation($accountObject: accounts_insert_input!) {
             insert_accounts_one(object: $accountObject) {
               id
@@ -96,10 +95,12 @@ export async function free_user_id(email = null) {
             }
           }
         `,
-        variables: {
+        {
           accountObject
         }
-      });
+      );
+      
+      result = { data: mutationResult.data };
       
       console.log("GraphQL mutation result:", JSON.stringify(result, null, 2));
       
@@ -268,24 +269,28 @@ export async function process_event(x) {
  */
 export async function user_id_from_auth(provider, sub) {
   var found_user_id = undefined;
-  let result = await get_server_apollo_client().query({
-    query: gql`
+  let result = await query(
+    gql`
       query MyQuery($login_name: String, $provider: String) {
         verified_user_authentications(where: {login_name: {_eq: $login_name}, provider: {_eq: $provider}}) {
           account_id
         }
       }
     `,
-    variables: {
+    {
       login_name: sub,
       provider: provider
     }
-  });
-  await result.data.verified_user_authentications.forEach(async (x) => {
-    console.log('found verified_user_authentication:');
-    console.log(x);
-    found_user_id = found_user_id || x.account_id;
-  });
+  );
+  
+  if (result.data && result.data.verified_user_authentications) {
+    await result.data.verified_user_authentications.forEach(async (x) => {
+      console.log('found verified_user_authentication:');
+      console.log(x);
+      found_user_id = found_user_id || x.account_id;
+    });
+  }
+  
   return found_user_id;
 }
 
@@ -296,8 +301,9 @@ export async function grab_email(user_id, info) {
   if (user_id == -1 || !user_id)
     return;
   let email = info.email;
-  console.log(JSON.stringify(await get_server_apollo_client().mutate({
-    mutation: gql`
+  
+  const result = await mutate(
+    gql`
       mutation MyMutation($user_id: Int, $email: String) {
         update_accounts(where: {id: {_eq: $user_id}, email: {_is_null: true}}, _set: {email: $email})
         {
@@ -306,11 +312,13 @@ export async function grab_email(user_id, info) {
           }
         }
       }`,
-    variables: {
+    {
       user_id,
       email
     }
-  }), null, ''));
+  );
+  
+  console.log(JSON.stringify(result, null, ''));
 }
 
 /**
@@ -321,8 +329,9 @@ export async function save_verified_authentication(user_id, provider, info) {
     return;
   let login_name = info.sub;
   console.log(['save_verified_authentication', user_id, provider, login_name]);
-  await get_server_apollo_client().mutate({
-    mutation: gql`
+  
+  await mutate(
+    gql`
       mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
         insert_verified_user_authentications_one(object: {login_name: $login_name, provider: $provider, account_id: $user_id})
         {
@@ -330,10 +339,10 @@ export async function save_verified_authentication(user_id, provider, info) {
         }
       }
     `,
-    variables: {
+    {
       user_id,
       provider,
       login_name
     }
-  });
+  );
 }

@@ -3,7 +3,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
-	
+
+	clearScreen: false,
 	// Configure Node.js built-in replacements
 	resolve: {
 		alias: {

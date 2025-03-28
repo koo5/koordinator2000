@@ -2,7 +2,7 @@
 	import TestModal from '../../components/TestModal.svelte';
 	import {my_user} from '../../my_user.js';
 	import {CAMPAIGN_FRAGMENT} from '../../stuff.js';
-	import {subscribe, gql} from "$lib/apollo.js";
+	import {subscribe, gql} from "$lib/urql.js";
 	
 	let segment = 0;
 	let currentData = null;

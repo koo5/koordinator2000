@@ -7,8 +7,7 @@
 	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import TheNagModal from '../components/TheNagModal.svelte';
 	import Nav from '../components/Nav.svelte';
-	import { setClient } from 'svelte-apollo';
-	import { new_apollo_client } from '$lib/apollo.js';
+// URQL client is automatically created in $lib/urql.js
 	import {
 		Auth0Context,
 		idToken,
@@ -29,10 +28,8 @@
 	$: callback_url = PUBLIC_URL + "/you";
 	$: logout_url = PUBLIC_URL + "/you";
 	
-	// Set up Apollo client
-	if (browser) {
-		setClient(new_apollo_client());
-	}
+	// URQL client is automatically created and initialized
+	// No need to explicitly set the client
 	
 	// Auth0 token handling
 	$: maybe_ping_server_about_this($idToken, $userInfo);

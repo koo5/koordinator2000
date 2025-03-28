@@ -2,17 +2,18 @@
 	import Campaign from './Campaign.svelte';
 	import {my_user} from '../my_user.js';
 	import * as animateScroll from "svelte-scrollto";
-	import {subscribe, gql} from "$lib/apollo.js";
+	import {subscribe, gql} from "$lib/urql.js";
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 	import {CAMPAIGN_FRAGMENT} from '../stuff.js';
+	import { browser } from '$app/environment';
 	
-	// Import Swiper components
-	import SwiperCore from 'swiper';
-	import { Swiper, SwiperSlide } from 'swiper/svelte';
-	import { EffectFade } from 'swiper';
-	
-	// Import Swiper styles - use the bundled CSS for version 6.x
-	import 'swiper/swiper-bundle.min.css';
+	// Import Swiper components - using version 11
+	import { Swiper, SwiperSlide } from 'swiper';
+	import { EffectFade } from 'swiper/modules';
+
+	// Import Swiper styles for version 11
+	import 'swiper/css';
+	import 'swiper/css/effect-fade';
 
 
 	export let ids;
@@ -67,12 +68,8 @@
 	let campaign_containers;
 	$: my_user_id = $my_user.id
 
-
-
-	SwiperCore.use([EffectFade]);
 	function slideChange(x, campaign_id)
 	{
-
 		if (my_timeout)
 			clearTimeout(my_timeout);
 
@@ -125,6 +122,7 @@
 
 		{#each sorted_campaigns as campaign (campaign.id)}
 
+			{#if browser}
 			<Swiper data-campaign-id={campaign.id}
 					threshold={60}
 					initialSlide={2}
@@ -134,7 +132,8 @@
 					watchOverflow={true}
 					speed={1500}
 					freeModeMomentum={false}
-					fadeEffect={ {crossFade: true} }
+					modules={[EffectFade]}
+					effect="fade"
 					on:slideChange={(x) => slideChange(x,campaign.id)}
 			>
 				<SwiperSlide>
@@ -180,6 +179,14 @@
 				</SwiperSlide>
 
 			</Swiper>
+			{:else}
+			<!-- SSR fallback to show campaigns without sliders -->
+			<div class="campaign_swiper_slide ssr-fallback">
+				<li>
+					<Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)}/>
+				</li>
+			</div>
+			{/if}
 
 		{:else}
 			No campaigns found
@@ -198,6 +205,12 @@
 	.campaign_swiper_slide {
 		max-width: 100%;
 		word-wrap: break-word;
+	}
+
+	.ssr-fallback {
+		margin: 1rem 0;
+		padding: 1rem;
+		border: 1px solid #eee;
 	}
 
 	:global(.confirmed) {

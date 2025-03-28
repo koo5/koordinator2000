@@ -3,7 +3,7 @@
 	import Auth0 from "./Auth0.svelte";
 	import {login} from '$lib/auth0-stub';
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "$lib/apollo.js";
+	import {subscribe, gql} from "$lib/urql.js";
 
 	$: my_user_id = $my_user.id
 

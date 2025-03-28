@@ -19,7 +19,7 @@
 	import Campaign from '../../components/Campaign.svelte';
 	import {my_user} from '../../my_user.js';
 	import {CAMPAIGN_FRAGMENT} from '../../stuff.js';
-	import {subscribe, gql} from "$lib/apollo.js";
+	import {subscribe, gql} from "$lib/urql.js";
 
 	export let campaign_id;
 

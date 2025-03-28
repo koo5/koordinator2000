@@ -3,8 +3,8 @@
 		Button,
 		Card
 	} from './ui';
-	import {subscribe, gql} from "$lib/apollo.js";
-	import {query} from 'svelte-apollo';
+	import {subscribe, gql} from "$lib/urql.js";
+	import {mutation} from '$lib/urql.js';
 	import {my_user} from '../my_user.js';
 	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
