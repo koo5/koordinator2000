@@ -1,8 +1,16 @@
 // This is a stub for authentication (transitioning from Auth0 to Keycloak)
 import { writable } from 'svelte/store';
 
+// Create Auth0Context as a proper constructor class
+export class Auth0Context {
+  constructor() {
+    // Initialize with empty methods
+    this.setContext = () => {};
+    this.getContext = () => {};
+  }
+}
+
 // Create writable stores with default values
-export const Auth0Context = { setContext: () => {}, getContext: () => {} };
 export const authError = writable(null);
 export const authToken = writable(null);
 export const idToken = writable(null);

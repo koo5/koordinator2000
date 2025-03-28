@@ -116,13 +116,6 @@
 {/if}
 
 {#if browser && $my_user}
-	<Auth0Context
-		{domain}
-		{client_id}
-		{audience}
-		{callback_url}
-		{logout_url}>
-		
 		<SettingsModal bind:toggle_settings={toggle_settings}/>
 		<TheNagModal/>
 		
@@ -141,21 +134,6 @@
 			</Row>
 		</Container>
 		
-		{#if $my_user.auth_debug}
-			<div class="content_block">
-				auth0 configuration:
-				<pre>
-					audience = {audience}
-					domain = {domain}
-					client_id = {client_id}
-					
-					PUBLIC_URL = {PUBLIC_URL}
-					callback_url = {callback_url}
-					logout_url = {logout_url}
-				</pre>
-			</div>
-		{/if}
-	</Auth0Context>
 {:else}
 	<div class="content_block">
 		Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. 

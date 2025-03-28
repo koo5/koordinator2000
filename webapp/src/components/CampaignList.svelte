@@ -1,13 +1,18 @@
-<script type='js'>
+<script>
 	import Campaign from './Campaign.svelte';
 	import {my_user} from '../my_user.js';
 	import * as animateScroll from "svelte-scrollto";
 	import {subscribe, gql} from "$lib/apollo.js";
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 	import {CAMPAIGN_FRAGMENT} from '../stuff.js';
-	import {Swiper, SwiperSlide} from 'swiper/svelte';
-	import SwiperCore, {EffectFade} from 'swiper';
-	import 'swiper/swiper-bundle.css';
+	
+	// Import Swiper components
+	import SwiperCore from 'swiper';
+	import { Swiper, SwiperSlide } from 'swiper/svelte';
+	import { EffectFade } from 'swiper';
+	
+	// Import Swiper styles - use the bundled CSS for version 6.x
+	import 'swiper/swiper-bundle.min.css';
 
 
 	export let ids;
