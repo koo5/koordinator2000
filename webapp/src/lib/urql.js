@@ -3,10 +3,22 @@
  */
 import { browser } from '$app/environment';
 import { writable, readable } from 'svelte/store';
-import { Client, getContextClient, setContextClient } from '@urql/svelte';
+import { 
+  Client, 
+  getContextClient, 
+  setContextClient, 
+  queryStore,
+  subscriptionStore 
+} from '@urql/svelte';
 import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env.js';
-import { cacheExchange, fetchExchange, ssrExchange } from '@urql/core';
+import { 
+  cacheExchange, 
+  fetchExchange, 
+  ssrExchange,
+  subscriptionExchange
+} from '@urql/core';
+import { createClient as createWSClient } from 'graphql-ws';
 
 // Track GraphQL connection status
 export const graphqlConnectionStatus = writable({
@@ -20,9 +32,25 @@ const ssr = ssrExchange({
   isClient: browser
 });
 
+// Create WebSocket client for subscriptions
+function getWebSocketUrl(endpoint) {
+  // Convert HTTP URL to WebSocket URL
+  const wsEndpoint = endpoint.replace(/^http/, 'ws');
+  return `wss://${wsEndpoint}`;
+}
+
 // Export client creation function
 export function createUrqlClient() {
   console.log('Creating URQL client with endpoint:', public_env.GRAPHQL_ENDPOINT);
+  
+  // Create WebSocket client for subscriptions if in browser environment
+  const wsClient = browser ? createWSClient({
+    url: getWebSocketUrl(public_env.GRAPHQL_ENDPOINT),
+    connectionParams: {
+      headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' }
+    }
+  }) : null;
+  
   return new Client({
     url: `https://${public_env.GRAPHQL_ENDPOINT}`,
     fetchOptions: {
@@ -31,7 +59,22 @@ export function createUrqlClient() {
     exchanges: [
       cacheExchange,
       ssr, // Add SSR exchange
-      fetchExchange
+      fetchExchange,
+      // Add subscription exchange only in browser environment
+      ...(browser && wsClient ? [
+        subscriptionExchange({
+          forwardSubscription(operation) {
+            return {
+              subscribe: (sink) => {
+                const dispose = wsClient.subscribe(operation, sink);
+                return {
+                  unsubscribe: dispose
+                };
+              }
+            };
+          }
+        })
+      ] : [])
     ]
   });
 }
@@ -40,35 +83,32 @@ export function createUrqlClient() {
 export { setContextClient, getContextClient }
 
 /**
- * Subscribe to a GraphQL query
+ * Subscribe to a GraphQL query or subscription
+ * Automatically detects operation type and uses the appropriate store
+ * 
+ * NOTE: This function is deprecated; use queryStore or subscriptionStore directly instead
  */
 export function subscribe(query, options = {}) {
-  if (!browser) {
-    return readable({ loading: true, data: null, error: null });
-  }
+  // Check operation type from query definition
+  const operationType = query.definitions?.[0]?.operation;
   
-  const result = { 
-    loading: true, 
-    data: null, 
-    error: null 
-  };
+  // Use appropriate store based on operation type
+  const urqlStore = operationType === 'subscription' 
+    ? subscriptionStore({
+        client: getContextClient(),
+        query: query,
+        variables: options.variables || {}
+      })
+    : queryStore({
+        client: getContextClient(),
+        query: query,
+        variables: options.variables || {}
+      });
   
-  const store = writable(result);
+  // Transform to our expected format for backwards compatibility
+  const store = writable({ loading: true, data: null, error: null });
   
-  const queryResult = options.variables ? 
-    { query, variables: options.variables } : 
-    { query };
-    
-  // Handle subscription by converting URQL result to match expected format
-  const urqlStore = browser ? 
-    // If it's a subscription, use it directly
-    query.definitions?.[0]?.operation === 'subscription' ?
-      getContextClient().subscription(queryResult).toSvelte() :
-      getContextClient().query(queryResult).toSvelte() :
-    readable({ fetching: false, data: null, error: null });
-  
-  // Subscribe to URQL store and transform to expected format
-  const unsubscribe = urqlStore.subscribe(result => {
+  urqlStore.subscribe(result => {
     store.set({
       loading: result.fetching,
       data: result.data,
@@ -115,5 +155,5 @@ export function mutation(query) {
   };
 }
 
-// Export gql tag for query building
-export { gql };
+// Export URQL functions for direct use
+export { gql, queryStore, subscriptionStore };

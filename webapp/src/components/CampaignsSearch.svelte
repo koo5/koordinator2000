@@ -3,7 +3,7 @@
 		Button,
 		Card
 	} from './ui';
-	import { gql, subscribe } from '$lib/urql.js';
+	import { gql, queryStore, getContextClient } from '$lib/urql.js';
 	import {my_user} from '../my_user.js';
 	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
@@ -12,7 +12,7 @@
 
 
 	const CAMPAIGN_LIST = gql`
-		query ($_user_id: Int, $_seen_ids: [Int!]) {
+		query CampaignList($_user_id: Int, $_seen_ids: [Int!]) {
 			campaigns(
 				order_by: [{id: asc}],
 				limit: 5,
@@ -65,12 +65,13 @@
 		_seen_ids: seen,
 	}
 
-	$: items = subscribe(
-		CAMPAIGN_LIST,
-		{
-			variables: vars
-		}
-	);
+	// Use queryStore directly for more reliable handling
+	$: items = queryStore({
+		client: getContextClient(),
+		query: CAMPAIGN_LIST,
+		variables: vars,
+		pause: !browser
+	});
 
 
 	let more_button;

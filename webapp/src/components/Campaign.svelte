@@ -6,7 +6,7 @@
 	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from './MutationForm.svelte';
-	import {subscribe, gql} from "$lib/urql.js";
+	import {gql, queryStore, subscriptionStore, getContextClient} from "$lib/urql.js";
 	import {my_user, default_participations_display_style, get_my_participation} from '../my_user.js';
 	import ToolTipsy from './ToolTipsy.svelte';
 	import ParticipationBadge from './ParticipationBadge.svelte';
@@ -14,6 +14,7 @@
 	import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
 	import ProgressBar from "./ProgressBar.svelte";
 	import {Progress} from './ui';
+	import { browser } from '$app/environment';
 	//import {slide, fade} from 'svelte/transition';
 	/*import { flip } from 'svelte/animate';
 	import { crossfade } from 'svelte/transition';
@@ -64,22 +65,25 @@
 		}
 	`;
 
-	$: confirmed_contributing_count_q = false ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
-			variables: {
-				threshold: suggested_mass,
-				campaign_id: campaign.id,
-				confirmed: true
-			}
+	$: confirmed_contributing_count_q = subscriptionStore({
+		client: getContextClient(),
+		query: CONTRIBUTING_COUNT,
+		variables: {
+			threshold: suggested_mass,
+			campaign_id: campaign.id,
+			confirmed: true
 		}
-	);
-	$: unconfirmed_contributing_count_q = false ? readable({}) : subscribe(CONTRIBUTING_COUNT, {
-			variables: {
-				threshold: suggested_mass,
-				campaign_id: campaign.id,
-				confirmed: false
-			}
+	});
+	
+	$: unconfirmed_contributing_count_q = subscriptionStore({
+		client: getContextClient(),
+		query: CONTRIBUTING_COUNT,
+		variables: {
+			threshold: suggested_mass,
+			campaign_id: campaign.id,
+			confirmed: false
 		}
-	);
+	});
 	$: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: unconfirmed_contributing_count = $unconfirmed_contributing_count_q.data && $unconfirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
 	$: confirmed_contributing_count_str = confirmed_contributing_count == undefined ? '???' : confirmed_contributing_count;

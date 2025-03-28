@@ -36,9 +36,9 @@
 			<Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert("yeeeeeehaaaaaaa")}/>
 	{:else}
 		{#if dddd}
-			sorry, this campaign doesn't exist
+			this campaign doesn't exist
 		{:else}
-			<div class="animate-flicker">Loading...</div>
+			<div class="animate-flicker">Campaign is loading...</div>
 		{/if}
 	{/if}
 

@@ -58,7 +58,7 @@
 </script>
 
 {#if loading}
-  <div class="loading">Loading...</div>
+  <div class="loading">Auth is loading...</div>
 {:else}
   <slot login={handleLogin} logout={handleLogout} {error} />
 {/if}

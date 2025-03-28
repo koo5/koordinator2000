@@ -2,7 +2,7 @@
 	import Campaign from './Campaign.svelte';
 	import {my_user} from '../my_user.js';
 	import * as animateScroll from "svelte-scrollto";
-	import {subscribe, gql} from "$lib/urql.js";
+	import {gql, subscriptionStore, getContextClient} from "$lib/urql.js";
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 	import {CAMPAIGN_FRAGMENT} from '../stuff.js';
 	import { browser } from '$app/environment';
@@ -25,15 +25,14 @@
 		}
   	`;
 
-	$: campaigns_query = subscribe(
-		CAMPAIGN_LIST,
-		{
-			variables: {
-				_user_id: my_user_id,
-				_ids: ids,
-			}
+	$: campaigns_query = subscriptionStore({
+		client: getContextClient(),
+		query: CAMPAIGN_LIST,
+		variables: {
+			_user_id: my_user_id,
+			_ids: ids,
 		}
-	);
+	});
 
 
 	let sorted_campaigns = [];

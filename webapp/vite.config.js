@@ -63,8 +63,14 @@ export default defineConfig({
 		]
 	},
 	
-	// Include @urql/svelte in dependency optimization
-	optimizeDeps: {
-		include: ['@urql/svelte']
+	// Resolve aliases for Node.js modules in browser
+	resolve: {
+		alias: {
+			'path': 'path-browserify',
+			'fs': './src/lib/empty-module.js',
+			'url': 'url-polyfill',
+			'source-map-js': './src/lib/empty-module.js'
+		}
 	}
+	
 });
