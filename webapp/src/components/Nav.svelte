@@ -11,7 +11,7 @@
 		Nav,
 		NavItem,
 		NavLink,
-	} from 'sveltestrap';
+	} from './ui';
 
 	export const data = {}; // Changed to const as it's for external reference only
 

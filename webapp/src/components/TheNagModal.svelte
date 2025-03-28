@@ -9,7 +9,7 @@
 		ModalBody,
 		ModalFooter,
 		ModalHeader
-	} from 'sveltestrap';
+	} from './ui';
 
 	let isOpen = false;
 	$: modal_hack(isOpen);
@@ -47,7 +47,7 @@
 </script>
 
 
-<Modal {isOpen} toggle={later} fade={false} keyboard={true} scrollable={true}>
+<Modal {isOpen} toggle={later} fadeEffect={false} keyboard={true} scrollable={true}>
 	<ModalHeader toggle={later}>Please!</ModalHeader>
 	<ModalBody>
 		<TheNagBody/>

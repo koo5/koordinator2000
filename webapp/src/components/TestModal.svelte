@@ -5,7 +5,7 @@
 		ModalBody,
 		ModalFooter,
 		ModalHeader
-	} from 'sveltestrap';
+	} from './ui';
 
 	export let settings_open = false;
 	export const toggle_settings = () => (settings_open = !settings_open);
@@ -13,7 +13,7 @@
 
 <Button on:click={toggle_settings}>do not click this button</Button>
 
-<Modal isOpen={settings_open} toggle={toggle_settings} fade={false} keyboard={true} scrollable={true}>
+<Modal isOpen={settings_open} toggle={toggle_settings} fadeEffect={false} keyboard={true} scrollable={true}>
 	<ModalHeader {toggle_settings}>hi</ModalHeader>
 	<ModalBody>
 		hi there

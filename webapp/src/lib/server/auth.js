@@ -185,22 +185,82 @@ export async function user_authenticity_jwt(id) {
 }
 
 /**
- * Process authentication event from Auth0
+ * Process authentication event from Keycloak
+ * This function handles the authentication event from Keycloak and associates
+ * the Keycloak identity with our internal JWT identity system
  */
 export async function process_event(x) {
-  let auth0 = x.auth.auth0;
-  if (auth0.token == "") return;
-  console.log("user is:");
-  console.log(JSON.stringify(auth0, null, '  '));
-  let user_id = await user_id_from_auth("auth0", auth0.info.sub);
-  if (user_id)
-    var result = {user: await sign_user_object({id: user_id})};
-  else {
-    user_id = x.id;
-    save_verified_authentication(user_id, "auth0", auth0.info);
+  try {
+    // Validate the event data structure
+    if (!x) {
+      console.log("process_event: Event object is null or undefined");
+      return null;
+    }
+    
+    // For debugging
+    console.log("process_event received:", JSON.stringify(x, null, 2));
+    
+    // If no auth data at all, return null
+    if (!x.auth) {
+      console.log("process_event: No auth data in event");
+      return null;
+    }
+    
+    // Handle Keycloak auth
+    if (x.auth.keycloak) {
+      const keycloak = x.auth.keycloak;
+      
+      // Skip empty tokens
+      if (!keycloak.token) {
+        console.log("process_event: Empty Keycloak token");
+        return null;
+      }
+      
+      // Validate required info
+      if (!keycloak.info || !keycloak.info.sub) {
+        console.log("process_event: Missing Keycloak subject ID");
+        return null;
+      }
+      
+      console.log("Processing Keycloak authentication:", JSON.stringify(keycloak.info, null, 2));
+      
+      // Find if this Keycloak identity is already associated with a user
+      const user_id = await user_id_from_auth("keycloak", keycloak.info.sub);
+      
+      if (user_id) {
+        // If found, return the associated user with a fresh JWT
+        console.log(`Found existing user (ID: ${user_id}) for Keycloak identity`);
+        return {user: await sign_user_object({id: user_id})};
+      } else if (x.id) {
+        // If not found but we have a current user ID, associate the identities
+        console.log(`Associating Keycloak identity with user ID: ${x.id}`);
+        await save_verified_authentication(x.id, "keycloak", keycloak.info);
+        // Save email if available
+        if (keycloak.info.email) {
+          await grab_email(x.id, keycloak.info);
+        }
+        return {user: await sign_user_object({id: x.id})};
+      } else {
+        console.log("No valid user ID for Keycloak association");
+        return null;
+      }
+    }
+    
+    // Check for legacy auth0 data (temporary, will be removed)
+    // This is just to prevent errors during transition
+    if (x.auth.auth0) {
+      console.log("Legacy Auth0 authentication received - ignoring");
+      // Return the current user ID if available
+      return x.id ? {user: await sign_user_object({id: x.id})} : null;
+    }
+    
+    // If we get here, no supported auth provider was found
+    console.log("No supported auth provider found in event");
+    return null;
+  } catch (error) {
+    console.error("Error in process_event:", error);
+    return null;
   }
-  grab_email(user_id, auth0.info);
-  return result;
 }
 
 /**

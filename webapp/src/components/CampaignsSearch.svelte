@@ -2,7 +2,7 @@
 	import {
 		Button,
 		Card
-	} from 'sveltestrap';
+	} from './ui';
 	import {subscribe, gql} from "$lib/apollo.js";
 	import {query} from 'svelte-apollo';
 	import {my_user} from '../my_user.js';
@@ -121,8 +121,7 @@
 		more...
 	</button>
 
-	<!-- https://github.com/bestguy/sveltestrap/issues/275
-	<Button use:xxx color="secondary" on:click={more}>more...</Button>
+	<!-- Use our custom Button component instead
 	<Button bind:this={more_button} color="secondary" on:click={more}>more...</Button>
 	-->
 

@@ -1,7 +1,7 @@
 <script lang='js'>
 	import {
 		Button,
-	} from 'sveltestrap';
+	} from './ui';
 	import {sanitize_html} from '../stuff.js';
 	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
@@ -13,7 +13,7 @@
 	import DismissalBadge from './DismissalBadge.svelte';
 	import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
 	import ProgressBar from "./ProgressBar.svelte";
-	import {Progress} from 'sveltestrap';
+	import {Progress} from './ui';
 	//import {slide, fade} from 'svelte/transition';
 	/*import { flip } from 'svelte/animate';
 	import { crossfade } from 'svelte/transition';

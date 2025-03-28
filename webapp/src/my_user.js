@@ -1,7 +1,7 @@
 import {readable, writable, get} from 'svelte/store';
 import {localStorageSharedStore} from './svelte-shared-store';
 import {goto} from '$app/navigation';
-import {logout as auth0_logout} from '$lib/auth0-stub';
+import {logout as auth_logout} from '$lib/auth-compat';
 import {EventDispatcher} from './event_dispatcher.js';
 import {browser} from '$app/environment';
 
@@ -169,7 +169,7 @@ export async function apply_newly_authenticated_user(newly_authenticated_user)
 export async function logout()
 {
 	my_user.set({id: -1});
-	await auth0_logout();
+	await auth_logout();
 }
 
 

@@ -7,7 +7,8 @@
 		ModalBody,
 		ModalFooter,
 		ModalHeader
-	} from 'sveltestrap';
+	} from './ui';
+	// Label and Input not implemented yet
 	import {my_user, decrease_auth_nag_postponement, get_my_participation} from '../my_user.js';
 	import gql from 'graphql-tag';
 	import MutationForm from './MutationForm.svelte';

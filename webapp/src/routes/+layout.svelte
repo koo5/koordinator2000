@@ -3,8 +3,8 @@
 	import { page, navigating } from '$app/stores';
 	import { theme, user } from '$lib/stores';
 	import { browser } from '$app/environment';
-	import { Col, Container, Row } from 'sveltestrap';
-	import SettingsModal from '../components/SettingsModal.svelte';
+	import { Col, Container, Row } from '../components/ui';
+	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import TheNagModal from '../components/TheNagModal.svelte';
 	import Nav from '../components/Nav.svelte';
 	import { setClient } from 'svelte-apollo';

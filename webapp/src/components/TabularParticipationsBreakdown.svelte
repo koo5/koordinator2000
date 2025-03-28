@@ -1,5 +1,5 @@
 <script>
-	import {Table} from 'sveltestrap';
+	import {Table} from './ui';
 	//import {my_user} from '../my_user.js';
 	import TabularParticipationsRow from './TabularParticipationsRow.svelte';
 
