@@ -9,29 +9,42 @@ import { server_env } from '$lib/server/env.js';
 console.log("Server startup - using GraphQL endpoint:", server_env.GRAPHQL_ENDPOINT);
 console.log("Server environment configured with keys:", Object.keys(server_env));
 
-// Verify keys are available since they are critical
-if (!server_env.MY_APP_KEYS) {
-  throw new Error("CRITICAL ERROR: MY_APP_KEYS environment variable is missing or invalid. The application cannot start without this variable set.");
-}
-
-// Import authentication functions from server directory
+// Import both authentication systems for transition period
 import { init_keys } from '$lib/server/auth';
+import { init_keycloak_keys, get_user_from_request as get_keycloak_user } from '$lib/server/keycloak-auth';
 
-// Initialize authentication keys
-init_keys().catch(err => {
-  console.error('Failed to initialize auth keys:', err);
-});
+// Initialize both auth systems during transition
+Promise.all([
+  // Initialize traditional auth keys
+  init_keys().catch(err => {
+    console.error('Failed to initialize traditional auth keys:', err);
+  }),
+  // Initialize Keycloak auth
+  init_keycloak_keys().catch(err => {
+    console.error('Failed to initialize Keycloak keys:', err);
+  })
+]);
 
 // Use the server environment for configuration
 const config = server_env;
 
+// Flag to determine which auth system to use (can be controlled by env var)
+const USE_KEYCLOAK = true; // Set to true to use Keycloak, false to use traditional auth
+
 /**
  * Helper to extract and verify JWT token from request
+ * This function will use either traditional or Keycloak auth based on the USE_KEYCLOAK flag
  * 
  * @param {import('@sveltejs/kit').RequestEvent} event - The SvelteKit request event
  * @returns {Promise<UserObject|null>} The user object or null if not authenticated
  */
 async function get_user_from_request(event) {
+  // If Keycloak is enabled, use Keycloak authentication
+  if (USE_KEYCLOAK) {
+    return await get_keycloak_user(event);
+  }
+  
+  // Otherwise fall back to traditional authentication
   try {
     // Get the authorization header
     const auth_header = event.request.headers.get('authorization');

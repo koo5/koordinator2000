@@ -1,7 +1,7 @@
 <script>
 	import {my_user, register, logout} from '../my_user.js';
 	import Auth0 from "./Auth0.svelte";
-	import {login} from '@dopry/svelte-auth0';
+	import {login} from '$lib/auth0-stub';
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 	import {subscribe, gql} from "$lib/apollo.js";
 

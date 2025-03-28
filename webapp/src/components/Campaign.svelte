@@ -12,7 +12,7 @@
 	import ParticipationBadge from './ParticipationBadge.svelte';
 	import DismissalBadge from './DismissalBadge.svelte';
 	import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
-	import ProgressBar from "@okrad/svelte-progressbar";
+	import ProgressBar from "./ProgressBar.svelte";
 	import {Progress} from 'sveltestrap';
 	//import {slide, fade} from 'svelte/transition';
 	/*import { flip } from 'svelte/animate';

@@ -13,7 +13,7 @@
 		Auth0Context,
 		idToken,
 		userInfo,
-	} from '@dopry/svelte-auth0';
+	} from '$lib/auth0-stub';
 	import { my_user, ensure_we_exist, apply_newly_authenticated_user, event } from '../my_user.js';
 	import { set_css_var, saturate_computate } from '../stuff.js';
 	import { initVersionCheck } from '$lib/version-check';
