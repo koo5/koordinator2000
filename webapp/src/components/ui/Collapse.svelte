@@ -4,7 +4,8 @@
   
   export let isOpen = false;
   export let navbar = false;
-  export let expand = "";
+  // Using const for reference-only exports
+  export const expand = "";
   
   const dispatch = createEventDispatcher();
   

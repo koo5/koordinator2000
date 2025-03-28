@@ -19,19 +19,20 @@
     border-collapse: collapse;
   }
   
-  .table th,
-  .table td {
+  /* Apply styles to all cells regardless of whether they're currently rendered */
+  :global(.table th),
+  :global(.table td) {
     padding: 0.75rem;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
   }
   
-  .table thead th {
+  :global(.table thead th) {
     vertical-align: bottom;
     border-bottom: 2px solid #dee2e6;
   }
   
-  .table-striped tbody tr:nth-of-type(odd) {
+  :global(.table-striped tbody tr:nth-of-type(odd)) {
     background-color: rgba(0, 0, 0, 0.05);
   }
   
@@ -39,12 +40,12 @@
     border: 1px solid #dee2e6;
   }
   
-  .table-bordered th,
-  .table-bordered td {
+  :global(.table-bordered th),
+  :global(.table-bordered td) {
     border: 1px solid #dee2e6;
   }
   
-  .table-hover tbody tr:hover {
+  :global(.table-hover tbody tr:hover) {
     background-color: rgba(0, 0, 0, 0.075);
   }
   

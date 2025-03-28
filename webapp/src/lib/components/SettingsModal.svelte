@@ -21,8 +21,10 @@
 <svelte:window on:keydown={handleKeydown} />
 
 {#if isOpen}
-  <div class="modal-backdrop" on:click={closeModal} on:keydown={() => {}}>
-    <div class="modal-content" on:click|stopPropagation on:keydown={() => {}}>
+  <div class="modal-backdrop" role="presentation">
+    <!-- Using a button element that is styled to be invisible but captures the click action properly -->
+    <button type="button" class="backdrop-click-handler" on:click={closeModal} aria-label="Close settings"></button>
+    <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
       <div class="modal-header">
         <h2>Settings</h2>
         <button class="close-button" on:click={closeModal}>×</button>
@@ -48,6 +50,20 @@
     align-items: center;
     z-index: 1000;
     animation: fade-in 0.2s ease-out;
+  }
+  
+  .backdrop-click-handler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
   }
   
   .modal-content {

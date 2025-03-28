@@ -3,7 +3,8 @@
   import { createEventDispatcher } from 'svelte';
   
   export let isOpen = false;
-  export let fadeEffect = true;
+  // Using const for reference-only exports
+  export const fadeEffect = true;
   export let keyboard = true;
   export let scrollable = false;
   export let toggle = undefined;
@@ -26,12 +27,24 @@
 <svelte:window on:keydown={handleKeydown}/>
 
 {#if isOpen}
-  <div class="modal-backdrop" on:click={handleBackdropClick} transition:fade={{ duration: 200 }}>
+  <!-- Use a button for the backdrop to handle both click and keyboard events properly -->
+  <div 
+    class="modal-backdrop" 
+    role="presentation" 
+    transition:fade={{ duration: 200 }}
+  >
+    <!-- Using a button element that visually looks like a div but is semantically interactive -->
+    <button 
+      type="button" 
+      class="backdrop-click-handler" 
+      on:click={handleBackdropClick} 
+      aria-label="Close modal"
+    ></button>
     <div 
       class="modal-dialog {scrollable ? 'modal-dialog-scrollable' : ''}" 
-      on:click|stopPropagation
       role="dialog"
       aria-modal="true"
+      tabindex="-1"
     >
       <div class="modal-content">
         <slot />
@@ -54,6 +67,21 @@
     z-index: 1050;
     overflow-x: hidden;
     overflow-y: auto;
+  }
+  
+  .backdrop-click-handler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
   }
   
   .modal-dialog {
