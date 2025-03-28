@@ -1,8 +1,6 @@
 <script>
 	import {my_user, register, logout} from '../my_user.js';
-	import Auth0 from "./Auth0.svelte";
-	import {login} from '$lib/auth0-stub';
-	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
+	import {login} from '$lib/auth.ts';
 	import {subscribe, gql} from "$lib/urql.js";
 
 	$: my_user_id = $my_user.id
@@ -53,7 +51,6 @@
 	<br>
 	{#if $my_user.id > 0}
 		<h5>Link your account to a social login:</h5>
-		<Auth0/>
 		<br><br>
 		<form class="cell" on:submit={logout}>
 			<button class="cell" type="submit">Log out</button>
@@ -61,7 +58,6 @@
 		<br>
 	{:else}
 		<h5>Log in:</h5>
-		<Auth0/>
 		<br><br>
 
 		<!--		<button  class="cell"  on:click|preventDefault='{() => login() }'>Log in</button> -->

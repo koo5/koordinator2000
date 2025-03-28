@@ -7,7 +7,7 @@ import { server_env } from '$lib/server/env.js';
 
 // Log server information on startup
 console.log("Server startup - using GraphQL endpoint:", server_env.GRAPHQL_ENDPOINT);
-console.log("Server environment configured with keys:", Object.keys(server_env));
+console.log("Server environment:", Object.getOwnPropertyNames(server_env).map(key => `${key}: ${JSON.stringify(server_env[key])}`));
 
 // Import both authentication systems for transition period
 import { init_keys } from '$lib/server/auth';
@@ -28,8 +28,8 @@ Promise.all([
 // Use the server environment for configuration
 const config = server_env;
 
-// Flag to determine which auth system to use (can be controlled by env var)
-const USE_KEYCLOAK = true; // Set to true to use Keycloak, false to use traditional auth
+// Flag to determine which auth system to use (controlled by env var)
+const USE_KEYCLOAK = public_env.ENABLE_KEYCLOAK;
 
 /**
  * Helper to extract and verify JWT token from request
@@ -39,12 +39,6 @@ const USE_KEYCLOAK = true; // Set to true to use Keycloak, false to use traditio
  * @returns {Promise<UserObject|null>} The user object or null if not authenticated
  */
 async function get_user_from_request(event) {
-  // If Keycloak is enabled, use Keycloak authentication
-  if (USE_KEYCLOAK) {
-    return await get_keycloak_user(event);
-  }
-  
-  // Otherwise fall back to traditional authentication
   try {
     // Get the authorization header
     const auth_header = event.request.headers.get('authorization');
@@ -63,7 +57,6 @@ async function get_user_from_request(event) {
     if (!token) return null;
     
     // In a production app, we'd verify the JWT signature here
-    // This is still insecure but better than before
     const parts = token.split('.');
     if (parts.length !== 3) {
       console.error('Invalid JWT format');

@@ -1,6 +1,5 @@
 <script lang='js'>
   import {
-    Auth0Context as AuthContext,
     authError,
     authToken,
     idToken,
@@ -9,7 +8,7 @@
     login,
     logout,
     userInfo,
-  } from '$lib/auth-compat';
+  } from '$lib/auth';
   import {get} from 'svelte/store';
   import {page} from '$app/stores';
   import {my_user, event} from '../my_user.js';

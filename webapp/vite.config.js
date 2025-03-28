@@ -5,35 +5,7 @@ export default defineConfig({
 	plugins: [sveltekit()],
 
 	clearScreen: false,
-	// Configure Node.js built-in replacements
-	resolve: {
-		alias: {
-			// SvelteKit provides its own fetch polyfill
-			'node-fetch': 'isomorphic-fetch',
-			
-			// Provide browser versions of Node.js built-ins
-			path: 'path-browserify',
-			url: 'url-polyfill',
-			fs: './src/lib/empty-polyfill.js',
-			'source-map-js': './src/lib/empty-module.js'
-		}
-	},
 
-	// Properly handle Node.js built-ins for browser
-	optimizeDeps: {
-		esbuildOptions: {
-			// Define empty modules for Node.js built-ins
-			define: {
-				global: 'globalThis'
-			}
-		},
-		include: [
-			// Ensure these are pre-bundled
-			'path-browserify',
-			'url-polyfill'
-		]
-	},
-	
 	// Add externalization warnings to help debug
 	build: {
 		rollupOptions: {

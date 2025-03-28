@@ -9,10 +9,9 @@
 	import Nav from '../components/Nav.svelte';
 // URQL client is automatically created in $lib/urql.js
 	import {
-		Auth0Context,
 		idToken,
 		userInfo,
-	} from '$lib/auth0-stub';
+	} from '$lib/auth.ts';
 	import { my_user, ensure_we_exist, apply_newly_authenticated_user, event } from '../my_user.js';
 	import { set_css_var, saturate_computate } from '../stuff.js';
 	import { initVersionCheck } from '$lib/version-check';

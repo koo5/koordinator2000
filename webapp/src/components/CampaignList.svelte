@@ -7,13 +7,8 @@
 	import {CAMPAIGN_FRAGMENT} from '../stuff.js';
 	import { browser } from '$app/environment';
 	
-	// Import Swiper components - using version 11
-	import { Swiper, SwiperSlide } from 'swiper';
-	import { EffectFade } from 'swiper/modules';
-
-	// Import Swiper styles for version 11
-	import 'swiper/css';
-	import 'swiper/css/effect-fade';
+	// Custom slider implementation
+	let activeSlideIndex = {}; // Track active slide for each campaign
 
 
 	export let ids;
@@ -68,23 +63,29 @@
 	let campaign_containers;
 	$: my_user_id = $my_user.id
 
-	function slideChange(x, campaign_id)
-	{
+	function changeSlide(campaign_id, direction) {
 		if (my_timeout)
 			clearTimeout(my_timeout);
-
-		/*console.log('campaign_id');
-		console.log(campaign_id);
-		console.log('x.detail[0][0].activeIndex');
-		console.log(x.detail[0][0].activeIndex);*/
-		if (!x) return;
-		if (!x.detail) return;
-		if (!x.detail[0]) return;
-		if (!x.detail[0][0]) return;
-		if (x.detail[0][0].activeIndex == undefined) return;
-		if (x.detail[0][0].activeIndex != 2)
+		
+		// Default to center slide (2) if not yet initialized
+		if (activeSlideIndex[campaign_id] === undefined) {
+			activeSlideIndex[campaign_id] = 2;
+		}
+		
+		// Calculate new index
+		let newIndex = activeSlideIndex[campaign_id] + direction;
+		
+		// Keep in bounds (0-4 for 5 slides)
+		if (newIndex < 0) newIndex = 0;
+		if (newIndex > 4) newIndex = 4;
+		
+		// Update active index
+		activeSlideIndex[campaign_id] = newIndex;
+		
+		// If moved away from center slide (index 2), trigger next campaign
+		if (newIndex !== 2) {
 			go_to_next_campaign(campaign_id);
-
+		}
 	}
 
 	function go_to_next_campaign(current_campaign_id)
@@ -123,62 +124,51 @@
 		{#each sorted_campaigns as campaign (campaign.id)}
 
 			{#if browser}
-			<Swiper data-campaign-id={campaign.id}
-					threshold={60}
-					initialSlide={2}
-					slidesPerView={1}
-					spaceBetween={0}
-					grabCursor={true}
-					watchOverflow={true}
-					speed={1500}
-					freeModeMomentum={false}
-					modules={[EffectFade]}
-					effect="fade"
-					on:slideChange={(x) => slideChange(x,campaign.id)}
-			>
-				<SwiperSlide>
-					<div class="campaign_swiper_slide">
-						(TODO.)
-						<button type="submit">participate in all campaigns of this cause</button>
-						<button type="submit">participate in all campaigns of this user</button>
-					</div>
-				</SwiperSlide>
-
-				<SwiperSlide>
-					<div class="campaign_swiper_slide">
-						<div>(TODO.) PARTICIPATEd. double right:
-							See all campaigns of this cause. (button)
+			<div class="campaign-slider" data-campaign-id={campaign.id}>
+				<div class="slider-controls">
+					<button class="slider-arrow left" on:click={() => changeSlide(campaign.id, -1)}>←</button>
+					<button class="slider-arrow right" on:click={() => changeSlide(campaign.id, 1)}>→</button>
+				</div>
+				
+				<div class="slider-container">
+					<div class="slider-track" style="transform: translateX({activeSlideIndex[campaign.id] !== undefined ? (2 - activeSlideIndex[campaign.id]) * 100 : 0}%)">
+						<!-- Slide 0: Far Left -->
+						<div class="campaign_swiper_slide slide">
+							(TODO.)
+							<button type="submit">dismiss all campaigns of this cause</button>
+							<button type="submit">dismiss all campaigns of this user (for ever and ever...)</button>
+						</div>
+						
+						<!-- Slide 1: Left -->
+						<div class="campaign_swiper_slide slide">
+							<div>(TODO.) DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
+								cause. (button)
+							</div>
+						</div>
+						
+						<!-- Slide 2: Center (Main) -->
+						<div class="campaign_swiper_slide slide">
+						<li>
+							<Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)}/>
+						</li>
+						</div>
+						
+						<!-- Slide 3: Right -->
+						<div class="campaign_swiper_slide slide">
+							<div>(TODO.) PARTICIPATEd. double right:
+								See all campaigns of this cause. (button)
+							</div>
+						</div>
+						
+						<!-- Slide 4: Far Right -->
+						<div class="campaign_swiper_slide slide">
+							(TODO.)
+							<button type="submit">participate in all campaigns of this cause</button>
+							<button type="submit">participate in all campaigns of this user</button>
 						</div>
 					</div>
-				</SwiperSlide>
-
-				<SwiperSlide>
-
-					<div class="campaign_swiper_slide">
-					<li>
-						<Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)}/>
-					</li>
-					</div>
-
-				</SwiperSlide>
-
-				<SwiperSlide>
-					<div class="campaign_swiper_slide">
-						<div>(TODO.) DISMISSed. double left: I dont care about this cause, dismiss all campaigns of this
-							cause. (button)
-						</div>
-					</div>
-				</SwiperSlide>
-
-				<SwiperSlide>
-					<div class="campaign_swiper_slide">
-						(TODO.)
-						<button type="submit">dismiss all campaigns of this cause</button>
-						<button type="submit">dismiss all campaigns of this user (for ever and ever...)</button>
-					</div>
-				</SwiperSlide>
-
-			</Swiper>
+				</div>
+			</div>
 			{:else}
 			<!-- SSR fallback to show campaigns without sliders -->
 			<div class="campaign_swiper_slide ssr-fallback">
@@ -226,5 +216,55 @@
 		background-color: #ffffcc;
 	}
 
+	/* Custom slider styles */
+	.campaign-slider {
+		position: relative;
+		width: 100%;
+		margin: 1rem 0;
+		overflow: hidden;
+	}
+
+	.slider-controls {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		display: flex;
+		justify-content: space-between;
+		z-index: 10;
+		transform: translateY(-50%);
+		pointer-events: none;
+	}
+
+	.slider-arrow {
+		background: rgba(0, 0, 0, 0.3);
+		color: white;
+		border: none;
+		border-radius: 50%;
+		width: 36px;
+		height: 36px;
+		font-size: 18px;
+		line-height: 1;
+		cursor: pointer;
+		margin: 0 10px;
+		pointer-events: auto;
+	}
+
+	.slider-container {
+		overflow: hidden;
+		position: relative;
+	}
+
+	.slider-track {
+		display: flex;
+		transition: transform 0.5s ease;
+	}
+
+	.slide {
+		flex: 0 0 100%;
+		padding: 1rem;
+		border: 1px solid #eee;
+		transition: opacity 0.3s ease;
+	}
 
 </style>

@@ -18,6 +18,9 @@ VITE_PUBLIC_BASE_URL="/"
 # Hasura GraphQL Headers with Admin Secret
 VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-hasura-admin-secret"}'
 
+# Optional Keycloak integration (set to 'true' to enable)
+VITE_PUBLIC_ENABLE_KEYCLOAK="false"
+
 # App keys - generate using generate_key_pair.mjs
 # This should be a server-side environment variable - NOT public!
 MY_APP_KEYS='{"private":{...},"public":{...}}'

@@ -2,6 +2,7 @@ export const public_env = {
   GRAPHQL_ENDPOINT: import.meta.env.VITE_PUBLIC_GRAPHQL_ENDPOINT,
   PUBLIC_URL: import.meta.env.VITE_PUBLIC_URL,
   PUBLIC_BASE_URL: import.meta.env.VITE_PUBLIC_BASE_URL,
+  ENABLE_KEYCLOAK: !!import.meta.env.VITE_PUBLIC_ENABLE_KEYCLOAK,
   // Parse Hasura headers from environment
   PUBLIC_GRAPHQL_HEADERS: (() => {
     try {

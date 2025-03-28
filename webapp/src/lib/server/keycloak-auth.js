@@ -9,6 +9,8 @@ let keycloak_keys = null;
  */
 export async function init_keycloak_keys() {
   if (keycloak_keys) return;
+  if (!server_env.ENABLE_KEYCLOAK)
+    return;
 
   try {
     console.log("Server-side auth keys initialization started");
