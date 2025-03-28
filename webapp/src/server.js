@@ -6,7 +6,6 @@ import express from 'express';
 import { private_env } from './private_env.js';
 import moment from 'moment';
 
-const config = private_env;
 const { PORT = 5000 } = process.env;
 
 const app = express();

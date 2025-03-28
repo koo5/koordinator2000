@@ -1,8 +1,6 @@
 import moment from 'moment';
 import { minify } from 'html-minifier';
 import { building } from '$app/environment';
-import { public_env } from '$lib/public_env.js';
-// Import server environment
 import { server_env } from '$lib/server/env.js';
 
 // Log server information on startup
@@ -24,12 +22,6 @@ Promise.all([
     console.error('Failed to initialize Keycloak keys:', err);
   })
 ]);
-
-// Use the server environment for configuration
-const config = server_env;
-
-// Flag to determine which auth system to use (controlled by env var)
-const USE_KEYCLOAK = public_env.ENABLE_KEYCLOAK;
 
 /**
  * Helper to extract and verify JWT token from request
@@ -126,27 +118,11 @@ export function load({ locals }) {
  */
 export const handle = async ({ event, resolve }) => {
 	// Log timestamp for each request
-	console.log(moment().format());
+	console.log('server request at', moment().format('YYYY-MM-DD HH:mm:ss'), 'for', event.url.pathname);
 	
 	// Get user from request if available
 	const user = await get_user_from_request(event);
-	
-	// Add session data to locals without any JWT keys
-	// MY_APP_KEYS should never be exposed to the client
-	event.locals.session = {
-		PUBLIC_URL: public_env.PUBLIC_URL,
-		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Use the single endpoint
-		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT, // Add GRAPHQL_ENDPOINT explicitly
-		PUBLIC_GRAPHQL_HEADERS: config.PUBLIC_GRAPHQL_HEADERS,
-		BASE_URL: public_env.PUBLIC_BASE_URL
-		// No MY_APP_KEYS here - this should remain server-side only
-	};
-	
-	// Debug: Print what's being passed to locals
-	console.log("Setting session data:", {
-		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT,
-		GRAPHQL_ENDPOINT: config.GRAPHQL_ENDPOINT
-	});
+	console.log("request user:", user);
 	
 	// Add user to locals if authenticated
 	if (user) {

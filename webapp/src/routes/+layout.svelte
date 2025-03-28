@@ -7,29 +7,21 @@
 	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import TheNagModal from '../components/TheNagModal.svelte';
 	import Nav from '../components/Nav.svelte';
-// URQL client is automatically created in $lib/urql.js
-	import {
-		idToken,
-		userInfo,
-	} from '$lib/auth.ts';
-	import { my_user, ensure_we_exist, apply_newly_authenticated_user, event } from '../my_user.js';
+	import { createUrqlClient, setContextClient } from '$lib/urql.js';
+	import {		idToken,		userInfo,	} from '$lib/auth.ts';
+	import { my_user, ensure_we_exist, apply_newly_authenticated_user, auth_event } from '../my_user.js';
 	import { set_css_var, saturate_computate } from '../stuff.js';
 	import { initVersionCheck } from '$lib/version-check';
 
 	export let data;
-	
-	// Set up Auth0 configuration
-	let audience = undefined;
-	let domain = "dev-koord11.eu.auth0.com";
-	let client_id = "GjHr32K9lxNsmzoBBdoFE44IDXg24btf";
-	
+
 	$: PUBLIC_URL = data.session?.PUBLIC_URL;
-	$: callback_url = PUBLIC_URL + "/you";
-	$: logout_url = PUBLIC_URL + "/you";
+	const callback_url = PUBLIC_URL + "/you";
+	const logout_url = PUBLIC_URL + "/you";
 	
-	// URQL client is automatically created and initialized
-	// No need to explicitly set the client
-	
+	const urqlClient = createUrqlClient();
+	setContextClient(urqlClient);
+
 	// Auth0 token handling
 	$: maybe_ping_server_about_this($idToken, $userInfo);
 	
@@ -41,7 +33,7 @@
 			return {...u, auth};
 		});
 		
-		let event_result = await event($my_user);
+		let event_result = await auth_event($my_user);
 		if (event_result && event_result.user) {
 			console.log('ich bin logged in');
 			my_user.set(event_result.user);

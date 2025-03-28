@@ -85,7 +85,7 @@ async function new_user() {
     }
 }
 
-export async function event(event)
+export async function auth_event(event)
 {
 	//console.log('/event');
 	//console.log(event);
@@ -93,7 +93,7 @@ export async function event(event)
 	let res2;
 	try
 	{
-		res = fetch('/event', {
+		res = fetch('/auth_event', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

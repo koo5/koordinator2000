@@ -3,8 +3,7 @@
 		Button,
 		Card
 	} from './ui';
-	import {subscribe, gql} from "$lib/urql.js";
-	import {mutation} from '$lib/urql.js';
+	import { gql, subscribe } from '$lib/urql.js';
 	import {my_user} from '../my_user.js';
 	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
@@ -66,13 +65,12 @@
 		_seen_ids: seen,
 	}
 
-	const items = query(
+	$: items = subscribe(
 		CAMPAIGN_LIST,
 		{
 			variables: vars
 		}
 	);
-	$: items?.refetch(vars);
 
 
 	let more_button;

@@ -190,20 +190,20 @@ export async function user_authenticity_jwt(id) {
  * This function handles the authentication event from Keycloak and associates
  * the Keycloak identity with our internal JWT identity system
  */
-export async function process_event(x) {
+export async function process_auth_event(x) {
   try {
     // Validate the event data structure
     if (!x) {
-      console.log("process_event: Event object is null or undefined");
+      console.log("process_auth_event: Event object is null or undefined");
       return null;
     }
     
     // For debugging
-    console.log("process_event received:", JSON.stringify(x, null, 2));
+    console.log("process_auth_event received:", JSON.stringify(x, null, 2));
     
     // If no auth data at all, return null
     if (!x.auth) {
-      console.log("process_event: No auth data in event");
+      console.log("process_auth_event: No auth data in event");
       return null;
     }
     
@@ -213,13 +213,13 @@ export async function process_event(x) {
       
       // Skip empty tokens
       if (!keycloak.token) {
-        console.log("process_event: Empty Keycloak token");
+        console.log("process_auth_event: Empty Keycloak token");
         return null;
       }
       
       // Validate required info
       if (!keycloak.info || !keycloak.info.sub) {
-        console.log("process_event: Missing Keycloak subject ID");
+        console.log("process_auth_event: Missing Keycloak subject ID");
         return null;
       }
       
@@ -246,20 +246,11 @@ export async function process_event(x) {
         return null;
       }
     }
-    
-    // Check for legacy auth0 data (temporary, will be removed)
-    // This is just to prevent errors during transition
-    if (x.auth.auth0) {
-      console.log("Legacy Auth0 authentication received - ignoring");
-      // Return the current user ID if available
-      return x.id ? {user: await sign_user_object({id: x.id})} : null;
-    }
-    
-    // If we get here, no supported auth provider was found
+
     console.log("No supported auth provider found in event");
     return null;
   } catch (error) {
-    console.error("Error in process_event:", error);
+    console.error("Error in process_auth_event:", error);
     return null;
   }
 }

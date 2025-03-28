@@ -3,7 +3,7 @@
  */
 import { browser } from '$app/environment';
 import { writable, readable } from 'svelte/store';
-import { createClient } from '@urql/svelte';
+import { Client, getContextClient, setContextClient } from '@urql/svelte';
 import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env.js';
 import { cacheExchange, fetchExchange, ssrExchange } from '@urql/core';
@@ -20,9 +20,10 @@ const ssr = ssrExchange({
   isClient: browser
 });
 
-// Only initialize the client on the browser
-if (browser) {
-  createClient({
+// Export client creation function
+export function createUrqlClient() {
+  console.log('Creating URQL client with endpoint:', public_env.GRAPHQL_ENDPOINT);
+  return new Client({
     url: `https://${public_env.GRAPHQL_ENDPOINT}`,
     fetchOptions: {
       headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' }
@@ -34,6 +35,9 @@ if (browser) {
     ]
   });
 }
+
+// Export context functions
+export { setContextClient, getContextClient }
 
 /**
  * Subscribe to a GraphQL query
@@ -59,8 +63,8 @@ export function subscribe(query, options = {}) {
   const urqlStore = browser ? 
     // If it's a subscription, use it directly
     query.definitions?.[0]?.operation === 'subscription' ?
-      createClient().subscription(queryResult).toSvelte() :
-      createClient().query(queryResult).toSvelte() :
+      getContextClient().subscription(queryResult).toSvelte() :
+      getContextClient().query(queryResult).toSvelte() :
     readable({ fetching: false, data: null, error: null });
   
   // Subscribe to URQL store and transform to expected format
@@ -97,7 +101,7 @@ export function mutation(query) {
     }
     
     try {
-      const result = await createClient().mutation(query, variables || {}).toPromise();
+      const result = await getContextClient().mutation(query, variables || {}).toPromise();
       return result;
     } catch (error) {
       console.error('Mutation error:', error);

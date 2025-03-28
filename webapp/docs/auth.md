@@ -90,7 +90,7 @@ Every visitor to Koordinator2000 is automatically assigned an identity via JWT u
 ## API Endpoints
 
 - **/get_free_user_id**: Generates a new user ID with JWT token
-- **/event**: Processes authentication events from Keycloak
+- **/auth_event**: Processes authentication events from Keycloak
 
 ## Authentication Association Database
 
