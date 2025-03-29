@@ -1,6 +1,6 @@
 <script type='js'>
 	import { onMount } from "svelte";
-	import { my_user } from '../my_user.js';
+	import { my_user } from '../my_user.ts';
 
 	let timer = 0;
 	onMount(() => {

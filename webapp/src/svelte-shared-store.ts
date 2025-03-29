@@ -7,12 +7,9 @@ import { writable, get, type Writable, type Updater, type Subscriber, type Unsub
 import { browser } from '$app/environment';
 
 /**
- * Storage event handler interface
+ * Storage event handler interface (using native StorageEvent)
+ * We define a subset of the properties we're interested in
  */
-interface StorageEventValue {
-  key: string | null;
-  newValue: string | null;
-}
 
 /**
  * Shared store interface that extends Writable
@@ -78,16 +75,16 @@ export function localStorageSharedStore<T>(name_postfix: string, default_: T): S
 	function start(): () => void {
 		if (!browser) return () => {};
 		
-		function handleStorageEvent({ key, newValue }: StorageEventValue): void {
-			if (key !== name || newValue === null) {
+		function handleStorageEvent(event: StorageEvent): void {
+			if (event.key !== name || event.newValue === null) {
 				return;
 			}
-			set(JSON.parse(newValue) as T);
+			set(JSON.parse(event.newValue) as T);
 		}
 
 		set(getStorage());
-		addEventListener('storage', handleStorageEvent as EventListener);
-		return () => removeEventListener('storage', handleStorageEvent as EventListener);
+		addEventListener('storage', handleStorageEvent);
+		return () => removeEventListener('storage', handleStorageEvent);
 	}
 	
 	// Create a new writable with the start function for browser environment

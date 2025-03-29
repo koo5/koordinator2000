@@ -11,7 +11,7 @@
   } from '$lib/auth';
   import {get} from 'svelte/store';
   import {page} from '$app/stores';
-  import {my_user, event} from '../my_user.js';
+  import {my_user, auth_event} from '../my_user.ts';
   import {browser} from '$app/environment';
 </script>
 

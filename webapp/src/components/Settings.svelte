@@ -1,5 +1,5 @@
 <script type='js'>
-	import {my_user, default_participations_display_style} from '../my_user.js';
+	import {my_user, default_participations_display_style} from '../my_user.ts';
 
 	const default_participations_display_styles_list = ['koo1', 'koo1_introductory', 'facebook', 'tabular_breakdown'];
 

@@ -11,10 +11,9 @@ import {
   subscriptionStore, 
   type OperationContext
 } from '@urql/svelte';
-import { 
-  DocumentNode, 
-  OperationDefinitionNode 
-} from 'graphql';
+// Import GraphQL types properly from CommonJS module
+import pkg from 'graphql';
+const { DocumentNode, OperationDefinitionNode } = pkg;
 import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env';
 import { 

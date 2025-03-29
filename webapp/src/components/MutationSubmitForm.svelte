@@ -1,8 +1,8 @@
 <script type='js'>
 
-	import { mutation as urqlMutation } from '$lib/urql.js';
+	import { mutation as urqlMutation } from '$lib/urql.ts';
 	import {getContext} from 'svelte';
-	import {ensure_we_exist, apply_newly_authenticated_user, my_user} from '../my_user.js';
+	import {ensure_we_exist, apply_newly_authenticated_user, my_user} from '../my_user.ts';
 	import {createEventDispatcher} from 'svelte';
 	import {browser} from '$app/environment';
 	const dispatch = createEventDispatcher();

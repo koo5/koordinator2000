@@ -1,8 +1,8 @@
 <script>
 	import TestModal from '../../components/TestModal.svelte';
-	import {my_user} from '../../my_user.js';
-	import {CAMPAIGN_FRAGMENT} from '../../stuff.js';
-	import {subscribe, gql} from "$lib/urql.js";
+	import {my_user} from '../../my_user.ts';
+	import {CAMPAIGN_FRAGMENT} from '../../stuff.ts';
+	import {subscribe, gql} from "$lib/urql.ts";
 	
 	let segment = 0;
 	let currentData = null;
@@ -24,7 +24,7 @@
 	);
 	
 	// Show headers being used
-	import { public_env } from '$lib/public_env.js';
+	import { public_env } from '$lib/public_env.ts';
 	let graphqlHeaders = JSON.stringify(public_env.PUBLIC_GRAPHQL_HEADERS, null, 2);
 	
 	// Update when data changes

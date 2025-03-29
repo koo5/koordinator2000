@@ -1,5 +1,5 @@
 <script>
-	import {my_user} from '../../my_user.js';
+	import {my_user} from '../../my_user.ts';
 	import gql from 'graphql-tag';
 	import FormGroup from '../../components/ui/FormGroup.svelte';
 	import Label from '../../components/ui/Label.svelte';

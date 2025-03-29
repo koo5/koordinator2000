@@ -1,6 +1,6 @@
 <script>
 	import {Table} from './ui';
-	//import {my_user} from '../my_user.js';
+	//import {my_user} from '../my_user.ts';
 	import TabularParticipationsRow from './TabularParticipationsRow.svelte';
 
 	export let campaign;

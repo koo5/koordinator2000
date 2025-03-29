@@ -2,7 +2,7 @@
 	import {onMount} from 'svelte';
 	import MutationForm from './MutationForm.svelte';
 	import gql from 'graphql-tag';
-	import {my_user} from '../my_user.js';
+	import {my_user} from '../my_user.ts';
 
 	const ADD = gql`
 	mutation MyMutation(

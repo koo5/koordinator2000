@@ -1,6 +1,6 @@
 <script>
 	import Campaigns from "../components/CampaignsSearch.svelte";
-	import { my_user } from '../my_user.js';
+	import { my_user } from '../my_user.ts';
 	import { debug, addNotification } from '$lib/stores';
 
 </script>

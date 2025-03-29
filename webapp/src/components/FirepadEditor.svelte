@@ -1,6 +1,6 @@
 <script lang="js">
 	import { onMount, onDestroy } from 'svelte';
-	import { my_user } from '../my_user.js';
+	import { my_user } from '../my_user.ts';
 	import { browser } from '$app/environment';
 	import '../polyfills.js';  // Import polyfills
 

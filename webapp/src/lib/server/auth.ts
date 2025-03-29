@@ -108,8 +108,8 @@ async function load_keys_internal(): Promise<boolean> {
       return false;
     }
     
-    ecPrivateKey = await importJWK(pr);
-    rsaPublicKey = await importJWK(pu);
+    ecPrivateKey = (await importJWK(pr)) as KeyLike;
+    rsaPublicKey = (await importJWK(pu)) as KeyLike;
     keys_initialized = true;
     console.log('Server-side auth keys initialized successfully');
     return true;

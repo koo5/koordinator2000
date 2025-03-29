@@ -2,12 +2,12 @@
 	import {
 		Button,
 	} from './ui';
-	import {sanitize_html} from '../stuff.js';
+	import {sanitize_html} from '../stuff.ts';
 	import {readable} from 'svelte/store';
 	import MyParticipation from './MyParticipation.svelte';
 	import MutationForm from './MutationForm.svelte';
-	import {gql, queryStore, subscriptionStore, getContextClient} from "$lib/urql.js";
-	import {my_user, default_participations_display_style, get_my_participation} from '../my_user.js';
+	import {gql, queryStore, subscriptionStore, getContextClient} from "$lib/urql.ts";
+	import {my_user, default_participations_display_style, get_my_participation} from '../my_user.ts';
 	import ToolTipsy from './ToolTipsy.svelte';
 	import ParticipationBadge from './ParticipationBadge.svelte';
 	import DismissalBadge from './DismissalBadge.svelte';

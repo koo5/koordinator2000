@@ -3,8 +3,8 @@
 		Button,
 		Card
 	} from './ui';
-	import { gql, queryStore, getContextClient } from '$lib/urql.js';
-	import {my_user} from '../my_user.js';
+	import { gql, queryStore, getContextClient } from '$lib/urql.ts';
+	import {my_user} from '../my_user.ts';
 	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
 	import { browser } from '$app/environment';

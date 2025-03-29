@@ -9,13 +9,13 @@
 		ModalHeader
 	} from './ui';
 	// Label and Input not implemented yet
-	import {my_user, decrease_auth_nag_postponement, get_my_participation} from '../my_user.js';
+	import {my_user, decrease_auth_nag_postponement, get_my_participation} from '../my_user.ts';
 	import gql from 'graphql-tag';
 	import MutationForm from './MutationForm.svelte';
 	import {createEventDispatcher} from 'svelte';
 
 	const dispatch = createEventDispatcher();
-	import {get_status_class, get_tickmark} from '../stuff.js';
+	import {get_status_class, get_tickmark} from '../stuff.ts';
 
 	export let campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;

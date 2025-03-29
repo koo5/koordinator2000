@@ -1,8 +1,8 @@
 <script lang='js'>
 
 	import ToolTipsy from './ToolTipsy.svelte';
-	import {my_user} from '../my_user.js';
-	import {get_status_class,get_tickmark} from '../stuff.js';
+	import {my_user} from '../my_user.ts';
+	import {get_status_class,get_tickmark} from '../stuff.ts';
 
 	export let participation;
 	export let campaign;

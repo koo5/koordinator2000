@@ -1,8 +1,8 @@
 <script>
 	import Notification from '../../components/Notification.svelte';
 	import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "$lib/urql.js";
-	import {my_user} from '../../my_user.js';
+	import {subscribe, gql} from "$lib/urql.ts";
+	import {my_user} from '../../my_user.ts';
 	$: my_user_id = $my_user.id
 
 	$: items = subscribe(

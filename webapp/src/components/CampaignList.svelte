@@ -1,10 +1,10 @@
 <script>
 	import Campaign from './Campaign.svelte';
-	import {my_user} from '../my_user.js';
+	import {my_user} from '../my_user.ts';
 	import * as animateScroll from "svelte-scrollto";
-	import {gql, subscriptionStore, getContextClient} from "$lib/urql.js";
+	import {gql, subscriptionStore, getContextClient} from "$lib/urql.ts";
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
-	import {CAMPAIGN_FRAGMENT} from '../stuff.js';
+	import {CAMPAIGN_FRAGMENT} from '../stuff.ts';
 	import { browser } from '$app/environment';
 	
 	// Custom slider implementation

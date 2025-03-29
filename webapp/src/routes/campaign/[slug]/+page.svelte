@@ -1,8 +1,8 @@
 <script>
 	import Campaign from '../../../components/Campaign.svelte';
-	import {my_user} from '../../../my_user.js';
-	import {CAMPAIGN_FRAGMENT} from '../../../stuff.js';
-	import {subscribe, gql} from "$lib/urql.js";
+	import {my_user} from '../../../my_user.ts';
+	import {CAMPAIGN_FRAGMENT} from '../../../stuff.ts';
+	import {subscribe, gql} from "$lib/urql.ts";
 
 	export let data;
 	const campaign_id = data.campaign_id;

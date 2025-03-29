@@ -1,7 +1,7 @@
 <script type='js'>
 
-	import {impersonate} from '../my_user.js';
-	import {subscribe, gql} from "$lib/urql.js";
+	import {impersonate} from '../my_user.ts';
+	import {subscribe, gql} from "$lib/urql.ts";
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 
 	const USER_LIST = gql`

@@ -1,15 +1,15 @@
 import moment from 'moment';
 import { minify } from 'html-minifier';
 import { building } from '$app/environment';
-import { server_env } from '$lib/server/env.js';
+import { server_env } from '$lib/server/env.ts';
 
 // Log server information on startup
 console.log("Server startup - using GraphQL endpoint:", server_env.GRAPHQL_ENDPOINT);
 console.log("Server environment:", Object.getOwnPropertyNames(server_env).map(key => `${key}: ${JSON.stringify(server_env[key])}`));
 
 // Import both authentication systems for transition period
-import { init_keys } from '$lib/server/auth';
-import { init_keycloak_keys, get_user_from_request as get_keycloak_user } from '$lib/server/keycloak-auth';
+import { init_keys } from '$lib/server/auth.ts';
+import { init_keycloak_keys, get_user_from_request as get_keycloak_user } from '$lib/server/keycloak-auth.ts';
 
 // Initialize both auth systems during transition
 Promise.all([

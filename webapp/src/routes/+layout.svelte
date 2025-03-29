@@ -7,11 +7,11 @@
 	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import TheNagModal from '../components/TheNagModal.svelte';
 	import Nav from '../components/Nav.svelte';
-	import { createUrqlClient, setContextClient } from '$lib/urql.js';
+	import { createUrqlClient, setContextClient } from '$lib/urql.ts';
 	import {		idToken,		userInfo,	} from '$lib/auth.ts';
-	import { my_user, ensure_we_exist, apply_newly_authenticated_user, auth_event } from '../my_user.js';
-	import { set_css_var, saturate_computate } from '../stuff.js';
-	import { initVersionCheck } from '$lib/version-check';
+	import { my_user, ensure_we_exist, apply_newly_authenticated_user, auth_event } from '../my_user.ts';
+	import { set_css_var, saturate_computate } from '../stuff.ts';
+	import { initVersionCheck } from '$lib/version-check.ts';
 
 	export let data;
 

@@ -1,7 +1,7 @@
 <script>
-	import {my_user, register, logout} from '../my_user.js';
+	import {my_user, register, logout} from '../my_user.ts';
 	import {login} from '$lib/auth.ts';
-	import {subscribe, gql} from "$lib/urql.js";
+	import {subscribe, gql} from "$lib/urql.ts";
 
 	$: my_user_id = $my_user.id
 
