@@ -142,7 +142,7 @@
 				</Col>
 			</Row>
 			<Row>
-				<Col xs={12}>
+				<Col xs={12} auto={false}>
 					<main>
 						<slot></slot>
 					</main>

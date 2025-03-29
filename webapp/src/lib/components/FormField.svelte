@@ -145,8 +145,8 @@
     <input
       {id}
       {name}
-      {type}
-      bind:value
+      type={type}
+      value={value}
       {placeholder}
       {min}
       {max}

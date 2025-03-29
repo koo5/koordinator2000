@@ -1,13 +1,8 @@
 <script lang="ts">
   import { page } from '$app/stores';
 
-  // Define a custom error interface that might include stack
-  interface ErrorWithStack extends Error {
-    stack?: string;
-  }
-
   // Add a type guard for checking if error has stack property
-  function hasStack(error: Error | null): error is ErrorWithStack {
+  function hasStack(error: App.Error | null): error is App.Error & { stack: string } {
     return error !== null && error !== undefined && 'stack' in error;
   }
 </script>
