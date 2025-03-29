@@ -2,7 +2,7 @@
 
 
 	import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
-	import {subscribe, gql} from "$lib/urql.js";
+	import {subscribe, gql} from "$lib/urql.ts";
 	import CampaignLink from '../../components/CampaignLink.svelte';
 
 

@@ -3,19 +3,19 @@
  */
 import { browser } from '$app/environment';
 import { writable, readable, type Writable, type Readable } from 'svelte/store';
-import { 
-  getContextClient, 
-  setContextClient, 
+import {
+  getContextClient,
+  setContextClient,
   queryStore,
   subscriptionStore
+    , Client, OperationContext
 } from '@urql/svelte';
-import type { Client, OperationContext } from '@urql/svelte';
 // Import GraphQL types properly from CommonJS module
 import type { DocumentNode, OperationDefinitionNode } from 'graphql';
 import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env';
-import { 
-  cacheExchange, 
+import {
+  cacheExchange,
   fetchExchange, 
   ssrExchange,
   subscriptionExchange,
@@ -140,13 +140,10 @@ export function createUrqlClient(): Client {
       })
     );
   }
-  
-  // Using dynamic import for Client constructor
-  // This is a better approach than using @ts-ignore
-  const urqlCore = require('@urql/core');
-  const ClientConstructor = urqlCore.Client;
-  
-  return new ClientConstructor({
+
+
+
+  return new Client({
     url: `https://${public_env.GRAPHQL_ENDPOINT}`,
     fetchOptions: {
       headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' }

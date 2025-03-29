@@ -1,5 +1,5 @@
 <script>
-	import {subscribe, gql} from "$lib/urql.js";
+	import {subscribe, gql} from "$lib/urql.ts";
 
 	$: account_subscription = subscribe(
 		gql`

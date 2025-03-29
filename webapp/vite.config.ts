@@ -82,13 +82,10 @@ const config: UserConfig = {
 		]
 	},
 	
-	// Resolve aliases for Node.js modules in browser
+	// Resolve aliases for Node.js modules in browser - only include what's actually needed
 	resolve: {
 		alias: {
-			'path': 'path-browserify',
-			'fs': './src/lib/empty-module.js',
-			'url': 'url-polyfill',
-			'source-map-js': './src/lib/empty-module.js'
+			// Removed unnecessary polyfills
 		}
 	}
 };
