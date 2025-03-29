@@ -12,7 +12,9 @@
 		"noImplicitAny": true,
 		"strictNullChecks": true,
 		"noImplicitThis": true,
-		"alwaysStrict": true
+		"alwaysStrict": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": true
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 }
