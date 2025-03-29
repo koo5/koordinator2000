@@ -1,28 +1,39 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { createForm, validators } from '$lib/form-utils';
   
-  // Create an event dispatcher
-  const dispatch = createEventDispatcher();
+  // Define types for form data and validators
+  type FormData = Record<string, any>;
+  type Validator = (value: any) => string | null;
+  type FieldValidators = Record<string, Validator>;
   
-  // Form props
-  export let initialData = {};
-  export let onSubmit = async (data) => {};
-  export let fieldValidators = {};
+  interface FormEvents {
+    success: any;
+    error: Error;
+    reset: void;
+  }
+  
+  // Create an event dispatcher with typed events
+  const dispatch = createEventDispatcher<FormEvents>();
+  
+  // Form props with type annotations
+  export let initialData: FormData = {};
+  export let onSubmit: (data: FormData) => Promise<any> = async (data) => {};
+  export let fieldValidators: FieldValidators = {};
   export let submitText = 'Submit';
   export let resetText = 'Reset';
   export let showReset = true;
   export let loading = false;
   
   // Create form handler
-  const form = createForm(initialData, async (data) => {
+  const form = createForm(initialData, async (data: FormData) => {
     loading = true;
     try {
       const result = await onSubmit(data);
       dispatch('success', result);
       return result;
     } catch (error) {
-      dispatch('error', error);
+      dispatch('error', error as Error);
       throw error;
     } finally {
       loading = false;
@@ -30,21 +41,27 @@
   });
   
   // Additional methods
-  export function reset() {
+  export function reset(): void {
     form.resetForm();
     dispatch('reset');
   }
   
-  export function validate() {
-    // Example validation
+  export function validate(): boolean {
+    // Validation logic
     let isValid = true;
-    for (const [field, validator] of Object.entries(fieldValidators)) {
-      const error = validator(form.data[field]);
-      if (error) {
-        isValid = false;
-        break;
+    
+    // Add type safety for field validators
+    for (const [field, validator] of Object.entries(fieldValidators) as Array<[string, Validator]>) {
+      // Ensure field exists in form data
+      if (field in form.data) {
+        const error = validator(form.data[field]);
+        if (error) {
+          isValid = false;
+          break;
+        }
       }
     }
+    
     return isValid;
   }
 </script>

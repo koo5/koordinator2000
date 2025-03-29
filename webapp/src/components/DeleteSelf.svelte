@@ -1,10 +1,10 @@
-<script lang='js'>
+<script lang='ts'>
   /*
   Not implemented yet: https://docs.nhost.io/auth/api-reference#delete-user
   - "ON DELETE CASCADE for foreign keys on users table"
   */
-  function nhost_delete_user(){
-    var xhr = new XMLHttpRequest();
+  function nhost_delete_user(): void {
+    const xhr = new XMLHttpRequest();
     xhr.open("POST", 'https://backend-3f257037.nhost.app/auth/delete', true);
 
     //Send the proper header information along with the request
@@ -12,18 +12,16 @@
 
     xhr.onreadystatechange = function() { // Call a function when the state changes.
         if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            console.log("Delete done...")
+            console.log("Delete done...");
         }
-    }
+    };
     xhr.send("");
   }
-
 </script>
 
-
-<div className="form-container" id="delete_form_container">
-  <label className="form-header" htmlFor="delete">Delete User</label>
-  <input type="button" value="Delete user" on:click="{nhost_delete_user}">
+<div class="form-container" id="delete_form_container">
+  <label class="form-header" for="delete-user">Delete User</label>
+  <input type="button" id="delete-user" value="Delete user" on:click={nhost_delete_user}>
 </div>
 
 <style>

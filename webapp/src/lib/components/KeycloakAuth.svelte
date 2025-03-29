@@ -1,23 +1,57 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { writable } from 'svelte/store';
+  import { writable, type Writable } from 'svelte/store';
   import { initializeKeycloak, updateToken, logout } from '$lib/server/keycloak';
   
+  // Define Keycloak related interfaces
+  interface KeycloakProfile {
+    id?: string;
+    username?: string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    [key: string]: any;
+  }
+
+  interface Keycloak {
+    token?: string;
+    refreshToken?: string;
+    idToken?: string;
+    subject?: string;
+    authenticated?: boolean;
+    loadUserProfile(): Promise<KeycloakProfile>;
+    login(options?: any): void;
+    logout(options?: any): void;
+    updateToken(minValidity: number): Promise<boolean>;
+    onAuthSuccess?: () => void;
+    onAuthError?: () => void;
+    onAuthRefreshSuccess?: () => void;
+    onAuthRefreshError?: () => void;
+    onAuthLogout?: () => void;
+    onTokenExpired?: () => void;
+    [key: string]: any;
+  }
+  
+  interface KeycloakInitResult {
+    keycloak: Keycloak;
+    authenticated: boolean;
+  }
+
   // Create Svelte stores for authentication state
-  export const isAuthenticated = writable(false);
-  export const userProfile = writable(null);
-  export const keycloakInstance = writable(null);
+  export const isAuthenticated: Writable<boolean> = writable(false);
+  export const userProfile: Writable<KeycloakProfile | null> = writable(null);
+  export const keycloakInstance: Writable<Keycloak | null> = writable(null);
   
   // Token refresh interval in seconds
   const tokenRefreshInterval = 60;
-  let refreshInterval;
+  let refreshInterval: ReturnType<typeof setInterval> | undefined;
   let mounted = false;
   
   onMount(async () => {
     mounted = true;
     try {
       // Initialize Keycloak
-      const { keycloak, authenticated } = await initializeKeycloak();
+      const { keycloak, authenticated } = await initializeKeycloak() as KeycloakInitResult;
       
       // Update stores
       keycloakInstance.set(keycloak);
@@ -25,8 +59,12 @@
       
       if (authenticated) {
         // Load user profile if authenticated
-        const profile = await keycloak.loadUserProfile();
-        userProfile.set(profile);
+        try {
+          const profile = await keycloak.loadUserProfile();
+          userProfile.set(profile);
+        } catch (profileError) {
+          console.error('Failed to load user profile', profileError);
+        }
         
         // Set up token refresh interval
         refreshInterval = setInterval(() => {
@@ -42,8 +80,10 @@
       keycloak.onAuthSuccess = () => {
         if (mounted) {
           isAuthenticated.set(true);
-          keycloak.loadUserProfile().then(profile => {
+          keycloak.loadUserProfile().then((profile: KeycloakProfile) => {
             userProfile.set(profile);
+          }).catch((err: Error) => {
+            console.error('Failed to load user profile', err);
           });
         }
       };
@@ -76,7 +116,8 @@
       
       keycloak.onTokenExpired = () => {
         console.log('Token expired');
-        updateToken().catch(() => {
+        updateToken().catch((err: Error) => {
+          console.error('Token refresh failed after expiry', err);
           if (mounted) {
             logout();
           }

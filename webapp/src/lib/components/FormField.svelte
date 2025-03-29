@@ -1,14 +1,27 @@
-<script>
-  // Props
+<script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
+  // Define option interface
+  interface FieldOption {
+    value: string | number;
+    label: string;
+  }
+
+  interface ChangeEvent {
+    name: string;
+    value: any;
+  }
+
+  // Props with type annotations
   export let name = "";
   export let label = "";
-  export let type = "text";
-  export let value = "";
+  export let type: 'text' | 'number' | 'email' | 'password' | 'textarea' | 'select' | 'checkbox' | 'radio' | 'date' = "text";
+  export let value: string | number | boolean = "";
   export let error = "";
   export let placeholder = "";
   export let required = false;
   export let disabled = false;
-  export let options = [];
+  export let options: FieldOption[] = [];
   export let id = name;
   export let helpText = "";
   
@@ -16,28 +29,38 @@
   export let rows = 3;
 
   // For number inputs
-  export let min = undefined;
-  export let max = undefined;
-  export let step = undefined;
+  export let min: number | undefined = undefined;
+  export let max: number | undefined = undefined;
+  export let step: number | undefined = undefined;
   
   // Generate unique ID if not provided
   if (!id) {
     id = `field-${Math.random().toString(36).substring(2, 9)}`;
   }
   
+  // Create typed event dispatcher
+  const dispatch = createEventDispatcher<{
+    change: ChangeEvent;
+    blur: Event;
+    focus: Event;
+  }>();
+  
   // Helper to handle change events
-  function handleChange(event) {
-    const eventValue = type === 'checkbox' ? event.target.checked : event.target.value;
-    value = eventValue;
-    dispatch('change', { name, value: eventValue });
+  function handleChange(event: Event): void {
+    if (event.target) {
+      const target = event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+      const eventValue = type === 'checkbox' 
+        ? (target as HTMLInputElement).checked 
+        : target.value;
+      
+      value = eventValue;
+      dispatch('change', { name, value: eventValue });
+    }
   }
   
   // Compute CSS classes
   let className = '';
   export { className as class };
-  
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
 </script>
 
 <div class="form-field {error ? 'form-field-error' : ''} {className}">
@@ -89,7 +112,7 @@
         {id}
         {name}
         {type}
-        bind:checked={value}
+        checked={value === true}
         {disabled}
         {required}
         class="form-checkbox"
