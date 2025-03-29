@@ -3,33 +3,55 @@
  */
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
-import { getApiUrl } from '$lib/public_env.js';
-import { setAuthToken } from '$lib/fetch-utils.js';
-import { user, addNotification } from '$lib/stores.js';
+import { getApiUrl } from '$lib/public_env';
+import { setAuthToken } from '$lib/fetch-utils';
+import { user, addNotification, type User } from '$lib/stores';
+
+/**
+ * Login user data request interface
+ */
+interface LoginRequestData {
+  email?: string;
+}
+
+/**
+ * Register user data request interface
+ */
+interface RegisterRequestData {
+  name: string;
+  email: string;
+}
 
 /**
  * Login a user using credentials (email/password) or create a guest user
  * 
- * @param {string} email - Optional email for login
- * @param {string} password - Optional password for login
- * @param {string} redirectTo - Where to redirect after login
- * @returns {Promise<void>}
+ * @param email - Optional email for login
+ * @param password - Optional password for login
+ * @param redirectTo - Where to redirect after login
+ * @returns The logged in user data
  */
-export async function login(email = null, password = null, redirectTo = '/') {
+export async function login(
+  email: string | null = null, 
+  password: string | null = null, 
+  redirectTo: string = '/'
+): Promise<User> {
   try {
     // Determine if using credentials or guest login
     const useCredentials = !!(email && password);
-    let userData;
+    let userData: User;
     
     if (useCredentials) {
       // This would be a real login with credentials in a production app
       // For now, we'll use the free user ID endpoint with email info
+      const requestData: LoginRequestData = {};
+      if (email) requestData.email = email;
+      
       const response = await fetch(getApiUrl('/get_free_user_id'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email })
+        body: JSON.stringify(requestData)
       });
       
       if (!response.ok) {
@@ -74,7 +96,8 @@ export async function login(email = null, password = null, redirectTo = '/') {
     return userData;
   } catch (err) {
     console.error('Login error:', err);
-    addNotification(err.message || 'Failed to login', 'error');
+    const error = err as Error;
+    addNotification(error.message || 'Failed to login', 'error');
     throw err;
   }
 }
@@ -82,16 +105,25 @@ export async function login(email = null, password = null, redirectTo = '/') {
 /**
  * Register a new user
  * 
- * @param {string} name - Username
- * @param {string} email - User email
- * @param {string} password - User password
- * @returns {Promise<Object>} The created user object
+ * @param name - Username
+ * @param email - User email
+ * @param password - User password
+ * @returns The created user object
  */
-export async function register(name, email, password) {
+export async function register(
+  name: string, 
+  email: string, 
+  password: string
+): Promise<User> {
   try {
     if (!name || !email || !password) {
       throw new Error('All fields are required');
     }
+    
+    const requestData: RegisterRequestData = {
+      name,
+      email
+    };
 
     // Register user using server endpoint
     const response = await fetch(getApiUrl('/get_free_user_id'), {
@@ -99,14 +131,14 @@ export async function register(name, email, password) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name, email })
+      body: JSON.stringify(requestData)
     });
     
     if (!response.ok) {
       throw new Error('Registration failed');
     }
     
-    const userData = await response.json();
+    const userData: User = await response.json();
     
     // Store user data
     user.set(userData);
@@ -125,7 +157,8 @@ export async function register(name, email, password) {
     return userData;
   } catch (err) {
     console.error('Registration error:', err);
-    addNotification(err.message || 'Failed to register', 'error');
+    const error = err as Error;
+    addNotification(error.message || 'Failed to register', 'error');
     throw err;
   }
 }
@@ -133,7 +166,7 @@ export async function register(name, email, password) {
 /**
  * Logout the current user
  */
-export function logout() {
+export function logout(): void {
   user.set(null);
   if (browser) {
     localStorage.removeItem('user');
@@ -145,16 +178,16 @@ export function logout() {
 
 /**
  * Check if a user is logged in and restore session
- * @returns {Promise<boolean>}
+ * @returns True if user is authenticated
  */
-export async function checkAuth() {
+export async function checkAuth(): Promise<boolean> {
   if (!browser) return false;
   
   try {
     // Check if user is already logged in
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      const userData = JSON.parse(storedUser);
+      const userData = JSON.parse(storedUser) as User;
       user.set(userData);
       
       // Set auth token for future requests

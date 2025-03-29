@@ -195,12 +195,20 @@ This project is undergoing migration from JavaScript to TypeScript:
   - `urql.ts`
   - `fetch-utils.ts`
   - `auth.ts` (was already TypeScript)
+  - `stores.ts`
+  - `auth-utils.ts`
+  - `empty-module.ts`
+  - `empty-polyfill.ts`
 - Server-side libraries in `$lib/server` directory:
   - `env.ts`
   - `urql.ts`
   - `auth.ts`
   - `keycloak.ts`
   - `keycloak-auth.ts`
+- Client-side libraries in `$lib/client` directory:
+  - `auth.ts`
+- Utility modules in `src`:
+  - `svelte-shared-store.ts`
 
 ### Migration Guidelines:
 1. **File Extensions**: Rename `.js` to `.ts` when converting
