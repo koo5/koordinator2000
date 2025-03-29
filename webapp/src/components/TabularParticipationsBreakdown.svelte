@@ -1,15 +1,20 @@
-<script>
+<script lang="ts">
 	import {Table} from './ui';
 	//import {my_user} from '../my_user.ts';
 	import TabularParticipationsRow from './TabularParticipationsRow.svelte';
+	import type { Campaign, Participation } from '../my_user.ts';
 
-	export let campaign;
+	export let campaign: Campaign;
 
-	$: participations = add_idxs(campaign.participations);
-	function add_idxs(participations)
-	{
+	interface ParticipationWithIndex extends Participation {
+		idx: number;
+	}
+
+	$: participations = add_idxs(campaign.participations || []);
+	
+	function add_idxs(participations: Participation[]): ParticipationWithIndex[] {
 		let i = 1;
-		return participations.map(participation =>
+		return participations.map(participation => 
 			({...participation, idx: i++})
 		);
 	}
@@ -19,13 +24,11 @@
 	$: le = participations.filter(f);
 	$: gt = participations.filter(participation => !f(participation));
 
-	function f(participation)
-	{
-		return participation.idx <= suggested_participants && participation.threshold <= campaign.suggested_optimal_threshold;
+	function f(participation: ParticipationWithIndex): boolean {
+		return participation.idx <= suggested_participants && (participation.threshold || 0) <= (campaign.suggested_optimal_threshold || 0);
 	}
-
 </script>
-<table responsive>
+<table class="responsive">
 	<thead>
 	<tr>
 		<th scope="col">#</th>

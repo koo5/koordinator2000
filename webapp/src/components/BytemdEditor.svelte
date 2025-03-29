@@ -1,18 +1,23 @@
-<script lang="js">
-
-	export let title;
-	export let paragraph;
+<script lang="ts">
+	export let title: string;
+	export let paragraph: string;
 
 	import { onMount } from "svelte";
 
 	let value = "";
-	let mode = "split";
+	let mode: "split" | "tab" = "split";
 
-	function handleChange(e) {
+	interface ChangeEvent {
+		detail: {
+			value: string;
+		};
+	}
+
+	function handleChange(e: ChangeEvent): void {
 		value = e.detail.value;
 	}
 
-	let Editor;
+	let Editor: any;
 
 	onMount(async () => {
 		/*const m = await import("bytemd");
@@ -24,7 +29,11 @@
 		value = text;
 	});
 
-	let enabled = {
+	interface EnabledPlugins {
+		[key: string]: boolean;
+	}
+
+	let enabled: EnabledPlugins = {
 //    breaks: false,
 //    gfm: true,
 //highlight: true,
@@ -75,7 +84,15 @@
 // },
 	].filter((x) => x);
 
-	function sanitize(schema) {
+	interface SchemaType {
+		protocols: {
+			src: string[];
+			[key: string]: any;
+		};
+		[key: string]: any;
+	}
+
+	function sanitize(schema: SchemaType): SchemaType {
 		schema.protocols.src.push("blob");
 		return schema;
 	}
@@ -99,5 +116,4 @@
 	<svelte:component this={Editor} {value} {mode} {plugins} {sanitize} on:change={handleChange}/>
 </div>
 
-export let {title}: string;
-export let {paragraph}: string;
+<!-- Exports are already declared at the top of the script -->

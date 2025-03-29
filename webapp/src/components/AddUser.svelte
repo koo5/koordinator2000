@@ -1,7 +1,8 @@
-<script type='js'>
+<script lang='ts'>
   import { onMount } from 'svelte';
   import { mutation } from '$lib/urql.ts';
   import gql from 'graphql-tag';
+  import type { DocumentNode } from 'graphql';
 
   const ADD_USER = gql`
     mutation($name: String!, $email: String) {
@@ -10,7 +11,13 @@
       }
     }
   `;
-  let status = 'ready';
+  
+  interface MutationOptions {
+    mutation: DocumentNode;
+    variables: { name: string; email: string; };
+  }
+  
+  let status: string | MutationOptions = 'ready';
   $:status_string = JSON.stringify(status,null,' ');
 
   let name = '';
@@ -21,25 +28,24 @@
     clearForm()
   });
 
-  function clearForm()
-  {
+  function clearForm(): void {
     name = 'user' + Date.now();
   }
 
-  async function addUser(e) {
+  async function addUser(e: Event): Promise<void> {
     e.preventDefault();
     try {
-      let mut = {
+      const mut: MutationOptions = {
         mutation: ADD_USER,
         variables: { name, email }
       };
       status = mut;
-      mutation(mut);
+      await mutation(ADD_USER)({ name, email });
       status = "Added successfully";
       clearForm()
     } catch(error) {
       console.error(error);
-      status = error;
+      status = error instanceof Error ? error.message : String(error);
     }
   }
 </script>

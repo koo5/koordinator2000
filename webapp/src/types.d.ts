@@ -215,6 +215,14 @@ declare module '../../utils/nhost.js' {
   };
 }
 
+// svelte-scrollto module
+declare module 'svelte-scrollto' {
+  export function scrollTo(options: any): void;
+  export function scrollToTop(options?: any): void;
+  export function scrollToBottom(options?: any): void;
+  export function scrollToElement(element: HTMLElement, options?: any): void;
+}
+
 // graphql-ws WebSocket client
 declare module 'graphql-ws' {
   export interface Client {

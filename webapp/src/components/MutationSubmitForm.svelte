@@ -72,7 +72,7 @@
 	}
 </script>
 
-<form {css_ref} on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={submit} class={css_ref}>
 	{#if $my_user.graphql_debug}
 		<pre>mutation vars:{variables_str}</pre>
 	{/if}

@@ -1,8 +1,9 @@
-<script type='js'>
+<script lang='ts'>
 	import {onMount} from 'svelte';
 	import MutationForm from './MutationForm.svelte';
 	import gql from 'graphql-tag';
-	import {my_user} from '../my_user.ts';
+	import {my_user, type MyUser} from '../my_user.ts';
+	import { get } from 'svelte/store';
 
 	const ADD = gql`
 	mutation MyMutation(
@@ -61,7 +62,7 @@
 	variables={{
 		title,
 		description,
-		maintainer_id: my_user.id,
+		maintainer_id: get(my_user).id,
 		suggested_lowest_threshold,
 		suggested_highest_threshold,
 		suggested_optimal_threshold,

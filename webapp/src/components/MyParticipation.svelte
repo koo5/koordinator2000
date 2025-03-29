@@ -1,4 +1,4 @@
-<script type='js'>
+<script lang='ts'>
 	import {
 		Button,
 		Label,
@@ -9,7 +9,7 @@
 		ModalHeader
 	} from './ui';
 	// Label and Input not implemented yet
-	import {my_user, decrease_auth_nag_postponement, get_my_participation} from '../my_user.ts';
+	import {my_user, decrease_auth_nag_postponement, get_my_participation, type Campaign, type Participation, type MyUser} from '../my_user.ts';
 	import gql from 'graphql-tag';
 	import MutationForm from './MutationForm.svelte';
 	import {createEventDispatcher} from 'svelte';
@@ -17,12 +17,12 @@
 	const dispatch = createEventDispatcher();
 	import {get_status_class, get_tickmark} from '../stuff.ts';
 
-	export let campaign;
+	export let campaign: Campaign;
 	let new_threshold = campaign.suggested_optimal_threshold;
 	$: my_participation = get_my_participation(campaign, $my_user);
 	$: set_new_threshold($my_user);
 
-	function set_new_threshold(u)
+	function set_new_threshold(u: MyUser): void
 	{
 		if (my_participation.threshold != undefined) new_threshold = my_participation.threshold;
 	}

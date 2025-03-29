@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
 	import TestModal from '../../components/TestModal.svelte';
 	import {my_user} from '../../my_user.ts';
 	import {CAMPAIGN_FRAGMENT} from '../../stuff.ts';
 	import {subscribe, gql} from "$lib/urql.ts";
 	
-	let segment = 0;
-	let currentData = null;
-	let error = null;
+	let segment: string = 'dev_area';
+	let currentData: string | null = null;
+	let error: string | null = null;
 	
 	// Query to test the campaign data structure
 	$: my_user_id = $my_user.id;

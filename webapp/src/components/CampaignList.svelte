@@ -1,17 +1,26 @@
-<script>
+<script lang="ts">
 	import Campaign from './Campaign.svelte';
-	import {my_user} from '../my_user.ts';
+	import {my_user, type Campaign as CampaignType} from '../my_user.ts';
 	import * as animateScroll from "svelte-scrollto";
 	import {gql, subscriptionStore, getContextClient} from "$lib/urql.ts";
 	import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 	import {CAMPAIGN_FRAGMENT} from '../stuff.ts';
 	import { browser } from '$app/environment';
+	import type { OperationResultState } from '@urql/core';
+	
+	// Interface definitions
+	interface CampaignQueryResult {
+		campaigns: CampaignType[];
+	}
+	
+	interface CampaignQueryStore extends OperationResultState<CampaignQueryResult> {
+		data?: CampaignQueryResult;
+	}
 	
 	// Custom slider implementation
-	let activeSlideIndex = {}; // Track active slide for each campaign
+	let activeSlideIndex: Record<number, number> = {}; // Track active slide for each campaign
 
-
-	export let ids;
+	export let ids: number[];
 
 	// fixme, the dismissal filter works in hasura console, but not here, for some reason (still?)
 	const CAMPAIGN_LIST = gql`
@@ -35,36 +44,41 @@
 	});
 
 
-	let sorted_campaigns = [];
+	let sorted_campaigns: CampaignType[] = [];
 	$: sorted_campaigns = sort_campaigns(ids, $campaigns_query);
-	function sort_campaigns(ids, query_store)
-	{
-		if (query_store.loading)
+	
+	function sort_campaigns(ids: number[], query_store: CampaignQueryStore): CampaignType[] {
+		if (query_store.fetching)
 			return [];
-		let data = query_store.data;
-			if (!data) return [];
-		let campaigns = query_store.data.campaigns;
-		let by_ids = {}
-		campaigns.forEach((c) =>
-		{
-			by_ids[c.id] = c
+		
+		const data = query_store.data;
+		if (!data) return [];
+		
+		const campaigns = data.campaigns;
+		const by_ids: Record<number, CampaignType> = {};
+		
+		campaigns.forEach((c: CampaignType) => {
+			by_ids[c.id] = c;
 		});
-		let result = [];
-		ids.forEach((id) =>
-		{
-			result.push(by_ids[id]);
-		})
+		
+		const result: CampaignType[] = [];
+		ids.forEach((id: number) => {
+			if (by_ids[id]) {
+				result.push(by_ids[id]);
+			}
+		});
+		
 		return result;
 	}
 
+	let my_timeout: ReturnType<typeof setTimeout> | undefined;
+	let campaign_containers: HTMLDivElement | null = null;
+	$: my_user_id = $my_user.id;
 
-	var my_timeout;
-	let campaign_containers;
-	$: my_user_id = $my_user.id
-
-	function changeSlide(campaign_id, direction) {
-		if (my_timeout)
+	function changeSlide(campaign_id: number, direction: number): void {
+		if (my_timeout) {
 			clearTimeout(my_timeout);
+		}
 		
 		// Default to center slide (2) if not yet initialized
 		if (activeSlideIndex[campaign_id] === undefined) {
@@ -87,27 +101,29 @@
 		}
 	}
 
-	function go_to_next_campaign(current_campaign_id)
-	{
+	function go_to_next_campaign(current_campaign_id: number): void {
 		if (!$my_user.autoscroll)
 			return;
+		
+		// Make sure campaign container exists and get as HTMLElement
 		if (!campaign_containers) return;
-		if (!campaign_containers.children) return;
-		const children = campaign_containers.children;
-		var goToNext = false;
-		for (var i = 0; i < children.length; i++)
-		{
-			const ch = children[i];
+		const containerElement = campaign_containers as unknown as HTMLElement;
+		if (!containerElement.children) return;
+		
+		const children = containerElement.children;
+		for (let i = 0; i < children.length; i++) {
+			const ch = children[i] as HTMLElement;
 			if (!ch.dataset) return;
+			
 			const j = ch.dataset.campaignId;
-			if (current_campaign_id == j)
-			{
-				const next_ch = children[i+1];
+			if (current_campaign_id.toString() === j) {
+				const next_ch = children[i+1] as HTMLElement;
 				if (!next_ch) return;
-				my_timeout = setTimeout(() =>
-				{
+				
+				my_timeout = setTimeout(() => {
 					animateScroll.scrollTo({delay: 0, element: next_ch});
 				}, 500);
+				
 				return; // hmm this could maybe also be done by navigating to a hash (the element id)
 			}
 		}
