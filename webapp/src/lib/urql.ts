@@ -20,7 +20,9 @@ import {
   subscriptionExchange,
   type Exchange,
   type OperationResult,
-  type GraphQLRequest, createClient
+  type GraphQLRequest, 
+  createClient,
+  type Client
 } from '@urql/core';
 import { createClient as createWSClient } from 'graphql-ws';
 
@@ -37,9 +39,16 @@ interface ConnectionStatus {
  * Query result interface
  */
 interface QueryResult<T = any> {
-  loading: boolean;
+  fetching: boolean;
   data: T | null;
   error: Error | null;
+}
+
+/**
+ * Operation context interface
+ */
+interface OperationContext {
+  [key: string]: any;
 }
 
 /**
@@ -185,11 +194,11 @@ export function subscribe<T = any>(
       });
   
   // Transform to our expected format for backwards compatibility
-  const store: Writable<QueryResult<T>> = writable({ loading: true, data: null, error: null });
+  const store: Writable<QueryResult<T>> = writable({ fetching: true, data: null, error: null });
   
   urqlStore.subscribe(result => {
     store.set({
-      loading: result.fetching,
+      fetching: result.fetching,
       data: result.data as T | null,
       error: result.error || null
     });

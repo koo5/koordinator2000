@@ -1,5 +1,15 @@
-<script type='js'>
-	export let items;
+<script lang="ts">
+	import type { Readable } from 'svelte/store';
+	
+	// Match the subscription store result structure
+	interface SubscriptionResult<T = any> {
+		fetching: boolean;
+		data?: T;
+		error?: Error | null;
+	}
+	
+	// Export items as a readable store with subscription result
+	export let items: Readable<SubscriptionResult<any>>;
 </script>
 
 {#if $items.fetching}

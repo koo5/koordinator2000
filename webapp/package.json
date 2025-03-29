@@ -10,7 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node build ",
-    "typecheck": "svelte-check --tsconfig ./tsconfig.json",
+    "svelte-check": "svelte-check --tsconfig ./tsconfig.json",
     "check": "npm run typecheck"
   },
   "devDependencies": {
