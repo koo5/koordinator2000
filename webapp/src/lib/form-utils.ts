@@ -12,10 +12,15 @@ interface ErrorWithDetails extends Error {
 }
 
 /**
- * Form input event
+ * Form input event type
  */
-interface FormInputEvent extends Event {
-  target: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+interface FormInputEvent {
+  target: {
+    name: string;
+    value: any;
+    type?: string;
+    checked?: boolean;
+  };
 }
 
 /**

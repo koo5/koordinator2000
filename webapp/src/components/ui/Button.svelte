@@ -1,9 +1,19 @@
-<script>
-  export let color = "primary";
-  export let outline = false;
-  export let size = "";
-  export let disabled = false;
-  export let type = "button";
+<script lang="ts">
+  // Define the allowed button types
+  type ButtonType = 'button' | 'submit' | 'reset';
+  
+  // Define the allowed color variants
+  type ButtonColor = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+  
+  // Define the allowed size variants
+  type ButtonSize = 'sm' | 'lg' | '';
+  
+  // Component props with TypeScript types
+  export let color: ButtonColor = "primary";
+  export let outline: boolean = false;
+  export let size: ButtonSize = "";
+  export let disabled: boolean = false;
+  export let type: ButtonType = "button";
 </script>
 
 <button 

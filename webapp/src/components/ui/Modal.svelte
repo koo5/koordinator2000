@@ -1,24 +1,29 @@
-<script>
+<script lang="ts">
   import { fade } from 'svelte/transition';
   import { createEventDispatcher } from 'svelte';
   
-  export let isOpen = false;
+  // Component props with TypeScript types
+  export let isOpen: boolean = false;
   // Using const for reference-only exports
-  export const fadeEffect = true;
-  export let keyboard = true;
-  export let scrollable = false;
-  export let toggle = undefined;
+  export const fadeEffect: boolean = true;
+  export let keyboard: boolean = true;
+  export let scrollable: boolean = false;
+  export let toggle: (() => void) | undefined = undefined;
   
-  const dispatch = createEventDispatcher();
+  // Create typed event dispatcher
+  const dispatch = createEventDispatcher<{
+    close: void;
+  }>();
   
-  function handleKeydown(e) {
+  // Event handlers with proper types
+  function handleKeydown(e: KeyboardEvent): void {
     if (keyboard && e.key === 'Escape' && isOpen) {
       if (toggle) toggle();
       dispatch('close');
     }
   }
   
-  function handleBackdropClick() {
+  function handleBackdropClick(): void {
     if (toggle) toggle();
     dispatch('close');
   }

@@ -1,4 +1,5 @@
-import Keycloak, { KeycloakConfig, KeycloakInitOptions, KeycloakProfile } from 'keycloak-js';
+import Keycloak from 'keycloak-js';
+import type { KeycloakConfig, KeycloakInitOptions, KeycloakProfile } from 'keycloak-js';
 
 /**
  * Keycloak initialization result interface

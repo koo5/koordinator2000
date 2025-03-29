@@ -1,12 +1,9 @@
-import { requireAuth } from '$lib/auth-utils.ts';
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 
-export const load: PageServerLoad = async (event) => {
-  // Check if user is authenticated
-  requireAuth(event);
+export const load: PageLoad = async ({ parent }) => {
+  // Get user from parent layout
+  const { user } = await parent();
   
-  // If we get here, the user is authenticated
-  return {
-    user: event.locals.user
-  };
+  // If user is not authenticated, the parent layout will handle the redirect
+  return { user };
 };

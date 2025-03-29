@@ -1,17 +1,24 @@
-<script>
-  export let type = 'text';
-  export let name = undefined;
-  export let id = undefined;
-  export let class_ = undefined;
-  export let placeholder = undefined;
-  export let value = undefined;
-  export let readonly = false;
-  export let disabled = false;
-  export let valid = true;
-  export let invalid = false;
-  export let bsSize = undefined;
-  export let checked = false;
-  export let multiple = false;
+<script lang="ts">
+  // Define the allowed input types
+  type InputType = 'text' | 'password' | 'email' | 'number' | 'checkbox' | 'file' | 'radio' | 'date' | 'time' | 'datetime-local' | 'search' | 'tel' | 'url';
+  
+  // Define the allowed form control sizes
+  type FormControlSize = 'sm' | 'lg' | undefined;
+  
+  // Component props with TypeScript types
+  export let type: InputType = 'text';
+  export let name: string | undefined = undefined;
+  export let id: string | undefined = undefined;
+  export let class_: string | undefined = undefined;
+  export let placeholder: string | undefined = undefined;
+  export let value: any = undefined;
+  export let readonly: boolean = false;
+  export let disabled: boolean = false;
+  export let valid: boolean = true;
+  export let invalid: boolean = false;
+  export let bsSize: FormControlSize = undefined;
+  export let checked: boolean = false;
+  export let multiple: boolean = false;
   
   let classes = '';
   

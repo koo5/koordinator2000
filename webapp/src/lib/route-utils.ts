@@ -2,17 +2,17 @@
  * Route utilities for SvelteKit
  */
 import { browser } from '$app/environment';
-import { goto, type GotoOptions } from '$app/navigation';
-import type { LoadEvent } from '@sveltejs/kit';
+import { goto } from '$app/navigation';
+import type { RequestEvent } from '@sveltejs/kit';
 import { fetchData } from './data-utils';
 import { requireAuth, createError } from './error-utils';
 
 /**
  * Check if user is authenticated and redirect if not
  * 
- * @param event - SvelteKit load event
+ * @param event - SvelteKit request event
  */
-export function checkAuth(event: LoadEvent): void {
+export function checkAuth(event: RequestEvent): void {
   const { locals } = event;
   if (!locals.user) {
     requireAuth('You must be logged in to access this page', event.url.pathname);
@@ -22,13 +22,13 @@ export function checkAuth(event: LoadEvent): void {
 /**
  * Load data from the API in a standardized way
  * 
- * @param event - SvelteKit load event
+ * @param event - SvelteKit request event
  * @param endpoint - API endpoint to fetch
  * @param options - Fetch options
  * @returns Fetched data
  */
 export async function loadFromApi<T = any>(
-  event: LoadEvent, 
+  event: RequestEvent, 
   endpoint: string, 
   options: RequestInit = {}
 ): Promise<T> {
@@ -50,7 +50,7 @@ export async function loadFromApi<T = any>(
  */
 export async function navigate(
   path: string, 
-  options: GotoOptions = {}
+  options: Record<string, any> = {}
 ): Promise<void> {
   try {
     await goto(path, options);
