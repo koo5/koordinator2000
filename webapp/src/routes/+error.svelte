@@ -1,5 +1,15 @@
-<script>
+<script lang="ts">
   import { page } from '$app/stores';
+
+  // Define a custom error interface that might include stack
+  interface ErrorWithStack extends Error {
+    stack?: string;
+  }
+
+  // Add a type guard for checking if error has stack property
+  function hasStack(error: Error | null): error is ErrorWithStack {
+    return error !== null && error !== undefined && 'stack' in error;
+  }
 </script>
 
 <svelte:head>
@@ -8,9 +18,11 @@
 
 <div class="error">
   <h1>{$page.status}</h1>
-  <p>{$page.error.message}</p>
-  {#if $page.error.stack}
-    <pre>{$page.error.stack}</pre>
+  {#if $page.error}
+    <p>{$page.error.message}</p>
+    {#if hasStack($page.error)}
+      <pre>{$page.error.stack}</pre>
+    {/if}
   {/if}
   <a href="/">Go to home page</a>
 </div>

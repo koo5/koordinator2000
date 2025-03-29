@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import PageReloadClock from "./PageReloadClock.svelte";
 	import { user } from '$lib/stores';
 	import { page } from '$app/stores';
@@ -13,23 +13,30 @@
 		NavLink,
 	} from './ui';
 
-	export const data = {}; // Changed to const as it's for external reference only
+	// Props definition with types
+	export let data: Record<string, any> = {};
+	export let toggle_settings: () => void;
 
 	$: my_user_str = JSON.stringify($user, null, ' ');
 	$: currentPath = $page.url.pathname;
 	$: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
 
 	let navbar_open = false;
-	function navbar_handleUpdate(event) {navbar_open = event.detail.isOpen;}
+	
+	interface UpdateEvent {
+		detail: {
+			isOpen: boolean;
+		};
+	}
+	
+	function navbar_handleUpdate(event: UpdateEvent): void {
+		navbar_open = event.detail.isOpen;
+	}
 
 	// Settings modal state
 	let settingsModalOpen = false;
 	
-	function toggle_settings() {
-		settingsModalOpen = !settingsModalOpen;
-	}
-	
-	function closeSettingsModal() {
+	function closeSettingsModal(): void {
 		settingsModalOpen = false;
 	}
 </script>

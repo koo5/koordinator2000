@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { page, navigating } from '$app/stores';
 	import { theme, user } from '$lib/stores';
@@ -8,14 +8,32 @@
 	import TheNagModal from '../components/TheNagModal.svelte';
 	import Nav from '../components/Nav.svelte';
 	import { createUrqlClient, setContextClient } from '$lib/urql.ts';
-	import {		idToken,		userInfo,	} from '$lib/auth.ts';
-	import { my_user, ensure_we_exist, apply_newly_authenticated_user, auth_event } from '../my_user.ts';
+	import { idToken, userInfo } from '$lib/auth.ts';
+	import { 
+		my_user, 
+		ensure_we_exist, 
+		apply_newly_authenticated_user, 
+		auth_event, 
+		type MyUser, 
+		type AuthEvent 
+	} from '../my_user.ts';
 	import { set_css_var, saturate_computate } from '../stuff.ts';
 	import { initVersionCheck } from '$lib/version-check.ts';
+	import { get } from 'svelte/store';
+	import type { SharedStore } from '../svelte-shared-store';
 
-	export let data;
+	// Define types for layout data
+	interface LayoutData {
+		session?: {
+			PUBLIC_URL?: string;
+			[key: string]: any;
+		};
+		[key: string]: any;
+	}
 
-	$: PUBLIC_URL = data.session?.PUBLIC_URL;
+	export let data: LayoutData;
+
+	$: PUBLIC_URL = data.session?.PUBLIC_URL || '';
 	const callback_url = PUBLIC_URL + "/you";
 	const logout_url = PUBLIC_URL + "/you";
 	
@@ -25,18 +43,27 @@
 	// Auth0 token handling
 	$: maybe_ping_server_about_this($idToken, $userInfo);
 	
-	async function maybe_ping_server_about_this(token, info) {
+	async function maybe_ping_server_about_this(token: string | null, info: any): Promise<void> {
 		if (!browser) return;
 		
-		let auth = {'auth0': {token, info}};
-		my_user.update((u) => {
+		const auth = {'auth0': {token, info}};
+		
+		// Need to cast to the correct type since we're in the browser
+		const writableMyUser = my_user as SharedStore<MyUser>;
+		writableMyUser.update((u: MyUser) => {
 			return {...u, auth};
 		});
 		
-		let event_result = await auth_event($my_user);
+		// Create a proper AuthEvent
+		const authEventData: AuthEvent = {
+			type: 'auth0',
+			...get(my_user)
+		};
+		
+		const event_result = await auth_event(authEventData);
 		if (event_result && event_result.user) {
 			console.log('ich bin logged in');
-			my_user.set(event_result.user);
+			writableMyUser.set(event_result.user);
 		}
 	}
 	
@@ -52,11 +79,12 @@
 	$: set_css_var('--invert', (color_theme_invert ? 100 : 0) + "%");
 	$: set_css_var('--contrast', (100 + (color_theme_contrast || 0)) + "%");
 	
-	// Settings modal toggle function
-	let toggle_settings = () => {
-		// This is a placeholder that will be bound by the SettingsModal component
-		console.log('Settings toggle called but not bound yet');
-	};
+	// Settings modal state and toggle function
+	let settingsModalOpen = false;
+	
+	function toggle_settings(): void {
+		settingsModalOpen = !settingsModalOpen;
+	}
 	
 	// Handle any client-side initialization
 	onMount(async () => {
@@ -104,17 +132,17 @@
 {/if}
 
 {#if browser && $my_user}
-		<SettingsModal bind:toggle_settings={toggle_settings}/>
+		<SettingsModal isOpen={settingsModalOpen} on:close={() => settingsModalOpen = false} />
 		<TheNagModal/>
 		
 		<Container>
 			<Row>
 				<Col>
-					<Nav {data} {toggle_settings} />
+					<Nav data={{}} {toggle_settings} />
 				</Col>
 			</Row>
 			<Row>
-				<Col xs="auto">
+				<Col xs={12}>
 					<main>
 						<slot></slot>
 					</main>

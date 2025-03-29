@@ -1,17 +1,19 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import Settings from './Settings.svelte';
   
   export let isOpen = false;
   
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    close: void;
+  }>();
   
-  function closeModal() {
+  function closeModal(): void {
     dispatch('close');
   }
   
   // Close modal when Escape key is pressed
-  function handleKeydown(event) {
+  function handleKeydown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && isOpen) {
       closeModal();
     }
