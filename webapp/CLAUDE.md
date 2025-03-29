@@ -209,6 +209,8 @@ This project is undergoing migration from JavaScript to TypeScript:
   - `auth.ts`
 - Utility modules in `src`:
   - `svelte-shared-store.ts`
+  - `event_dispatcher.ts`
+  - `browser_theme_setting.ts`
 
 ### Migration Guidelines:
 1. **File Extensions**: Rename `.js` to `.ts` when converting

@@ -71,8 +71,8 @@ interface AccountInsertResult {
 }
 
 // Initialize variables for JWT operations
-let ecPrivateKey: KeyLike | null = null;
-let rsaPublicKey: KeyLike | null = null;
+let ecPrivateKey: KeyLike = null as unknown as KeyLike;
+let rsaPublicKey: KeyLike = null as unknown as KeyLike;
 let keys_initialized = false;
 let keys_promise: Promise<boolean> | null = null;
 
@@ -126,7 +126,7 @@ async function load_keys_internal(): Promise<boolean> {
  */
 export async function free_user_id(email: string | null = null): Promise<UserObject> {
   let result: { data: any } | null = null;
-  let name: string;
+  let name: string = "user";  // Default name in case of errors
   let attempt = 0;
   const maxAttempts = 3;
   
@@ -345,8 +345,9 @@ export async function user_id_from_auth(provider: string, sub: string): Promise<
     }
   );
   
-  if (result.data?.verified_user_authentications) {
-    result.data.verified_user_authentications.forEach((x) => {
+  if (result.data && 'verified_user_authentications' in result.data) {
+    const authData = result.data as { verified_user_authentications: Array<{ account_id: number }> };
+    authData.verified_user_authentications.forEach((x) => {
       console.log('found verified_user_authentication:');
       console.log(x);
       found_user_id = found_user_id || x.account_id;

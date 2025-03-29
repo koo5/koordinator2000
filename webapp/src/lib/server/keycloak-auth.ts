@@ -1,5 +1,5 @@
 import * as jose from 'jose';
-import { JWTPayload, JWTVerifyResult, KeyLike, JWTVerifyOptions } from 'jose';
+import type { JWTPayload, JWTVerifyResult, KeyLike, JWTVerifyOptions } from 'jose';
 import { server_env } from './env';
 import type { RequestEvent } from '@sveltejs/kit';
 
