@@ -3,21 +3,84 @@
  * This file should only be imported by server-side code
  */
 import { SignJWT, importJWK } from 'jose';
+import type { KeyLike } from 'jose';
 import { uniqueNamesGenerator, adjectives, colors } from 'unique-names-generator';
-import { getServerClient, gql, serverQuery as query, serverMutation as mutate } from '$lib/server/urql.js';
-import { server_env } from '$lib/server/env.js';
+import { getServerClient, gql, serverQuery as query, serverMutation as mutate } from '$lib/server/urql';
+import { server_env } from '$lib/server/env';
+
+/**
+ * User object interface
+ */
+interface UserObject {
+  id: number;
+  name: string;
+  email?: string | null;
+  autoscroll?: boolean;
+  fallback?: boolean;
+  jwt?: string;
+  [key: string]: any;
+}
+
+/**
+ * Auth event interface
+ */
+interface AuthEvent {
+  id?: number;
+  auth?: {
+    keycloak?: {
+      token?: string;
+      info?: {
+        sub: string;
+        email?: string;
+        [key: string]: any;
+      };
+    };
+  };
+}
+
+/**
+ * Authentication info interface
+ */
+interface AuthInfo {
+  sub: string;
+  email?: string;
+  [key: string]: any;
+}
+
+/**
+ * Authentication query result interface
+ */
+interface AuthQueryResult {
+  data?: {
+    verified_user_authentications?: Array<{
+      account_id: number;
+    }>;
+  };
+}
+
+/**
+ * Account insertion result interface
+ */
+interface AccountInsertResult {
+  data?: {
+    insert_accounts_one?: {
+      id: number;
+      email?: string;
+    };
+  };
+}
 
 // Initialize variables for JWT operations
-let ecPrivateKey = null;
-let rsaPublicKey = null;
+let ecPrivateKey: KeyLike | null = null;
+let rsaPublicKey: KeyLike | null = null;
 let keys_initialized = false;
-let keys_promise = null;
+let keys_promise: Promise<boolean> | null = null;
 
 /**
  * Initialize cryptographic keys for JWT operations
- * @returns {Promise<void>} Promise that resolves when keys are initialized
+ * @returns Promise that resolves when keys are initialized
  */
-export async function init_keys() {
+export async function init_keys(): Promise<boolean> {
   if (!keys_promise) {
     keys_promise = load_keys_internal();
     console.log("Server auth keys initialization started");
@@ -27,9 +90,9 @@ export async function init_keys() {
 
 /**
  * Internal function to load and import cryptographic keys
- * @returns {Promise<boolean>} Promise that resolves to true if keys were successfully loaded
+ * @returns Promise that resolves to true if keys were successfully loaded
  */
-async function load_keys_internal() {
+async function load_keys_internal(): Promise<boolean> {
   try {
     // Get server-side keys from environment
     const MY_APP_KEYS = server_env.MY_APP_KEYS;
@@ -58,12 +121,12 @@ async function load_keys_internal() {
 
 /**
  * Generate a free user ID with optional email
- * @param {string|null} email - Optional email for the user
- * @returns {Promise<Object>} User object with JWT
+ * @param email - Optional email for the user
+ * @returns User object with JWT
  */
-export async function free_user_id(email = null) {
-  let result;
-  let name;
+export async function free_user_id(email: string | null = null): Promise<UserObject> {
+  let result: { data: any } | null = null;
+  let name: string;
   let attempt = 0;
   const maxAttempts = 3;
   
@@ -76,7 +139,7 @@ export async function free_user_id(email = null) {
     
     try {
       // Create account object with name and optional email
-      const accountObject = { name };
+      const accountObject: { name: string; email?: string } = { name };
       if (email) {
         accountObject.email = email;
       }
@@ -86,7 +149,7 @@ export async function free_user_id(email = null) {
       console.log("Server URQL client initialized:", !!client);
       console.log("GraphQL mutation variables:", { accountObject });
       
-      const mutationResult = await mutate(
+      const mutationResult = await mutate<{ insert_accounts_one?: { id: number; email?: string } }>(
         gql`
           mutation MyMutation($accountObject: accounts_insert_input!) {
             insert_accounts_one(object: $accountObject) {
@@ -132,40 +195,42 @@ export async function free_user_id(email = null) {
     });
   }
 
-  let r = await sign_user_object({
+  const userObject: UserObject = {
     id: result.data.insert_accounts_one.id,
-    name,
+    name: name!,
     email: email,
     autoscroll: true
-  });
+  };
+
+  const r = await sign_user_object(userObject);
   console.log("free_user_id result:" + JSON.stringify(r, null, ' '));
   return r;
 }
 
 /**
  * Signs a user object by adding a JWT
- * @param {Object} x - The user object to sign
- * @returns {Promise<Object>} The user object with JWT added
+ * @param userObject - The user object to sign
+ * @returns The user object with JWT added
  */
-export async function sign_user_object(x) {
+export async function sign_user_object(userObject: UserObject): Promise<UserObject> {
   await init_keys();
   if (!keys_initialized) {
     console.error("Keys not initialized");
   }
-  const jwt = await user_authenticity_jwt(x.id);
-  return {...x, jwt};
+  const jwt = await user_authenticity_jwt(userObject.id);
+  return {...userObject, jwt};
 }
 
 /**
  * Generate a JWT for a user ID
- * @param {number} id - The user ID to authenticate
- * @returns {Promise<string>} The generated JWT token
+ * @param id - The user ID to authenticate
+ * @returns The generated JWT token
  */
-export async function user_authenticity_jwt(id) {
+export async function user_authenticity_jwt(id: number): Promise<string> {
   try {
     await init_keys();
     
-    if (!keys_initialized) {
+    if (!keys_initialized || !ecPrivateKey) {
       console.error("Keys not initialized for JWT signing");
       return "";
     }
@@ -173,7 +238,7 @@ export async function user_authenticity_jwt(id) {
     return await new SignJWT({
       'urn:id': id,
     })
-      .setProtectedHeader({alg: server_env.MY_APP_KEYS.private.alg})
+      .setProtectedHeader({alg: server_env.MY_APP_KEYS.private.alg as string})
       .setIssuedAt()
       .setIssuer('urn:example:issuer')
       .setAudience('urn:example:audience')
@@ -189,27 +254,29 @@ export async function user_authenticity_jwt(id) {
  * Process authentication event from Keycloak
  * This function handles the authentication event from Keycloak and associates
  * the Keycloak identity with our internal JWT identity system
+ * @param event - Authentication event data
+ * @returns User data if authentication was successful
  */
-export async function process_auth_event(x) {
+export async function process_auth_event(event: AuthEvent): Promise<{ user: UserObject } | null> {
   try {
     // Validate the event data structure
-    if (!x) {
+    if (!event) {
       console.log("process_auth_event: Event object is null or undefined");
       return null;
     }
     
     // For debugging
-    console.log("process_auth_event received:", JSON.stringify(x, null, 2));
+    console.log("process_auth_event received:", JSON.stringify(event, null, 2));
     
     // If no auth data at all, return null
-    if (!x.auth) {
+    if (!event.auth) {
       console.log("process_auth_event: No auth data in event");
       return null;
     }
     
     // Handle Keycloak auth
-    if (x.auth.keycloak) {
-      const keycloak = x.auth.keycloak;
+    if (event.auth.keycloak) {
+      const keycloak = event.auth.keycloak;
       
       // Skip empty tokens
       if (!keycloak.token) {
@@ -231,16 +298,16 @@ export async function process_auth_event(x) {
       if (user_id) {
         // If found, return the associated user with a fresh JWT
         console.log(`Found existing user (ID: ${user_id}) for Keycloak identity`);
-        return {user: await sign_user_object({id: user_id})};
-      } else if (x.id) {
+        return {user: await sign_user_object({id: user_id, name: ""})};
+      } else if (event.id) {
         // If not found but we have a current user ID, associate the identities
-        console.log(`Associating Keycloak identity with user ID: ${x.id}`);
-        await save_verified_authentication(x.id, "keycloak", keycloak.info);
+        console.log(`Associating Keycloak identity with user ID: ${event.id}`);
+        await save_verified_authentication(event.id, "keycloak", keycloak.info);
         // Save email if available
         if (keycloak.info.email) {
-          await grab_email(x.id, keycloak.info);
+          await grab_email(event.id, keycloak.info);
         }
-        return {user: await sign_user_object({id: x.id})};
+        return {user: await sign_user_object({id: event.id, name: ""})};
       } else {
         console.log("No valid user ID for Keycloak association");
         return null;
@@ -257,10 +324,14 @@ export async function process_auth_event(x) {
 
 /**
  * Find user ID from authentication provider and subject
+ * @param provider - Authentication provider name
+ * @param sub - Subject identifier
+ * @returns User ID if found
  */
-export async function user_id_from_auth(provider, sub) {
-  var found_user_id = undefined;
-  let result = await query(
+export async function user_id_from_auth(provider: string, sub: string): Promise<number | undefined> {
+  let found_user_id: number | undefined = undefined;
+  
+  const result = await query<AuthQueryResult>(
     gql`
       query MyQuery($login_name: String, $provider: String) {
         verified_user_authentications(where: {login_name: {_eq: $login_name}, provider: {_eq: $provider}}) {
@@ -274,8 +345,8 @@ export async function user_id_from_auth(provider, sub) {
     }
   );
   
-  if (result.data && result.data.verified_user_authentications) {
-    await result.data.verified_user_authentications.forEach(async (x) => {
+  if (result.data?.verified_user_authentications) {
+    result.data.verified_user_authentications.forEach((x) => {
       console.log('found verified_user_authentication:');
       console.log(x);
       found_user_id = found_user_id || x.account_id;
@@ -287,11 +358,15 @@ export async function user_id_from_auth(provider, sub) {
 
 /**
  * Add email to user account
+ * @param user_id - User ID
+ * @param info - Authentication info
  */
-export async function grab_email(user_id, info) {
-  if (user_id == -1 || !user_id)
+export async function grab_email(user_id: number, info: AuthInfo): Promise<void> {
+  if (user_id === -1 || !user_id)
     return;
-  let email = info.email;
+  
+  const email = info.email;
+  if (!email) return;
   
   const result = await mutate(
     gql`
@@ -314,11 +389,19 @@ export async function grab_email(user_id, info) {
 
 /**
  * Save authentication info
+ * @param user_id - User ID
+ * @param provider - Authentication provider
+ * @param info - Authentication info
  */
-export async function save_verified_authentication(user_id, provider, info) {
-  if (user_id == -1 || !user_id)
+export async function save_verified_authentication(
+  user_id: number, 
+  provider: string, 
+  info: AuthInfo
+): Promise<void> {
+  if (user_id === -1 || !user_id)
     return;
-  let login_name = info.sub;
+  
+  const login_name = info.sub;
   console.log(['save_verified_authentication', user_id, provider, login_name]);
   
   await mutate(

@@ -1,13 +1,45 @@
 import * as jose from 'jose';
-import { server_env } from './env.js';
+import { JWTPayload, JWTVerifyResult, KeyLike, JWTVerifyOptions } from 'jose';
+import { server_env } from './env';
+import type { RequestEvent } from '@sveltejs/kit';
+
+/**
+ * Keycloak JWKS interface
+ */
+interface KeycloakJWKS {
+  keys: Array<Record<string, any>>;
+}
+
+/**
+ * Keycloak user information interface
+ */
+interface KeycloakUser {
+  id: string;
+  name: string | undefined;
+  email: string | undefined;
+  roles: string[];
+  jwt: string;
+}
+
+/**
+ * Keycloak token payload interface
+ */
+interface KeycloakTokenPayload extends JWTPayload {
+  sub: string;
+  preferred_username?: string;
+  email?: string;
+  realm_access?: {
+    roles: string[];
+  };
+}
 
 // Variable to hold the Keycloak validation keys
-let keycloak_keys = null;
+let keycloak_keys: KeycloakJWKS | null = null;
 
 /**
  * Initialize Keycloak validation keys by fetching them from the Keycloak server
  */
-export async function init_keycloak_keys() {
+export async function init_keycloak_keys(): Promise<void> {
   if (keycloak_keys) return;
   if (!server_env.ENABLE_KEYCLOAK)
     return;
@@ -26,7 +58,7 @@ export async function init_keycloak_keys() {
       throw new Error(`Failed to fetch Keycloak JWKS: ${response.statusText}`);
     }
     
-    const jwks = await response.json();
+    const jwks = await response.json() as KeycloakJWKS;
     keycloak_keys = jwks;
     
     console.log("Server-side auth keys initialized successfully");
@@ -39,30 +71,35 @@ export async function init_keycloak_keys() {
 /**
  * Verify a Keycloak token and extract user information
  * 
- * @param {string} token - The JWT token to verify
- * @returns {Promise<Object|null>} The user information or null if verification fails
+ * @param token - The JWT token to verify
+ * @returns The user information or null if verification fails
  */
-export async function verify_keycloak_token(token) {
+export async function verify_keycloak_token(token: string): Promise<KeycloakUser | null> {
   if (!keycloak_keys) {
     await init_keycloak_keys();
   }
   
   try {
     // Create JWKS from the keys
-    const jwks = jose.createRemoteJWKSet(new URL('http://localhost:8080/realms/koordinator/protocol/openid-connect/certs'));
+    const jwks = jose.createRemoteJWKSet(
+      new URL('http://localhost:8080/realms/koordinator/protocol/openid-connect/certs')
+    );
     
     // Verify the token
-    const { payload } = await jose.jwtVerify(token, jwks, {
+    const verifyOptions: JWTVerifyOptions = {
       issuer: 'http://localhost:8080/realms/koordinator',
       audience: 'koordinator-webapp'
-    });
+    };
+    
+    const { payload } = await jose.jwtVerify(token, jwks, verifyOptions);
+    const keycloakPayload = payload as KeycloakTokenPayload;
     
     // Extract user information
-    const user = {
-      id: payload.sub,
-      name: payload.preferred_username,
-      email: payload.email,
-      roles: payload.realm_access?.roles || [],
+    const user: KeycloakUser = {
+      id: keycloakPayload.sub,
+      name: keycloakPayload.preferred_username,
+      email: keycloakPayload.email,
+      roles: keycloakPayload.realm_access?.roles || [],
       jwt: token
     };
     
@@ -76,14 +113,16 @@ export async function verify_keycloak_token(token) {
 /**
  * Extract and verify user from a request
  * 
- * @param {import('@sveltejs/kit').RequestEvent} event - The SvelteKit request event
- * @returns {Promise<Object|null>} The user information or null if not authenticated
+ * @param event - The SvelteKit request event
+ * @returns The user information or null if not authenticated
  */
-export async function get_user_from_request(event) {
+export async function get_user_from_request(
+  event: RequestEvent
+): Promise<KeycloakUser | null> {
   try {
     // Get the authorization header
     const auth_header = event.request.headers.get('authorization');
-    let token = null;
+    let token: string | null = null;
     
     if (auth_header?.startsWith('Bearer ')) {
       token = auth_header.slice(7);
