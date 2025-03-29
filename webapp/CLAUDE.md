@@ -8,7 +8,7 @@
 - **TypeScript Check**: `npm run typecheck`
 
 ## Environment Setup
-Create a `.public_env` file in the project root with these required variables:
+Create a `.env` file in the project root with these required variables:
 
 ```
 # GraphQL endpoint for Hasura (MUST have VITE_ prefix for client access)
@@ -79,7 +79,7 @@ Private keys are handled securely through strict requirements:
 
 ⚠️ **IMPORTANT**: MY_APP_KEYS is a CRITICAL security component:
 - The server will refuse to start if MY_APP_KEYS is missing or invalid
-- This environment variable MUST be properly set in production environments
+- This environment variable MUST be properly set
 - No defaults are provided for this sensitive data
 - JWT authentication will completely fail without this key
 
@@ -91,24 +91,9 @@ This application uses Hasura Cloud for GraphQL:
    - Navigate to "Project Settings" > "API Access"
    - Copy or generate an admin secret
 
-2. Add the admin secret to your .public_env file:
-   ```
-   VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-admin-secret":"your-secret-here"}'
-   ```
+2. Add the admin secret to your .env file.
 
-3. For production, consider using role-based headers instead:
-   ```
-   VITE_PUBLIC_GRAPHQL_HEADERS='{"content-type":"application/json","x-hasura-role":"user","x-hasura-user-id":"${userId}"}'
-   ```
-
-## Migration Status
-This project has been fully migrated from Sapper to SvelteKit. All routes are now in the SvelteKit file-based routing format:
-- Page components use `+page.svelte` files in route directories
-- Data loading is handled in separate `+page.js` files
-- API endpoints use `+server.js` files with HTTP method handlers
-- Layouts are defined in `+layout.svelte` files
-
-When working with this codebase:
+## when working with this codebase:
 - Use SvelteKit conventions for all new code
 - Use `browser` from `$app/environment` instead of `process.browser`
 - Use relative import paths using `../` for parent directories
@@ -118,9 +103,8 @@ When working with this codebase:
 
 ## Architecture
 - The frontend uses a GraphQL endpoint provided by Hasura
-- Access control logic (ACL) should be handled by Hasura
+- Access control logic (ACL) should be handled by Hasura using the JWT token stored in local storage
 - Hasura is configured to use a Postgres instance, database schema dump is in ../data/koordinator.sql
-- SSR-safe code must check for browser environment before accessing browser APIs
 
 ## Code Style Guidelines
 - **Framework**: SvelteKit application using client-side rendering
@@ -164,20 +148,6 @@ Components like FirepadEditor that use browser-only APIs need special handling:
 - Use dynamic imports for browser-only modules
 - Use `browser` check before initializing browser-only features
 - Handle errors gracefully during SSR
-
-## Node.js Modules in Browser
-Some dependencies may try to use Node.js built-in modules (fs, path, url, etc.) which aren't available in browsers:
-
-- **Polyfills**: The app includes minimal polyfills in `src/polyfills.js`
-- **Module Aliases**: Vite is configured to replace Node.js modules with browser-compatible versions
-- **Empty Modules**: For modules like 'fs', we provide empty implementations
-- **External Modules**: Node.js modules are marked as external in SSR private_env
-
-To handle these modules:
-1. Add required polyfills to `src/polyfills.js`
-2. Configure module replacements in `vite.private_env.js`
-3. Add empty module implementations in `src/lib/empty-polyfill.js` and `src/lib/empty-module.js`
-4. Always include `import './polyfills.js'` in client.js
 
 ## TypeScript Migration
 This project is undergoing migration from JavaScript to TypeScript:

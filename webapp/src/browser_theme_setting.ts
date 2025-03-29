@@ -29,17 +29,17 @@ export function theme(): Writable<ThemeType> {
 	r.set(prefersDarkMode.matches ? 'dark' : 'light');
 
 	// Update the store if OS preference changes
-	const updateThemeOnChange = (e: MediaQueryChangeEvent): void => 
+	const updateThemeOnChange = (e: MediaQueryChangeEvent | MediaQueryListEvent): void => 
 		r.set(e.matches ? 'dark' : 'light');
 		
 	// Use the appropriate API based on browser support
 	if (typeof prefersDarkMode.addEventListener === 'function') {
-		prefersDarkMode.addEventListener('change', updateThemeOnChange as EventListener);
+		prefersDarkMode.addEventListener('change', updateThemeOnChange as (e: MediaQueryListEvent) => void);
 		// We could also return a function to clean up if needed:
 		// return () => prefersDarkMode.removeEventListener('change', updateThemeOnChange);
 	} else {
 		// Fallback for older browsers
-		prefersDarkMode.addListener(updateThemeOnChange);
+		prefersDarkMode.addListener(updateThemeOnChange as (e: MediaQueryListEvent) => void);
 		// Cleanup: prefersDarkMode.removeListener(updateThemeOnChange);
 	}
 

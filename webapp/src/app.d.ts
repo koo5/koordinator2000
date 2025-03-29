@@ -15,18 +15,25 @@ declare global {
 				PUBLIC_GRAPHQL_HEADERS?: Record<string, string>;
 				BASE_URL: string;
 			},
-			user?: {
-				id: number;
-				name: string;
-				email?: string;
-				jwt?: string;
-				auth_debug?: boolean;
-				nag_postponement?: number;
-				nag_backoff?: number;
-				default_participations_display_style?: string;
-				autoscroll?: boolean;
-				[key: string]: any;
-			}
+			user?: UserObject;
+		}
+		
+		interface UserObject {
+			id: number;
+			name?: string;
+			email?: string;
+			jwt?: string;
+			auth_debug?: boolean;
+			nag_postponement?: number;
+			nag_backoff?: number;
+			default_participations_display_style?: string;
+			autoscroll?: boolean;
+			hue_rotate?: number;
+			saturate?: number;
+			invert?: boolean;
+			contrast?: number;
+			override_browser_setting?: boolean;
+			[key: string]: any;
 		}
 		
 		interface PageData {

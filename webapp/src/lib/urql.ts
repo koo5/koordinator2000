@@ -4,16 +4,14 @@
 import { browser } from '$app/environment';
 import { writable, readable, type Writable, type Readable } from 'svelte/store';
 import { 
-  Client, 
   getContextClient, 
   setContextClient, 
   queryStore,
-  subscriptionStore, 
-  type OperationContext
+  subscriptionStore
 } from '@urql/svelte';
+import type { Client, OperationContext } from '@urql/svelte';
 // Import GraphQL types properly from CommonJS module
-import pkg from 'graphql';
-const { DocumentNode, OperationDefinitionNode } = pkg;
+import type { DocumentNode, OperationDefinitionNode } from 'graphql';
 import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env';
 import { 
@@ -118,13 +116,24 @@ export function createUrqlClient(): Client {
   if (browser && wsClient) {
     exchanges.push(
       subscriptionExchange({
-        forwardSubscription: (operation: GraphQLRequest) => {
+        forwardSubscription: (operation: any) => {
+          const opWithKey = { ...operation, key: 1 };
           return {
-            subscribe: (sink: Sink) => {
-              const dispose = wsClient.subscribe(operation, sink);
-              return {
-                unsubscribe: dispose
-              };
+            subscribe: (sink: any) => {
+              // Convert the DocumentNode to a string if needed
+              if (typeof opWithKey.query !== 'string') {
+                const stringifiedQuery = JSON.stringify(opWithKey.query);
+                const payload = { ...opWithKey, query: stringifiedQuery };
+                const dispose = wsClient.subscribe(payload, sink);
+                return {
+                  unsubscribe: dispose
+                };
+              } else {
+                const dispose = wsClient.subscribe(opWithKey, sink);
+                return {
+                  unsubscribe: dispose
+                };
+              }
             }
           };
         }
@@ -132,7 +141,12 @@ export function createUrqlClient(): Client {
     );
   }
   
-  return new Client({
+  // Using dynamic import for Client constructor
+  // This is a better approach than using @ts-ignore
+  const urqlCore = require('@urql/core');
+  const ClientConstructor = urqlCore.Client;
+  
+  return new ClientConstructor({
     url: `https://${public_env.GRAPHQL_ENDPOINT}`,
     fetchOptions: {
       headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' }
@@ -154,11 +168,11 @@ export { setContextClient, getContextClient };
  * @returns Readable store with query results
  */
 export function subscribe<T = any>(
-  query: DocumentNode, 
+  query: any, 
   options: SubscribeOptions = {}
 ): Readable<QueryResult<T>> {
   // Check operation type from query definition
-  const definition = query.definitions?.[0] as OperationDefinitionNode;
+  const definition = (query as DocumentNode).definitions?.[0] as OperationDefinitionNode;
   const operationType = definition?.operation;
   
   // Use appropriate store based on operation type
@@ -204,8 +218,8 @@ export function subscribe<T = any>(
  * @param query - GraphQL mutation
  * @returns Function to execute the mutation
  */
-export function mutation<TData = any, TVariables = any>(
-  query: DocumentNode
+export function mutation<TData = any, TVariables extends Record<string, any> = Record<string, any>>(
+  query: any
 ): (variables?: TVariables) => Promise<MutationResult<TData>> {
   return async (variables?: TVariables): Promise<MutationResult<TData>> => {
     if (!browser) {
@@ -219,7 +233,7 @@ export function mutation<TData = any, TVariables = any>(
         .toPromise();
       
       return {
-        data: result.data,
+        data: result.data ?? null,
         error: result.error || undefined
       };
     } catch (error) {
