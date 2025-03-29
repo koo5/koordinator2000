@@ -2,12 +2,12 @@
 	export let items;
 </script>
 
-{#if $items.loading || $items.fetching}
+{#if $items.fetching}
 	<div class="content_block">
 		<div class="animate-flicker">
 			Loading items...
 		</div>
-		{JSON.stringify($items, null, '  ')}
+		SubscribedItemsInner:{JSON.stringify($items, null, '  ')}
 		<p>If it doesn't load, maybe it crashed, or maybe you overloaded our <a href="http://nhost.io">DB hosting!</a>.
 			Please try again in a minute.</p>
 			<a href="/about">Come chat.</a>

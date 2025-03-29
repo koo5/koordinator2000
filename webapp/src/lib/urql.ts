@@ -8,7 +8,6 @@ import {
   setContextClient,
   queryStore,
   subscriptionStore
-    , Client, OperationContext
 } from '@urql/svelte';
 // Import GraphQL types properly from CommonJS module
 import type { DocumentNode, OperationDefinitionNode } from 'graphql';
@@ -16,12 +15,12 @@ import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env';
 import {
   cacheExchange,
-  fetchExchange, 
+  fetchExchange,
   ssrExchange,
   subscriptionExchange,
   type Exchange,
   type OperationResult,
-  type GraphQLRequest
+  type GraphQLRequest, createClient
 } from '@urql/core';
 import { createClient as createWSClient } from 'graphql-ws';
 
@@ -143,7 +142,7 @@ export function createUrqlClient(): Client {
 
 
 
-  return new Client({
+  return createClient({
     url: `https://${public_env.GRAPHQL_ENDPOINT}`,
     fetchOptions: {
       headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' }
