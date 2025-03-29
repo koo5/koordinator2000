@@ -1,17 +1,29 @@
 /**
  * Error handling utilities for SvelteKit
  */
-import { redirect, error } from '@sveltejs/kit';
+import { redirect, error, type HttpError } from '@sveltejs/kit';
+
+/**
+ * Error data interface
+ */
+interface ErrorData {
+  message: string;
+  [key: string]: any;
+}
 
 /**
  * Create a standardized error object with optional details
  * 
- * @param {number} status - HTTP status code
- * @param {string} message - Error message
- * @param {Record<string, any>} [details] - Additional error details
- * @returns {import('@sveltejs/kit').Error} - SvelteKit error object
+ * @param status - HTTP status code
+ * @param message - Error message
+ * @param details - Additional error details
+ * @returns SvelteKit error object
  */
-export function createError(status, message, details = {}) {
+export function createError(
+  status: number, 
+  message: string, 
+  details: Record<string, any> = {}
+): HttpError {
   console.error(`Error ${status}: ${message}`, details);
   return error(status, {
     message,
@@ -22,12 +34,15 @@ export function createError(status, message, details = {}) {
 /**
  * Handle authentication errors by redirecting to login
  * 
- * @param {string} [message='Authentication required'] - Error message
- * @param {string} [returnUrl='/'] - URL to return to after login
- * @returns {never} - This function never returns normally
- * @throws {import('@sveltejs/kit').Redirect} - Throws a redirect to login
+ * @param message - Error message
+ * @param returnUrl - URL to return to after login
+ * @returns This function never returns normally
+ * @throws Redirect - Throws a redirect to login
  */
-export function requireAuth(message = 'Authentication required', returnUrl = '/') {
+export function requireAuth(
+  message: string = 'Authentication required', 
+  returnUrl: string = '/'
+): never {
   const encodedReturnUrl = encodeURIComponent(returnUrl);
   throw redirect(307, `/login?error=${encodeURIComponent(message)}&returnUrl=${encodedReturnUrl}`);
 }
@@ -35,13 +50,13 @@ export function requireAuth(message = 'Authentication required', returnUrl = '/'
 /**
  * Handle API errors from fetch responses
  * 
- * @param {Response} response - Fetch response object
- * @returns {Promise<any>} - Response data if successful
- * @throws {import('@sveltejs/kit').Error} - Throws a SvelteKit error if response is not ok
+ * @param response - Fetch response object
+ * @returns Response data if successful
+ * @throws HttpError - Throws a SvelteKit error if response is not ok
  */
-export async function handleApiResponse(response) {
+export async function handleApiResponse<T = any>(response: Response): Promise<T> {
   if (!response.ok) {
-    let errorData = { message: 'Unknown error' };
+    let errorData: ErrorData = { message: 'Unknown error' };
     
     try {
       errorData = await response.json();
@@ -63,5 +78,5 @@ export async function handleApiResponse(response) {
     );
   }
   
-  return response.json();
+  return response.json() as Promise<T>;
 }

@@ -5,9 +5,9 @@
 
 /** 
  * Checks if SvelteKit dependencies have compatible versions
- * @returns {boolean} True if versions are compatible
+ * @returns True if versions are compatible
  */
-export function checkVersions() {
+export function checkVersions(): boolean {
   try {
     // This would be expanded in a real implementation to check
     // the versions of @sveltejs/kit and svelte from package.json
@@ -23,7 +23,7 @@ export function checkVersions() {
  * Initialize version checking
  * Should be called at app startup
  */
-export function initVersionCheck() {
+export function initVersionCheck(): void {
   if (typeof window !== 'undefined') {
     setTimeout(() => {
       checkVersions();

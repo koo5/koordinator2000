@@ -2,17 +2,17 @@
  * Route utilities for SvelteKit
  */
 import { browser } from '$app/environment';
-import { goto } from '$app/navigation';
+import { goto, type GotoOptions } from '$app/navigation';
+import type { LoadEvent } from '@sveltejs/kit';
 import { fetchData } from './data-utils';
 import { requireAuth, createError } from './error-utils';
 
 /**
  * Check if user is authenticated and redirect if not
  * 
- * @param {import('@sveltejs/kit').LoadEvent} event - SvelteKit load event
- * @returns {void}
+ * @param event - SvelteKit load event
  */
-export function checkAuth(event) {
+export function checkAuth(event: LoadEvent): void {
   const { locals } = event;
   if (!locals.user) {
     requireAuth('You must be logged in to access this page', event.url.pathname);
@@ -22,16 +22,20 @@ export function checkAuth(event) {
 /**
  * Load data from the API in a standardized way
  * 
- * @param {import('@sveltejs/kit').LoadEvent} event - SvelteKit load event
- * @param {string} endpoint - API endpoint to fetch
- * @param {RequestInit} [options] - Fetch options
- * @returns {Promise<any>} Fetched data
+ * @param event - SvelteKit load event
+ * @param endpoint - API endpoint to fetch
+ * @param options - Fetch options
+ * @returns Fetched data
  */
-export async function loadFromApi(event, endpoint, options = {}) {
+export async function loadFromApi<T = any>(
+  event: LoadEvent, 
+  endpoint: string, 
+  options: RequestInit = {}
+): Promise<T> {
   try {
     const url = new URL(endpoint, event.url.origin).toString();
     const response = await event.fetch(url, options);
-    return await response.json();
+    return await response.json() as T;
   } catch (err) {
     console.error(`Error fetching from ${endpoint}:`, err);
     throw createError(500, 'Failed to load data from API');
@@ -41,11 +45,13 @@ export async function loadFromApi(event, endpoint, options = {}) {
 /**
  * Enhanced page navigation with error handling and loading state
  * 
- * @param {string} path - Path to navigate to
- * @param {NavigationOptions} [options] - Navigation options
- * @returns {Promise<void>}
+ * @param path - Path to navigate to
+ * @param options - Navigation options
  */
-export async function navigate(path, options = {}) {
+export async function navigate(
+  path: string, 
+  options: GotoOptions = {}
+): Promise<void> {
   try {
     await goto(path, options);
   } catch (err) {
@@ -57,10 +63,10 @@ export async function navigate(path, options = {}) {
 /**
  * Create query parameters string from an object
  * 
- * @param {Record<string, any>} params - Query parameters object
- * @returns {string} URL query string (including the ?)
+ * @param params - Query parameters object
+ * @returns URL query string (including the ?)
  */
-export function createQueryString(params) {
+export function createQueryString(params: Record<string, any>): string {
   const searchParams = new URLSearchParams();
   
   Object.entries(params).forEach(([key, value]) => {

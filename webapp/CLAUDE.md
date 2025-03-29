@@ -5,6 +5,7 @@
 - **Build for Production**: `npm run build`
 - **Preview Production Build**: `npm run preview`
 - **Start Production Server**: `npm start`
+- **TypeScript Check**: `npm run typecheck`
 
 ## Environment Setup
 Create a `.public_env` file in the project root with these required variables:
@@ -123,19 +124,19 @@ When working with this codebase:
 
 ## Code Style Guidelines
 - **Framework**: SvelteKit application using client-side rendering
-- **Modules**: Use ES modules with `.js` extension
+- **Modules**: Use ES modules with `.ts` extension for TypeScript files
 - **Imports**: Prefer relative imports (`../`) or alias imports (`$lib/`)
 - **Component Files**: Use `.svelte` extension with PascalCase naming
 - **Variables/Functions**: Use snake_case for variables and functions
-- **Documentation**: Use JSDoc comments for functions (see jsdoc-template.js)
+- **Documentation**: Use TypeScript-compatible JSDoc comments for functions
 - **Error Handling**: Use try/catch blocks with console.error for error logging
-- **Store Pattern**: Use Svelte stores and shared local storage stores
-- **TypeScript**: Use TypeScript with at least noImplicitAny and strictNullChecks
-- **Type Definitions**: Define types in app.d.ts or types.d.ts
+- **Store Pattern**: Use strongly-typed Svelte stores and shared local storage stores
+- **TypeScript**: All new code should be written in TypeScript
+- **Type Definitions**: Define types inline, in module files, or in app.d.ts and types.d.ts
 - **Navigation**: Use SvelteKit's imports from `$app/navigation` for navigation
 - **Environment**: Use `browser` from `$app/environment` (not process.browser)
 - **Authentication**: Custom auth implementation with Auth0 integration
-- **GraphQL**: Apollo client for data fetching
+- **GraphQL**: URQL client for data fetching with TypeScript support
 
 ## SvelteKit Conventions
 - Pages use `+page.svelte` and `+page.js` files in route directories
@@ -147,12 +148,14 @@ When working with this codebase:
 
 ## Utility Libraries
 This project includes several utility libraries in the `$lib` directory:
-- **route-utils.js**: Navigation, route handling, and API loading
-- **data-utils.js**: Data fetching with automatic error handling
-- **form-utils.js**: Form state management and validation
-- **error-utils.js**: Standardized error handling
-- **storage-utils.js**: Enhanced localStorage/sessionStorage
-- **utils.js**: Main export file that includes all utilities
+- **route-utils.ts**: Navigation, route handling, and API loading
+- **data-utils.ts**: Data fetching with automatic error handling
+- **form-utils.ts**: Form state management and validation
+- **error-utils.ts**: Standardized error handling
+- **storage-utils.ts**: Enhanced localStorage/sessionStorage
+- **utils.ts**: Main export file that includes all utilities
+- **public_env.ts**: Environment variable management
+- **urql.ts**: GraphQL client configuration
 
 Import these utilities with: `import { functionName } from '$lib/utils'`
 
@@ -175,3 +178,37 @@ To handle these modules:
 2. Configure module replacements in `vite.private_env.js`
 3. Add empty module implementations in `src/lib/empty-polyfill.js` and `src/lib/empty-module.js`
 4. Always include `import './polyfills.js'` in client.js
+
+## TypeScript Migration
+This project is undergoing migration from JavaScript to TypeScript:
+
+### Completed Conversions:
+- Core utility libraries in `$lib` directory:
+  - `utils.ts`
+  - `route-utils.ts`
+  - `data-utils.ts`
+  - `error-utils.ts`
+  - `form-utils.ts`
+  - `storage-utils.ts`
+  - `version-check.ts`
+  - `public_env.ts`
+  - `urql.ts`
+  - `fetch-utils.ts`
+  - `auth.ts` (was already TypeScript)
+
+### Migration Guidelines:
+1. **File Extensions**: Rename `.js` to `.ts` when converting
+2. **Type Annotations**: Add explicit types to function parameters and return values
+3. **Interfaces**: Define interfaces for complex data structures
+4. **Generics**: Use generics for reusable functions
+5. **Type Assertions**: Use `as` for type assertions when necessary
+6. **TypeScript-compatible JSDoc**: Update JSDoc comments to work with TypeScript
+7. **Import Types**: Use `import type` for type-only imports
+
+### Outstanding TypeScript Errors:
+As of the latest typecheck, there are still type errors to fix, particularly in:
+- Server-side code
+- Component files
+- Client-side modules
+
+Run `npm run typecheck` to see the current status of TypeScript errors.
