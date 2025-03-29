@@ -227,3 +227,25 @@ declare module 'graphql-ws' {
     [key: string]: any;
   }): Client;
 }
+
+// Keyv module
+declare module 'keyv' {
+  export interface KeyvOptions {
+    uri?: string;
+    store?: any;
+    adapter?: string;
+    ttl?: number;
+    namespace?: string;
+    [key: string]: any;
+  }
+
+  class Keyv {
+    constructor(options?: KeyvOptions | string);
+    get(key: string): Promise<any>;
+    set(key: string, value: any, ttl?: number): Promise<boolean>;
+    delete(key: string): Promise<boolean>;
+    clear(): Promise<void>;
+  }
+
+  export default Keyv;
+}
