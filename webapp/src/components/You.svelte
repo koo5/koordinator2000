@@ -1,12 +1,17 @@
-<script>
-	import {my_user, register, logout} from '../my_user.ts';
-	import {login} from '$lib/auth.ts';
-	import {subscribe, gql} from "$lib/urql.ts";
+<script lang="ts">
+	import { my_user, register, logout } from '../my_user';
+	import { login } from '$lib/auth';
+	import { subscribe, gql } from "$lib/urql";
+	import type { QueryResult } from "@urql/svelte";
 
-	$: my_user_id = $my_user.id
+	$: my_user_id = $my_user.id;
+	
+	interface AccountData {
+		accounts: Array<{ email: string }>;
+	}
 
 	/* fixme, we should rather go for users.email column */
-	$: account_email_subscription = subscribe(
+	$: account_email_subscription = subscribe<AccountData>(
 		gql`
 			subscription ($my_user_id: Int) {
   				accounts(where: {id: {_eq: $my_user_id}}) {
@@ -20,13 +25,11 @@
 			}
 	);
 
-	function save()
-	{
-
+	function save(): void {
+		// Placeholder for save functionality
 	}
-
-
 </script>
+
 	<b>Please enter your e-mail, or authenticate with google/facebook/etc</b>, otherwise, you can lose access to your account!
 	<br>
 	<h5>account</h5>
@@ -42,7 +45,7 @@
 	<h5>authentication</h5>
 	<div>
 		E-mail:
-		{#if $account_email_subscription.loading}
+		{#if $account_email_subscription.fetching}
 			Loading account data...
 		{:else if $account_email_subscription.data}
 			{$account_email_subscription.data.accounts?.[0]?.email}

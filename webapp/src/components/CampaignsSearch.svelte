@@ -81,8 +81,7 @@
 	$: items = queryStore<CampaignListResult>({
 		client: getContextClient(),
 		query: CAMPAIGN_LIST,
-		variables: vars,
-		pause: !browser
+		variables: vars
 	});
 
 	let more_button: HTMLButtonElement | null = null;
@@ -120,6 +119,8 @@
 </div>
 
 <div bind:this={items_div}>
+
+	seeing={JSON.stringify(seeing, null, '')}:
 
 	<CampaignList ids={seeing}/>
 

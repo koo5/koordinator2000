@@ -1,29 +1,42 @@
-<script>
+<script lang="ts">
   import { theme, user, addNotification } from '$lib/stores';
+  
+  // Define types
+  interface ThemeSettings {
+    dark: boolean;
+    saturate: number;
+    [key: string]: any;
+  }
+  
+  interface UserSettings {
+    autoscroll?: boolean;
+    [key: string]: any;
+  }
   
   // Local state for settings
   let darkMode = $theme.dark;
   let saturation = $theme.saturate;
-  let autoScroll = $user?.autoscroll || true;
+  let autoScroll = $user?.autoscroll ?? true;
   
   // Handle theme toggle
-  function toggleDarkMode() {
+  function toggleDarkMode(): void {
     darkMode = !darkMode;
-    theme.update(t => ({ ...t, dark: darkMode }));
+    theme.update((t: ThemeSettings) => ({ ...t, dark: darkMode }));
   }
   
   // Handle saturation change
-  function updateSaturation(event) {
-    saturation = parseInt(event.target.value);
-    theme.update(t => ({ ...t, saturate: saturation }));
+  function updateSaturation(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    saturation = parseInt(target.value);
+    theme.update((t: ThemeSettings) => ({ ...t, saturate: saturation }));
   }
   
   // Handle auto-scroll toggle
-  function toggleAutoScroll() {
+  function toggleAutoScroll(): void {
     autoScroll = !autoScroll;
     if ($user) {
       // Update user preferences
-      user.update(u => ({ ...u, autoscroll: autoScroll }));
+      user.update((u: UserSettings) => ({ ...u, autoscroll: autoScroll }));
       
       // Save to localStorage
       if (typeof localStorage !== 'undefined') {
@@ -39,7 +52,7 @@
   }
   
   // Save all settings
-  function saveSettings() {
+  function saveSettings(): void {
     addNotification('Settings saved successfully', 'success');
   }
 </script>

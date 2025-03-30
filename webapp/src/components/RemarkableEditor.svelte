@@ -1,13 +1,18 @@
-<script lang="js">
+<script lang="ts">
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
 	
-	let md;
+	// Define types for the Remarkable library
+	interface RemarkableInstance {
+		render: (markdown: string) => string;
+	}
+	
+	let md: RemarkableInstance | null = null;
 	let value = 'Hello, **world**!';
 
 	const initializeRemarkable = () => {
-		if (browser && typeof remarkable !== 'undefined') {
-			md = new remarkable.Remarkable();
+		if (browser && typeof window.remarkable !== 'undefined') {
+			md = new window.remarkable.Remarkable();
 		}
 	}
 	
@@ -23,7 +28,7 @@
 
 
 <div>
-  <label htmlFor="markdown-content">
+  <label for="markdown-content">
     Enter some markdown:<br>
   <textarea
     id="markdown-content"
@@ -32,7 +37,7 @@
   </label>
   <h3>Rendering:</h3>
   <div
-    className="content">
+    class="content">
 		{#if md}
 	    {@html md.render(value)}
 		{/if}

@@ -42,7 +42,7 @@
     }
 </style>
 
-<li><b>{campaign.title}</b></li>
+<li><b>{campaign?.title || 'Unknown Campaign'}</b></li>
 
 <span class="{notification.read ? 'notification-read' : 'notification-unread'}">{notification.content}</span>
 

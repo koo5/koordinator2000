@@ -30,7 +30,7 @@ export interface Notification {
 }
 
 // Debug flag
-export const debug: Writable<boolean> = writable(false);
+export const debug: Writable<boolean> = writable(true);
 
 // User store
 export const user: Writable<User | null> = writable(null);

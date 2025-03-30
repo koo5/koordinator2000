@@ -12,18 +12,25 @@
 	export let items: Readable<SubscriptionResult<any>>;
 </script>
 
-{#if $items.fetching}
+{#if $items.data}
+	<!-- Always render data if available, regardless of fetching state -->
+	<slot da={($items.data)}>???</slot>
+{:else if $items.error}
+	<!-- Show error if there's an error and no data -->
+	<pre>{JSON.stringify($items.error, null, '  ')}</pre>
+{:else}
+	<!-- Only show loading if no data and no error -->
 	<div class="content_block">
 		<div class="animate-flicker">
 			Loading items...
 		</div>
-		SubscribedItemsInner:{JSON.stringify($items, null, '  ')}
 		<p>If it doesn't load, maybe it crashed, or maybe you overloaded our <a href="http://nhost.io">DB hosting!</a>.
 			Please try again in a minute.</p>
-			<a href="/about">Come chat.</a>
+		<a href="/about">Come chat.</a>
 	</div>
-{:else if $items.data}
-	<slot da={($items.data)}>???</slot>
-{:else}
-	<pre>{JSON.stringify($items.error, null, '  ')}</pre>
 {/if}
+
+<details>
+	<summary>Debug Info</summary>
+	<pre>{JSON.stringify($items, null, 2)}</pre>
+</details>

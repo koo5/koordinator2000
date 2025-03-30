@@ -10,8 +10,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "start": "node build ",
-    "svelte-check": "svelte-check --tsconfig ./tsconfig.json",
-    "check": "npm run typecheck"
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.6",

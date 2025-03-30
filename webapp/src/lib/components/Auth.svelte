@@ -1,16 +1,16 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { user } from '$lib/stores';
   import { browser } from '$app/environment';
   import { login, logout, checkAuth } from '$lib/client/auth';
   
-  export let redirectTo = '/';
+  export let redirectTo: string = '/';
   
-  let loading = true;
-  let error = null;
-  let email = '';
-  let password = '';
+  let loading: boolean = true;
+  let error: string | null = null;
+  let email: string = '';
+  let password: string = '';
   
   onMount(async () => {
     if (!browser) return;
@@ -23,7 +23,7 @@
         // If on login page but already logged in, redirect
         window.location.href = redirectTo;
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Auth initialization error:', err);
       error = err.message;
     } finally {
@@ -31,7 +31,7 @@
     }
   });
   
-  async function handleLogin(useCredentials = false) {
+  async function handleLogin(useCredentials: boolean = false): Promise<void> {
     loading = true;
     error = null;
     
@@ -43,7 +43,7 @@
         // Use the client auth login as guest
         await login(null, null, redirectTo);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Login error:', err);
       error = err.message || 'Failed to login';
     } finally {
@@ -51,7 +51,7 @@
     }
   }
   
-  function handleLogout() {
+  function handleLogout(): void {
     // Use the client auth logout function
     logout();
   }

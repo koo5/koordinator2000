@@ -1,22 +1,36 @@
-<script lang="js">
+<script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
-	import { my_user } from '../my_user.ts';
+	import { my_user } from '../my_user';
 	import { browser } from '$app/environment';
-	import '../polyfills.js';  // Import polyfills
+	
+	// Try to load empty polyfill instead
+	import { empty } from '$lib/empty-polyfill';
 
-	export let uid = "default";
-	let firepad_container;
-	let firepad;
-	let codeMirror;
-	let firebaseApp;
-	let database;
+	// Types for internal component use
+	interface FirepadEntity {
+		render: (info: any, entityHandler: any) => HTMLElement;
+		fromElement: (element: HTMLElement) => any;
+		update: (info: any, element: HTMLElement) => void;
+		export: (info: any) => HTMLElement;
+	}
 
-	function ensureDependencies() {
+	export let uid: string = "default";
+	let firepad_container: HTMLElement | null = null;
+	let firepad: any = null;
+	let codeMirror: any = null;
+	let firebaseApp: any = null;
+	let database: any = null;
+
+	/**
+	 * Ensures that Firepad and CodeMirror dependencies are loaded
+	 * @returns Promise that resolves when dependencies are available
+	 */
+	function ensureDependencies(): Promise<void> {
 		if (!browser) return Promise.resolve();
 		
-		return new Promise((resolve, reject) => {
+		return new Promise<void>((resolve) => {
 			// Check if dependencies are already loaded via app.html
-			if (typeof Firepad !== 'undefined' && typeof CodeMirror !== 'undefined') {
+			if (typeof window.Firepad !== 'undefined' && typeof window.CodeMirror !== 'undefined') {
 				resolve();
 				return;
 			}
@@ -28,7 +42,7 @@
 		});
 	}
 
-	async function init_firebase() {
+	async function init_firebase(): Promise<void> {
 		if (!browser) return;
 		
 		try {
@@ -57,7 +71,7 @@
 		}
 	}
 
-	async function getFirebaseRef() {
+	async function getFirebaseRef(): Promise<any | null> {
 		if (!browser || !database) return null;
 		
 		try {
@@ -75,7 +89,7 @@
 		}
 	}
 
-	async function init_firepad() {
+	async function init_firepad(): Promise<void> {
 		if (!browser) return;
 		
 		// Make sure we have the container element
@@ -89,22 +103,32 @@
 			const firepadRef = await getFirebaseRef();
 			if (!firepadRef) return;
 			
-			// Initialize CodeMirror
-			codeMirror = CodeMirror(firepad_container, { 
-				lineWrapping: true, 
-				lineNumbers: true 
-			});
+			// Initialize CodeMirror with type assertion
+			if (window.CodeMirror) {
+				codeMirror = window.CodeMirror(firepad_container, { 
+					lineWrapping: true, 
+					lineNumbers: true 
+				});
+			} else {
+				console.error('CodeMirror is not available');
+				return;
+			}
 
-			// Initialize Firepad
-			firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
-				richTextToolbar: true,
-				richTextShortcuts: true
-			});
+			// Initialize Firepad with type assertion
+			if (window.Firepad) {
+				firepad = window.Firepad.fromCodeMirror(firepadRef, codeMirror, {
+					richTextToolbar: true,
+					richTextShortcuts: true
+				});
+			} else {
+				console.error('Firepad is not available');
+				return;
+			}
 
 			// Set default contents when ready
 			firepad.on("ready", function () {
 				console.log("Firepad ready");
-				if (firepad.isHistoryEmpty()) {
+				if (firepad && firepad.isHistoryEmpty()) {
 					firepad.setHtml(
 						"<span style=\"font-size: 24px;\">Rich-text editing with <span style=\"color: red\">Firepad!</span></span><br/>\n" +
 						"<br/>" +
@@ -138,40 +162,42 @@
 			});
 
 			// Register custom checkbox entity
-			firepad.registerEntity("checkbox", {
-				render: function (info, entityHandler) {
-					const inputElement = document.createElement("input");
-					inputElement.setAttribute("type", "checkbox");
-					if (info.checked) {
-						inputElement.checked = "checked";
+			if (firepad) {
+				firepad.registerEntity("checkbox", {
+					render: function (info: any, entityHandler: any) {
+						const inputElement = document.createElement("input");
+						inputElement.setAttribute("type", "checkbox");
+						if (info.checked) {
+							inputElement.checked = true;
+						}
+						inputElement.addEventListener("click", function (this: HTMLInputElement) {
+							entityHandler.replace({ checked: this.checked });
+						});
+						return inputElement;
+					},
+					fromElement: function (element: HTMLElement) {
+						const info: Record<string, any> = {};
+						if (element.hasAttribute("checked")) {
+							info.checked = true;
+						}
+						return info;
+					},
+					update: function (info: any, element: HTMLInputElement) {
+						if (info.checked) {
+							element.checked = true;
+						} else {
+							element.checked = false;
+						}
+					},
+					export: function (info: any) {
+						const inputElement = document.createElement("checkbox");
+						if (info.checked) {
+							inputElement.setAttribute("checked", "true");
+						}
+						return inputElement;
 					}
-					inputElement.addEventListener("click", function () {
-						entityHandler.replace({ checked: this.checked });
-					});
-					return inputElement;
-				}.bind(this),
-				fromElement: function (element) {
-					const info = {};
-					if (element.hasAttribute("checked")) {
-						info.checked = true;
-					}
-					return info;
-				},
-				update: function (info, element) {
-					if (info.checked) {
-						element.checked = "checked";
-					} else {
-						element.checked = null;
-					}
-				},
-				export: function (info) {
-					const inputElement = document.createElement("checkbox");
-					if (info.checked) {
-						inputElement.setAttribute("checked", true);
-					}
-					return inputElement;
-				}
-			});
+				});
+			}
 		} catch (error) {
 			console.error("Error initializing Firepad:", error);
 		}

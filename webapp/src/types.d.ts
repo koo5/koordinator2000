@@ -1,5 +1,29 @@
 // Common types used throughout the application
 
+// Global window object extensions for third-party libraries
+interface Window {
+  // Firepad library
+  Firepad?: {
+    fromCodeMirror: (ref: any, codeMirror: any, options: any) => {
+      on: (event: string, callback: () => void) => void;
+      isHistoryEmpty: () => boolean;
+      setHtml: (html: string) => void;
+      registerEntity: (name: string, entity: any) => void;
+      dispose: () => void;
+    };
+  };
+  
+  // CodeMirror library
+  CodeMirror?: (element: HTMLElement, options: any) => any;
+  
+  // Remarkable library
+  remarkable?: {
+    Remarkable: new () => {
+      render: (markdown: string) => string;
+    };
+  };
+}
+
 // Apollo and GraphQL related types
 declare type ApolloResult<T> = {
   data?: T;
@@ -205,6 +229,14 @@ declare module '@urql/svelte' {
   export function subscriptionStore<Data = any, Variables = any>(options: any): Readable<OperationResultState<Data, Variables>>;
   export type OperationContext = any;
   export type Client = import('@urql/core').Client;
+  
+  // Add QueryResult type for components that need it
+  export interface QueryResult<T = any> {
+    data?: T;
+    fetching: boolean;
+    error?: Error;
+    [key: string]: any;
+  }
 }
 
 // Legacy nhost.js module that needs to be migrated
