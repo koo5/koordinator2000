@@ -1,13 +1,14 @@
 <script lang="ts">
 	import PageReloadClock from "./PageReloadClock.svelte";
-	import { user, mobile } from '$lib/stores';
+	import { page } from '$app/state';
+	import { user } from '$lib/stores';
+	import { mobile } from '$lib/platform';
 	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import {
 		Collapse,
 		Navbar,
 		NavbarToggler,
 		NavbarBrand,
-		Nav,
 		NavItem,
 		NavLink,
 	} from './ui';
@@ -15,7 +16,7 @@
 
 
 	$: my_user_str = JSON.stringify($user, null, ' ');
-	$: currentPath = $page.url.pathname;
+	$: currentPath = page.url.pathname;
 	$: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
 
 	// make navbar always open on desktop
@@ -39,6 +40,7 @@
 	}
 
 	function toggle_settings(): void {
+		console.log("toggle_settings");
 		settingsModalOpen = !settingsModalOpen;
 	}
 
@@ -53,7 +55,7 @@
 	<PageReloadClock/>
 	<NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
 	<Collapse isOpen={navbar_open} navbar expand="md" on:update={(e) => navbar_handleUpdate(e)}>
-		<Nav class="ml-auto" navbar>
+
 
 			<NavItem>
 				<NavLink href="/" active={segment === undefined}>Home</NavLink>
@@ -80,7 +82,7 @@
 			</NavItem>
 
 			<NavItem>
-				<NavLink href="javascript:void(0)" on:click={toggle_settings}>Settings</NavLink>
+				<NavLink on:click={toggle_settings}>Settings</NavLink>
 			</NavItem>
 
 			<NavItem align="right">
@@ -99,7 +101,6 @@
 				</NavItem>
 			{/if}
 
-		</Nav>
 	</Collapse>
 </Navbar>
 

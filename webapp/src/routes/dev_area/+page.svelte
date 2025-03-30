@@ -1,5 +1,4 @@
 <script lang="ts">
-	import TestModal from '../../components/TestModal.svelte';
 	import {my_user} from '../../my_user.ts';
 	import {CAMPAIGN_FRAGMENT} from '../../stuff.ts';
 	import {subscribe, gql} from "$lib/urql.ts";
@@ -51,7 +50,6 @@
 	</ul>
 	<img src="/less_sat_by_telepatx_d2n736h-fullview.jpg" alt="alt"/>
 
-	<TestModal/>
 
 	<h2>GraphQL Schema Debug</h2>
 	
@@ -66,7 +64,7 @@
 	
 	<div>
 		<h3>GraphQL Headers:</h3>
-		<pre style="background-color: #eeeeff; padding: 10px; border: 1px solid #ccc;">{graphqlHeaders}</pre>
+		<pre>{graphqlHeaders}</pre>
 	</div>
 	
 	<div>

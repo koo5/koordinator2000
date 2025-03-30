@@ -1,12 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { page, navigating } from '$app/stores';
-	import { theme, user } from '$lib/stores';
+	import { user } from '$lib/stores';
 	import { browser } from '$app/environment';
 	import { Col, Container, Row } from '../components/ui';
-	import SettingsModal from '$lib/components/SettingsModal.svelte';
-	import TheNagModal from '../components/TheNagModal.svelte';
-	import Nav from '../components/Nav.svelte';
+	import Header from '../components/Header.svelte';
 	import { createUrqlClient, setContextClient } from '$lib/urql.ts';
 	import { idToken, userInfo } from '$lib/auth.ts';
 	import { 
@@ -124,18 +121,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
-<!-- Show loading indicator when navigating between pages -->
-{#if $navigating}
-	<div class="loading-indicator">
-		<div class="spinner"></div>
-	</div>
-{/if}
-
 
 <Container>
 	<Row>
 		<Col>
-			<Nav />
+			<Header />
 		</Col>
 	</Row>
 	<Row>

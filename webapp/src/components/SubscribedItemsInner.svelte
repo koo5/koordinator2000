@@ -24,9 +24,6 @@
 		<div class="animate-flicker">
 			Loading items...
 		</div>
-		<p>If it doesn't load, maybe it crashed, or maybe you overloaded our <a href="http://nhost.io">DB hosting!</a>.
-			Please try again in a minute.</p>
-		<a href="/about">Come chat.</a>
 	</div>
 {/if}
 

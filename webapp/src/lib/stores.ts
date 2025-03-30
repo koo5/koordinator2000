@@ -79,4 +79,4 @@ export function removeNotification(id: number): void {
   notifications.update(all => all.filter(n => n.id !== id));
 }
 
-export const mobile: Writable<boolean> = writable(false);
+

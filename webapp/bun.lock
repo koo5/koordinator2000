@@ -7,6 +7,8 @@
         "@sideway/address": "^5.0.0",
         "@sideway/formula": "^3.0.1",
         "@sideway/pinpoint": "^2.0.0",
+        "@tauri-apps/api": "^2.4.0",
+        "@tauri-apps/plugin-os": "^2.2.1",
         "express": "^4.18.2",
         "firebase": "^11.5.0",
         "html-minifier": "^4.0.0",
@@ -333,6 +335,10 @@
     "@sveltejs/vite-plugin-svelte-inspector": ["@sveltejs/vite-plugin-svelte-inspector@2.1.0", "", { "dependencies": { "debug": "^4.3.4" }, "peerDependencies": { "@sveltejs/vite-plugin-svelte": "^3.0.0", "svelte": "^4.0.0 || ^5.0.0-next.0", "vite": "^5.0.0" } }, "sha512-9QX28IymvBlSCqsCll5t0kQVxipsfhFFL+L2t3nTWfXnddYwxBuAEtTtlaVQpRz9c37BhJjltSeY4AJSC03SSg=="],
 
     "@szmarczak/http-timer": ["@szmarczak/http-timer@4.0.5", "", { "dependencies": { "defer-to-connect": "^2.0.0" } }, "sha512-PyRA9sm1Yayuj5OIoJ1hGt2YISX45w9WcFbh6ddT0Z/0yaFxOtGLInr4jUfU1EAFVs0Yfyfev4RNwBlUaHdlDQ=="],
+
+    "@tauri-apps/api": ["@tauri-apps/api@2.4.0", "", {}, "sha512-F1zXTsmwcCp+ocg6fbzD/YL0OHeSG1eynCag1UNlX2tD5+dlXy7eRbTu9cAcscPjcR7Nix7by2wiv/+VfWUieg=="],
+
+    "@tauri-apps/plugin-os": ["@tauri-apps/plugin-os@2.2.1", "", { "dependencies": { "@tauri-apps/api": "^2.0.0" } }, "sha512-cNYpNri2CCc6BaNeB6G/mOtLvg8dFyFQyCUdf2y0K8PIAKGEWdEcu8DECkydU2B+oj4OJihDPD2de5K6cbVl9A=="],
 
     "@types/cacheable-request": ["@types/cacheable-request@6.0.1", "", { "dependencies": { "@types/http-cache-semantics": "*", "@types/keyv": "*", "@types/node": "*", "@types/responselike": "*" } }, "sha512-ykFq2zmBGOCbpIXtoVbz4SKY5QriWPh3AjyU4G74RYbtt5yOc5OfaY75ftjg7mikMOla1CTGpX3lLbuJh8DTrQ=="],
 
