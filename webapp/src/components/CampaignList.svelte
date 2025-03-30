@@ -102,8 +102,13 @@
 				return `<span class="${className}">${names[index]}</span>`;
 			}
 		},
-		cssMode: true,
-		keyboard: true
+		keyboard: true,
+		mousewheel: true,
+		navigation: true,
+		resistanceRatio: 0,
+		threshold: 10,
+		simulateTouch: true,
+		followFinger: true
 	};
 	
 	function handleSlideChange(campaignId: number, swiper: any) {
@@ -151,11 +156,39 @@
 	function swiperInitialized(event: any, campaignId: number) {
 		console.log('Swiper initialized for campaign:', campaignId);
 		// Store reference to swiper instance
-		swiperInstances[campaignId] = event.detail[0];
+		const swiper = event.detail[0];
+		swiperInstances[campaignId] = swiper;
+		
+		// Apply custom parameters programmatically
+		Object.keys(swiperParams).forEach(key => {
+			swiper.params[key] = swiperParams[key];
+		});
+		
+		// Set specific handlers for better touch handling
+		swiper.params.touchStartPreventDefault = false;
+		swiper.params.touchStartForcePreventDefault = false;
+		swiper.params.touchReleaseOnEdges = true;
+		swiper.params.longSwipesRatio = 0.2;
+		swiper.params.longSwipesMs = 100;
+		
+		// Update swiper with the new parameters
+		swiper.update();
+		
+		// Add event listeners for better cursor handling
+		const swiperEl = document.querySelector(`[data-campaign-id="${campaignId}"] swiper-container`);
+		if (swiperEl) {
+			swiperEl.addEventListener('mousedown', () => {
+				document.body.style.cursor = 'grabbing';
+			});
+			
+			document.addEventListener('mouseup', () => {
+				document.body.style.cursor = '';
+			});
+		}
 		
 		// Add slide change event handler
-		swiperInstances[campaignId].on('slideChange', () => {
-			handleSlideChange(campaignId, swiperInstances[campaignId]);
+		swiper.on('slideChange', () => {
+			handleSlideChange(campaignId, swiper);
 		});
 	}
 </script>
@@ -182,9 +215,15 @@
 					centered-slides="true"
 					space-between="10"
 					slides-per-view="1"
-					css-mode="true"
 					grab-cursor="true"
+					pagination
 					keyboard="true"
+					mousewheel="true"
+					navigation="true"
+					resistance-ratio="0"
+					threshold="10"
+					simulate-touch="true"
+					follow-finger="true"
 					on:swiperinitialized={(e) => swiperInitialized(e, campaign.id)}
 				>
 					<!-- Slide 0: Far Left - Dismiss All -->
@@ -278,12 +317,27 @@
 		height: auto;
 		--swiper-theme-color: #ff3e00;
 		--swiper-pagination-bullet-inactive-color: #999;
+		--swiper-navigation-color: #ff3e00;
+		--swiper-navigation-size: 30px;
+		touch-action: pan-y;
+		user-select: none;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
 	}
 	
 	:global(swiper-slide) {
 		padding: 1.5rem;
 		border-radius: 8px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		transition: transform 300ms ease;
+	}
+	
+	:global(.swiper-initialized) {
+		cursor: grab;
+	}
+	
+	:global(.swiper-initialized:active) {
+		cursor: grabbing;
 	}
 	
 	:global(.campaign-slide) {
