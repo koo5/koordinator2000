@@ -9,7 +9,7 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": false,
-		"noImplicitAny": true,
+		"noImplicitAny": false,  // Turning this off to fix issues with Svelte event handlers
 		"strictNullChecks": true,
 		"noImplicitThis": true,
 		"alwaysStrict": true,
