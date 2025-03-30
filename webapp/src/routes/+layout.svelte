@@ -131,33 +131,22 @@
 	</div>
 {/if}
 
-{#if browser && $my_user}
-		<SettingsModal isOpen={settingsModalOpen} on:close={() => settingsModalOpen = false} />
-		<TheNagModal/>
+
+<Container>
+	<Row>
+		<Col>
+			<Nav />
+		</Col>
+	</Row>
+	<Row>
+		<Col xs={12} auto={false}>
+			<main>
+				<slot></slot>
+			</main>
+		</Col>
+	</Row>
+</Container>
 		
-		<Container>
-			<Row>
-				<Col>
-					<Nav data={{}} {toggle_settings} />
-				</Col>
-			</Row>
-			<Row>
-				<Col xs={12} auto={false}>
-					<main>
-						<slot></slot>
-					</main>
-				</Col>
-			</Row>
-		</Container>
-		
-{:else}
-	<div class="content_block">
-		Koordinator is like kickstarter, but it's not for collecting money, it's for collective action. 
-		See the <a href="https://github.com/koo5/koordinator2000/">code.</a><br>
-		<p>
-		<div class="animate-flicker">Koordinator is loading...</div>
-	</div>
-{/if}
 
 <style>
 	:root {

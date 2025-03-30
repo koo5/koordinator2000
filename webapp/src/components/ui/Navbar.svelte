@@ -22,17 +22,17 @@
     background-color: #f8f9fa;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  
+
   .navbar-light {
     background-color: #f8f9fa;
     color: rgba(0, 0, 0, 0.9);
   }
-  
+
   .navbar-dark {
     background-color: #343a40;
     color: rgba(255, 255, 255, 0.9);
   }
-  
+
   @media (min-width: 768px) {
     .navbar-expand-md {
       flex-flow: row nowrap;

@@ -432,16 +432,12 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		min-height: 70vh;
 	}
 	
 	/* Mobile-specific styles for campaign wrapper */
 	@media (max-width: 768px) {
 		.campaign-wrapper {
 			margin: 0.5rem 0;
-			min-height: 95vh;
-			max-height: 95vh;
 		}
 	}
 	
@@ -454,8 +450,6 @@
 	:global(swiper-container) {
 		width: 100%;
 		height: auto;
-		min-height: 70vh; /* Set minimum height for vertical centering */
-		max-height: 95vh; /* Maximum height for desktop */
 		display: flex;
 		align-items: center;
 		--swiper-theme-color: #ff3e00;
@@ -557,18 +551,16 @@
 	
 	.action-panel h3 {
 		margin-top: 0;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0;
 	}
 	
 	.action-panel p {
-		margin-bottom: 1.5rem;
 		color: #666;
 	}
 	
 	:global(.btn-action) {
 		display: inline-block;
 		padding: 0.5rem 1rem;
-		margin: 0.5rem;
 		border: none;
 		border-radius: 4px;
 		font-weight: bold;

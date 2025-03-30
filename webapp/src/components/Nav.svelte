@@ -1,7 +1,6 @@
 <script lang="ts">
 	import PageReloadClock from "./PageReloadClock.svelte";
-	import { user } from '$lib/stores';
-	import { page } from '$app/stores';
+	import { user, mobile } from '$lib/stores';
 	import SettingsModal from '$lib/components/SettingsModal.svelte';
 	import {
 		Collapse,
@@ -12,17 +11,16 @@
 		NavItem,
 		NavLink,
 	} from './ui';
+	import TheNagModal from "src/components/TheNagModal.svelte";
 
-	// Props definition with types
-	export let data: Record<string, any> = {};
-	export let toggle_settings: () => void;
 
 	$: my_user_str = JSON.stringify($user, null, ' ');
 	$: currentPath = $page.url.pathname;
 	$: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
 
-	let navbar_open = false;
-	
+	// make navbar always open on desktop
+	let navbar_open = !$mobile;
+
 	interface UpdateEvent {
 		detail: {
 			isOpen: boolean;
@@ -39,6 +37,11 @@
 	function closeSettingsModal(): void {
 		settingsModalOpen = false;
 	}
+
+	function toggle_settings(): void {
+		settingsModalOpen = !settingsModalOpen;
+	}
+
 </script>
 
 {#if $user?.auth_debug}|$user = {my_user_str}|{/if}
@@ -102,3 +105,4 @@
 
 <!-- Settings Modal -->
 <SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal} />
+<TheNagModal/>
