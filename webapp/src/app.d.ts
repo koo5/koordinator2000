@@ -45,12 +45,6 @@ declare global {
 	}
 }
 
-// Define additional types for use throughout the application
-declare type GqlStatus = {
-	loading: boolean;
-	error?: Error;
-};
-
 declare type UserParticipation = {
 	id: number;
 	status?: string;

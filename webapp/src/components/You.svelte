@@ -30,6 +30,14 @@
 	}
 </script>
 
+<p>
+	Welcome, visitor!
+	{#if $my_user.name}
+		Your automatically-assigned username is "{$my_user.name}".
+	{/if}
+</p>
+
+
 	<b>Please enter your e-mail, or authenticate with google/facebook/etc</b>, otherwise, you can lose access to your account!
 	<br>
 	<h5>account</h5>

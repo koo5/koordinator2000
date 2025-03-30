@@ -1,16 +1,13 @@
 <script lang="ts">
-	import {
-		Button,
-		Card
-	} from './ui';
 	import { gql, queryStore, getContextClient } from '$lib/urql.ts';
-	import {my_user, type Campaign} from '../my_user.ts';
+	import {my_user} from '../my_user.ts';
 	import CampaignList from './CampaignList.svelte';
 	import * as animateScroll from 'svelte-scrollto';
 	import { browser } from '$app/environment';
 	import { debug } from '$lib/stores';
-	import type { Readable } from 'svelte/store';
-	import type { OperationResultState } from '@urql/core';
+	import {onMount, tick} from "svelte";
+
+	const client = getContextClient();
 
 	interface CampaignListResult {
 		campaigns: Array<{
@@ -45,7 +42,7 @@
   	`;
 
 	$: my_user_id = $my_user.id;
-
+	let items;
 	let seen: number[] = [];
 	$: seeing = get_seeing($items?.data?.campaigns);
 
@@ -57,7 +54,7 @@
 		return result;
 	}
 
-	function more(): void {
+	async function more(): void {
 		if (browser) {
 			if (items_div) {
 				animateScroll.scrollTo({delay: 0, element: items_div});
@@ -65,6 +62,8 @@
 			more_button?.blur();
 		}
 		seen = seen.concat(seeing);
+		await tick();
+		search();
 	}
 
 	let vars: QueryVariables = {
@@ -77,35 +76,41 @@
 		_seen_ids: seen,
 	};
 
-	// Use queryStore directly for more reliable handling
-	$: items = queryStore<CampaignListResult>({
-		client: getContextClient(),
-		query: CAMPAIGN_LIST,
-		variables: vars
-	});
-
-	let more_button: HTMLButtonElement | null = null;
-
-	function xxx(x: any): void {
-		console.log(x);
+	function search() {
+		items = queryStore<CampaignListResult>({
+			client,
+			query: CAMPAIGN_LIST,
+			variables: vars
+		});
 	}
 
+	onMount(() => {
+				search();
+			}
+	);
+
+	let more_button: HTMLButtonElement | null = null;
 	let items_div: HTMLDivElement | null = null;
 
 </script>
 <div class="content_block">
+	* search - searches titles and descriptions
 
-	categories:
+	* categories:
 	[all] [ecology] [human rights] [animal rights] [commerce & products] [tech] [politics]
 	<br>
-	items on page:
-	[5] [15] [50] [500]
+	* items on page:
+	[5] [15] [50]
 	<br>
-	sort by:
-	[id]
+	* sort:
 	[title]
 	[proximity]
-	[number of participants]
+	[number of participants] - default
+	[date created]
+	[last activity]
+	* view:
+	[details] [list] [map]
+	* live updates [on] [off]
 
 	{#if $debug}
 
@@ -130,10 +135,6 @@
 	<button class="btn btn-primary" bind:this={more_button} color="secondary" aria-label="more..." on:click={more}>
 		more...
 	</button>
-
-	<!-- Use our custom Button component instead
-	<Button bind:this={more_button} color="secondary" on:click={more}>more...</Button>
-	-->
 
 </center>
 <br/>

@@ -1,9 +1,18 @@
 <script>
   export let href = "#";
   export let active = false;
+  export let click;
+  
+  // Forward the click event when href is not set explicitly
+  function handleClick(event) {
+    console.log("NavLink clicked");
+    if (click) {
+      click();
+    }
+  }
 </script>
 
-<a {href} class="nav-link {active ? 'active' : ''}" {...$$restProps}>
+<a {href} class="nav-link {active ? 'active' : ''}" on:click={handleClick}>
   <slot />
 </a>
 

@@ -56,11 +56,6 @@
 	<NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
 	<Collapse isOpen={navbar_open} navbar expand="md" on:update={(e) => navbar_handleUpdate(e)}>
 
-
-			<NavItem>
-				<NavLink href="/" active={segment === undefined}>Home</NavLink>
-			</NavItem>
-
 			<NavItem>
 				<NavLink href="/campaigns" active={segment === "campaigns"}>Campaigns</NavLink>
 			</NavItem>
@@ -82,7 +77,7 @@
 			</NavItem>
 
 			<NavItem>
-				<NavLink on:click={toggle_settings}>Settings</NavLink>
+				<NavLink href="#" click={toggle_settings}>Settings</NavLink>
 			</NavItem>
 
 			<NavItem align="right">
