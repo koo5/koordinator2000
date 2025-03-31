@@ -396,13 +396,15 @@
 				{:else}
 					<div class="d-flex flex-wrap">
 						{#each availableTags as tag}
-							<div 
+							<button 
+								type="button"
 								class="tag-badge {selectedTagIds.includes(tag.id) ? 'active' : ''}"
 								on:click={() => toggleTag(tag.id)}
+								on:keydown={(e) => e.key === 'Enter' && toggleTag(tag.id)}
 								title={tag.description || tag.name}
 							>
 								{tag.name}
-							</div>
+							</button>
 						{/each}
 					</div>
 					<div class="note mt-2">
@@ -586,10 +588,20 @@
 		transition: all 0.2s ease;
 		font-size: 0.9rem;
 		user-select: none;
+		border: none;
+		font-family: inherit;
+		text-align: center;
+		text-decoration: none;
+		line-height: 1.5;
 	}
 	
 	.tag-badge:hover {
 		background-color: #dee2e6;
+	}
+	
+	.tag-badge:focus {
+		outline: 2px solid #007bff;
+		outline-offset: 2px;
 	}
 	
 	.tag-badge.active {
@@ -597,14 +609,4 @@
 		color: white;
 	}
 	
-	.location-details {
-		background-color: #e9ecef;
-		padding: 1rem;
-		border-radius: 0.375rem;
-		margin-top: 0.5rem;
-	}
-	
-	.form-range {
-		width: 100%;
-	}
 </style>
