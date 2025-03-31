@@ -1,9 +1,9 @@
 // This file is for a custom server when using adapter-node
 // See https://kit.svelte.dev/docs/adapter-node#custom-server
 
+import type { NextFunction, Request, Response } from 'express';
 // Import type definitions for Express
 import express from 'express';
-import type { Request, Response, NextFunction } from 'express';
 import moment from 'moment';
 
 // Import the SvelteKit adapter handler (will be generated at build time)
@@ -25,13 +25,13 @@ app.use(express.json());
 
 // Log all requests
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`${moment().format()} - ${req.method} ${req.url}`);
-  next();
+    console.log(`${moment().format()} - ${req.method} ${req.url}`);
+    next();
 });
 
 // Let SvelteKit handle everything else
 app.use(handler);
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT} at ${moment().format()}`);
+    console.log(`Server listening on port ${PORT} at ${moment().format()}`);
 });

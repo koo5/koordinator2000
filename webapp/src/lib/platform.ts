@@ -1,7 +1,7 @@
-import {invoke} from '@tauri-apps/api/core';
+import { invoke } from '@tauri-apps/api/core';
 import * as app from '@tauri-apps/api';
-import {platform} from '@tauri-apps/plugin-os';
-import {readable, writable, type Writable} from "svelte/store";
+import { platform } from '@tauri-apps/plugin-os';
+import { readable } from 'svelte/store';
 
 declare global {
     interface Window {
@@ -16,16 +16,14 @@ if (typeof window !== 'undefined') {
     }
 }
 
-
-export const IS_TAURI = (typeof window !== 'undefined') && Object.prototype.hasOwnProperty.call(window, '__TAURI__');
+export const IS_TAURI = typeof window !== 'undefined' && Object.prototype.hasOwnProperty.call(window, '__TAURI__');
 export const BROWSER = !IS_TAURI;
 export const IS_TAURI_MOBILE = IS_TAURI && (platformName === 'android' || platformName === 'ios');
-
 
 export const log = {
     debug: (...args: any[]) => {
         console.log(...args);
-        if (window.__TAURI__) invoke('log', {message: formatNoColor(args)});
+        if (window.__TAURI__) invoke('log', { message: formatNoColor(args) });
     },
 };
 
@@ -36,7 +34,7 @@ function formatNoColor(args) {
     return msg;
 }
 
-export const mobile: Readable<boolean> = readable(false, (set) => {
+export const mobile: Readable<boolean> = readable(false, set => {
     if (typeof window !== 'undefined') {
         const check = () => set(window.innerWidth < 768);
         window.addEventListener('resize', check);
@@ -44,4 +42,3 @@ export const mobile: Readable<boolean> = readable(false, (set) => {
         return () => window.removeEventListener('resize', check);
     }
 });
-

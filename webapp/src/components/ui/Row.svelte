@@ -1,12 +1,12 @@
 <div class="row" {...$$restProps}>
-  <slot />
+    <slot />
 </div>
 
 <style>
-  .row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-  }
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: -15px;
+        margin-left: -15px;
+    }
 </style>

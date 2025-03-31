@@ -1,12 +1,12 @@
-import Keycloak from 'keycloak-js';
 import type { KeycloakConfig, KeycloakInitOptions, KeycloakProfile } from 'keycloak-js';
+import Keycloak from 'keycloak-js';
 
 /**
  * Keycloak initialization result interface
  */
 interface KeycloakInitResult {
-  keycloak: Keycloak;
-  authenticated: boolean;
+    keycloak: Keycloak;
+    authenticated: boolean;
 }
 
 /**
@@ -14,12 +14,12 @@ interface KeycloakInitResult {
  * @returns A new Keycloak instance
  */
 const initKeycloak = (): Keycloak => {
-  const config: KeycloakConfig = {
-    url: 'http://localhost:8080',
-    realm: 'koordinator',
-    clientId: 'koordinator-webapp',
-  };
-  return new Keycloak(config);
+    const config: KeycloakConfig = {
+        url: 'http://localhost:8080',
+        realm: 'koordinator',
+        clientId: 'koordinator-webapp',
+    };
+    return new Keycloak(config);
 };
 
 let keycloak: Keycloak | undefined;
@@ -29,10 +29,10 @@ let keycloak: Keycloak | undefined;
  * @returns The Keycloak instance
  */
 export const getKeycloak = (): Keycloak => {
-  if (!keycloak) {
-    keycloak = initKeycloak();
-  }
-  return keycloak;
+    if (!keycloak) {
+        keycloak = initKeycloak();
+    }
+    return keycloak;
 };
 
 /**
@@ -40,47 +40,47 @@ export const getKeycloak = (): Keycloak => {
  * @returns Promise resolving to authentication status
  */
 export const initializeKeycloak = (): Promise<KeycloakInitResult> => {
-  const keycloakInstance = getKeycloak();
-  return new Promise((resolve, reject) => {
-    const initOptions: KeycloakInitOptions = {
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
-      pkceMethod: 'S256',
-    };
-    
-    keycloakInstance
-      .init(initOptions)
-      .then((authenticated: boolean) => {
-        resolve({ keycloak: keycloakInstance, authenticated });
-      })
-      .catch((error: Error) => {
-        reject(error);
-      });
-  });
+    const keycloakInstance = getKeycloak();
+    return new Promise((resolve, reject) => {
+        const initOptions: KeycloakInitOptions = {
+            onLoad: 'check-sso',
+            silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html',
+            pkceMethod: 'S256',
+        };
+
+        keycloakInstance
+            .init(initOptions)
+            .then((authenticated: boolean) => {
+                resolve({ keycloak: keycloakInstance, authenticated });
+            })
+            .catch((error: Error) => {
+                reject(error);
+            });
+    });
 };
 
 /**
  * Function to handle login
  */
 export const login = (): void => {
-  const keycloakInstance = getKeycloak();
-  keycloakInstance.login();
+    const keycloakInstance = getKeycloak();
+    keycloakInstance.login();
 };
 
 /**
  * Function to handle logout
  */
 export const logout = (): void => {
-  const keycloakInstance = getKeycloak();
-  keycloakInstance.logout();
+    const keycloakInstance = getKeycloak();
+    keycloakInstance.logout();
 };
 
 /**
  * Function to handle account management
  */
 export const accountManagement = (): void => {
-  const keycloakInstance = getKeycloak();
-  keycloakInstance.accountManagement();
+    const keycloakInstance = getKeycloak();
+    keycloakInstance.accountManagement();
 };
 
 /**
@@ -88,17 +88,17 @@ export const accountManagement = (): void => {
  * @returns Promise resolving to user profile
  */
 export const getUserProfile = (): Promise<KeycloakProfile> => {
-  const keycloakInstance = getKeycloak();
-  return new Promise((resolve, reject) => {
-    keycloakInstance
-      .loadUserProfile()
-      .then((profile: KeycloakProfile) => {
-        resolve(profile);
-      })
-      .catch((error: Error) => {
-        reject(error);
-      });
-  });
+    const keycloakInstance = getKeycloak();
+    return new Promise((resolve, reject) => {
+        keycloakInstance
+            .loadUserProfile()
+            .then((profile: KeycloakProfile) => {
+                resolve(profile);
+            })
+            .catch((error: Error) => {
+                reject(error);
+            });
+    });
 };
 
 /**
@@ -106,8 +106,8 @@ export const getUserProfile = (): Promise<KeycloakProfile> => {
  * @returns The authentication token
  */
 export const getToken = (): string | undefined => {
-  const keycloakInstance = getKeycloak();
-  return keycloakInstance.token;
+    const keycloakInstance = getKeycloak();
+    return keycloakInstance.token;
 };
 
 /**
@@ -116,8 +116,8 @@ export const getToken = (): string | undefined => {
  * @returns True if the user has the role
  */
 export const hasRole = (role: string): boolean => {
-  const keycloakInstance = getKeycloak();
-  return keycloakInstance.hasRealmRole(role);
+    const keycloakInstance = getKeycloak();
+    return keycloakInstance.hasRealmRole(role);
 };
 
 /**
@@ -126,15 +126,15 @@ export const hasRole = (role: string): boolean => {
  * @returns Promise resolving to whether the token was refreshed
  */
 export const updateToken = (minValidity: number = 5): Promise<boolean> => {
-  const keycloakInstance = getKeycloak();
-  return new Promise((resolve, reject) => {
-    keycloakInstance
-      .updateToken(minValidity)
-      .then((refreshed: boolean) => {
-        resolve(refreshed);
-      })
-      .catch((error: Error) => {
-        reject(error);
-      });
-  });
+    const keycloakInstance = getKeycloak();
+    return new Promise((resolve, reject) => {
+        keycloakInstance
+            .updateToken(minValidity)
+            .then((refreshed: boolean) => {
+                resolve(refreshed);
+            })
+            .catch((error: Error) => {
+                reject(error);
+            });
+    });
 };

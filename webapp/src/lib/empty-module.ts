@@ -23,11 +23,11 @@ export const sep: string = '/';
  * source-map-js stubs
  */
 export class SourceMapConsumer {
-  constructor() {}
+    constructor() {}
 }
 
 export class SourceMapGenerator {
-  constructor() {}
+    constructor() {}
 }
 
 /**

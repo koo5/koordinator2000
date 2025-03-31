@@ -1,7 +1,6 @@
 import { my_user, type Participation } from './my_user.ts';
-import { gql } from "$lib/urql.ts";
 import sanitizeHtml from 'sanitize-html';
-import { readable, writable, get } from 'svelte/store';
+import { get } from 'svelte/store';
 import { browser } from '$app/environment';
 
 /**
@@ -10,7 +9,7 @@ import { browser } from '$app/environment';
  * @returns Sanitized HTML
  */
 export function sanitize_html(x: string): string {
-	return sanitizeHtml(x, { disallowedTagsMode: 'escape' });
+    return sanitizeHtml(x, { disallowedTagsMode: 'escape' });
 }
 
 /**
@@ -79,15 +78,11 @@ export const CAMPAIGN_FRAGMENT = `
  * @returns CSS class name
  */
 export function get_status_class(participation: Participation, collect_confirmations: boolean = true): string {
-	if (participation.condition_is_fulfilled) {
-		if (!collect_confirmations || participation.confirmed) {
-			return "confirmed"
-		}
-		else
-			return "condition_is_fulfilled"
-	}
-	else
-		return "condition_is_not_fulfilled"
+    if (participation.condition_is_fulfilled) {
+        if (!collect_confirmations || participation.confirmed) {
+            return 'confirmed';
+        } else return 'condition_is_fulfilled';
+    } else return 'condition_is_not_fulfilled';
 }
 
 /**
@@ -97,19 +92,14 @@ export function get_status_class(participation: Participation, collect_confirmat
  * @returns Unicode symbol for status
  */
 export function get_tickmark(participation: Participation | undefined | null, collect_confirmations: boolean = true): string {
-	if (!participation || participation.threshold === undefined)
-		return ""
-	else {
-		if (participation.condition_is_fulfilled) {
-			if (!collect_confirmations || participation.confirmed) {
-				return '✅'
-			}
-			else
-				return "✉" // "☑?"
-		}
-		else
-			return "👁"
-	}
+    if (!participation || participation.threshold === undefined) return '';
+    else {
+        if (participation.condition_is_fulfilled) {
+            if (!collect_confirmations || participation.confirmed) {
+                return '✅';
+            } else return '✉'; // "☑?"
+        } else return '👁';
+    }
 }
 
 /**
@@ -119,22 +109,16 @@ export function get_tickmark(participation: Participation | undefined | null, co
  * @returns Short status description
  */
 export function short_description(participation: Participation | undefined | null, collect_confirmations: boolean = true): string {
-	if (!participation || participation.threshold === undefined)
-		return ""
-	else {
-		if (participation.condition_is_fulfilled) {
-			if (collect_confirmations) {
-				if (participation.confirmed) {
-					return 'participation confirmed!'
-				} else
-					return "awaiting confirmation.."
-			}
-			else
-				return "threshold reached"
-		}
-		else
-			return "more participants needed..."
-	}
+    if (!participation || participation.threshold === undefined) return '';
+    else {
+        if (participation.condition_is_fulfilled) {
+            if (collect_confirmations) {
+                if (participation.confirmed) {
+                    return 'participation confirmed!';
+                } else return 'awaiting confirmation..';
+            } else return 'threshold reached';
+        } else return 'more participants needed...';
+    }
 }
 
 /**
@@ -144,22 +128,16 @@ export function short_description(participation: Participation | undefined | nul
  * @returns Detailed status description
  */
 export function long_description(participation: Participation | undefined | null, collect_confirmations: boolean = true): string {
-	if (!participation || participation.threshold === undefined)
-		return ""
-	else {
-		if (participation.condition_is_fulfilled) {
-			if (!collect_confirmations) {
-				return "threshold is reached, participation is confirmed"
-			}
-			else if (!participation.confirmed) {
-				return "threshold is reached, waiting for confirmation"
-			}
-			else
-				return "threshold is reached"
-		}
-		else
-			return "this user is waiting for more participants..."
-	}
+    if (!participation || participation.threshold === undefined) return '';
+    else {
+        if (participation.condition_is_fulfilled) {
+            if (!collect_confirmations) {
+                return 'threshold is reached, participation is confirmed';
+            } else if (!participation.confirmed) {
+                return 'threshold is reached, waiting for confirmation';
+            } else return 'threshold is reached';
+        } else return 'this user is waiting for more participants...';
+    }
 }
 
 /**
@@ -167,13 +145,11 @@ export function long_description(participation: Participation | undefined | null
  * @param isOpen - Whether modal is open
  */
 export function modal_hack(isOpen: boolean): void {
-	/* https://github.com/bestguy/sveltestrap/issues/248 */
-	if (!browser) return;
-	
-	if (isOpen)
-		document.documentElement.style.removeProperty('--saturate');
-	else
-		document.documentElement.style.setProperty('--saturate', saturate_computate(get(my_user).saturate || 0));
+    /* https://github.com/bestguy/sveltestrap/issues/248 */
+    if (!browser) return;
+
+    if (isOpen) document.documentElement.style.removeProperty('--saturate');
+    else document.documentElement.style.setProperty('--saturate', saturate_computate(get(my_user).saturate || 0));
 }
 
 /**
@@ -182,8 +158,8 @@ export function modal_hack(isOpen: boolean): void {
  * @param value - Variable value
  */
 export function set_css_var(name: string, value: string): void {
-	if (!browser) return;
-	document.documentElement.style.setProperty(name, value);
+    if (!browser) return;
+    document.documentElement.style.setProperty(name, value);
 }
 
 /**
@@ -192,5 +168,5 @@ export function set_css_var(name: string, value: string): void {
  * @returns Formatted saturation string
  */
 export function saturate_computate(x: number): string {
-	return (100 + (x || 0)) + "%";
+    return 100 + (x || 0) + '%';
 }
