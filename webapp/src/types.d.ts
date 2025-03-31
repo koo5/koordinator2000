@@ -219,33 +219,6 @@ declare module '@urql/core' {
   export function createClient(options: any): Client;
 }
 
-declare module '@urql/svelte' {
-  import type { Readable } from 'svelte/store';
-  import type { Client, OperationResultState } from '@urql/core';
-  
-  export const getContextClient: () => Client;
-  export const setContextClient: (client: Client) => void;
-  export function queryStore<Data = any, Variables = any>(options: any): Readable<OperationResultState<Data, Variables>>;
-  export function subscriptionStore<Data = any, Variables = any>(options: any): Readable<OperationResultState<Data, Variables>>;
-  export type OperationContext = any;
-  export type Client = import('@urql/core').Client;
-  
-  // Add QueryResult type for components that need it
-  export interface QueryResult<T = any> {
-    data?: T;
-    fetching: boolean;
-    error?: Error;
-    [key: string]: any;
-  }
-}
-
-// Legacy nhost.js module that needs to be migrated
-declare module '../../utils/nhost.js' {
-  export const auth: {
-    confirmPasswordChange: (password: string, ticket: string) => Promise<any>;
-    [key: string]: any;
-  };
-}
 
 // svelte-scrollto module
 declare module 'svelte-scrollto' {

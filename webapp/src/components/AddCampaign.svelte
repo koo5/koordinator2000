@@ -4,6 +4,7 @@
 	import gql from 'graphql-tag';
 	import {my_user, type MyUser} from '../my_user.ts';
 	import { get } from 'svelte/store';
+	import TagManager from './TagManager.svelte';
 
 	const ADD = gql`
 	mutation MyMutation(
@@ -37,6 +38,8 @@
 	let suggested_highest_threshold = 8000000000;
 	let suggested_optimal_threshold = 800;
 	let collect_confirmations = false;
+	let selectedTags: Array<{id: number, name: string}> = [];
+	let newCampaignId: number | null = null;
 
 	onMount(async () =>
 	{
@@ -47,6 +50,8 @@
 	{
 		title = 'campaign' + Date.now();
 		description = 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum ';
+		selectedTags = [];
+		newCampaignId = null;
 	}
 
 </script>
@@ -68,8 +73,15 @@
 		suggested_optimal_threshold,
 		collect_confirmations
 	}}
-	on:done={(result)=>{
-		clearForm();
+	on:done={(event)=>{
+		const result = event.detail;
+		if (result && result.data && result.data.insert_campaigns_one) {
+			// Save the ID of the newly created campaign
+			newCampaignId = result.data.insert_campaigns_one.id;
+		} else {
+			// Reset form on error or unknown response
+			clearForm();
+		}
 	}}
 >
 	<h3>Add campaign:</h3>
@@ -101,5 +113,25 @@
 	<br>
 	<input type="checkbox" id="collect_confirmations" bind:checked={collect_confirmations}/>
 	<br/>
-	<button type="submit">Add Campaign</button>
+	
+	{#if newCampaignId}
+		<div class="tags-section">
+			<h4>Add Tags to Your Campaign</h4>
+			<p>Your campaign has been created! Now you can add tags to help others find it.</p>
+			
+			<TagManager 
+				campaignId={newCampaignId} 
+				tags={[]} 
+				allowAdd={true}
+				showAddForm={true}
+			/>
+			
+			<div class="mt-3">
+				<a href="/campaign/{newCampaignId}" class="btn btn-primary">View Your Campaign</a>
+				<button type="button" class="btn btn-secondary" on:click={clearForm}>Create Another Campaign</button>
+			</div>
+		</div>
+	{:else}
+		<button type="submit">Add Campaign</button>
+	{/if}
 </MutationForm>

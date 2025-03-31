@@ -15,6 +15,7 @@
 	import ProgressBar from "./ProgressBar.svelte";
 	import {Progress} from './ui';
 	import { browser } from '$app/environment';
+	import TagManager from './TagManager.svelte';
 	//import {slide, fade} from 'svelte/transition';
 	/*import { flip } from 'svelte/animate';
 	import { crossfade } from 'svelte/transition';
@@ -128,6 +129,16 @@
 	<h5>Description</h5>
 	<div class="content_block">
 		<p>{@html sanitize_html(campaign.description)}</p>
+	</div>
+
+	<h5>Tags</h5>
+	<div class="content_block">
+		<TagManager 
+			campaignId={campaign.id} 
+			tags={campaign.tags?.map(t => ({id: t.tag.id, name: t.tag.name})) || []} 
+			readOnly={!is_detail_view}
+			size="md"
+		/>
 	</div>
 
 	<h5>My participation</h5>

@@ -26,6 +26,9 @@ export const CAMPAIGN_FRAGMENT = `
 			suggested_highest_threshold,
 			suggested_optimal_threshold,
 			collect_confirmations,
+			created_at,
+			updated_at,
+			last_activity_at,
 			participations(order_by: [{threshold: asc}], where:{ account:{smazano:{_eq: false}}} ) {
 			  id
 			  threshold
@@ -57,6 +60,13 @@ export const CAMPAIGN_FRAGMENT = `
 			confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}, account:{smazano:{_eq: false}}}) {
 			  aggregate {
 				count
+			  }
+			}
+			tags: campaign_tags {
+			  tag {
+				id
+				name
+				description
 			  }
 			}
 		}

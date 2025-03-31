@@ -155,26 +155,6 @@
 		flex: 1;
 	}
 
-	/* Removed unused footer selector */
-
-	/* Removed unused .dark-mode selector */
-
-	.loading-indicator {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		height: 3px;
-		background-color: #ff3e00;
-		z-index: 1000;
-	}
-
-	.spinner {
-		height: 100%;
-		width: 100%;
-		background: linear-gradient(to right, transparent, #ff3e00, transparent);
-		animation: loading 1.5s infinite;
-	}
 
 	@keyframes loading {
 		0% {

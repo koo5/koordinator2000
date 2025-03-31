@@ -2,7 +2,6 @@
 	import { my_user, register, logout } from '../my_user';
 	import { login } from '$lib/auth';
 	import { subscribe, gql } from "$lib/urql";
-	import type { QueryResult } from "@urql/svelte";
 
 	$: my_user_id = $my_user.id;
 	
