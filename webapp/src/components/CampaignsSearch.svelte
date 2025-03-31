@@ -112,7 +112,7 @@
 
     // Update the GraphQL query with additional filter options
     const CAMPAIGN_LIST = gql`
-        query CampaignList($_user_id: Int, $_seen_ids: [Int!], $_search_term: String, $_tag_ids: [Int!], $_apply_tag_filter: Boolean!, $_limit: Int, $_order_by: [campaigns_order_by!]) {
+        query CampaignList($_user_id: Int, $_seen_ids: [Int!], $_search_term: String, $_limit: Int, $_order_by: [campaigns_order_by!]) {
             campaigns(
                 order_by: $_order_by
                 limit: $_limit
@@ -123,8 +123,12 @@
                         { _not: { campaign_dismissals: { account_id: { _eq: $_user_id } } } }
                         { id: { _nin: $_seen_ids } }
                         { _or: [{ title: { _ilike: $_search_term } }, { description: { _ilike: $_search_term } }] }
-                        # Tag filtering logic - only apply when we have selected tags
-                        { _or: [{ campaign_tags: { tag_id: { _in: $_tag_ids } } }, { _not: $_apply_tag_filter }] }
+                        # Only apply tag filtering when tags are selected
+                        #{
+                        #    campaign_tags: {
+                        #        tag_id: { _in: $_tag_ids }
+                        #    }
+                        #}
 
                         # To enable location filtering, uncomment and fix:
                         # {
@@ -145,12 +149,6 @@
                 location_name
                 latitude
                 longitude
-                tags: campaign_tags {
-                    tag {
-                        id
-                        name
-                    }
-                }
                 participations_aggregate(where: { account: { smazano: { _eq: false } } }) {
                     aggregate {
                         count
@@ -158,12 +156,6 @@
                 }
             }
 
-            # Get all available tags
-            tags {
-                id
-                name
-                description
-            }
         }
     `;
 
@@ -268,8 +260,7 @@
         _limit: itemsPerPage,
         _order_by: orderBy(),
         // Tag filtering variables
-        _tag_ids: selectedTagIds,
-        _apply_tag_filter: selectedTagIds.length > 0,
+
         // Location filter variables removed - disabled in query
     };
 
@@ -311,6 +302,19 @@
         search();
     }
 
+    // Modified search function to handle conditional tag filtering
+    function search(): void {
+        // Only include tag filter if we have tags selected
+        const queryVars = {...vars};
+        console.log('search', queryVars);
+
+        items = queryStore<CampaignListResult>({
+            client,
+            query: CAMPAIGN_LIST,
+            variables: queryVars
+        });
+    }
+
     // Toggle location filtering
     function toggleLocationFilter(): void {
         if (!showLocationFilter) {
@@ -322,13 +326,6 @@
         }
     }
 
-    function search(): void {
-        items = queryStore<CampaignListResult>({
-            client,
-            query: CAMPAIGN_LIST,
-            variables: vars,
-        });
-    }
 
     // Restore filters from localStorage on mount
     onMount(() => {
