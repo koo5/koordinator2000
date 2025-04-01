@@ -284,7 +284,7 @@
                 <div class="campaign-wrapper" data-campaign-id={campaign.id}>
                     <!-- Desktop: Swiper with horizontal slides -->
                     <div class="desktop-view">
-                        <swiper-container class="campaign-swiper" data-campaign-id={campaign.id} initial-slide="2" centered-slides="true" space-between="10" slides-per-view="1" grab-cursor="true" pagination keyboard="true" mousewheel="true" navigation="true" resistance-ratio="0" threshold="10" simulate-touch="true" follow-finger="true" on:swiperinitialized={e => swiperInitialized(e, campaign.id)}>
+                        <swiper-container class="campaign-swiper" data-campaign-id={campaign.id} initial-slide="2" centered-slides="true" space-between="10" slides-per-view="1" grab-cursor="true" pagination keyboard="true" navigation="true" resistance-ratio="0" threshold="10" simulate-touch="true" follow-finger="true" on:swiperinitialized={e => swiperInitialized(e, campaign.id)}>
                             <!-- Slide 0: Far Left - Dismiss All -->
                             <swiper-slide class="campaign-slide dismiss-all">
                                 <div class="action-panel">

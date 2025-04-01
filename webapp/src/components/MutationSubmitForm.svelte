@@ -3,6 +3,7 @@
     import { my_user } from '../my_user.ts';
     import { createEventDispatcher } from 'svelte';
     import type { DocumentNode } from 'graphql';
+    import MutationResult from "src/components/MutationResult.svelte";
 
     // Type for status displayer context
     type StatusDisplayer = (message: any[]) => void;
@@ -24,12 +25,15 @@
     let client = getContextClient();
 
     async function submit(): Promise<void> {
+        console.log('submit', variables);
         result = mutationStore({ client, query: mutation, variables });
     }
 </script>
 
-mutation result: {JSON.stringify(result ?? $result, null, ' ')}
-result.errors: {result?.errors}
+{#if result}
+    <MutationResult
+        {result} />
+{/if}
 
 <form on:submit|preventDefault={submit} class={css_ref}>
     {#if $my_user.graphql_debug}
