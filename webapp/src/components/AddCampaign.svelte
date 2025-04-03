@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import MutationForm from './MutationForm.svelte';
     import gql from 'graphql-tag';
-    import { my_user } from '../my_user.ts';
+    import { my_user } from '$lib/client/my_user.ts';
     import { get } from 'svelte/store';
     import TagManager from './TagManager.svelte';
 

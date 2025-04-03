@@ -1,5 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
-import { localStorageSharedStore } from '../svelte-shared-store';
+import { localStorageSharedStore } from './client/svelte-shared-store.ts';
 
 /**
  * User type for user store

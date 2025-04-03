@@ -1,7 +1,7 @@
 <script lang="ts">
     import MutationForm from './MutationForm.svelte';
     import { gql } from '$lib/urql.ts';
-    import type { Campaign, Participation } from '../my_user.ts';
+    import type { Campaign, Participation } from '$lib/client/my_user.ts';
 
     // Define the notification interface based on the GraphQL schema
     interface CampaignNotification {

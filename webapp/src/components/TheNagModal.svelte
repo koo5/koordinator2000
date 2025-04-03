@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { my_user, nag, postpone_nag } from '../my_user';
+    import { my_user, nag, postpone_nag } from '$lib/client/my_user.ts';
     import TheNagBody from './TheNagBody.svelte';
-    import { modal_hack } from '../stuff';
+    import { modal_hack } from '$lib/client/stuff.ts';
     import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from './ui';
 
     let isOpen = false;

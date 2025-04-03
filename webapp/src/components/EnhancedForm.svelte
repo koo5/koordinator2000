@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { createForm } from '$lib/form-utils';
+    import { createForm } from '$lib/form-utils.ts';
 
     // Define types for form data and validators
     type FormData = Record<string, any>;

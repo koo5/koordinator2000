@@ -3,9 +3,11 @@
     import { page } from '$app/state';
     import { user } from '$lib/stores';
     import { mobile } from '$lib/platform';
-    import SettingsModal from '$lib/components/SettingsModal.svelte';
+    import SettingsModal from 'src/components/SettingsModal.svelte';
     import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from './ui';
     import TheNagModal from 'src/components/TheNagModal.svelte';
+    import KeycloakStatus from './KeycloakStatus.svelte';
+    import { public_env } from '$lib/public_env';
 
     $: my_user_str = JSON.stringify($user, null, ' ');
     $: currentPath = page.url.pathname;
@@ -80,7 +82,11 @@
             </NavLink>
         </NavItem>
 
-        {#if !$user}
+        {#if public_env.ENABLE_KEYCLOAK}
+            <NavItem>
+                <KeycloakStatus />
+            </NavItem>
+        {:else if !$user}
             <NavItem>
                 <NavLink href="/login" active={segment === 'login'}>Login</NavLink>
             </NavItem>

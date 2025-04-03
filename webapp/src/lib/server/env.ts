@@ -4,7 +4,11 @@
  */
 
 // Import server-side environment variables
-import { HASURA_ADMIN_SECRET, MY_APP_KEYS } from '$env/static/private';
+import { 
+    HASURA_ADMIN_SECRET, 
+    MY_APP_KEYS,
+    KEYCLOAK_CLIENT_SECRET
+} from '$env/static/private';
 import { public_env, type PublicEnv } from '$lib/public_env';
 
 /**
@@ -23,6 +27,7 @@ interface AppKeys {
 interface ServerEnv extends PublicEnv {
     HASURA_ADMIN_SECRET: string;
     MY_APP_KEYS: AppKeys;
+    KEYCLOAK_CLIENT_SECRET: string;
     PUBLIC_GRAPHQL_HEADERS: Record<string, string>;
 }
 
@@ -50,6 +55,7 @@ export const server_env: ServerEnv = {
     // Private environment variables (server-side only)
     HASURA_ADMIN_SECRET,
     MY_APP_KEYS: parsedKeys,
+    KEYCLOAK_CLIENT_SECRET: KEYCLOAK_CLIENT_SECRET || '',
 
     // Override the public GraphQL headers with admin secret for server-side requests
     PUBLIC_GRAPHQL_HEADERS: {

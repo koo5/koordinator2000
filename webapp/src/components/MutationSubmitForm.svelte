@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContextClient, mutationStore } from '@urql/svelte';
-    import { my_user } from '../my_user.ts';
+    import { my_user } from '$lib/client/my_user.ts';
     import { createEventDispatcher } from 'svelte';
     import type { DocumentNode } from 'graphql';
     import MutationResult from "src/components/MutationResult.svelte";

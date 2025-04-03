@@ -1,4 +1,4 @@
-import { my_user, type Participation } from './my_user.ts';
+import { my_user, type Participation } from '$lib/client/my_user.ts';
 import sanitizeHtml from 'sanitize-html';
 import { get } from 'svelte/store';
 import { browser } from '$app/environment';

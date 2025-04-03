@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { type Campaign as CampaignType, my_user } from '../my_user';
+    import { type Campaign as CampaignType, my_user } from '$lib/client/my_user.ts';
     import { getContextClient, gql, subscriptionStore } from '$lib/urql';
     import SubscribedItemsInner from './SubscribedItemsInner.svelte';
-    import { CAMPAIGN_FRAGMENT } from '../stuff';
+    import { CAMPAIGN_FRAGMENT } from '$lib/client/stuff.ts';
     import { browser } from '$app/environment';
     import type { OperationResultState } from '@urql/core';
     import CampaignsListSorted from './CampaignsListSorted.svelte';

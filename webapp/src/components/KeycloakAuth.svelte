@@ -1,34 +1,98 @@
-<script lang="js">
-    import { authError, authToken, idToken, isAuthenticated, isLoading, login, logout, userInfo } from '$lib/auth';
+<script lang="ts">
     import { page } from '$app/stores';
     import { my_user } from '../my_user.ts';
     import { browser } from '$app/environment';
+    import { public_env } from '$lib/public_env';
+    import { 
+        isAuthenticated, 
+        keycloakProfile, 
+        login as keycloakLogin, 
+        logout as keycloakLogout,
+        accountManagement,
+        keycloakError,
+        isKeycloakInitialized
+    } from '$lib/client/keycloak';
+    
+    // Flag to determine if Keycloak is enabled
+    const enableKeycloak = public_env.ENABLE_KEYCLOAK;
+    
+    // Function to handle login
+    function handleLogin() {
+        if (enableKeycloak) {
+            keycloakLogin();
+        }
+    }
+    
+    // Function to handle logout
+    function handleLogout() {
+        if (enableKeycloak) {
+            keycloakLogout();
+        }
+    }
+    
+    // Function to manage account
+    function handleAccountManagement() {
+        accountManagement();
+    }
 </script>
 
 {#if browser}
     <br />
 
-    {#if $isAuthenticated}
-        <div class="auth-status authenticated">
-            <p>You are authenticated as: {JSON.stringify($my_user?.auth?.keycloak?.info?.preferred_username || $my_user?.auth?.keycloak?.info?.sub)}</p>
-            <button class="btn btn-outline-secondary" on:click|preventDefault={() => logout()}>Sign Out</button>
-        </div>
+    {#if enableKeycloak}
+        {#if $isKeycloakInitialized}
+            {#if $isAuthenticated}
+                <div class="auth-status authenticated">
+                    <p>You are authenticated as: 
+                        {#if $keycloakProfile?.preferred_username}
+                            {$keycloakProfile.preferred_username}
+                        {:else if $keycloakProfile?.name}
+                            {$keycloakProfile.name}
+                        {:else if $my_user?.auth?.keycloak?.info?.preferred_username}
+                            {$my_user.auth.keycloak.info.preferred_username}
+                        {:else if $my_user?.auth?.keycloak?.info?.sub}
+                            {$my_user.auth.keycloak.info.sub}
+                        {:else}
+                            Unknown User
+                        {/if}
+                    </p>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-outline-secondary" on:click|preventDefault={handleAccountManagement}>Manage Account</button>
+                        <button class="btn btn-sm btn-outline-secondary" on:click|preventDefault={handleLogout}>Sign Out</button>
+                    </div>
+                </div>
+            {:else}
+                <div class="auth-status unauthenticated">
+                    <p>You are not authenticated with Keycloak.</p>
+                    <button class="btn btn-primary" on:click|preventDefault={handleLogin}>Sign In with Keycloak</button>
+                </div>
+            {/if}
+            
+            {#if $keycloakError}
+                <div class="auth-error">
+                    <p>Authentication error: {$keycloakError.message}</p>
+                </div>
+            {/if}
+        {:else}
+            <div class="loading">
+                <div class="animate-flicker">Initializing Keycloak...</div>
+            </div>
+        {/if}
     {:else}
-        <div class="auth-status unauthenticated">
-            <p>You are not authenticated.</p>
-            <button class="btn btn-primary" on:click|preventDefault={() => login()}> Sign In with Keycloak </button>
+        <div class="auth-status keycloak-disabled">
+            <p>Keycloak integration is disabled. Enable it in your environment configuration.</p>
         </div>
     {/if}
 
     {#if $my_user.auth_debug}
         <div class="auth-debug">
             <h4>Auth Debug Information</h4>
-            <pre>isLoading: {$isLoading}</pre>
+            <pre>Keycloak Enabled: {enableKeycloak}</pre>
+            <pre>Keycloak Initialized: {$isKeycloakInitialized}</pre>
             <pre>isAuthenticated: {$isAuthenticated}</pre>
-            <pre>authToken: {$authToken}</pre>
-            <pre>idToken: {$idToken}</pre>
-            <pre>userInfo: {JSON.stringify($userInfo, null, 2)}</pre>
-            <pre>authError: {$authError}</pre>
+            <pre>Keycloak Profile: {JSON.stringify($keycloakProfile, null, 2)}</pre>
+            <pre>Keycloak Error: {$keycloakError?.message}</pre>
+            <pre>My User: {JSON.stringify($my_user, null, 2)}</pre>
 
             <h5>Page Info:</h5>
             <pre>{JSON.stringify($page, null, '  ')}</pre>
@@ -53,6 +117,24 @@
 
     .unauthenticated {
         background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .keycloak-disabled {
+        background-color: rgba(255, 165, 0, 0.1);
+    }
+
+    .auth-error {
+        margin: 1rem 0;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        background-color: rgba(255, 0, 0, 0.1);
+        color: #721c24;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
     }
 
     .auth-debug {

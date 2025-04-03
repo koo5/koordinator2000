@@ -1,10 +1,10 @@
 <script lang="js">
     import { Button, Progress } from './ui';
-    import { sanitize_html } from '../stuff.ts';
+    import { sanitize_html } from '$lib/client/stuff.ts';
     import MyParticipation from './MyParticipation.svelte';
     import MutationForm from './MutationForm.svelte';
     import { getContextClient, gql, subscriptionStore } from '$lib/urql.ts';
-    import { default_participations_display_style, get_my_participation, my_user } from '../my_user.ts';
+    import { default_participations_display_style, get_my_participation, my_user } from '$lib/client/my_user.ts';
     import ToolTipsy from './ToolTipsy.svelte';
     import ParticipationBadge from './ParticipationBadge.svelte';
     import DismissalBadge from './DismissalBadge.svelte';

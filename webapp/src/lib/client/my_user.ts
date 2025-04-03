@@ -1,8 +1,8 @@
 import { get, readable, type Readable } from 'svelte/store';
-import { localStorageSharedStore, type SharedStore } from './svelte-shared-store';
+import { localStorageSharedStore, type SharedStore } from './svelte-shared-store.ts';
 import { goto } from '$app/navigation';
 import { logout as auth_logout } from '$lib/client/auth';
-import { EventDispatcher } from './event_dispatcher';
+import { EventDispatcher } from '../../event_dispatcher.ts';
 import { browser } from '$app/environment';
 
 /**

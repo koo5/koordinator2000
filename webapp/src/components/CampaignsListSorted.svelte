@@ -1,6 +1,6 @@
 <script lang="ts">
     import Campaign from './Campaign.svelte';
-    import { type Campaign as CampaignType, my_user } from '../my_user';
+    import { type Campaign as CampaignType, my_user } from '$lib/client/my_user.ts';
     import * as animateScroll from 'svelte-scrollto';
     import { browser } from '$app/environment';
     import { onDestroy, onMount } from 'svelte';

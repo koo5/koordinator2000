@@ -1,5 +1,5 @@
 <script type="js">
-    import { impersonate } from '../my_user.ts';
+    import { impersonate } from '$lib/client/my_user.ts';
     import { gql, subscribe } from '$lib/urql.ts';
     import SubscribedItemsInner from './SubscribedItemsInner.svelte';
 

@@ -1,18 +1,23 @@
-<script type="js">
-    import { my_user } from '../my_user.ts';
+<script lang="ts">
+    import { my_user } from '$lib/client/my_user.ts';
+    import KeycloakIdentityManager from './KeycloakIdentityManager.svelte';
+    import { public_env } from '$lib/public_env';
 
     const default_participations_display_styles_list = ['koo1', 'koo1_introductory', 'facebook', 'tabular_breakdown'];
 </script>
 
 <div>
-    <h5>general</h5>
+    <h5>Authentication & Identity</h5>
+    <KeycloakIdentityManager />
+    
+    <h5>General</h5>
     <label><input type="checkbox" bind:checked={$my_user.autoscroll} />Autoscroll</label>
     <br />
     <label><input type="checkbox" bind:checked={$my_user.hide_help} />Hide help</label>
     <br />
     <label><input type="checkbox" bind:checked={$my_user.enable_swiping_also_on_desktop} />enable_swiping_also_on_desktop (TODO)</label>
     <br />
-    <h5>default display style for participations</h5>
+    <h5>Default display style for participations</h5>
     {#each default_participations_display_styles_list as s (s)}
         <label>
             <input type="radio" bind:group={$my_user.default_participations_display_style} value={s} />

@@ -1,11 +1,11 @@
 <script lang="ts">
     import { Button, Input, Label } from './ui';
     // Label and Input not implemented yet
-    import { type Campaign, decrease_auth_nag_postponement, get_my_participation, my_user, type MyUser } from '../my_user.ts';
+    import { type Campaign, decrease_auth_nag_postponement, get_my_participation, my_user, type MyUser } from '$lib/client/my_user.ts';
     import gql from 'graphql-tag';
     import MutationForm from './MutationForm.svelte';
     import { createEventDispatcher } from 'svelte';
-    import { get_tickmark } from '../stuff.ts';
+    import { get_tickmark } from '$lib/client/stuff.ts';
 
     const dispatch = createEventDispatcher();
 

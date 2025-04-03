@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { my_user } from '../../my_user.ts';
-    import { CAMPAIGN_FRAGMENT } from '../../stuff.ts';
+    import { my_user } from '$lib/client/my_user.ts';
+    import { CAMPAIGN_FRAGMENT } from '$lib/client/stuff.ts';
     import { gql, subscribe } from '$lib/urql.ts';
     // Show headers being used
     import { public_env } from '$lib/public_env.ts';

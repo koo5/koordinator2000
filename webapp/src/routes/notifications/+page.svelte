@@ -2,7 +2,7 @@
     import Notification from '../../components/Notification.svelte';
     import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
     import { gql, subscribe } from '$lib/urql.ts';
-    import { my_user } from '../../my_user.ts';
+    import { my_user } from '$lib/client/my_user.ts';
 
     $: my_user_id = $my_user.id;
 

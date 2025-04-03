@@ -1,7 +1,7 @@
 <script lang="ts">
     //import {my_user} from '../my_user.ts';
     import TabularParticipationsRow from './TabularParticipationsRow.svelte';
-    import type { Campaign, Participation } from '../my_user.ts';
+    import type { Campaign, Participation } from '$lib/client/my_user.ts';
 
     export let campaign: Campaign;
 

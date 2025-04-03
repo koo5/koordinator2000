@@ -1,12 +1,12 @@
 <script lang="ts">
     import { getContextClient, gql, queryStore } from '$lib/urql.ts';
-    import { my_user } from '../my_user.ts';
+    import { my_user } from '$lib/client/my_user.ts';
     import CampaignList from './CampaignList.svelte';
     import * as animateScroll from 'svelte-scrollto';
     import { browser } from '$app/environment';
     import { debug } from '$lib/stores';
     import { onMount, tick } from 'svelte';
-    import { localStorageSharedStore } from '../svelte-shared-store';
+    import { localStorageSharedStore } from '$lib/client/svelte-shared-store.ts';
     import { Button, FormGroup, Input, Label } from './ui';
 
     const client = getContextClient();

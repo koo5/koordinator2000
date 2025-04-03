@@ -6,11 +6,11 @@
     import Header from '../components/Header.svelte';
     import { createUrqlClient, setContextClient } from '$lib/urql.ts';
     import { idToken, userInfo } from '$lib/auth.ts';
-    import { apply_newly_authenticated_user, auth_event, type AuthEvent, ensure_we_exist, my_user, type MyUser } from '../my_user.ts';
-    import { saturate_computate, set_css_var } from '../stuff.ts';
+    import { apply_newly_authenticated_user, auth_event, type AuthEvent, ensure_we_exist, my_user, type MyUser } from '$lib/client/my_user.ts';
+    import { saturate_computate, set_css_var } from '$lib/client/stuff.ts';
     import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
-    import type { SharedStore } from '../svelte-shared-store';
+    import type { SharedStore } from '$lib/client/svelte-shared-store.ts';
 
     // Define types for layout data
     interface LayoutData {

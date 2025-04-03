@@ -2,15 +2,16 @@
 <html>
 <head>
   <title>Silent SSO Check</title>
-  <script src="http://localhost:8080/js/keycloak.js"></script>
   <script>
     window.onload = function () {
-      var keycloak = new Keycloak();
-      keycloak.init({ checkLoginIframe: false }).then(function(authenticated) {
-        window.parent.postMessage({ 'keycloak-authenticated': authenticated }, window.location.origin);
-      }).catch(function(error) {
-        console.error('Silent SSO check failed', error);
-      });
+      try {
+        /* This page is used in the silent authentication check process. 
+           It's loaded in an iframe by the main application to detect 
+           silent authentication changes from Keycloak */
+        parent.postMessage(location.href, location.origin);
+      } catch (e) {
+        console.error('Silent check SSO error:', e);
+      }
     }
   </script>
 </head>

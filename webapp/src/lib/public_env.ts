@@ -6,6 +6,9 @@ export interface PublicEnv {
     PUBLIC_URL: string;
     PUBLIC_BASE_URL: string;
     ENABLE_KEYCLOAK: boolean;
+    KEYCLOAK_URL: string;
+    KEYCLOAK_REALM: string;
+    KEYCLOAK_CLIENT_ID: string;
     PUBLIC_GRAPHQL_HEADERS: Record<string, string>;
 }
 
@@ -14,6 +17,9 @@ export const public_env: PublicEnv = {
     PUBLIC_URL: import.meta.env.VITE_PUBLIC_URL as string,
     PUBLIC_BASE_URL: import.meta.env.VITE_PUBLIC_BASE_URL as string,
     ENABLE_KEYCLOAK: !!import.meta.env.VITE_PUBLIC_ENABLE_KEYCLOAK,
+    KEYCLOAK_URL: import.meta.env.VITE_PUBLIC_KEYCLOAK_URL as string || 'http://localhost:8080',
+    KEYCLOAK_REALM: import.meta.env.VITE_PUBLIC_KEYCLOAK_REALM as string || 'koordinator',
+    KEYCLOAK_CLIENT_ID: import.meta.env.VITE_PUBLIC_KEYCLOAK_CLIENT_ID as string || 'koordinator-app',
     // Parse Hasura headers from environment
     PUBLIC_GRAPHQL_HEADERS: (() => {
         try {
