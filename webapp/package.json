@@ -6,7 +6,7 @@
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 5000",
+    "dev": "vite dev --port 5005",
     "build": "vite build",
     "preview": "vite preview",
     "start": "node build ",
@@ -62,6 +62,7 @@
     "ws": "^7.5.10"
   },
   "dependencies": {
+    "@auth/sveltekit": "^1.8.0",
     "@sideway/address": "^5.0.0",
     "@sideway/formula": "^3.0.1",
     "@sideway/pinpoint": "^2.0.0",

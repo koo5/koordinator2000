@@ -182,18 +182,8 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
         }
     }
 
-    // If we couldn't create a user after max attempts, create a fallback user
     if (!result || !result.data || !result.data.insert_accounts_one) {
         console.warn('Failed to create user via GraphQL, using fallback user');
-        // Return a fallback user with a generated ID
-        const fallbackId = Math.floor(Math.random() * 100000);
-        return await sign_user_object({
-            id: fallbackId,
-            name: name || 'fallback_user',
-            email: email,
-            autoscroll: true,
-            fallback: true,
-        });
     }
 
     const userObject: UserObject = {

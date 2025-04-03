@@ -4,6 +4,7 @@
     "": {
       "name": "koordinator",
       "dependencies": {
+        "@auth/sveltekit": "^1.8.0",
         "@sideway/address": "^5.0.0",
         "@sideway/formula": "^3.0.1",
         "@sideway/pinpoint": "^2.0.0",
@@ -75,6 +76,8 @@
     "@apollo/client": ["@apollo/client@3.3.13", "", { "dependencies": { "@graphql-typed-document-node/core": "^3.0.0", "@types/zen-observable": "^0.8.0", "@wry/context": "^0.6.0", "@wry/equality": "^0.4.0", "fast-json-stable-stringify": "^2.0.0", "graphql-tag": "^2.12.0", "hoist-non-react-statics": "^3.3.2", "optimism": "^0.15.0", "prop-types": "^15.7.2", "symbol-observable": "^2.0.0", "ts-invariant": "^0.7.0", "tslib": "^1.10.0", "zen-observable": "^0.8.14" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0", "react": "^16.8.0 || ^17.0.0", "subscriptions-transport-ws": "^0.9.0" }, "optionalPeers": ["react"] }, "sha512-usiVmXiOq0J/GpyIOIhlF8ItHpiPJObC7zoxLYPoOYj3G3OB0hCIcUKs3aTJ3ATW7u8QxvYgRaJg72NN7E1WOg=="],
 
     "@auth/core": ["@auth/core@0.38.0", "", { "dependencies": { "@panva/hkdf": "^1.2.1", "jose": "^6.0.6", "oauth4webapi": "^3.3.0", "preact": "10.24.3", "preact-render-to-string": "6.5.11" }, "peerDependencies": { "@simplewebauthn/browser": "^9.0.1", "@simplewebauthn/server": "^9.0.2", "nodemailer": "^6.8.0" }, "optionalPeers": ["@simplewebauthn/browser", "@simplewebauthn/server", "nodemailer"] }, "sha512-ClHl44x4cY3wfJmHLpW+XrYqED0fZIzbHmwbExltzroCjR5ts3DLTWzADRba8mJFYZ8JIEJDa+lXnGl0E9Bl7Q=="],
+
+    "@auth/sveltekit": ["@auth/sveltekit@1.8.0", "", { "dependencies": { "@auth/core": "0.38.0", "set-cookie-parser": "^2.7.0" }, "peerDependencies": { "@simplewebauthn/browser": "^9.0.1", "@simplewebauthn/server": "^9.0.3", "@sveltejs/kit": "^1.0.0 || ^2.0.0", "nodemailer": "^6.6.5", "svelte": "^3.54.0 || ^4.0.0 || ^5.0.0-0" }, "optionalPeers": ["@simplewebauthn/browser", "@simplewebauthn/server", "nodemailer"] }, "sha512-qCkN84BhDGxz99DFEIp6Y2rJffkKq6a/PYTNXvhfBqNKYWAMUbmhbV52LWKXX7QtpWzWaAhj2Nc3DZTdjgj3Bw=="],
 
     "@esbuild/aix-ppc64": ["@esbuild/aix-ppc64@0.21.5", "", { "os": "aix", "cpu": "ppc64" }, "sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ=="],
 

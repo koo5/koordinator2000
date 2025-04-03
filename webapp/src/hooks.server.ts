@@ -5,7 +5,8 @@ import { server_env } from '$lib/server/env.ts';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 // Import both authentication systems for transition period
 import { init_keys } from '$lib/server/auth.ts';
-import { init_keycloak_keys } from '$lib/server/keycloak-auth.ts';
+import { authjs } from '$lib/authjs.ts';
+
 
 // Log server information on startup
 console.log('Server startup - using GraphQL endpoint:', server_env.GRAPHQL_ENDPOINT);
@@ -14,23 +15,14 @@ console.log(
     Object.getOwnPropertyNames(server_env).map(key => `${key}: ${JSON.stringify(server_env[key as keyof typeof server_env])}`)
 );
 
-// Initialize both auth systems during transition
 Promise.all([
-    // Initialize traditional auth keys
     init_keys().catch(err => {
-        console.error('Failed to initialize traditional auth keys:', err);
-    }),
-    // Initialize Keycloak auth
-    init_keycloak_keys().catch(err => {
-        console.error('Failed to initialize Keycloak keys:', err);
+        console.error('Failed to initialize auth keys:', err);
     }),
 ]);
 
-// Using the UserObject interface from App namespace defined in app.d.ts
-
 /**
  * Helper to extract and verify JWT token from request
- * This function will use either traditional or Keycloak auth based on the USE_KEYCLOAK flag
  *
  * @param event - The SvelteKit request event
  * @returns The user object or null if not authenticated
