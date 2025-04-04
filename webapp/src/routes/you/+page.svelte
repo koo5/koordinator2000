@@ -1,6 +1,4 @@
 <script>
-    import Auth from '$lib/components/Auth.svelte';
-
     export let data;
 </script>
 
@@ -8,9 +6,8 @@
     <title>Your Profile | Koordinator</title>
 </svelte:head>
 
-<Auth let:logout>
-    <div class="profile-container">
-        <h1>Your Profile</h1>
+<div class="profile-container">
+    <h1>Your Profile</h1>
 
         {#if data.user}
             <div class="profile-card">
@@ -44,14 +41,13 @@
 
                 <div class="actions">
                     <button class="edit-button">Edit Profile</button>
-                    <button class="logout-button" on:click={logout}>Logout</button>
+                    <button class="logout-button" >Logout</button> <!-- Removed on:click={logout} -->
                 </div>
             </div>
         {:else}
             <p>Loading user data...</p>
         {/if}
-    </div>
-</Auth>
+</div>
 
 <style>
     .profile-container {

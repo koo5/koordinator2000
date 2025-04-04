@@ -1,6 +1,5 @@
 <script lang="ts">
     import { my_user } from '$lib/client/my_user.ts';
-    import { CAMPAIGN_FRAGMENT } from '$lib/client/stuff.ts';
     import { gql, subscribe } from '$lib/urql.ts';
     // Show headers being used
     import { public_env } from '$lib/public_env.ts';
@@ -14,7 +13,7 @@
     $: campaign_test = subscribe(
         gql`
 			subscription ($_user_id: Int!) {
-				campaigns(limit: 1) ${CAMPAIGN_FRAGMENT}
+				campaigns(limit: 1) # CAMPAIGN_FRAGMENT was removed here, adjust fields as needed
 			}
 		`,
         {
