@@ -2,12 +2,13 @@
  * URQL client configuration for Svelte
  */
 import { browser } from '$app/environment';
-import { type Readable, type Writable, writable } from 'svelte/store';
+import { type Readable, type Writable, writable, get } from 'svelte/store'; // Import get
 import { getContextClient, queryStore, setContextClient, subscriptionStore } from '@urql/svelte';
 // Import GraphQL types properly from CommonJS module
 import type { DocumentNode, OperationDefinitionNode } from 'graphql';
 import { gql } from 'graphql-tag';
 import { public_env } from '$lib/public_env';
+import { my_user } from '$lib/client/my_user'; // Import my_user store
 import { cacheExchange, type Client, createClient, type Exchange, fetchExchange, ssrExchange, subscriptionExchange } from '@urql/core';
 import { createClient as createWSClient } from 'graphql-ws';
 
@@ -91,12 +92,34 @@ function getWebSocketUrl(endpoint: string): string {
 export function createUrqlClient(): Client {
     console.log('Creating URQL client with endpoint:', public_env.GRAPHQL_ENDPOINT);
 
+    // Function to dynamically get fetch options (including auth header)
+    const getFetchOptions = (): RequestInit => {
+        const headers: Record<string, string> = {
+            'content-type': 'application/json', // Keep default content type
+            ...public_env.PUBLIC_GRAPHQL_HEADERS, // Include other static headers
+        };
+        const user = get(my_user); // Get current user state
+        if (user && user.jwt) {
+            headers['Authorization'] = `Bearer ${user.jwt}`; // Add auth header if token exists
+            console.log('URQL Client: Added Authorization header'); // Added log
+        } else {
+            console.log('URQL Client: No JWT found, skipping Authorization header'); // Added log
+        }
+        return { headers };
+    };
+
     // Create WebSocket client for subscriptions if in browser environment
     const wsClient = browser
         ? createWSClient({
-              url: getWebSocketUrl(public_env.GRAPHQL_ENDPOINT),
-              connectionParams: {
-                  headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' },
+              url: getWebSocketUrl(public_env.GRAPHQL_ENDPOINT), // Use helper function
+              connectionParams: () => { // Use function for dynamic params
+                  const user = get(my_user);
+                  const headers = {
+                      ...(public_env.PUBLIC_GRAPHQL_HEADERS || {}),
+                      ...(user?.jwt ? { Authorization: `Bearer ${user.jwt}` } : {}),
+                  };
+                  console.log('WS Client: Connection params headers:', headers); // Added log
+                  return { headers };
               },
           })
         : null;
@@ -137,10 +160,8 @@ export function createUrqlClient(): Client {
     }
 
     return createClient({
-        url: `https://${public_env.GRAPHQL_ENDPOINT}`,
-        fetchOptions: {
-            headers: public_env.PUBLIC_GRAPHQL_HEADERS || { 'content-type': 'application/json' },
-        },
+        url: `https://${public_env.GRAPHQL_ENDPOINT}`, // Ensure HTTPS
+        fetchOptions: getFetchOptions, // Use the dynamic fetchOptions function
         exchanges,
     });
 }
