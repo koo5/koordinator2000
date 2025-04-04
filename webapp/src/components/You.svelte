@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { logout, my_user, register } from '$lib/client/my_user.ts';
+    import { logout, my_user } from '$lib/client/my_user.ts';
     import { gql, subscribe } from '$lib/urql';
 
     $: my_user_id = $my_user.id;

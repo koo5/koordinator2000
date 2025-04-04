@@ -257,19 +257,6 @@ export function get_my_participation(campaign: Campaign | null | undefined, user
 }
 
 /**
- * Register a new user and redirect to profile page
- * @returns Promise that resolves when registration is complete
- */
-export async function register(): Promise<void> {
-    try {
-        await apply_newly_authenticated_user(await ensure_we_exist());
-        goto('/you');
-    } catch (e) {
-        console.log(e);
-    }
-}
-
-/**
  * Get the default participations display style
  * @param user - The user object
  * @returns The display style string
