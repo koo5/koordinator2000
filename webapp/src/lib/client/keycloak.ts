@@ -5,8 +5,8 @@ import Keycloak from 'keycloak-js';
 import { browser } from '$app/environment';
 import { writable, get, type Writable } from 'svelte/store';
 import { public_env } from '$lib/public_env';
-import { auth_event } from '../../my_user';
-import { get as getMyUser, my_user } from '../client/my_user';
+import { auth_event } from './my_user.ts';
+import { my_user } from '../client/my_user.ts';
 
 // Keycloak instance stores
 export const keycloakInstance: Writable<Keycloak | null> = writable(null);
@@ -75,8 +75,8 @@ export async function initKeycloak(): Promise<boolean> {
                                 sub: keycloak.subject || '',
                                 email: profile.email,
                                 preferred_username: profile.username,
-                                name: profile.firstName && profile.lastName 
-                                    ? `${profile.firstName} ${profile.lastName}` 
+                                name: profile.firstName && profile.lastName
+                                    ? `${profile.firstName} ${profile.lastName}`
                                     : profile.username
                             }
                         }
@@ -124,11 +124,11 @@ function setupKeycloakEvents(keycloak: Keycloak): void {
         keycloak.loadUserProfile()
             .then(profile => {
                 keycloakProfile.set(profile);
-                
+
                 // Get the current user ID from the store
                 const currentUser = get(my_user);
                 const userId = currentUser.id > 0 ? currentUser.id : null;
-                
+
                 // Send auth event to server for identity linking
                 return auth_event({
                     type: 'keycloak_auth',
@@ -140,8 +140,8 @@ function setupKeycloakEvents(keycloak: Keycloak): void {
                                 sub: keycloak.subject || '',
                                 email: profile.email,
                                 preferred_username: profile.username,
-                                name: profile.firstName && profile.lastName 
-                                    ? `${profile.firstName} ${profile.lastName}` 
+                                name: profile.firstName && profile.lastName
+                                    ? `${profile.firstName} ${profile.lastName}`
                                     : profile.username
                             }
                         }
@@ -212,18 +212,18 @@ function setupTokenRefresh(keycloak: Keycloak): void {
  */
 export async function updateToken(minValidity: number = 30): Promise<boolean> {
     const keycloak = get(keycloakInstance);
-    
+
     if (!keycloak) {
         return false;
     }
 
     try {
         const updated = await keycloak.updateToken(minValidity);
-        
+
         if (updated) {
             keycloakToken.set(keycloak.token || null);
         }
-        
+
         return updated;
     } catch (error) {
         console.error('Failed to update token:', error);
@@ -238,7 +238,7 @@ export async function updateToken(minValidity: number = 30): Promise<boolean> {
  */
 export function login(redirectUri?: string, register: boolean = false): void {
     const keycloak = get(keycloakInstance);
-    
+
     if (!keycloak) {
         console.error('Keycloak is not initialized');
         return;
@@ -258,7 +258,7 @@ export function login(redirectUri?: string, register: boolean = false): void {
  */
 export function logout(redirectUri?: string): void {
     const keycloak = get(keycloakInstance);
-    
+
     if (!keycloak) {
         console.error('Keycloak is not initialized');
         return;
@@ -293,7 +293,7 @@ export function isUserAuthenticated(): boolean {
  */
 export function accountManagement(): void {
     const keycloak = get(keycloakInstance);
-    
+
     if (!keycloak) {
         console.error('Keycloak is not initialized');
         return;

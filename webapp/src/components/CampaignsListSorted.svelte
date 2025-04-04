@@ -3,6 +3,7 @@
     import { type Campaign as CampaignType, my_user } from '$lib/client/my_user.ts';
     import * as animateScroll from 'svelte-scrollto';
     import { browser } from '$app/environment';
+    import { mobile } from '$lib/stores.ts';
     import { onDestroy, onMount } from 'svelte';
     import { register } from 'swiper/element/bundle';
 
@@ -276,62 +277,64 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </svelte:head>
 
+<!--ids: {JSON.stringify(ids)}-->
 
 <div bind:this={campaign_containers} class="campaign-container">
         {#each campaigns as campaign (campaign.id)}
             {#if browser}
-                <!-- Different approaches for mobile and desktop -->
-                <div class="campaign-wrapper" data-campaign-id={campaign.id}>
-                    <!-- Desktop: Swiper with horizontal slides -->
-                    <div class="desktop-view">
-                        <swiper-container class="campaign-swiper" data-campaign-id={campaign.id} initial-slide="2" centered-slides="true" space-between="10" slides-per-view="1" grab-cursor="true" pagination keyboard="true" navigation="true" resistance-ratio="0" threshold="10" simulate-touch="true" follow-finger="true" on:swiperinitialized={e => swiperInitialized(e, campaign.id)}>
-                            <!-- Slide 0: Far Left - Dismiss All -->
-                            <swiper-slide class="campaign-slide dismiss-all">
-                                <div class="action-panel">
-                                    <h3>Dismiss All</h3>
-                                    <p>Dismiss all campaigns of this cause/user</p>
-                                    <button class="btn-action btn-dismiss-all">Dismiss all campaigns of this cause </button>
-                                    <button class="btn-action btn-dismiss-user">Dismiss all campaigns of this user </button>
-                                </div>
-                            </swiper-slide>
+                {#if !$mobile}
+                    <div class="campaign-wrapper" data-campaign-id={campaign.id}>
+                        <!-- Desktop: Swiper with horizontal slides -->
+                        <div class="desktop-view">
+                            <swiper-container class="campaign-swiper" data-campaign-id={campaign.id} initial-slide="2" centered-slides="true" space-between="10" slides-per-view="1" grab-cursor="true" pagination keyboard="true" navigation="true" resistance-ratio="0" threshold="10" simulate-touch="true" follow-finger="true" on:swiperinitialized={e => swiperInitialized(e, campaign.id)}>
+                                <!-- Slide 0: Far Left - Dismiss All -->
+                                <swiper-slide class="campaign-slide dismiss-all">
+                                    <div class="action-panel">
+                                        <h3>Dismiss All</h3>
+                                        <p>Dismiss all campaigns of this cause/user</p>
+                                        <button class="btn-action btn-dismiss-all">Dismiss all campaigns of this cause </button>
+                                        <button class="btn-action btn-dismiss-user">Dismiss all campaigns of this user </button>
+                                    </div>
+                                </swiper-slide>
 
-                            <!-- Slide 1: Left - Dismiss -->
-                            <swiper-slide class="campaign-slide dismiss">
-                                <div class="action-panel">
-                                    <h3>Dismiss</h3>
-                                    <p>I don't care about this cause</p>
-                                    <button class="btn-action btn-dismiss">Dismiss this campaign</button>
-                                </div>
-                            </swiper-slide>
+                                <!-- Slide 1: Left - Dismiss -->
+                                <swiper-slide class="campaign-slide dismiss">
+                                    <div class="action-panel">
+                                        <h3>Dismiss</h3>
+                                        <p>I don't care about this cause</p>
+                                        <button class="btn-action btn-dismiss">Dismiss this campaign</button>
+                                    </div>
+                                </swiper-slide>
 
-                            <!-- Slide 2: Center (Main) - Campaign View -->
-                            <swiper-slide class="campaign-slide main">
-                                <div class="campaign-content">
-                                    <Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)} />
-                                </div>
-                            </swiper-slide>
+                                <!-- Slide 2: Center (Main) - Campaign View -->
+                                <swiper-slide class="campaign-slide main">
+                                    <div class="campaign-content">
+                                        <Campaign {campaign} on:my_participation_upsert={() => go_to_next_campaign(campaign.id)} />
+                                    </div>
+                                </swiper-slide>
 
-                            <!-- Slide 3: Right - Participate -->
-                            <swiper-slide class="campaign-slide participate">
-                                <div class="action-panel">
-                                    <h3>Participate</h3>
-                                    <p>Mark as participating in this campaign</p>
-                                    <button class="btn-action btn-participate">Participate in this campaign</button>
-                                </div>
-                            </swiper-slide>
+                                <!-- Slide 3: Right - Participate -->
+                                <swiper-slide class="campaign-slide participate">
+                                    <div class="action-panel">
+                                        <h3>Participate</h3>
+                                        <p>Mark as participating in this campaign</p>
+                                        <button class="btn-action btn-participate">Participate in this campaign</button>
+                                    </div>
+                                </swiper-slide>
 
-                            <!-- Slide 4: Far Right - Participate All -->
-                            <swiper-slide class="campaign-slide participate-all">
-                                <div class="action-panel">
-                                    <h3>Participate All</h3>
-                                    <p>Participate in all related campaigns</p>
-                                    <button class="btn-action btn-participate-all">Participate in all campaigns of this cause </button>
-                                    <button class="btn-action btn-participate-user">Participate in all campaigns of this user </button>
-                                </div>
-                            </swiper-slide>
-                        </swiper-container>
+                                <!-- Slide 4: Far Right - Participate All -->
+                                <swiper-slide class="campaign-slide participate-all">
+                                    <div class="action-panel">
+                                        <h3>Participate All</h3>
+                                        <p>Participate in all related campaigns</p>
+                                        <button class="btn-action btn-participate-all">Participate in all campaigns of this cause </button>
+                                        <button class="btn-action btn-participate-user">Participate in all campaigns of this user </button>
+                                    </div>
+                                </swiper-slide>
+                            </swiper-container>
+                        </div>
                     </div>
-
+                {:else}
                     <!-- Mobile: Simple card with action buttons -->
                     <div class="mobile-view">
                         <div class="campaign-card">
@@ -351,7 +354,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                {/if}
             {:else}
                 <!-- SSR fallback to show campaigns without swiper -->
                 <div class="campaign-fallback">

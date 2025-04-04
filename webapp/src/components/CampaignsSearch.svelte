@@ -394,9 +394,6 @@
                     <label class="form-check-label" for="location-filter"> Enable location filter (coming soon) </label>
                 </div>
 
-                <div class="note">
-                    <small class="text-muted">Note: Location filtering will be available soon</small>
-                </div>
             </div>
         </FormGroup>
 

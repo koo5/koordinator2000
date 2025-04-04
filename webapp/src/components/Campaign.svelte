@@ -1,6 +1,6 @@
 <script lang="js">
     import { Button, Progress } from './ui';
-    import { sanitize_html } from '$lib/client/stuff.ts';
+    import { sanitize_html } from '$lib/client/campaign.ts';
     import MyParticipation from './MyParticipation.svelte';
     import MutationForm from './MutationForm.svelte';
     import { getContextClient, gql, subscriptionStore } from '$lib/urql.ts';
@@ -132,7 +132,7 @@
     </div>
     <h5>Progress</h5>
     <div class="content_block">
-        <i>We want {suggested_mass} people:</i><br />
+
 
         <Progress multi>
             {#if campaign.collect_confirmations}
@@ -146,10 +146,11 @@
             >
         </Progress>
         {#if campaign.collect_confirmations}
-            {confirmed_contributing_count_str} are confirmed, {unconfirmed_contributing_count_str} are unconfirmed.<br />
+            {confirmed_contributing_count_str} confirmed, {unconfirmed_contributing_count_str} unconfirmed
         {:else}
-            {unconfirmed_contributing_count_str} participants.<br />
+            {unconfirmed_contributing_count_str} participating
         {/if}
+        <i>of {suggested_mass} campaign goal</i><br />
     </div>
     <h5>Participants</h5>
     <div class="content_block">

@@ -5,7 +5,6 @@ import { server_env } from '$lib/server/env.ts';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 // Import both authentication systems for transition period
 import { init_keys } from '$lib/server/auth.ts';
-import { authjs } from '$lib/authjs.ts';
 
 
 // Log server information on startup
@@ -30,7 +29,9 @@ Promise.all([
 async function get_user_from_request(event: RequestEvent): Promise<App.UserObject | null> {
     try {
         // Get the authorization header
-        const auth_header = event.request.headers.get('authorization');
+        const auth_header = event.request.headers.get('Authorization');
+        console.log('auth header:', auth_header);
+
         let token: string | null = null;
 
         if (auth_header?.startsWith('Bearer ')) {
@@ -38,7 +39,9 @@ async function get_user_from_request(event: RequestEvent): Promise<App.UserObjec
         } else {
             // Try to get from cookie
             const cookies = event.cookies.getAll();
-            const auth_cookie = cookies.find(c => c.name === 'auth_token');
+            console.log('cookies:', cookies);
+
+            const auth_cookie = cookies.find(c => c.name === 'Authorization');
             if (!auth_cookie?.value) return null;
             token = auth_cookie.value;
         }

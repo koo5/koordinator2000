@@ -8,5 +8,7 @@
         flex-wrap: wrap;
         margin-right: -15px;
         margin-left: -15px;
+        margin-top: 0;
+        margin-bottom: 0;
     }
 </style>

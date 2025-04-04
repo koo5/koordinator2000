@@ -5,7 +5,7 @@
     import gql from 'graphql-tag';
     import MutationForm from './MutationForm.svelte';
     import { createEventDispatcher } from 'svelte';
-    import { get_tickmark } from '$lib/client/stuff.ts';
+    import { get_tickmark } from '$lib/client/campaign.ts';
 
     const dispatch = createEventDispatcher();
 

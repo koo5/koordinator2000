@@ -1,9 +1,8 @@
 import { get, readable, type Readable } from 'svelte/store';
 import { localStorageSharedStore, type SharedStore } from './svelte-shared-store.ts';
 import { goto } from '$app/navigation';
-import { logout as auth_logout } from '$lib/client/auth';
-import { EventDispatcher } from '../../event_dispatcher.ts';
 import { browser } from '$app/environment';
+import EventEmitter from 'events';
 
 /**
  * User object interface for the current user
@@ -110,11 +109,13 @@ async function new_user(): Promise<AuthUserResponse> {
         const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
         console.log('Attempting to create new user...');
+        console.log('get(my_user):', get(my_user));
         const res = await fetch('/get_free_user_id', {
             method: 'POST',
             signal: controller.signal,
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + get(my_user)?.jwt
             },
         });
 
@@ -204,7 +205,7 @@ export async function ensure_we_exist(): Promise<AuthUserResponse | null> {
         }
     } else {
         // User already exists
-        console.log('User already exists with ID:', user.id);
+        console.log('User exists (ID:', user.id + ')');
         return null;
     }
 }
@@ -279,7 +280,7 @@ export function default_participations_display_style(user: MyUser): string {
 }
 
 // Nag system for authentication reminders
-export const nag = new EventDispatcher<void>();
+export const nag = new EventEmitter<void>();
 let nag_timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
 /**
@@ -293,7 +294,7 @@ export function decrease_auth_nag_postponement(): void {
         if (nag_timeout) clearTimeout(nag_timeout);
         nag_timeout = setTimeout(() => {
             nag_timeout = undefined;
-            nag.trigger();
+            nag.emit('nag');
         }, 1000);
     }
 }

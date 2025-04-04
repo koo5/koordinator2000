@@ -1,13 +1,13 @@
 <script lang="ts">
     import { my_user, nag, postpone_nag } from '$lib/client/my_user.ts';
     import TheNagBody from './TheNagBody.svelte';
-    import { modal_hack } from '$lib/client/stuff.ts';
+    import { modal_hack } from '$lib/client/campaign.ts';
     import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from './ui';
 
     let isOpen = false;
     $: modal_hack(isOpen);
 
-    nag.on(() => {
+    nag.on('nag', () => {
         //postpone_nag();
         //alert("i'm gonna attempt to show a modal dialog. This seems to break in firefox. In that case, please reload the page.");
         isOpen = true;

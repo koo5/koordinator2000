@@ -1,50 +1,50 @@
 <script lang="ts">
-    import { my_user } from '../lib/client/my_user';
+    import { my_user } from '../lib/client/my_user.ts';
     import { isAuthenticated, login, logout, keycloakProfile } from '../lib/client/keycloak';
     import { public_env } from '../lib/public_env';
     import { goto } from '$app/navigation';
-    
+
     // Local state
     let showDropdown = false;
-    
+
     // Toggle dropdown
     function toggleDropdown() {
         showDropdown = !showDropdown;
     }
-    
+
     // Close dropdown
     function closeDropdown() {
         showDropdown = false;
     }
-    
+
     // Handle login
     function handleLogin() {
         closeDropdown();
         login();
     }
-    
+
     // Handle logout
     function handleLogout() {
         closeDropdown();
         logout();
     }
-    
+
     // Go to settings
     function goToSettings() {
         closeDropdown();
         goto('/settings');
     }
-    
+
     // Handle click outside
     function handleClickOutside(event: MouseEvent) {
         const target = event.target as HTMLElement;
         const dropdown = document.querySelector('.keycloak-status-dropdown');
-        
+
         if (dropdown && !dropdown.contains(target) && !target.matches('.keycloak-status-btn')) {
             showDropdown = false;
         }
     }
-    
+
     // Add/remove event listener
     function onMount() {
         document.addEventListener('click', handleClickOutside);
@@ -73,7 +73,7 @@
                 </div>
             {/if}
         </button>
-        
+
         {#if showDropdown}
             <div class="keycloak-status-dropdown">
                 <div class="dropdown-header">
@@ -90,7 +90,7 @@
                         </div>
                     {/if}
                 </div>
-                
+
                 <div class="dropdown-content">
                     {#if $isAuthenticated}
                         <button class="dropdown-item" on:click={goToSettings}>
@@ -119,7 +119,7 @@
         position: relative;
         margin-left: 1rem;
     }
-    
+
     .keycloak-status-btn {
         background: none;
         border: none;
@@ -129,7 +129,7 @@
         align-items: center;
         justify-content: center;
     }
-    
+
     .user-avatar {
         width: 32px;
         height: 32px;
@@ -141,7 +141,7 @@
         justify-content: center;
         font-weight: bold;
     }
-    
+
     .login-icon {
         width: 32px;
         height: 32px;
@@ -150,7 +150,7 @@
         justify-content: center;
         color: #6c757d;
     }
-    
+
     .keycloak-status-dropdown {
         position: absolute;
         top: 100%;
@@ -163,38 +163,38 @@
         z-index: 1000;
         overflow: hidden;
     }
-    
+
     .dropdown-header {
         padding: 0.75rem 1rem;
         background-color: #f8f9fa;
         border-bottom: 1px solid #e9ecef;
     }
-    
+
     .user-info {
         display: flex;
         flex-direction: column;
     }
-    
+
     .username {
         font-weight: bold;
         color: #343a40;
     }
-    
+
     .email {
         font-size: 0.8rem;
         color: #6c757d;
         margin-top: 0.25rem;
     }
-    
+
     .auth-prompt {
         font-weight: bold;
         color: #343a40;
     }
-    
+
     .dropdown-content {
         padding: 0.5rem 0;
     }
-    
+
     .dropdown-item {
         display: block;
         width: 100%;
@@ -206,11 +206,11 @@
         font-size: 0.9rem;
         color: #212529;
     }
-    
+
     .dropdown-item:hover {
         background-color: #f8f9fa;
     }
-    
+
     .dropdown-divider {
         height: 1px;
         background-color: #e9ecef;

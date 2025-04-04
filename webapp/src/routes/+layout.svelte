@@ -5,9 +5,8 @@
     import { Col, Container, Row } from '../components/ui';
     import Header from '../components/Header.svelte';
     import { createUrqlClient, setContextClient } from '$lib/urql.ts';
-    import { idToken, userInfo } from '$lib/authjs.ts';
     import { apply_newly_authenticated_user, auth_event, type AuthEvent, ensure_we_exist, my_user, type MyUser } from '$lib/client/my_user.ts';
-    import { saturate_computate, set_css_var } from '$lib/client/stuff.ts';
+    import { saturate_computate, set_css_var } from '$lib/client/campaign.ts';
     import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
     import type { SharedStore } from '$lib/client/svelte-shared-store.ts';
@@ -32,7 +31,7 @@
     setContextClient(urqlClient);
 
     // Auth0 token handling
-    $: maybe_ping_server_about_this($idToken, $userInfo);
+    //$: maybe_ping_server_about_this($idToken, $userInfo);
 
     async function maybe_ping_server_about_this(token: string | null, info: any): Promise<void> {
         if (!browser) return;
@@ -168,24 +167,18 @@
 
     :global(.navbar) {
         background: #ffffee !important;
-        margin-bottom: 1em;
+        margin-bottom: 0;
     }
 
     :global(.content_block) {
-        margin: 0 auto;
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
+        margin: 0;
         max-width: 60rem;
-        padding: 3vh 3vw;
+        padding: 0;
         background: #ffffee;
-        box-shadow: 0 1px 4px rgb(0 0 0 / 40%);
     }
 
     :global(h1, h2, h3, h4, h5) {
         background: #dddddd;
-        margin: 1em;
-        margin-top: 1em;
-        margin-bottom: 1em;
         padding-top: 0;
         padding-bottom: 0;
     }

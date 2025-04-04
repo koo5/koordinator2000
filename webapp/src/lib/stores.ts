@@ -75,3 +75,5 @@ export function addNotification(message: string, type: 'info' | 'success' | 'war
 export function removeNotification(id: number): void {
     notifications.update(all => all.filter(n => n.id !== id));
 }
+
+export const mobile = writable(false);

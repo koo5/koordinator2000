@@ -10,6 +10,7 @@
         "@sideway/pinpoint": "^2.0.0",
         "@tauri-apps/api": "^2.4.0",
         "@tauri-apps/plugin-os": "^2.2.1",
+        "@types/keycloak-js": "^2.5.4",
         "express": "^4.18.2",
         "firebase": "^11.5.0",
         "html-minifier": "^4.0.0",
@@ -352,6 +353,8 @@
     "@types/http-cache-semantics": ["@types/http-cache-semantics@4.0.1", "", {}, "sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ=="],
 
     "@types/jwt-decode": ["@types/jwt-decode@2.2.1", "", {}, "sha512-aWw2YTtAdT7CskFyxEX2K21/zSDStuf/ikI3yBqmwpwJF0pS+/IX5DWv+1UFffZIbruP6cnT9/LAJV1gFwAT1A=="],
+
+    "@types/keycloak-js": ["@types/keycloak-js@2.5.4", "", {}, "sha512-fJkr8ApHGTyYemFJMS2f4ROH2atCqG9d4xsvWleCBcm6rbE952HNGnqFFHuvN2FFsqOjKriiWSO9h12wohVGmQ=="],
 
     "@types/keyv": ["@types/keyv@3.1.4", "", { "dependencies": { "@types/node": "*" } }, "sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg=="],
 
