@@ -227,7 +227,13 @@ export async function user_authenticity_jwt(id: number): Promise<string> {
         }
 
         return await new SignJWT({
-            'urn:id': id,
+            // Include the standard Hasura claims namespace
+            'https://hasura.io/jwt/claims': {
+                'x-hasura-allowed-roles': ['user'], // Define allowed roles (adjust if needed)
+                'x-hasura-default-role': 'user',    // Define the default role
+                'x-hasura-user-id': String(id),     // Pass the user ID as a string
+            },
+            'urn:id': id, // Keep your internal identifier if needed
         })
             .setProtectedHeader({ alg: server_env.MY_APP_KEYS.private.alg as string })
             .setIssuedAt()
