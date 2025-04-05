@@ -279,6 +279,8 @@
 
 <!--ids: {JSON.stringify(ids)}-->
 
+CampaignListSorted ids={JSON.stringify(ids)}
+
 <div bind:this={campaign_containers} class="campaign-container">
         {#each campaigns as campaign (campaign.id)}
             {#if browser}

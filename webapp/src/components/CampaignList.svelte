@@ -53,7 +53,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </svelte:head>
 
-ids={ids}
+CampaignList ids={ids}
 
 <div class="campaign-container">
     <SubscribedItemsInner items={campaigns_query} let:da={itemsData}>
