@@ -44,13 +44,4 @@
         line-height: 1.6;
     }
 
-    a {
-        color: #ff3e00;
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    a:hover {
-        text-decoration: underline;
-    }
 </style>
