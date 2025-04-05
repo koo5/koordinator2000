@@ -44,23 +44,6 @@
         line-height: 1.6;
     }
 
-    .user-info,
-    .login-prompt {
-        margin-top: 2rem;
-        padding: 1rem;
-        border-radius: 4px;
-    }
-
-    .user-info {
-        background-color: #e8f5e9;
-        border-left: 4px solid #4caf50;
-    }
-
-    .login-prompt {
-        background-color: #fff8e1;
-        border-left: 4px solid #ffc107;
-    }
-
     a {
         color: #ff3e00;
         text-decoration: none;
