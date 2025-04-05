@@ -69,8 +69,6 @@ username: {$my_user.name}
     <h5>Log in:</h5>
     <br /><br />
 
-    <!--		<button  class="cell"  on:click|preventDefault='{() => login() }'>Log in</button> -->
-    <button class="cell" on:click={register}>New user</button>
     <br /><br />
 {/if}
 
