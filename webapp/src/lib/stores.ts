@@ -33,9 +33,6 @@ export interface Notification {
 // Debug flag
 export const debug: Writable<boolean> = writable(true);
 
-// User store
-export const user: Writable<User | null> = writable(null);
-
 // Theme settings
 export const theme = localStorageSharedStore<ThemeSettings>('theme', {
     dark: false,

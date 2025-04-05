@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { user } from '$lib/stores';
     import { browser } from '$app/environment';
     import { Col, Container, Row } from '../components/ui';
     import Header from '../components/Header.svelte';
@@ -78,14 +77,6 @@
 
     // Handle any client-side initialization
     onMount(async () => {
-        // Note: private keys are only available server-side
-        // Client-side should only handle public operations
-
-        // Set user from server data if available
-        if (data.user) {
-            user.set(data.user);
-        }
-
         // Check if we need to create a user
         try {
             let u = await ensure_we_exist();
