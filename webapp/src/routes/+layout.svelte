@@ -137,7 +137,6 @@
 
     main {
         position: relative;
-        background-color: #ffeeee;
         margin: 0 auto;
         box-sizing: border-box;
         flex: 1;
@@ -165,7 +164,7 @@
 
     :global(.navbar) {
         background: #ffffee !important;
-        margin-bottom: 0;
+        margin: 0 0;
     }
 
     :global(.content_block) {
@@ -176,9 +175,7 @@
     }
 
     :global(h1, h2, h3, h4, h5) {
-        background: #dddddd;
-        padding-top: 0;
-        padding-bottom: 0;
+        background: #eee;
     }
 
     @keyframes flickerAnimation {

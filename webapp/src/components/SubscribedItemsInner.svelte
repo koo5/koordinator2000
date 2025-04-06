@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Readable } from 'svelte/store';
+    import { debug } from '$lib/stores.ts';
 
     // Match the subscription store result structure
     interface SubscriptionResult<T = any> {
@@ -25,7 +26,9 @@
     </div>
 {/if}
 
+{#if $debug}
 <details>
     <summary>Debug Info</summary>
     <pre>{JSON.stringify($items, null, 2)}</pre>
 </details>
+{/if}

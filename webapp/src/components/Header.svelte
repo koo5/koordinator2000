@@ -72,9 +72,6 @@
 </script>
 
 <Navbar expand="md" light>
-    <NavbarBrand href="/">
-        <img alt="logo" src="/favicon.ico" style="width:1em; height:1em;"/>
-    </NavbarBrand>
     <PageReloadClock/>
     <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
     <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
@@ -101,7 +98,7 @@
                 <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
             </NavItem>
         </div>
-        
+
         <!-- Right-aligned user section -->
         <div class="navbar-nav ms-auto">
             {#if $my_user}
@@ -146,11 +143,11 @@
     .me-auto {
         margin-right: auto !important;
     }
-    
+
     .ms-auto {
         margin-left: auto !important;
     }
-    
+
     .navbar-nav {
         display: flex;
         flex-direction: row;

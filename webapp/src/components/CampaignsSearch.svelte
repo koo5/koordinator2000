@@ -9,7 +9,7 @@
     import { slide } from 'svelte/transition';
     import { localStorageSharedStore } from '$lib/client/svelte-shared-store.ts';
     import { Button, FormGroup, Input, Label } from './ui';
-    
+
     // Filter panel state - collapsed by default
     let isFilterPanelOpen = false;
 
@@ -376,14 +376,14 @@
                 </span>
             </div>
         </button>
-        
+
         <!-- Simple search always visible -->
         <div class="d-flex search-quick-access">
             <Input type="text" id="quick-search-term" placeholder="Search titles and descriptions" bind:value={searchTerm} />
             <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
         </div>
     </div>
-    
+
     {#if isFilterPanelOpen}
     <div class="search-container" transition:slide={{ duration: 300 }}>
         <FormGroup>
@@ -519,9 +519,11 @@
     {/if}
 </div>
 
+{#if !($items?.fetching) && $items?.data?.campaigns.length > 0}
 <div class="text-center mt-3 mb-5">
     <button class="btn btn-primary" bind:this={more_button} color="primary" aria-label="more..." on:click={more}> Load More </button>
 </div>
+{/if}
 
 <style>
     .search-header {
@@ -529,28 +531,26 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
-        padding: 0.75rem;
-        background-color: #f8f9fa;
         border-radius: 0.5rem;
     }
-    
+
     .collapse-toggle {
         padding: 0.5rem 0.75rem;
         text-decoration: none;
         color: #495057;
         font-weight: 600;
     }
-    
+
     .toggle-icon {
         transition: transform 0.3s ease;
     }
-    
+
     .search-quick-access {
         flex-grow: 1;
         margin-left: 1rem;
         max-width: 500px;
     }
-    
+
     .search-container {
         background-color: #f8f9fa;
         padding: 1.5rem;
@@ -586,7 +586,6 @@
         font-family: inherit;
         text-align: center;
         text-decoration: none;
-        line-height: 1.5;
     }
 
     .tag-badge:hover {

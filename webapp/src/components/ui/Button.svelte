@@ -29,9 +29,9 @@
         border: 1px solid transparent;
         padding: 0.375rem 0.75rem;
         font-size: 1rem;
-        line-height: 1.5;
-        border-radius: 0.25rem;
+        border-radius: 0.35rem;
         cursor: pointer;
+
         transition:
             color 0.15s ease-in-out,
             background-color 0.15s ease-in-out,
