@@ -1,29 +1,31 @@
-var config_file = require('../sapper4/sapper/src/config.js');
-//console.log(config_file);
-var config = config_file.config;
-
 var fetch = require('cross-fetch');
 var gql = require('graphql-tag');
 var apollo = require('@apollo/client');
 var timeout_link = require('apollo-link-timeout');
 
-const httpLink = new apollo.HttpLink({
-    uri: 'https://' + config.GRAPHQL_ENDPOINT,
-    headers: {
-      //"Authorization": `Bearer ${process.env.FAUNADB_SECRET}`,
-      ...config.PUBLIC_GRAPHQL_HEADERS
-    },
-    fetch
-  });
+export function client() {
 
-const timeoutHttpLink = new timeout_link.default(10000).concat(httpLink);
+    console.log('process.env:', process.env);
+    const uri = `https://${process.env.VITE_PUBLIC_GRAPHQL_ENDPOINT}`
+    console.log('Connecting to GraphQL endpoint:', uri);
+    const httpLink = new apollo.HttpLink({
+        uri,
+        headers: {
+            'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET,
+        },
+        fetch
+    });
 
-module.exports = new apollo.ApolloClient({
-  cache: new apollo.InMemoryCache(),
-  link: timeoutHttpLink,
-  defaultOptions: {
-    query: {
-      fetchPolicy: 'no-cache',
-    },
-  }
-})
+    const timeoutHttpLink = new timeout_link.default(10000).concat(httpLink);
+
+    return new apollo.ApolloClient({
+        cache: new apollo.InMemoryCache(),
+        link: timeoutHttpLink,
+        defaultOptions: {
+            query: {
+                fetchPolicy: 'no-cache',
+            },
+        }
+    });
+
+}

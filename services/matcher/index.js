@@ -1,17 +1,18 @@
 require('dotenv').config();
+const matcher = require('./participation_matcher.js')
+
 const { applyMigrations } = require('./db');
 
 async function main() {
   try {
     console.log('Starting application...');
-    
+
     // Apply service-specific database migrations
     console.log('Applying service-specific migrations...');
     await applyMigrations();
-    
-    // Start your application logic here
-    console.log('Application started successfully');
-    
+
+    await matcher.run();
+
     // Keep the process running
     process.on('SIGINT', () => {
       console.log('Application shutting down...');
@@ -23,4 +24,4 @@ async function main() {
   }
 }
 
-main();
+await main();

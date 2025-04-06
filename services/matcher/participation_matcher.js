@@ -1,5 +1,5 @@
 var gql = require('graphql-tag');
-var db_client = require('./db_client.js')
+var db_client = require('./db_client.js');
 var moment = require('moment');
 
 
@@ -7,7 +7,7 @@ var moment = require('moment');
 
 var counter = 0;
 let verbose = false;
-
+const client = db_client.client();
 
 
 
@@ -22,7 +22,7 @@ async function flip_bit(participation, val)
         else
             content = `Heads up! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
 
-        console.log(await db_client.mutate({
+        console.log(await client.mutate({
             mutation: gql`
                 mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
                   insert_campaign_notifications(objects: {campaign_id: $campaign_id, content: $content, account_id: $user_id}) {
@@ -37,7 +37,7 @@ async function flip_bit(participation, val)
             }
         }));
 
-        console.log(await db_client.mutate({
+        console.log(await client.mutate({
             mutation: gql`
                 mutation MyMutation($_id: Int, $condition_is_fulfilled: Boolean) {
                   update_participations(where: {id: {_eq: $_id}}, _set: {condition_is_fulfilled: $condition_is_fulfilled}){
@@ -106,7 +106,7 @@ async function update_participations(data)
 
 async function my_fetch()
 {
-    const { data } = await db_client.query({
+    const { data } = await client.query({
         query: gql`
             query GET_PARTICIPATIONS {
               campaigns(order_by: [{id: asc}]) {
@@ -131,12 +131,14 @@ async function my_fetch()
 };
 
 
-async function run() {
+export async function run() {
+    console.log('running..');
     let sleep = 1;
     try
     {
         let data = await my_fetch();
         await update_participations(data);
+        console.log('done.');
     }
     catch (e)
     {
@@ -144,13 +146,13 @@ async function run() {
         sleep = 20;
     }
     /* just to avoid mem/handle leaks .. should be fixed now */
-    if (--counter == 0)
-        process.exit(0)
+    // if (--counter == 0)
+    //     process.exit(0)
     /* and repeat */
     setTimeout(async () => {await run();}, sleep * 1000);
 };
 
-(async () => {await run()})();
+//(async () => {await run()})();
 
 
 
