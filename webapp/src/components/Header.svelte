@@ -78,60 +78,85 @@
     <PageReloadClock/>
     <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
     <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
-        <NavItem>
-            <NavLink active={segment === 'campaigns'} click={undefined} href="/campaigns">Campaigns</NavLink>
-        </NavItem>
-
-        <NavItem>
-            <NavLink active={segment === 'add_campaign'} click={undefined} href="/add_campaign">Add campaign</NavLink>
-        </NavItem>
-
-        <NavItem>
-            <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
-            </NavLink>
-        </NavItem>
-        {#if $debug}
-        <NavItem>
-            <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
-        </NavItem>
-        {/if}
-        <NavItem>
-            <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
-        </NavItem>
-
-        {#if $my_user}
-            <NavItem align="right">
-                <Dropdown bind:isOpen={userDropdownOpen}>
-                    <div slot="toggle" let:toggle>
-                        <DropdownToggle toggle={toggle} color="link">
-                            {$my_user.name || 'You'}
-                            {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
-                        </DropdownToggle>
-                    </div>
-                    <div slot="menu">
-                        <DropdownMenu right>
-                            {#if $is_user}
-                                <DropdownItem on:click={handleLogin}>Switch account</DropdownItem>
-                                <DropdownItem href="/you">Profile</DropdownItem>
-                                <DropdownItem href="/account">Account</DropdownItem>
-                                <DropdownItem on:click={toggle_settings}>Settings</DropdownItem>
-                                <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
-                            {:else}
-                                <DropdownItem on:click={handleLogin}>Login</DropdownItem>
-                                <DropdownItem on:click={() => create_user(false)} >New user</DropdownItem>
-                            {/if}
-                        </DropdownMenu>
-                    </div>
-                </Dropdown>
+        <!-- Left-aligned navigation items -->
+        <div class="navbar-nav me-auto">
+            <NavItem>
+                <NavLink active={segment === 'campaigns'} click={undefined} href="/campaigns">Campaigns</NavLink>
             </NavItem>
-        {:else}
-            <NavItem align="right">
-                <NavLink href="#" on:click={handleLogin} active={segment === 'login'} click={undefined}>Login</NavLink>
+
+            <NavItem>
+                <NavLink active={segment === 'add_campaign'} click={undefined} href="/add_campaign">Add campaign</NavLink>
             </NavItem>
-        {/if}
+
+            <NavItem>
+                <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
+                </NavLink>
+            </NavItem>
+            {#if $debug}
+            <NavItem>
+                <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
+            </NavItem>
+            {/if}
+            <NavItem>
+                <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
+            </NavItem>
+        </div>
+        
+        <!-- Right-aligned user section -->
+        <div class="navbar-nav ms-auto">
+            {#if $my_user}
+                <NavItem>
+                    <Dropdown bind:isOpen={userDropdownOpen}>
+                        <div slot="toggle" let:toggle>
+                            <DropdownToggle toggle={toggle} color="link">
+                                {$my_user.name || 'You'}
+                                {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
+                            </DropdownToggle>
+                        </div>
+                        <div slot="menu">
+                            <DropdownMenu right>
+                                {#if $is_user}
+                                    <DropdownItem on:click={handleLogin}>Switch account</DropdownItem>
+                                    <DropdownItem href="/you">Profile</DropdownItem>
+                                    <DropdownItem href="/account">Account</DropdownItem>
+                                    <DropdownItem on:click={toggle_settings}>Settings</DropdownItem>
+                                    <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
+                                {:else}
+                                    <DropdownItem on:click={handleLogin}>Login</DropdownItem>
+                                    <DropdownItem on:click={() => create_user(false)}>New user</DropdownItem>
+                                {/if}
+                            </DropdownMenu>
+                        </div>
+                    </Dropdown>
+                </NavItem>
+            {:else}
+                <NavItem>
+                    <NavLink href="#" on:click={handleLogin} active={segment === 'login'} click={undefined}>Login</NavLink>
+                </NavItem>
+            {/if}
+        </div>
     </Collapse>
 </Navbar>
 
 <!-- Settings Modal -->
 <SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal}/>
 <TheNagModal/>
+
+<style>
+    .me-auto {
+        margin-right: auto !important;
+    }
+    
+    .ms-auto {
+        margin-left: auto !important;
+    }
+    
+    .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        padding-left: 0;
+        margin-bottom: 0;
+        list-style: none;
+        align-items: center;
+    }
+</style>
