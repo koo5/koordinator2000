@@ -5,6 +5,9 @@ import { public_env } from '$lib/public_env';
 import { process_auth_event } from '$lib/server/auth';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
+
+    console.log('Keycloak callback URL:', url.href, 'Code:', url.searchParams.get('code'));
+
     // Check if Keycloak is enabled
     if (!public_env.ENABLE_KEYCLOAK) {
         throw redirect(302, '/');
@@ -35,6 +38,8 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
             throw new Error('Failed to get user info');
         }
 
+        console.log('keycloak callback User info:', userInfo);
+
         // Process auth event to link Keycloak identity with internal user
         await process_auth_event({
             auth: {
@@ -53,7 +58,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         // Redirect to original destination or homepage
         const returnTo = cookies.get('keycloak_return_to') || '/';
         cookies.delete('keycloak_return_to', { path: '/' });
-        
+
         throw redirect(302, returnTo);
     } catch (error) {
         console.error('Keycloak callback error:', error);

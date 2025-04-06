@@ -64,6 +64,10 @@
             location.reload();
         }
     }
+
+    function handleLogin() {
+        goto('/auth/keycloak/login');
+    }
 </script>
 
 <Navbar expand="md" light>
@@ -106,13 +110,13 @@
                     <div slot="menu">
                         <DropdownMenu right>
                             {#if $is_user}
-                                <DropdownItem href="/login">Switch account</DropdownItem>
+                                <DropdownItem on:click={handleLogin}>Switch account</DropdownItem>
                                 <DropdownItem href="/you">Profile</DropdownItem>
                                 <DropdownItem href="/account">Account</DropdownItem>
                                 <DropdownItem on:click={toggle_settings}>Settings</DropdownItem>
                                 <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
                             {:else}
-                                <DropdownItem href="/login">Login</DropdownItem>
+                                <DropdownItem on:click={handleLogin}>Login</DropdownItem>
                                 <DropdownItem on:click={() => create_user(false)} >New user</DropdownItem>
                             {/if}
                         </DropdownMenu>
@@ -121,7 +125,7 @@
             </NavItem>
         {:else}
             <NavItem align="right">
-                <NavLink href="/login" active={segment === 'login'} click={undefined}>Login</NavLink>
+                <NavLink href="#" on:click={handleLogin} active={segment === 'login'} click={undefined}>Login</NavLink>
             </NavItem>
         {/if}
     </Collapse>

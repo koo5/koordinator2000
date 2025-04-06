@@ -11,10 +11,10 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
     // Get redirect_uri from query parameters or use default
     const redirectUri = url.searchParams.get('redirect_uri') || `${public_env.PUBLIC_URL}/auth/keycloak/callback`;
-    
+
     // Create Keycloak login URL
     const loginUrl = createLoginUrl(redirectUri);
-    
+
     // Store the original redirect destination to use after authentication
     const returnTo = url.searchParams.get('return_to') || '/';
     cookies.set('keycloak_return_to', returnTo, {
@@ -24,7 +24,11 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         maxAge: 600, // 10 minutes
         sameSite: 'lax',
     });
-    
+
     // Redirect to Keycloak login
+    console.log('Redirecting to Keycloak login:', loginUrl);
+    console.log('Return to:', returnTo);
+    console.log('Cookies:', cookies.get('keycloak_return_to'));
+    console.log('Redirect URI:', redirectUri);
     throw redirect(302, loginUrl);
 };
