@@ -6,8 +6,12 @@
     import { browser } from '$app/environment';
     import { debug } from '$lib/stores';
     import { onMount, tick } from 'svelte';
+    import { slide } from 'svelte/transition';
     import { localStorageSharedStore } from '$lib/client/svelte-shared-store.ts';
     import { Button, FormGroup, Input, Label } from './ui';
+    
+    // Filter panel state - collapsed by default
+    let isFilterPanelOpen = false;
 
     const client = getContextClient();
 
@@ -355,9 +359,35 @@
 </script>
 
 <div class="content_block">
-    <div class="search-container">
+    <div class="search-header">
+        <button class="btn btn-link collapse-toggle" type="button" on:click={() => isFilterPanelOpen = !isFilterPanelOpen}>
+            <div class="d-flex align-items-center">
+                <span>Search & Filter</span>
+                <span class="toggle-icon ms-2">
+                    {#if isFilterPanelOpen}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                        </svg>
+                    {:else}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    {/if}
+                </span>
+            </div>
+        </button>
+        
+        <!-- Simple search always visible -->
+        <div class="d-flex search-quick-access">
+            <Input type="text" id="quick-search-term" placeholder="Search titles and descriptions" bind:value={searchTerm} />
+            <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
+        </div>
+    </div>
+    
+    {#if isFilterPanelOpen}
+    <div class="search-container" transition:slide={{ duration: 300 }}>
         <FormGroup>
-            <Label htmlFor="search-term">Search</Label>
+            <Label htmlFor="search-term">Advanced Search</Label>
             <div class="d-flex">
                 <Input type="text" id="search-term" placeholder="Search titles and descriptions" bind:value={searchTerm} />
                 <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
@@ -448,6 +478,7 @@
 
         <Button color="primary" on:click={applySearch} class="mt-3">Apply Filters</Button>
     </div>
+    {/if}
 
     {#if $debug}
         <div class="debug-info mt-3">
@@ -493,6 +524,33 @@
 </div>
 
 <style>
+    .search-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+    }
+    
+    .collapse-toggle {
+        padding: 0.5rem 0.75rem;
+        text-decoration: none;
+        color: #495057;
+        font-weight: 600;
+    }
+    
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .search-quick-access {
+        flex-grow: 1;
+        margin-left: 1rem;
+        max-width: 500px;
+    }
+    
     .search-container {
         background-color: #f8f9fa;
         padding: 1.5rem;
