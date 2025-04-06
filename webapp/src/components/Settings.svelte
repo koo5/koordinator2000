@@ -1,15 +1,11 @@
 <script lang="ts">
     import { my_user } from '$lib/client/my_user.ts';
-    import KeycloakIdentityManager from './KeycloakIdentityManager.svelte';
     import { public_env } from '$lib/public_env';
 
     const default_participations_display_styles_list = ['koo1', 'koo1_introductory', 'facebook', 'tabular_breakdown'];
 </script>
 
 <div>
-    <h5>Authentication & Identity</h5>
-    <KeycloakIdentityManager />
-    
     <h5>General</h5>
     <label><input type="checkbox" bind:checked={$my_user.autoscroll} />Autoscroll</label>
     <br />

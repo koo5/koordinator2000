@@ -1,10 +1,10 @@
-<script>
-    export let href = '#';
-    export let active = false;
-    export let click;
+<script lang="ts">
+    export let href: string = '#';
+    export let active: boolean = false;
+    export let click: (() => void) | undefined = undefined;
 
     // Forward the click event when href is not set explicitly
-    function handleClick(event) {
+    function handleClick(event: MouseEvent): void {
         console.log('NavLink clicked');
         if (click) {
             click();
