@@ -31,7 +31,7 @@ export interface Notification {
 }
 
 // Debug flag
-export const debug: Writable<boolean> = writable(true);
+export const debug = localStorageSharedStore<boolean>('debug', false);
 
 // Theme settings
 export const theme = localStorageSharedStore<ThemeSettings>('theme', {

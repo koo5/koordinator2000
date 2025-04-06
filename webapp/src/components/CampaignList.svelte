@@ -6,6 +6,7 @@
     import { browser } from '$app/environment';
     import type { OperationResultState } from '@urql/core';
     import CampaignsListSorted from './CampaignsListSorted.svelte';
+    import { debug } from '$lib/stores.ts';
 
 
     export let ids: number[];
@@ -53,7 +54,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </svelte:head>
 
-CampaignList ids={ids}
+{#if $debug}CampaignList ids={ids}{/if}
 
 <div class="campaign-container">
     <SubscribedItemsInner items={campaigns_query} let:da={itemsData}>

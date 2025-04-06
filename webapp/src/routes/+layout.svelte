@@ -16,6 +16,7 @@
     import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
     import type { SharedStore } from '$lib/client/svelte-shared-store.ts';
+    import { debug } from '$lib/stores.ts';
 
     // Define types for layout data
     interface LayoutData {
@@ -90,8 +91,16 @@
 
         console.log('SvelteKit app mounted');
     });
-</script>
 
+
+    async function onkeydown(event) {
+        //console.log('window onkeydown: ', event);
+        if (event.ctrlKey && (event.key === '`' || event.key === '~' || event.key === ';')) debug.update(d => !d);
+        console.log('debug: ', get(debug));
+    }
+
+</script>
+<svelte:window on:keydown={onkeydown} />
 <svelte:head>
     <!-- Bootstrap theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/materia/bootstrap.min.css" integrity="sha384-B4morbeopVCSpzeC1c4nyV0d0cqvlSAfyXVfrPJa25im5p+yEN/YmhlgQP/OyMZD" crossorigin="anonymous" />

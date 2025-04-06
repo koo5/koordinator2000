@@ -3,7 +3,7 @@
     import { type Campaign as CampaignType, my_user } from '$lib/client/my_user.ts';
     import * as animateScroll from 'svelte-scrollto';
     import { browser } from '$app/environment';
-    import { mobile } from '$lib/stores.ts';
+    import { mobile, debug } from '$lib/stores.ts';
     import { onDestroy, onMount } from 'svelte';
     import { register } from 'swiper/element/bundle';
 
@@ -278,8 +278,7 @@
 </svelte:head>
 
 <!--ids: {JSON.stringify(ids)}-->
-
-CampaignListSorted ids={JSON.stringify(ids)}
+{#if $debug}CampaignListSorted ids={JSON.stringify(ids)}{/if}
 
 <div bind:this={campaign_containers} class="campaign-container">
         {#each campaigns as campaign (campaign.id)}

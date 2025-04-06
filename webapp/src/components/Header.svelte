@@ -4,6 +4,7 @@
     import {create_user, is_user, my_user} from '$lib/client/my_user.ts';
     import {mobile} from '$lib/platform';
     import SettingsModal from 'src/components/SettingsModal.svelte';
+    import { debug } from '$lib/stores.ts';
     import {
         Collapse,
         Dropdown,
@@ -89,11 +90,11 @@
             <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
             </NavLink>
         </NavItem>
-
+        {#if $debug}
         <NavItem>
             <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
         </NavItem>
-
+        {/if}
         <NavItem>
             <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
         </NavItem>
