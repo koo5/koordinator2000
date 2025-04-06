@@ -58,7 +58,7 @@
     "unique-names-generator": "^4.3.1",
     "url": "^0.11.0",
     "url-polyfill": "^1.1.13",
-    "vite": "^5.2.6",
+    "vite": "^5.4.17",
     "ws": "^7.5.10"
   },
   "dependencies": {
