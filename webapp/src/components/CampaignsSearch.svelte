@@ -376,22 +376,21 @@
                 </span>
             </div>
         </button>
-
-        <!-- Simple search always visible -->
-        <div class="d-flex search-quick-access">
-            <Input type="text" id="quick-search-term" placeholder="Search titles and descriptions" bind:value={searchTerm} />
-            <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
-        </div>
     </div>
 
     {#if isFilterPanelOpen}
     <div class="search-container" transition:slide={{ duration: 300 }}>
+        <!-- Search -->
         <FormGroup>
-            <Label htmlFor="search-term">Advanced Search</Label>
+            <Label htmlFor="search-term">Search</Label>
             <div class="d-flex">
                 <Input type="text" id="search-term" placeholder="Search titles and descriptions" bind:value={searchTerm} />
                 <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
             </div>
+        </FormGroup>
+        
+        <FormGroup>
+            <Label>Filters</Label>
         </FormGroup>
 
         <!-- Tags selector -->
@@ -476,7 +475,11 @@
             </div>
         </FormGroup>
 
-        <Button color="primary" on:click={applySearch} class="mt-3">Apply Filters</Button>
+        <div class="d-flex justify-content-end mt-4">
+            <Button color="primary" size="lg" on:click={applySearch}>
+                Apply Filters
+            </Button>
+        </div>
     </div>
     {/if}
 
@@ -528,10 +531,12 @@
 <style>
     .search-header {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         margin-bottom: 1rem;
         border-radius: 0.5rem;
+        background-color: #f8f9fa;
+        padding: 0.75rem;
     }
 
     .collapse-toggle {
@@ -539,16 +544,13 @@
         text-decoration: none;
         color: #495057;
         font-weight: 600;
+        display: flex;
+        align-items: center;
     }
 
     .toggle-icon {
         transition: transform 0.3s ease;
-    }
-
-    .search-quick-access {
-        flex-grow: 1;
-        margin-left: 1rem;
-        max-width: 500px;
+        margin-left: 0.5rem;
     }
 
     .search-container {

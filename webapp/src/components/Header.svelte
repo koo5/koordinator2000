@@ -2,10 +2,9 @@
     import PageReloadClock from './PageReloadClock.svelte';
     import {page} from '$app/state';
     import {create_user, is_user, my_user} from '$lib/client/my_user.ts';
-    import {mobile} from '$lib/platform';
     import SettingsModal from 'src/components/SettingsModal.svelte';
-    import { debug } from '$lib/stores.ts';
-    import { onMount } from 'svelte';
+    import {debug} from '$lib/stores.ts';
+    import {onMount} from 'svelte';
     import {
         Collapse,
         Dropdown,
@@ -13,7 +12,6 @@
         DropdownMenu,
         DropdownToggle,
         Navbar,
-        NavbarBrand,
         NavbarToggler,
         NavItem,
         NavLink
@@ -27,13 +25,13 @@
 
     // Start with navbar closed by default
     let navbar_open = false;
-    
+
     // Update navbar state based on screen size after component mounts
     onMount(() => {
         // Check if we're on desktop
         const isDesktop = window.innerWidth >= 768;
         navbar_open = isDesktop;
-        
+
         // Add window resize listener to adjust navbar state with throttling
         let resizeTimeout: ReturnType<typeof setTimeout>;
         const handleResize = () => {
@@ -44,7 +42,7 @@
                 navbar_open = isDesktopNow;
             }, 100); // 100ms throttle
         };
-        
+
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -92,6 +90,7 @@
     }
 
     function handleLogin() {
+        console.log('handleLogin');
         goto('/auth/keycloak/login');
     }
 </script>
@@ -109,17 +108,19 @@
             </NavItem>
 
             <NavItem>
-                <NavLink active={segment === 'add_campaign'} click={undefined} href="/add_campaign">Add campaign</NavLink>
-            </NavItem>
-
-            <NavItem>
-                <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
+                <NavLink active={segment === 'add_campaign'} click={undefined} href="/add_campaign">Add campaign
                 </NavLink>
             </NavItem>
+            {#if $is_user}
+                <NavItem>
+                    <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
+                    </NavLink>
+                </NavItem>
+            {/if}
             {#if $debug}
-            <NavItem>
-                <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
-            </NavItem>
+                <NavItem>
+                    <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
+                </NavItem>
             {/if}
             <NavItem>
                 <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
@@ -128,7 +129,7 @@
 
         <!-- Right-aligned user section -->
         <div class="navbar-nav ms-auto">
-            {#if $my_user}
+            {#if $is_user}
                 <NavItem>
                     <Dropdown bind:isOpen={userDropdownOpen}>
                         <div slot="toggle" let:toggle>
@@ -140,14 +141,14 @@
                         <div slot="menu">
                             <DropdownMenu right>
                                 {#if $is_user}
-                                    <DropdownItem on:click={handleLogin}>Switch account</DropdownItem>
+                                    <DropdownItem onClick={handleLogin}>Switch account</DropdownItem>
                                     <DropdownItem href="/you">Profile</DropdownItem>
                                     <DropdownItem href="/account">Account</DropdownItem>
-                                    <DropdownItem on:click={toggle_settings}>Settings</DropdownItem>
-                                    <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
+                                    <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
+                                    <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
                                 {:else}
-                                    <DropdownItem on:click={handleLogin}>Login</DropdownItem>
-                                    <DropdownItem on:click={() => create_user(false)}>New user</DropdownItem>
+                                    <DropdownItem onClick={handleLogin}>Login</DropdownItem>
+                                    <DropdownItem onClick={() => create_user(false)}>New user</DropdownItem>
                                 {/if}
                             </DropdownMenu>
                         </div>
@@ -155,7 +156,8 @@
                 </NavItem>
             {:else}
                 <NavItem>
-                    <NavLink href="#" on:click={handleLogin} active={segment === 'login'} click={undefined}>Login</NavLink>
+                    <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
+                    </NavLink>
                 </NavItem>
             {/if}
         </div>
@@ -183,18 +185,18 @@
         list-style: none;
         align-items: center;
     }
-    
+
     /* Hide navbar toggler except on mobile */
     .navbar-toggler-container {
         display: none;
     }
-    
+
     /* Only show navbar toggler on mobile screens */
     @media (max-width: 767.98px) {
         .navbar-toggler-container {
             display: block;
         }
     }
-    
+
     /* The navbar state is controlled by JavaScript rather than CSS overrides */
 </style>

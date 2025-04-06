@@ -1,12 +1,13 @@
 <script lang="ts">
     export let href: string | undefined = undefined;
     export let disabled: boolean = false;
+    export let onClick: (() => void) | undefined = undefined;
 </script>
 
 {#if href !== undefined}
-    <a 
-        class="dropdown-item {disabled ? 'disabled' : ''}" 
-        {href} 
+    <a
+        class="dropdown-item {disabled ? 'disabled' : ''}"
+        {href}
         tabindex={disabled ? -1 : 0}
         aria-disabled={disabled}
         on:click
@@ -14,11 +15,11 @@
         <slot />
     </a>
 {:else}
-    <button 
-        class="dropdown-item {disabled ? 'disabled' : ''}" 
-        type="button" 
+    <button
+        class="dropdown-item {disabled ? 'disabled' : ''}"
+        type="button"
         disabled={disabled}
-        on:click
+        on:click={onClick}
     >
         <slot />
     </button>
@@ -44,7 +45,7 @@
         cursor: pointer;
     }
 
-    .dropdown-item:hover:not(.disabled), 
+    .dropdown-item:hover:not(.disabled),
     .dropdown-item:focus:not(.disabled) {
         color: #16181b;
         text-decoration: none;
