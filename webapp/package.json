@@ -6,10 +6,10 @@
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 5004",
+    "dev": "vite dev --port 5005",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "bun --bun run start --port 5004",
+    "start": "node build ",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
