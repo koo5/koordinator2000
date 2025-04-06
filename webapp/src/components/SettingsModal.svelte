@@ -71,12 +71,13 @@
     .modal-content {
         background-color: white;
         border-radius: 8px;
-        width: 90%;
-        max-width: 500px;
+        width: 95%;
+        max-width: 550px;
         max-height: 90vh;
         overflow-y: auto;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         animation: slide-up 0.3s ease-out;
+        position: relative;
     }
 
     .modal-header {
@@ -106,6 +107,7 @@
 
     .modal-body {
         padding: 1rem;
+        overflow-x: hidden;
     }
 
     @keyframes fade-in {
