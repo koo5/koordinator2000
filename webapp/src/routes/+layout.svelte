@@ -83,11 +83,17 @@
         settingsModalOpen = !settingsModalOpen;
     }
 
+    // Import JWT renewal service
+    import { startJwtRenewalService } from '$lib/client/jwt-renewal';
+
     // Handle any client-side initialization
     onMount(async () => {
         await create_user(true);
         // Verify SvelteKit versions
         initVersionCheck();
+        
+        // Start JWT renewal service
+        startJwtRenewalService();
 
         console.log('SvelteKit app mounted');
     });

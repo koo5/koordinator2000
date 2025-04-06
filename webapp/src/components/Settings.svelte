@@ -5,17 +5,17 @@
     import { onMount } from 'svelte';
 
     const default_participations_display_styles_list = ['koo1', 'koo1_introductory', 'facebook', 'tabular_breakdown'];
-    
+
     // Tab management
     const tabs = ['General', 'Display', 'Appearance', 'Developer'];
     let activeTab = 'General';
     let contentHeight = 300; // Default height
     let tabSections = {};
-    
+
     function setActiveTab(tab: string) {
         activeTab = tab;
     }
-    
+
     // Function to measure the tallest tab content
     function measureTabHeights() {
         // Wait for next tick to ensure DOM is updated
@@ -35,7 +35,7 @@
             contentHeight = maxHeight + 20; // Add some padding
         }, 10);
     }
-    
+
     onMount(() => {
         measureTabHeights();
     });
@@ -46,19 +46,19 @@
     <div class="tab-navigation">
         {#each tabs as tab}
             {#if tab !== 'Developer' || $debug}
-                <button 
-                    class="tab-button {activeTab === tab ? 'active' : ''}" 
+                <button
+                    class="tab-button {activeTab === tab ? 'active' : ''}"
                     on:click={() => setActiveTab(tab)}>
                     {tab}
                 </button>
             {/if}
         {/each}
     </div>
-    
+
     <!-- Tab content with fixed height -->
     <div class="tab-content" style="height: {contentHeight}px">
         <!-- General Tab -->
-        <div id="tab-General" class="settings-section {activeTab === 'General' ? '' : 'hidden'}" 
+        <div id="tab-General" class="settings-section {activeTab === 'General' ? '' : 'hidden'}"
              in:fly={{ x: 20, duration: 250, delay: 50 }} out:fly={{ x: -20, duration: 200 }}>
             <div class="form-group">
                 <label class="form-check">
@@ -79,9 +79,9 @@
                 </label>
             </div>
         </div>
-        
+
         <!-- Display Tab -->
-        <div id="tab-Display" class="settings-section {activeTab === 'Display' ? '' : 'hidden'}" 
+        <div id="tab-Display" class="settings-section {activeTab === 'Display' ? '' : 'hidden'}"
              in:fly={{ x: 20, duration: 250, delay: 50 }} out:fly={{ x: -20, duration: 200 }}>
             <h5>Default display style for participations</h5>
             {#each default_participations_display_styles_list as style}
@@ -93,9 +93,9 @@
                 </div>
             {/each}
         </div>
-        
+
         <!-- Appearance Tab -->
-        <div id="tab-Appearance" class="settings-section {activeTab === 'Appearance' ? '' : 'hidden'}" 
+        <div id="tab-Appearance" class="settings-section {activeTab === 'Appearance' ? '' : 'hidden'}"
              in:fly={{ x: 20, duration: 250, delay: 50 }} out:fly={{ x: -20, duration: 200 }}>
             <h5>Color Theme</h5>
             <div class="form-group">
@@ -134,10 +134,10 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Developer Tab -->
         {#if $debug}
-            <div id="tab-Developer" class="settings-section {activeTab === 'Developer' ? '' : 'hidden'}" 
+            <div id="tab-Developer" class="settings-section {activeTab === 'Developer' ? '' : 'hidden'}"
                  in:fly={{ x: 20, duration: 250, delay: 50 }} out:fly={{ x: -20, duration: 200 }}>
                 <h5>Developer Settings</h5>
                 <div class="form-group">
@@ -174,14 +174,14 @@
         display: flex;
         flex-direction: column;
     }
-    
+
     .tab-navigation {
         display: flex;
         overflow-x: auto;
         margin-bottom: 1rem;
         border-bottom: 1px solid #dee2e6;
     }
-    
+
     .tab-button {
         padding: 0.5rem 1rem;
         border: none;
@@ -192,16 +192,16 @@
         transition: all 0.2s;
         position: relative;
     }
-    
+
     .tab-button:hover {
         color: #495057;
     }
-    
+
     .tab-button.active {
         color: #007bff;
         font-weight: 600;
     }
-    
+
     .tab-button.active::after {
         content: '';
         position: absolute;
@@ -211,13 +211,13 @@
         height: 2px;
         background-color: #007bff;
     }
-    
+
     .tab-content {
         position: relative;
         transition: height 0.3s ease;
         overflow: hidden;
     }
-    
+
     .settings-section {
         padding: 0.5rem 0;
         width: 100%;
@@ -228,67 +228,62 @@
         transition: opacity 0.3s;
         overflow-y: auto;
     }
-    
+
     .settings-section.hidden {
         opacity: 0;
         pointer-events: none;
     }
-    
+
     .form-group {
         margin-bottom: 1rem;
     }
-    
+
     .form-check {
         display: flex;
         align-items: center;
         margin-bottom: 0.5rem;
         cursor: pointer;
     }
-    
+
     .form-check-input {
         margin-right: 0.5rem;
     }
-    
-    .form-label {
-        display: block;
-        margin-bottom: 0.5rem;
-    }
-    
+
     .form-range {
         width: 100%;
         padding: 0;
         margin: 0.5rem 0;
     }
-    
+
     .value-display {
         display: inline-block;
         margin-left: 0.5rem;
         min-width: 2.5rem;
         text-align: right;
     }
-    
+
     .color-adjustments {
         background: #f8f9fa;
         border-radius: 6px;
         padding: 0.75rem;
         margin-top: 0.5rem;
     }
-    
+
     .form-group.compact {
         margin-bottom: 0.5rem;
     }
-    
+
     .slider-row {
         display: flex;
         align-items: center;
     }
-    
+
     .slider-label {
         width: 3rem;
         font-size: 0.875rem;
         color: #495057;
     }
-    
+
     h5 {
         margin-top: 0.5rem;
         margin-bottom: 1rem;

@@ -132,13 +132,13 @@ async function my_fetch()
 
 
 export async function run() {
-    console.log('running..');
+    //console.log('running..');
     let sleep = 1;
     try
     {
         let data = await my_fetch();
         await update_participations(data);
-        console.log('done.');
+        //console.log('done.');
     }
     catch (e)
     {

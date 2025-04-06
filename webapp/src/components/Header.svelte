@@ -78,10 +78,10 @@ import {browser} from '$app/environment';
 
     function handleLogout() {
         if (!browser) return; // Skip during SSR
-        
+
         // First set my_user to {id:-1} for both logout types
         my_user.set({id: -1});
-        
+
         if (public_env.ENABLE_KEYCLOAK) {
             // Handle Keycloak logout
             // Create a proper Keycloak logout URL directly instead of using the route
@@ -89,7 +89,7 @@ import {browser} from '$app/environment';
                 client_id: public_env.KEYCLOAK_CLIENT_ID,
                 post_logout_redirect_uri: window.location.origin,
             });
-            
+
             const logoutUrl = `${public_env.KEYCLOAK_URL}/realms/${public_env.KEYCLOAK_REALM}/protocol/openid-connect/logout?${logoutParams.toString()}`;
             window.location.href = logoutUrl;
         } else {
@@ -101,21 +101,21 @@ import {browser} from '$app/environment';
 
     function handleLogin() {
         if (!browser) return; // Skip during SSR
-        
+
         console.log('handleLogin - Keycloak enabled:', public_env.ENABLE_KEYCLOAK);
-        
+
         if (public_env.ENABLE_KEYCLOAK) {
             // Debug info
             console.log('Keycloak URL:', public_env.KEYCLOAK_URL);
             console.log('Keycloak Realm:', public_env.KEYCLOAK_REALM);
             console.log('Keycloak Client ID:', public_env.KEYCLOAK_CLIENT_ID);
-            
+
             try {
                 // First try the server-side route
                 window.location.href = '/auth/keycloak/login';
             } catch (error) {
                 console.error('Error navigating to login route:', error);
-                
+
                 // Fallback: Directly construct Keycloak URL if needed
                 if (public_env.KEYCLOAK_URL && public_env.KEYCLOAK_REALM && public_env.KEYCLOAK_CLIENT_ID) {
                     const params = new URLSearchParams({
@@ -124,7 +124,7 @@ import {browser} from '$app/environment';
                         response_type: 'code',
                         scope: 'openid email profile'
                     });
-                    
+
                     const loginUrl = `${public_env.KEYCLOAK_URL}/realms/${public_env.KEYCLOAK_REALM}/protocol/openid-connect/auth?${params.toString()}`;
                     console.log('Using fallback login URL:', loginUrl);
                     window.location.href = loginUrl;
@@ -180,7 +180,9 @@ import {browser} from '$app/environment';
                     <Dropdown bind:isOpen={userDropdownOpen}>
                         <div slot="toggle" let:toggle>
                             <DropdownToggle toggle={toggle} color="link">
-                                {$my_user.name || 'You'}
+                                {$my_user.name || `You (user ID {$my_user.id})`}
+                                {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
+                                {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
                                 {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
                             </DropdownToggle>
                         </div>
