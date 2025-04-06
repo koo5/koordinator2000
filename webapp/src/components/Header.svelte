@@ -5,6 +5,7 @@
     import {mobile} from '$lib/platform';
     import SettingsModal from 'src/components/SettingsModal.svelte';
     import { debug } from '$lib/stores.ts';
+    import { onMount } from 'svelte';
     import {
         Collapse,
         Dropdown,
@@ -24,8 +25,32 @@
     $: currentPath = page.url.pathname;
     $: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
 
-    // make navbar always open on desktop
-    let navbar_open = !$mobile;
+    // Start with navbar closed by default
+    let navbar_open = false;
+    
+    // Update navbar state based on screen size after component mounts
+    onMount(() => {
+        // Check if we're on desktop
+        const isDesktop = window.innerWidth >= 768;
+        navbar_open = isDesktop;
+        
+        // Add window resize listener to adjust navbar state with throttling
+        let resizeTimeout: ReturnType<typeof setTimeout>;
+        const handleResize = () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const isDesktopNow = window.innerWidth >= 768;
+                // Open on desktop, close on mobile
+                navbar_open = isDesktopNow;
+            }, 100); // 100ms throttle
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            clearTimeout(resizeTimeout);
+        };
+    });
 
     interface UpdateEvent {
         detail: {
@@ -73,7 +98,9 @@
 
 <Navbar expand="md" light>
     <PageReloadClock/>
-    <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
+    <div class="navbar-toggler-container">
+        <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
+    </div>
     <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
         <!-- Left-aligned navigation items -->
         <div class="navbar-nav me-auto">
@@ -156,4 +183,18 @@
         list-style: none;
         align-items: center;
     }
+    
+    /* Hide navbar toggler except on mobile */
+    .navbar-toggler-container {
+        display: none;
+    }
+    
+    /* Only show navbar toggler on mobile screens */
+    @media (max-width: 767.98px) {
+        .navbar-toggler-container {
+            display: block;
+        }
+    }
+    
+    /* The navbar state is controlled by JavaScript rather than CSS overrides */
 </style>
