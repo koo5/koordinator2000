@@ -188,7 +188,7 @@ export async function ensure_we_exist(): Promise<AuthUserResponse | null> {
     if (user.auth_debug) console.log('i am ' + JSON.stringify(user, null, '  '));
 
     // Only attempt to create a new user if we don't have a valid ID
-    if (user.id < 1) {
+    if (!user.id) {
         try {
             // Try to create a new user using the server endpoint
             const result = await new_user();

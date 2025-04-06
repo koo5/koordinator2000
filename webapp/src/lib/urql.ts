@@ -188,11 +188,60 @@ export function createRoleClient(role: string): Client {
         return { headers };
     };
     
+    const exchanges: Exchange[] = [
+        cacheExchange,
+        ssr,
+        fetchExchange,
+    ];
+    
+    // Add subscription exchange only in browser environment
+    if (browser) {
+        // Create WebSocket client with role-specific headers
+        const wsClient = createWSClient({
+            url: getWebSocketUrl(public_env.GRAPHQL_ENDPOINT),
+            connectionParams: () => {
+                const user = get(my_user);
+                const headers = {
+                    ...public_env.PUBLIC_GRAPHQL_HEADERS,
+                    'x-hasura-role': role,
+                    ...(user?.jwt ? { Authorization: `Bearer ${user.jwt}` } : {})
+                };
+                return { headers };
+            }
+        });
+        
+        exchanges.push(
+            subscriptionExchange({
+                forwardSubscription: (operation: any) => {
+                    const opWithKey = { ...operation, key: 1 };
+                    return {
+                        subscribe: (sink: any) => {
+                            // Convert the DocumentNode to a string if needed
+                            if (typeof opWithKey.query !== 'string') {
+                                const stringifiedQuery = JSON.stringify(opWithKey.query);
+                                const payload = { ...opWithKey, query: stringifiedQuery };
+                                const dispose = wsClient.subscribe(payload, sink);
+                                return {
+                                    unsubscribe: dispose,
+                                };
+                            } else {
+                                const dispose = wsClient.subscribe(opWithKey, sink);
+                                return {
+                                    unsubscribe: dispose,
+                                };
+                            }
+                        },
+                    };
+                },
+            })
+        );
+    }
+    
     // Create a new client with role header
     return createClient({
         url: `https://${public_env.GRAPHQL_ENDPOINT}`,
         fetchOptions: getRoleFetchOptions,
-        exchanges: [cacheExchange, ssr, fetchExchange]
+        exchanges
     });
 }
 
