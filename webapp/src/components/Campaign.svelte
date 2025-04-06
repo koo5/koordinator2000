@@ -208,7 +208,7 @@
                 campaign_id: campaign.id,
             }}
         >
-            <Button color="secondary" type="submit">dismiss campaign</Button>
+            <Button color="warning" type="submit">dismiss</Button>
         </MutationForm>
     </div>
 

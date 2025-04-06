@@ -40,12 +40,10 @@
         client: getContextClient(),
         query: CAMPAIGN_LIST,
         variables: {
-            _user_id: my_user_id,
+            _user_id: $my_user.id || -1,
             _ids: ids,
         },
     });
-
-    $: my_user_id = $my_user.id;
 
 </script>
 
