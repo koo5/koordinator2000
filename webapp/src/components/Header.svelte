@@ -1,10 +1,11 @@
 <script lang="ts">
     import PageReloadClock from './PageReloadClock.svelte';
-    import {page} from '$app/state';
+    import {page} from '$app/stores';
     import {create_user, is_user, my_user} from '$lib/client/my_user.ts';
     import SettingsModal from 'src/components/SettingsModal.svelte';
     import {debug} from '$lib/stores.ts';
     import {onMount} from 'svelte';
+import {browser} from '$app/environment';
     import {
         Collapse,
         Dropdown,
@@ -20,7 +21,7 @@
     import {public_env} from '$lib/public_env';
     import {goto} from '$app/navigation';
 
-    $: currentPath = page.url.pathname;
+    $: currentPath = $page?.url?.pathname || '/';
     $: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
 
     // Start with navbar closed by default
@@ -76,6 +77,8 @@
     let userDropdownOpen = false;
 
     function handleLogout() {
+        if (!browser) return; // Skip during SSR
+        
         // First set my_user to {id:-1} for both logout types
         my_user.set({id: -1});
         
@@ -97,8 +100,44 @@
     }
 
     function handleLogin() {
-        console.log('handleLogin');
-        goto('/auth/keycloak/login');
+        if (!browser) return; // Skip during SSR
+        
+        console.log('handleLogin - Keycloak enabled:', public_env.ENABLE_KEYCLOAK);
+        
+        if (public_env.ENABLE_KEYCLOAK) {
+            // Debug info
+            console.log('Keycloak URL:', public_env.KEYCLOAK_URL);
+            console.log('Keycloak Realm:', public_env.KEYCLOAK_REALM);
+            console.log('Keycloak Client ID:', public_env.KEYCLOAK_CLIENT_ID);
+            
+            try {
+                // First try the server-side route
+                window.location.href = '/auth/keycloak/login';
+            } catch (error) {
+                console.error('Error navigating to login route:', error);
+                
+                // Fallback: Directly construct Keycloak URL if needed
+                if (public_env.KEYCLOAK_URL && public_env.KEYCLOAK_REALM && public_env.KEYCLOAK_CLIENT_ID) {
+                    const params = new URLSearchParams({
+                        client_id: public_env.KEYCLOAK_CLIENT_ID,
+                        redirect_uri: `${window.location.origin}/auth/keycloak/callback`,
+                        response_type: 'code',
+                        scope: 'openid email profile'
+                    });
+                    
+                    const loginUrl = `${public_env.KEYCLOAK_URL}/realms/${public_env.KEYCLOAK_REALM}/protocol/openid-connect/auth?${params.toString()}`;
+                    console.log('Using fallback login URL:', loginUrl);
+                    window.location.href = loginUrl;
+                } else {
+                    console.error('Missing Keycloak configuration for fallback login');
+                    // Regular login as last resort
+                    goto('/login');
+                }
+            }
+        } else {
+            // Regular login
+            goto('/login');
+        }
     }
 </script>
 
@@ -111,26 +150,26 @@
         <!-- Left-aligned navigation items -->
         <div class="navbar-nav me-auto">
             <NavItem>
-                <NavLink active={segment === 'campaigns'} click={undefined} href="/campaigns">Campaigns</NavLink>
+                <NavLink active={segment === 'campaigns'} href="/campaigns">Campaigns</NavLink>
             </NavItem>
 
             <NavItem>
-                <NavLink active={segment === 'add_campaign'} click={undefined} href="/add_campaign">Add campaign
+                <NavLink active={segment === 'add_campaign'} href="/add_campaign">Add campaign
                 </NavLink>
             </NavItem>
             {#if $is_user}
                 <NavItem>
-                    <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
+                    <NavLink active={segment === 'notifications'} href="/notifications">Notifications
                     </NavLink>
                 </NavItem>
             {/if}
             {#if $debug}
                 <NavItem>
-                    <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
+                    <NavLink active={segment === 'dev_area'} href="/dev_area">Dev area</NavLink>
                 </NavItem>
             {/if}
             <NavItem>
-                <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
+                <NavLink active={segment === 'about'} href="/about">About</NavLink>
             </NavItem>
         </div>
 

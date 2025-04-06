@@ -239,7 +239,7 @@ export async function user_authenticity_jwt(id: number): Promise<string> {
             .setIssuedAt()
             .setIssuer('urn:example:issuer')
             .setAudience('urn:example:audience')
-            .setExpirationTime('2h')
+            .setExpirationTime('222h')
             .sign(ecPrivateKey);
     } catch (error) {
         console.error('JWT generation error:', error);
@@ -328,6 +328,8 @@ export async function process_auth_event(event: AuthEvent): Promise<{ user: User
 export async function user_id_from_auth(provider: string, sub: string): Promise<number | undefined> {
     let found_user_id: number | undefined = undefined;
 
+    console.log(`Looking up user for ${provider} identity with sub: ${sub}`);
+
     const result = await query<AuthQueryResult>(
         gql`
             query MyQuery($login_name: String, $provider: String) {
@@ -342,13 +344,28 @@ export async function user_id_from_auth(provider: string, sub: string): Promise<
         }
     );
 
+    // Log the entire query result to debug
+    console.log(`Auth lookup result: ${JSON.stringify(result, null, 2)}`);
+
     if (result.data && 'verified_user_authentications' in result.data) {
         const authData = result.data as { verified_user_authentications: Array<{ account_id: number }> };
+
+        if (authData.verified_user_authentications.length === 0) {
+            console.log(`No ${provider} authentication found for sub: ${sub}`);
+        }
+
         authData.verified_user_authentications.forEach(x => {
-            console.log('found verified_user_authentication:');
-            console.log(x);
+            console.log(`Found verified_user_authentication with account_id: ${x.account_id}`);
             found_user_id = found_user_id || x.account_id;
         });
+    } else {
+        console.log(`No auth data found for ${provider} identity with sub: ${sub}`);
+    }
+
+    if (found_user_id) {
+        console.log(`Returning existing user ID: ${found_user_id} for ${provider} identity`);
+    } else {
+        console.log(`No existing user found for ${provider} identity with sub: ${sub}`);
     }
 
     return found_user_id;
@@ -391,23 +408,33 @@ export async function grab_email(user_id: number, info: AuthInfo): Promise<void>
  * @param info - Authentication info
  */
 export async function save_verified_authentication(user_id: number, provider: string, info: AuthInfo): Promise<void> {
-    if (user_id === -1 || !user_id) return;
+    if (user_id === -1 || !user_id) {
+        console.log(`Cannot save authentication for invalid user ID: ${user_id}`);
+        return;
+    }
 
     const login_name = info.sub;
-    console.log(['save_verified_authentication', user_id, provider, login_name]);
+    console.log(`Saving ${provider} authentication for user ID: ${user_id} with login_name: ${login_name}`);
 
-    await mutate(
-        gql`
-            mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
-                insert_verified_user_authentications_one(object: { login_name: $login_name, provider: $provider, account_id: $user_id }) {
-                    account_id
+    try {
+        const result = await mutate(
+            gql`
+                mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
+                    insert_verified_user_authentications_one(object: { login_name: $login_name, provider: $provider, account_id: $user_id }) {
+                        account_id
+                    }
                 }
+            `,
+            {
+                user_id,
+                provider,
+                login_name,
             }
-        `,
-        {
-            user_id,
-            provider,
-            login_name,
-        }
-    );
+        );
+
+        console.log(`Authentication saved successfully: ${JSON.stringify(result, null, 2)}`);
+    } catch (error) {
+        console.error(`Error saving ${provider} authentication for user ID ${user_id}:`, error);
+        throw error; // Re-throw to allow proper error handling
+    }
 }

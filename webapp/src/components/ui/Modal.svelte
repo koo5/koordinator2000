@@ -4,8 +4,8 @@
 
     // Component props with TypeScript types
     export let isOpen: boolean = false;
-    // Using const for reference-only exports
-    export const fadeEffect: boolean = true;
+    // Using regular prop export
+    export let fadeEffect: boolean = true;
     export let keyboard: boolean = true;
     export let scrollable: boolean = false;
     export let toggle: (() => void) | undefined = undefined;
@@ -33,7 +33,7 @@
 
 {#if isOpen}
     <!-- Use a button for the backdrop to handle both click and keyboard events properly -->
-    <div class="modal-backdrop" role="presentation" transition:fade={{ duration: 200 }}>
+    <div class="modal-backdrop" role="presentation" transition:fade={{ duration: fadeEffect ? 200 : 0 }}>
         <!-- Using a button element that visually looks like a div but is semantically interactive -->
         <button type="button" class="backdrop-click-handler" on:click={handleBackdropClick} aria-label="Close modal"></button>
         <div class="modal-dialog {scrollable ? 'modal-dialog-scrollable' : ''}" role="dialog" aria-modal="true" tabindex="-1">

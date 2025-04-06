@@ -277,6 +277,24 @@ export async function refreshTokens(refreshToken: string): Promise<any> {
  * @returns Login URL
  */
 export function createLoginUrl(redirectUri: string): string {
+    // Log parameters for debugging
+    console.log('Creating Keycloak login URL with parameters:', {
+        keycloakUrl: server_env.KEYCLOAK_URL,
+        keycloakRealm: server_env.KEYCLOAK_REALM,
+        clientId: server_env.KEYCLOAK_CLIENT_ID,
+        redirectUri: redirectUri
+    });
+    
+    // Ensure we have the required parameters
+    if (!server_env.KEYCLOAK_URL || !server_env.KEYCLOAK_REALM || !server_env.KEYCLOAK_CLIENT_ID) {
+        console.error('Missing required Keycloak configuration:', {
+            keycloakUrl: server_env.KEYCLOAK_URL,
+            keycloakRealm: server_env.KEYCLOAK_REALM,
+            clientId: server_env.KEYCLOAK_CLIENT_ID
+        });
+        throw new Error('Missing required Keycloak configuration');
+    }
+    
     const params = new URLSearchParams({
         client_id: server_env.KEYCLOAK_CLIENT_ID,
         redirect_uri: redirectUri,
@@ -284,7 +302,9 @@ export function createLoginUrl(redirectUri: string): string {
         scope: 'openid email profile',
     });
     
-    return `${server_env.KEYCLOAK_URL}/realms/${server_env.KEYCLOAK_REALM}/protocol/openid-connect/auth?${params.toString()}`;
+    const url = `${server_env.KEYCLOAK_URL}/realms/${server_env.KEYCLOAK_REALM}/protocol/openid-connect/auth?${params.toString()}`;
+    console.log('Generated Keycloak login URL:', url);
+    return url;
 }
 
 /**

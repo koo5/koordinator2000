@@ -4,8 +4,18 @@ import { createLoginUrl } from '$lib/server/keycloak';
 import { public_env } from '$lib/public_env';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
+    console.log('Keycloak login route hit');
+    console.log('Environment variables:', {
+        ENABLE_KEYCLOAK: public_env.ENABLE_KEYCLOAK,
+        KEYCLOAK_URL: public_env.KEYCLOAK_URL,
+        KEYCLOAK_REALM: public_env.KEYCLOAK_REALM,
+        KEYCLOAK_CLIENT_ID: public_env.KEYCLOAK_CLIENT_ID,
+        PUBLIC_URL: public_env.PUBLIC_URL
+    });
+    
     // Check if Keycloak is enabled
     if (!public_env.ENABLE_KEYCLOAK) {
+        console.log('Keycloak is not enabled, returning error');
         return json({ error: 'Keycloak is not enabled' }, { status: 400 });
     }
 

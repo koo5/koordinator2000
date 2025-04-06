@@ -193,8 +193,18 @@ export async function create_user(only_on_first_visit): Promise<void> {
     if (user.auth_debug) console.log('i am ' + JSON.stringify(user, null, '  '));
     try {
         let u;
-        if (!user.id || (user.id === -1 && !only_on_first_visit)) {
-            u = await create_user2();
+        if (!user.id || user.id === -1) {
+            if (user.id === -1) {
+                console.log('User had logged out');
+            }
+            if (user.id === -1 && !only_on_first_visit) {
+                console.log('Creating new user...');
+            }
+            if (!user.id || !only_on_first_visit) {
+                u = await create_user2();
+            } else {
+                console.log('Not creating new user now');
+            }
         } else {
             console.log('User exists (ID:', user.id + ')');
             return null;

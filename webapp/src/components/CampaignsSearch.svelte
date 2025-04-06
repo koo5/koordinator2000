@@ -213,7 +213,7 @@
         });
     }
 
-    $: my_user_id = $my_user.id;
+    $: my_user_id = $my_user?.id || -1; // Ensure we have a valid integer even for anonymous users
     let items;
     let seen: number[] = [];
     $: seeing = get_seeing($items?.data?.campaigns);
