@@ -310,7 +310,7 @@
     function search(): void {
         // Only include tag filter if we have tags selected
         const queryVars = {...vars};
-        console.log('search', queryVars);
+        console.log('campaign search', queryVars);
 
         items = queryStore<CampaignListResult>({
             client,
@@ -388,7 +388,7 @@
                 <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
             </div>
         </FormGroup>
-        
+
         <FormGroup>
             <Label>Filters</Label>
         </FormGroup>

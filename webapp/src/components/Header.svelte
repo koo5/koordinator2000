@@ -76,14 +76,21 @@
     let userDropdownOpen = false;
 
     function handleLogout() {
+        // First set my_user to {id:-1} for both logout types
+        my_user.set({id: -1});
+        
         if (public_env.ENABLE_KEYCLOAK) {
-            // First set my_user to {id:-1} before Keycloak logout
-            my_user.set({id: -1});
-            // Redirect to keycloak logout endpoint
-            goto('/auth/keycloak/logout');
+            // Handle Keycloak logout
+            // Create a proper Keycloak logout URL directly instead of using the route
+            const logoutParams = new URLSearchParams({
+                client_id: public_env.KEYCLOAK_CLIENT_ID,
+                post_logout_redirect_uri: window.location.origin,
+            });
+            
+            const logoutUrl = `${public_env.KEYCLOAK_URL}/realms/${public_env.KEYCLOAK_REALM}/protocol/openid-connect/logout?${logoutParams.toString()}`;
+            window.location.href = logoutUrl;
         } else {
             // Handle regular logout
-            my_user.set({id: -1});
             goto('/');
             location.reload();
         }

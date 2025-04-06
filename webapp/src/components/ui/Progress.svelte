@@ -5,17 +5,35 @@
     export let striped = false;
     export let animated = false;
     export let color = 'primary';
+    export let multi = false;
+    export let bar = false;
 
     $: percentage = (value / max) * 100;
 </script>
 
-<div class="progress" {...$$restProps}>
+{#if bar}
+    <!-- Individual progress bar segment for use with multi-progress -->
     <div class="progress-bar bg-{color} {striped ? 'progress-bar-striped' : ''} {animated && striped ? 'progress-bar-animated' : ''}" role="progressbar" style="width: {percentage}%" aria-valuenow={value} aria-valuemin="0" aria-valuemax={max}>
-        {#if showValue}
-            <span>{value}%</span>
+        <slot>
+            {#if showValue}
+                <span>{value}</span>
+            {/if}
+        </slot>
+    </div>
+{:else}
+    <!-- Standard progress or container for multiple bars -->
+    <div class="progress" {...$$restProps}>
+        {#if multi}
+            <slot />
+        {:else}
+            <div class="progress-bar bg-{color} {striped ? 'progress-bar-striped' : ''} {animated && striped ? 'progress-bar-animated' : ''}" role="progressbar" style="width: {percentage}%" aria-valuenow={value} aria-valuemin="0" aria-valuemax={max}>
+                {#if showValue}
+                    <span>{value}%</span>
+                {/if}
+            </div>
         {/if}
     </div>
-</div>
+{/if}
 
 <style>
     .progress {
@@ -55,6 +73,20 @@
 
     .bg-warning {
         background-color: #ffc107;
+        color: #212529;
+    }
+
+    .bg-info {
+        background-color: #17a2b8;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa;
+        color: #212529;
+    }
+
+    .bg-dark {
+        background-color: #343a40;
     }
 
     .progress-bar-striped {
@@ -66,7 +98,7 @@
         animation: progress-bar-stripes 1s linear infinite;
     }
 
-    @keyframes progress-bar-stripes {
+    @keyframes progress-bar-stropes {
         from {
             background-position: 1rem 0;
         }
