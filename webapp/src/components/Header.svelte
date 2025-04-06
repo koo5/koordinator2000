@@ -180,7 +180,8 @@ import {browser} from '$app/environment';
                     <Dropdown bind:isOpen={userDropdownOpen}>
                         <div slot="toggle" let:toggle>
                             <DropdownToggle toggle={toggle} color="link">
-                                {$my_user.name || `You (user ID {$my_user.id})`}
+                                {$my_user.name || ('You (User ID: ' + $my_user.id + ')')}
+                                {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
                                 {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
                                 {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
                                 {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}

@@ -97,8 +97,16 @@ export async function checkAndRenewJwt(): Promise<void> {
     const now = Math.floor(Date.now() / 1000); // Current time in seconds
     const expiresAt = payload.exp;
 
-    const remaining =  expiresAt - now;
+    const remaining = expiresAt - now;
 
+    // Check if the token is already expired
+    if (remaining <= 0) {
+      console.log('JWT token has expired, logging out');
+      // Reset user to logged out state
+      (my_user as SharedStore<MyUser>).set({id: -1});
+      return;
+    }
+    
     // Check if the token is expiring soon
     if (remaining <= TOKEN_RENEWAL_BUFFER) {
       console.log('JWT token is expiring soon, renewing...');
