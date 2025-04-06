@@ -19,8 +19,8 @@
     "@polka/send-type": "^0.5.2",
     "@popperjs/core": "^2.11.8",
     "@sveltejs/adapter-node": "^5.2.12",
-    "@sveltejs/kit": "^2.5.4",
-    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "@sveltejs/kit": "^2.20.4",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@types/keyv": "^3.1.4",
     "@types/node": "^20.0.0",
     "@urql/core": "^5.1.1",
@@ -58,7 +58,7 @@
     "unique-names-generator": "^4.3.1",
     "url": "^0.11.0",
     "url-polyfill": "^1.1.13",
-    "vite": "^5.2.6",
+    "vite": "^6.2.5",
     "ws": "^7.5.10"
   },
   "dependencies": {
