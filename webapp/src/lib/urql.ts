@@ -166,6 +166,29 @@ export function createUrqlClient(): Client {
     });
 }
 
+/**
+ * Get URQL client with specified role context
+ * @param role - The Hasura role to use (defaults to 'nobody')
+ * @returns URQL client with role header
+ */
+export function getContextClientWithRole(role = 'nobody') {
+  const client = getContextClient();
+  // Use urql's .withFetchOptions to add a role header
+  return client.withFetchOptions(() => {
+    const options = getFetchOptions();
+    options.headers['x-hasura-role'] = role;
+    return options;
+  });
+}
+
+/**
+ * Get URQL client with 'user' role
+ * @returns URQL client with 'user' role
+ */
+export function getContextClientUser() {
+  return getContextClientWithRole('user');
+}
+
 // Export context functions
 export { setContextClient, getContextClient };
 
@@ -178,21 +201,24 @@ export { setContextClient, getContextClient };
  * @param options - Query options
  * @returns Readable store with query results
  */
-export function subscribe<T = any>(query: any, options: SubscribeOptions = {}): Readable<QueryResult<T>> {
+export function subscribe<T = any>(query: any, options: SubscribeOptions = {}, useUserRole = false): Readable<QueryResult<T>> {
     // Check operation type from query definition
     const definition = (query as DocumentNode).definitions?.[0] as OperationDefinitionNode;
     const operationType = definition?.operation;
+    
+    // Get appropriate client based on role
+    const client = useUserRole ? getContextClientUser() : getContextClient();
 
     // Use appropriate store based on operation type
     const urqlStore =
         operationType === 'subscription'
             ? subscriptionStore({
-                  client: getContextClient(),
+                  client: client,
                   query: query,
                   variables: options.variables || {},
               })
             : queryStore({
-                  client: getContextClient(),
+                  client: client,
                   query: query,
                   variables: options.variables || {},
               });
@@ -227,7 +253,7 @@ export function subscribe<T = any>(query: any, options: SubscribeOptions = {}): 
  * @param query - GraphQL mutation
  * @returns Function to execute the mutation
  */
-export function mutation<TData = any, TVariables extends Record<string, any> = Record<string, any>>(query: any): (variables?: TVariables) => Promise<MutationResult<TData>> {
+export function mutation<TData = any, TVariables extends Record<string, any> = Record<string, any>>(query: any, useUserRole = false): (variables?: TVariables) => Promise<MutationResult<TData>> {
     return async (variables?: TVariables): Promise<MutationResult<TData>> => {
         if (!browser) {
             console.warn('Mutation attempted on server-side');
@@ -235,7 +261,10 @@ export function mutation<TData = any, TVariables extends Record<string, any> = R
         }
 
         try {
-            const result = await getContextClient()
+            // Get appropriate client based on role
+            const client = useUserRole ? getContextClientUser() : getContextClient();
+            
+            const result = await client
                 .mutation<TData, TVariables>(query, variables || ({} as TVariables))
                 .toPromise();
 
@@ -253,6 +282,34 @@ export function mutation<TData = any, TVariables extends Record<string, any> = R
             return { data: null, error: error as Error };
         }
     };
+}
+
+/**
+ * Create a subscription store with specified role
+ * @param options - Subscription options
+ * @param useUserRole - Whether to use the 'user' role
+ * @returns Subscription store
+ */
+export function subscriptionStoreWithRole<T = any, V = object>(options: any, useUserRole = false) {
+    const client = useUserRole ? getContextClientUser() : getContextClient();
+    return subscriptionStore<T, V>({
+        ...options,
+        client
+    });
+}
+
+/**
+ * Create a query store with specified role
+ * @param options - Query options
+ * @param useUserRole - Whether to use the 'user' role
+ * @returns Query store
+ */
+export function queryStoreWithRole<T = any, V = object>(options: any, useUserRole = false) {
+    const client = useUserRole ? getContextClientUser() : getContextClient();
+    return queryStore<T, V>({
+        ...options,
+        client
+    });
 }
 
 // Export URQL functions for direct use
