@@ -32,6 +32,8 @@
     <input type="text" {name} {id} class={classes} {placeholder} bind:value {readonly} {disabled} on:blur on:change on:click on:focus on:input on:keydown on:keypress on:keyup on:mousedown on:mouseup {...$$restProps} />
 {:else if type === 'password'}
     <input type="password" {name} {id} class={classes} {placeholder} bind:value {readonly} {disabled} on:blur on:change on:click on:focus on:input on:keydown on:keypress on:keyup on:mousedown on:mouseup {...$$restProps} />
+{:else if type === 'number'}
+    <input type="number" {name} {id} class={classes} {placeholder} bind:value {readonly} {disabled} on:blur on:change on:click on:focus on:input on:keydown on:keypress on:keyup on:mousedown on:mouseup {...$$restProps} />
 {:else if type === 'checkbox'}
     <input type="checkbox" {name} {id} class={classes} bind:checked={value} {readonly} {disabled} on:blur on:change on:click on:focus on:input on:keydown on:keypress on:keyup on:mousedown on:mouseup {...$$restProps} />
 {:else if type === 'file'}

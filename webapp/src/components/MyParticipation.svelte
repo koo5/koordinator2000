@@ -12,11 +12,14 @@
     export let campaign: Campaign;
     let new_threshold = campaign.suggested_optimal_threshold;
     $: my_participation = get_my_participation(campaign, $my_user);
-    $: set_new_threshold($my_user);
+    $: update_new_threshold_when_user_changes($my_user);
 
-    function set_new_threshold(u: MyUser): void {
+    function update_new_threshold_when_user_changes(u: MyUser): void {
+        console.log('update_new_threshold_when_user_changes', u);
         if (my_participation.threshold != undefined) new_threshold = my_participation.threshold;
     }
+
+    $: console.log("new_threshold:", new_threshold);
 
     $: update_button_disabled = my_participation.threshold == new_threshold;
 
