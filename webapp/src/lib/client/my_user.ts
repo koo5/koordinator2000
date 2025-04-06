@@ -1,7 +1,6 @@
-import { get, readable, type Readable } from 'svelte/store';
-import { localStorageSharedStore, type SharedStore } from './svelte-shared-store.ts';
-import { goto } from '$app/navigation';
-import { browser } from '$app/environment';
+import {get, readable, type Readable, writable} from 'svelte/store';
+import {localStorageSharedStore, type SharedStore} from './svelte-shared-store.ts';
+import {browser} from '$app/environment';
 import EventEmitter from 'events';
 
 /**
@@ -63,7 +62,16 @@ export interface AuthUserResponse {
 type MyUserStore = typeof browser extends true ? SharedStore<MyUser> : Readable<MyUser>;
 
 // Create the appropriate store based on environment
-export const my_user: MyUserStore = browser ? localStorageSharedStore<MyUser>('my_user', { id: -1, auth_debug: false }) : readable<MyUser>({ id: 0 });
+export const my_user: MyUserStore = browser ? localStorageSharedStore<MyUser>('my_user', {}) : readable<MyUser>({id: -1});
+
+export const is_user = writable<boolean>(false);
+my_user.subscribe((user) => {
+    if (user?.id > 0) {
+        is_user.set(true);
+    } else {
+        is_user.set(false);
+    }
+});
 
 /**
  * Impersonate another user (for development)
@@ -71,7 +79,7 @@ export const my_user: MyUserStore = browser ? localStorageSharedStore<MyUser>('m
  */
 export function impersonate(_id: number): void {
     // Cast to writable type since we know this is only called in browser
-    (my_user as SharedStore<MyUser>).set({ id: _id });
+    (my_user as SharedStore<MyUser>).set({id: _id});
 }
 
 // Track requests to prevent multiple simultaneous user creations
@@ -162,7 +170,7 @@ export async function auth_event(event: AuthEvent): Promise<any> {
                 Accept: 'application/json',
             },
             mode: 'same-origin',
-            body: JSON.stringify({ event: event }),
+            body: JSON.stringify({event: event}),
         });
         //console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
         res = await res;
@@ -179,33 +187,44 @@ export async function auth_event(event: AuthEvent): Promise<any> {
     return res2;
 }
 
+
+export async function create_user(only_on_first_visit): Promise<void> {
+    const user = get(my_user);
+    if (user.auth_debug) console.log('i am ' + JSON.stringify(user, null, '  '));
+    try {
+        let u;
+        if (!user.id || (user.id === -1 && !only_on_first_visit)) {
+            u = await create_user2();
+        } else {
+            console.log('User exists (ID:', user.id + ')');
+            return null;
+        }
+        if (u) {
+            await apply_newly_authenticated_user(u);
+        }
+    } catch (e) {
+        console.error('Error during user initialization:', e);
+    }
+}
+
 /**
  * Ensure the current user exists, creating one if necessary
  * @returns Promise with user data or null
  */
-export async function ensure_we_exist(): Promise<AuthUserResponse | null> {
-    const user = get(my_user);
-    if (user.auth_debug) console.log('i am ' + JSON.stringify(user, null, '  '));
-
+export async function create_user2(): Promise<AuthUserResponse | null> {
     // Only attempt to create a new user if we don't have a valid ID
-    if (!user.id) {
-        try {
-            // Try to create a new user using the server endpoint
-            const result = await new_user();
-            if (result && result.id > 0) {
-                console.log('Created new user with ID:', result.id);
-                return result;
-            } else {
-                console.error('Failed to create new user: Invalid response');
-                return null;
-            }
-        } catch (e) {
-            console.error('Error during user creation:', e);
+    try {
+        // Try to create a new user using the server endpoint
+        const result = await new_user();
+        if (result && result.id > 0) {
+            console.log('Created new user with ID:', result.id);
+            return result;
+        } else {
+            console.error('Failed to create new user: Invalid response');
             return null;
         }
-    } else {
-        // User already exists
-        console.log('User exists (ID:', user.id + ')');
+    } catch (e) {
+        console.error('Error during user creation:', e);
         return null;
     }
 }
@@ -232,8 +251,8 @@ export async function apply_newly_authenticated_user(newly_authenticated_user: A
  * @returns Promise that resolves when logout is complete
  */
 export async function logout(): Promise<void> {
-    (my_user as SharedStore<MyUser>).set({ id: -1 });
-    await auth_logout();
+    (my_user as SharedStore<MyUser>).set({id: -1});
+    // The auth_logout() function doesn't exist, so we're removing this call
 }
 
 /**
@@ -275,7 +294,7 @@ let nag_timeout: ReturnType<typeof setTimeout> | undefined = undefined;
  */
 export function decrease_auth_nag_postponement(): void {
     console.log('decrease_auth_nag_postponement');
-    (my_user as SharedStore<MyUser>).update(x => ({ ...x, nag_postponement: (x.nag_postponement || 0) - 1 }));
+    (my_user as SharedStore<MyUser>).update(x => ({...x, nag_postponement: (x.nag_postponement || 0) - 1}));
     const $my_user = get(my_user);
     if ($my_user.nag_postponement !== undefined && $my_user.nag_postponement <= 0) {
         if (nag_timeout) clearTimeout(nag_timeout);

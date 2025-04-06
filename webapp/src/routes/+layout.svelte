@@ -4,7 +4,14 @@
     import { Col, Container, Row } from '../components/ui';
     import Header from '../components/Header.svelte';
     import { createUrqlClient, setContextClient } from '$lib/urql.ts';
-    import { apply_newly_authenticated_user, auth_event, type AuthEvent, ensure_we_exist, my_user, type MyUser } from '$lib/client/my_user.ts';
+    import {
+        apply_newly_authenticated_user,
+        auth_event,
+        type AuthEvent,
+        create_user,
+        my_user,
+        type MyUser
+    } from '$lib/client/my_user.ts';
     import { saturate_computate, set_css_var } from '$lib/client/campaign.ts';
     import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
@@ -77,16 +84,7 @@
 
     // Handle any client-side initialization
     onMount(async () => {
-        // Check if we need to create a user
-        try {
-            let u = await ensure_we_exist();
-            if (u) {
-                await apply_newly_authenticated_user(u);
-            }
-        } catch (e) {
-            console.error('Error during user initialization:', e);
-        }
-
+        await create_user(true);
         // Verify SvelteKit versions
         initVersionCheck();
 

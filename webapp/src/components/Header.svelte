@@ -1,25 +1,24 @@
 <script lang="ts">
     import PageReloadClock from './PageReloadClock.svelte';
-    import { page } from '$app/state';
-    import { my_user } from '$lib/client/my_user.ts';
-    import { mobile } from '$lib/platform';
+    import {page} from '$app/state';
+    import {create_user, is_user, my_user} from '$lib/client/my_user.ts';
+    import {mobile} from '$lib/platform';
     import SettingsModal from 'src/components/SettingsModal.svelte';
     import {
         Collapse,
+        Dropdown,
+        DropdownItem,
+        DropdownMenu,
+        DropdownToggle,
         Navbar,
         NavbarBrand,
         NavbarToggler,
         NavItem,
-        NavLink,
-        Dropdown,
-        DropdownToggle,
-        DropdownMenu,
-        DropdownItem
+        NavLink
     } from './ui';
     import TheNagModal from 'src/components/TheNagModal.svelte';
-    import KeycloakStatus from './KeycloakStatus.svelte';
-    import { public_env } from '$lib/public_env';
-    import { goto } from '$app/navigation';
+    import {public_env} from '$lib/public_env';
+    import {goto} from '$app/navigation';
 
     $: currentPath = page.url.pathname;
     $: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
@@ -53,12 +52,14 @@
     let userDropdownOpen = false;
 
     function handleLogout() {
-        // Implement logout functionality here
         if (public_env.ENABLE_KEYCLOAK) {
+            // First set my_user to {id:-1} before Keycloak logout
+            my_user.set({id: -1});
+            // Redirect to keycloak logout endpoint
             goto('/auth/keycloak/logout');
         } else {
             // Handle regular logout
-            localStorage.removeItem('my_user');
+            my_user.set({id: -1});
             goto('/');
             location.reload();
         }
@@ -67,29 +68,30 @@
 
 <Navbar expand="md" light>
     <NavbarBrand href="/">
-        <img alt="logo" src="/favicon.ico" style="width:1em; height:1em;" />
+        <img alt="logo" src="/favicon.ico" style="width:1em; height:1em;"/>
     </NavbarBrand>
-    <PageReloadClock />
-    <NavbarToggler on:click={() => (navbar_open = !navbar_open)} />
+    <PageReloadClock/>
+    <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
     <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
         <NavItem>
-            <NavLink active={segment === 'campaigns'} href="/campaigns" click={undefined}>Campaigns</NavLink>
+            <NavLink active={segment === 'campaigns'} click={undefined} href="/campaigns">Campaigns</NavLink>
         </NavItem>
 
         <NavItem>
-            <NavLink active={segment === 'add_campaign'} href="/add_campaign" click={undefined}>Add campaign</NavLink>
+            <NavLink active={segment === 'add_campaign'} click={undefined} href="/add_campaign">Add campaign</NavLink>
         </NavItem>
 
         <NavItem>
-            <NavLink active={segment === 'notifications'} href="/notifications" click={undefined}>Notifications</NavLink>
+            <NavLink active={segment === 'notifications'} click={undefined} href="/notifications">Notifications
+            </NavLink>
         </NavItem>
 
         <NavItem>
-            <NavLink active={segment === 'dev_area'} href="/dev_area" click={undefined}>Dev area</NavLink>
+            <NavLink active={segment === 'dev_area'} click={undefined} href="/dev_area">Dev area</NavLink>
         </NavItem>
 
         <NavItem>
-            <NavLink active={segment === 'about'} href="/about" click={undefined}>About</NavLink>
+            <NavLink active={segment === 'about'} click={undefined} href="/about">About</NavLink>
         </NavItem>
 
         {#if $my_user}
@@ -98,16 +100,21 @@
                     <div slot="toggle" let:toggle>
                         <DropdownToggle toggle={toggle} color="link">
                             {$my_user.name || 'You'}
-                            {#if $my_user?.auth_debug} (id: {$my_user.id}) {/if}
+                            {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
                         </DropdownToggle>
                     </div>
                     <div slot="menu">
                         <DropdownMenu right>
-                            <DropdownItem href="/login">Switch account</DropdownItem>
-                            <DropdownItem href="/you">Profile</DropdownItem>
-                            <DropdownItem href="/account">Account</DropdownItem>
-                            <DropdownItem on:click={toggle_settings}>Settings</DropdownItem>
-                            <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
+                            {#if $is_user}
+                                <DropdownItem href="/login">Switch account</DropdownItem>
+                                <DropdownItem href="/you">Profile</DropdownItem>
+                                <DropdownItem href="/account">Account</DropdownItem>
+                                <DropdownItem on:click={toggle_settings}>Settings</DropdownItem>
+                                <DropdownItem on:click={handleLogout}>Logout</DropdownItem>
+                            {:else}
+                                <DropdownItem href="/login">Login</DropdownItem>
+                                <DropdownItem on:click={() => create_user(false)} >New user</DropdownItem>
+                            {/if}
                         </DropdownMenu>
                     </div>
                 </Dropdown>
@@ -121,5 +128,5 @@
 </Navbar>
 
 <!-- Settings Modal -->
-<SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal} />
-<TheNagModal />
+<SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal}/>
+<TheNagModal/>
