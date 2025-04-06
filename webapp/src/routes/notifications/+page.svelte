@@ -29,7 +29,8 @@
             variables: {
                 _user_id: my_user_id,
             },
-        }
+        },
+        true
     );
 </script>
 

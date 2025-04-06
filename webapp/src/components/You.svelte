@@ -1,6 +1,6 @@
 <script lang="ts">
     import { logout, my_user } from '$lib/client/my_user.ts';
-    import { gql, subscribe } from '$lib/urql';
+    import { gql, subscriptionStoreAsUser } from '$lib/urql';
 
     $: my_user_id = $my_user.id;
 
@@ -9,7 +9,7 @@
     }
 
     /* fixme, we should rather go for users.email column */
-    $: account_email_subscription = subscribe<AccountData>(
+    $: account_email_subscription = subscriptionStoreAsUser<AccountData>(
         gql`
             subscription ($my_user_id: Int) {
                 accounts(where: { id: { _eq: $my_user_id } }) {

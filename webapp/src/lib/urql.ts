@@ -167,26 +167,41 @@ export function createUrqlClient(): Client {
 }
 
 /**
- * Get URQL client with specified role context
- * @param role - The Hasura role to use (defaults to 'nobody')
- * @returns URQL client with role header
+ * Create a new URQL client with specific role
+ * @param role - Hasura role to use
+ * @returns New URQL client with role header
  */
-export function getContextClientWithRole(role = 'nobody') {
-  const client = getContextClient();
-  // Use urql's .withFetchOptions to add a role header
-  return client.withFetchOptions(() => {
-    const options = getFetchOptions();
-    options.headers['x-hasura-role'] = role;
-    return options;
-  });
+export function createRoleClient(role: string): Client {
+    // Function to get fetch options with role
+    const getRoleFetchOptions = (): RequestInit => {
+        const headers: Record<string, string> = {
+            'content-type': 'application/json',
+            ...public_env.PUBLIC_GRAPHQL_HEADERS,
+            'x-hasura-role': role // Add role header
+        };
+        
+        const user = get(my_user);
+        if (user && user.jwt) {
+            headers['Authorization'] = `Bearer ${user.jwt}`;
+        }
+        
+        return { headers };
+    };
+    
+    // Create a new client with role header
+    return createClient({
+        url: `https://${public_env.GRAPHQL_ENDPOINT}`,
+        fetchOptions: getRoleFetchOptions,
+        exchanges: [cacheExchange, ssr, fetchExchange]
+    });
 }
 
 /**
- * Get URQL client with 'user' role
- * @returns URQL client with 'user' role
+ * Get client with 'user' role
+ * @returns URQL client configured with 'user' role
  */
-export function getContextClientUser() {
-  return getContextClientWithRole('user');
+export function getUserRoleClient(): Client {
+    return createRoleClient('user');
 }
 
 // Export context functions
@@ -207,7 +222,7 @@ export function subscribe<T = any>(query: any, options: SubscribeOptions = {}, u
     const operationType = definition?.operation;
     
     // Get appropriate client based on role
-    const client = useUserRole ? getContextClientUser() : getContextClient();
+    const client = useUserRole ? getUserRoleClient() : getContextClient();
 
     // Use appropriate store based on operation type
     const urqlStore =
@@ -262,7 +277,7 @@ export function mutation<TData = any, TVariables extends Record<string, any> = R
 
         try {
             // Get appropriate client based on role
-            const client = useUserRole ? getContextClientUser() : getContextClient();
+            const client = useUserRole ? getUserRoleClient() : getContextClient();
             
             const result = await client
                 .mutation<TData, TVariables>(query, variables || ({} as TVariables))
@@ -291,7 +306,7 @@ export function mutation<TData = any, TVariables extends Record<string, any> = R
  * @returns Subscription store
  */
 export function subscriptionStoreWithRole<T = any, V = object>(options: any, useUserRole = false) {
-    const client = useUserRole ? getContextClientUser() : getContextClient();
+    const client = useUserRole ? getUserRoleClient() : getContextClient();
     return subscriptionStore<T, V>({
         ...options,
         client
@@ -305,11 +320,25 @@ export function subscriptionStoreWithRole<T = any, V = object>(options: any, use
  * @returns Query store
  */
 export function queryStoreWithRole<T = any, V = object>(options: any, useUserRole = false) {
-    const client = useUserRole ? getContextClientUser() : getContextClient();
+    const client = useUserRole ? getUserRoleClient() : getContextClient();
     return queryStore<T, V>({
         ...options,
         client
     });
+}
+
+/**
+ * Shorthand to create a query store with 'user' role
+ */
+export function queryStoreAsUser<T = any, V = object>(options: any) {
+    return queryStoreWithRole<T, V>(options, true);
+}
+
+/**
+ * Shorthand to create a subscription store with 'user' role
+ */
+export function subscriptionStoreAsUser<T = any, V = object>(options: any) {
+    return subscriptionStoreWithRole<T, V>(options, true);
 }
 
 // Export URQL functions for direct use
