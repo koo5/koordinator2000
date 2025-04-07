@@ -31,6 +31,8 @@
         flex-grow: 1;
         align-items: center;
         overflow: visible !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
     }
 
     @media (min-width: 768px) {

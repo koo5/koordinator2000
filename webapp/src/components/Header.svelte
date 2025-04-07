@@ -146,73 +146,77 @@ import {browser} from '$app/environment';
     <div class="navbar-toggler-container">
         <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
     </div>
-    <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
-        <!-- Left-aligned navigation items -->
-        <div class="navbar-nav me-auto">
-            <NavItem>
-                <NavLink active={segment === 'campaigns'} href="/campaigns">Campaigns</NavLink>
-            </NavItem>
-
-            <NavItem>
-                <NavLink active={segment === 'add_campaign'} href="/add_campaign">Add campaign
-                </NavLink>
-            </NavItem>
-            {#if $is_user}
+    
+    <!-- Wrapper to force single line layout -->
+    <div class="navbar-inner-container">
+        <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
+            <!-- Left-aligned navigation items -->
+            <div class="navbar-nav me-auto">
                 <NavItem>
-                    <NavLink active={segment === 'notifications'} href="/notifications">Notifications
+                    <NavLink active={segment === 'campaigns'} href="/campaigns">Campaigns</NavLink>
+                </NavItem>
+
+                <NavItem>
+                    <NavLink active={segment === 'add_campaign'} href="/add_campaign">Add campaign
                     </NavLink>
                 </NavItem>
-            {/if}
-            {#if $debug}
+                {#if $is_user}
+                    <NavItem>
+                        <NavLink active={segment === 'notifications'} href="/notifications">Notifications
+                        </NavLink>
+                    </NavItem>
+                {/if}
+                {#if $debug}
+                    <NavItem>
+                        <NavLink active={segment === 'dev_area'} href="/dev_area">Dev area</NavLink>
+                    </NavItem>
+                {/if}
                 <NavItem>
-                    <NavLink active={segment === 'dev_area'} href="/dev_area">Dev area</NavLink>
+                    <NavLink active={segment === 'about'} href="/about">About</NavLink>
                 </NavItem>
-            {/if}
-            <NavItem>
-                <NavLink active={segment === 'about'} href="/about">About</NavLink>
-            </NavItem>
-        </div>
+            </div>
 
-        <!-- Right-aligned user section -->
-        <div class="navbar-nav ms-auto user-nav">
-            {#if $is_user}
-                <NavItem class="user-dropdown-container">
-                    <Dropdown bind:isOpen={userDropdownOpen}>
-                        <div slot="toggle" let:toggle>
-                            <DropdownToggle toggle={toggle} color="link">
-                                <span class="user-name">
-                                {$my_user.name || ('You (User ID: ' + $my_user.id + ')')}
-                                {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
-                                {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
-                                {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
-                                {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
-                                </span>
-                            </DropdownToggle>
-                        </div>
-                        <div slot="menu">
-                            <DropdownMenu right>
-                                {#if $is_user}
-                                    <DropdownItem onClick={handleLogin}>Switch account</DropdownItem>
-                                    <DropdownItem href="/you">Profile</DropdownItem>
-                                    <DropdownItem href="/account">Account</DropdownItem>
-                                    <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
-                                    <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-                                {:else}
-                                    <DropdownItem onClick={handleLogin}>Login</DropdownItem>
-                                    <DropdownItem onClick={() => create_user(false)}>New user</DropdownItem>
-                                {/if}
-                            </DropdownMenu>
-                        </div>
-                    </Dropdown>
-                </NavItem>
-            {:else}
-                <NavItem>
-                    <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
-                    </NavLink>
-                </NavItem>
-            {/if}
-        </div>
-    </Collapse>
+            <!-- Right-aligned user section -->
+            <div class="navbar-nav ms-auto user-nav">
+                {#if $is_user}
+                    <NavItem class="user-dropdown-container">
+                        <Dropdown bind:isOpen={userDropdownOpen}>
+                            <div slot="toggle" let:toggle>
+                                <DropdownToggle toggle={toggle} color="link">
+                                    <span class="user-name">
+                                    {$my_user.name || ('You')}
+                                    {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
+                                    {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
+                                    {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
+                                    {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
+                                    </span>
+                                </DropdownToggle>
+                            </div>
+                            <div slot="menu">
+                                <DropdownMenu right>
+                                    {#if $is_user}
+                                        <DropdownItem onClick={handleLogin}>Switch account</DropdownItem>
+                                        <DropdownItem href="/you">Profile</DropdownItem>
+                                        <DropdownItem href="/account">Account</DropdownItem>
+                                        <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
+                                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+                                    {:else}
+                                        <DropdownItem onClick={handleLogin}>Login</DropdownItem>
+                                        <DropdownItem onClick={() => create_user(false)}>New user</DropdownItem>
+                                    {/if}
+                                </DropdownMenu>
+                            </div>
+                        </Dropdown>
+                    </NavItem>
+                {:else}
+                    <NavItem>
+                        <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
+                        </NavLink>
+                    </NavItem>
+                {/if}
+            </div>
+        </Collapse>
+    </div>
 </Navbar>
 
 <!-- Settings Modal -->
@@ -235,7 +239,8 @@ import {browser} from '$app/environment';
         margin-bottom: 0;
         list-style: none;
         align-items: center;
-        flex-wrap: nowrap; /* Prevent items from wrapping */
+        flex-wrap: nowrap !important; /* Prevent items from wrapping */
+        white-space: nowrap !important;
     }
 
     /* Hide navbar toggler except on mobile */
@@ -267,6 +272,27 @@ import {browser} from '$app/environment';
         width: 100%;
         max-width: 100vw; /* Prevent overflow */
         overflow: visible !important; /* Force dropdowns to be visible beyond boundaries */
+        flex-wrap: nowrap !important; /* Prevent wrapping of navbar items */
+        white-space: nowrap !important; /* Prevent text wrapping */
+        display: flex !important;
+        flex-direction: row !important;
+    }
+    
+    /* Force container to be single-line */
+    .navbar-inner-container {
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        white-space: nowrap;
+        overflow-x: auto; /* Allow horizontal scrolling */
+        overflow-y: visible; /* Keep dropdowns visible */
+        scrollbar-width: none; /* Hide scrollbar in Firefox */
+        -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+        width: 100%;
+    }
+    
+    .navbar-inner-container::-webkit-scrollbar {
+        display: none; /* Hide scrollbar in WebKit browsers */
     }
     
     /* Make sure all navbar elements allow overflow */
@@ -304,6 +330,15 @@ import {browser} from '$app/environment';
             padding-left: 0.5rem;
             padding-right: 0.5rem;
             box-sizing: border-box;
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            scrollbar-width: none; /* Hide scrollbar in Firefox */
+            -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+        }
+        
+        /* Hide scrollbar in WebKit browsers */
+        :global(.navbar::-webkit-scrollbar) {
+            display: none;
         }
 
         /* Prevent "You" item from wrapping to a new line */
@@ -328,6 +363,20 @@ import {browser} from '$app/environment';
             position: absolute !important;
             right: 0 !important;
             left: auto !important;
+        }
+        
+        /* Make sure navbar doesn't break layout on small screens */
+        :global(.navbar-collapse) {
+            flex-basis: auto !important;
+            flex-grow: 1 !important;
+            display: flex !important;
+            flex-direction: row !important;
+            width: 100% !important;
+        }
+        
+        /* Force navbar to stay in a single line */
+        :global(.navbar), :global(.navbar-collapse), :global(.navbar-nav) {
+            flex-wrap: nowrap !important;
         }
     }
 

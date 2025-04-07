@@ -24,6 +24,9 @@
         text-decoration: none;
         background-color: transparent;
         transition: color 0.15s ease-in-out;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .nav-link:hover {

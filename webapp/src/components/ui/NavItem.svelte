@@ -6,6 +6,8 @@
     .nav-item {
         display: list-item;
         text-align: -webkit-match-parent;
+        white-space: nowrap;
+        overflow: visible;
     }
 
     @media (min-width: 768px) {
