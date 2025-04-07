@@ -143,41 +143,65 @@ import {browser} from '$app/environment';
 
 <Navbar expand="md" light class="header-navbar">
     <PageReloadClock/>
-    <div class="navbar-toggler-container">
-        <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
-    </div>
-    
-    <!-- Wrapper to force single line layout -->
-    <div class="navbar-inner-container">
-        <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
-            <!-- Left-aligned navigation items -->
-            <div class="navbar-nav me-auto">
-                <NavItem>
-                    <NavLink active={segment === 'campaigns'} href="/campaigns">Campaigns</NavLink>
-                </NavItem>
-
-                <NavItem>
-                    <NavLink active={segment === 'add_campaign'} href="/add_campaign">Add campaign
-                    </NavLink>
-                </NavItem>
-                {#if $is_user}
-                    <NavItem>
-                        <NavLink active={segment === 'notifications'} href="/notifications">Notifications
-                        </NavLink>
-                    </NavItem>
-                {/if}
-                {#if $debug}
-                    <NavItem>
-                        <NavLink active={segment === 'dev_area'} href="/dev_area">Dev area</NavLink>
-                    </NavItem>
-                {/if}
-                <NavItem>
-                    <NavLink active={segment === 'about'} href="/about">About</NavLink>
+    <div class="navbar-brand-section">
+        <div class="navbar-toggler-container">
+            <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
+        </div>
+        
+        <!-- Always visible "You" button on mobile -->
+        {#if $is_user}
+            <div class="mobile-user-button d-md-none">
+                <NavItem class="user-dropdown-container">
+                    <Dropdown bind:isOpen={userDropdownOpen}>
+                        <div slot="toggle" let:toggle>
+                            <DropdownToggle toggle={toggle} color="link">
+                                <span class="user-name">You</span>
+                            </DropdownToggle>
+                        </div>
+                        <div slot="menu">
+                            <DropdownMenu right>
+                                <DropdownItem onClick={handleLogin}>Switch account</DropdownItem>
+                                <DropdownItem href="/you">Profile</DropdownItem>
+                                <DropdownItem href="/account">Account</DropdownItem>
+                                <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
+                                <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+                            </DropdownMenu>
+                        </div>
+                    </Dropdown>
                 </NavItem>
             </div>
+        {/if}
+    </div>
+    
+    <!-- Mobile overlay menu and desktop horizontal menu -->
+    <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
+        <!-- Navigation items -->
+        <div class="navbar-nav">
+            <NavItem>
+                <NavLink active={segment === 'campaigns'} href="/campaigns">Campaigns</NavLink>
+            </NavItem>
 
-            <!-- Right-aligned user section -->
-            <div class="navbar-nav ms-auto user-nav">
+            <NavItem>
+                <NavLink active={segment === 'add_campaign'} href="/add_campaign">Add campaign
+                </NavLink>
+            </NavItem>
+            {#if $is_user}
+                <NavItem>
+                    <NavLink active={segment === 'notifications'} href="/notifications">Notifications
+                    </NavLink>
+                </NavItem>
+            {/if}
+            {#if $debug}
+                <NavItem>
+                    <NavLink active={segment === 'dev_area'} href="/dev_area">Dev area</NavLink>
+                </NavItem>
+            {/if}
+            <NavItem>
+                <NavLink active={segment === 'about'} href="/about">About</NavLink>
+            </NavItem>
+            
+            <!-- "You" item only shown in desktop mode or in mobile overlay -->
+            <div class="d-none d-md-block user-section">
                 {#if $is_user}
                     <NavItem class="user-dropdown-container">
                         <Dropdown bind:isOpen={userDropdownOpen}>
@@ -215,8 +239,18 @@ import {browser} from '$app/environment';
                     </NavItem>
                 {/if}
             </div>
-        </Collapse>
-    </div>
+            
+            <!-- Login link only in mobile overlay and only if not logged in -->
+            <div class="d-md-none">
+                {#if !$is_user}
+                    <NavItem>
+                        <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
+                        </NavLink>
+                    </NavItem>
+                {/if}
+            </div>
+        </div>
+    </Collapse>
 </Navbar>
 
 <!-- Settings Modal -->
@@ -272,27 +306,10 @@ import {browser} from '$app/environment';
         width: 100%;
         max-width: 100vw; /* Prevent overflow */
         overflow: visible !important; /* Force dropdowns to be visible beyond boundaries */
-        flex-wrap: nowrap !important; /* Prevent wrapping of navbar items */
-        white-space: nowrap !important; /* Prevent text wrapping */
         display: flex !important;
         flex-direction: row !important;
-    }
-    
-    /* Force container to be single-line */
-    .navbar-inner-container {
-        display: flex;
-        flex: 1;
-        flex-direction: row;
-        white-space: nowrap;
-        overflow-x: auto; /* Allow horizontal scrolling */
-        overflow-y: visible; /* Keep dropdowns visible */
-        scrollbar-width: none; /* Hide scrollbar in Firefox */
-        -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
-        width: 100%;
-    }
-    
-    .navbar-inner-container::-webkit-scrollbar {
-        display: none; /* Hide scrollbar in WebKit browsers */
+        padding: 0.5rem 1rem;
+        z-index: 1030; /* Ensure it's above content */
     }
     
     /* Make sure all navbar elements allow overflow */
@@ -303,13 +320,25 @@ import {browser} from '$app/environment';
         overflow: visible !important;
     }
 
-    /* User section styling */
-    .user-nav {
-        flex-shrink: 0; /* Prevent shrinking */
+    /* Brand section styling */
+    .navbar-brand-section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex: 1;
+    }
+    
+    /* Mobile user button styling */
+    .mobile-user-button {
+        margin-left: auto;
+        margin-right: 1rem;
+    }
+    
+    /* User section styling - desktop only */
+    .user-section {
+        margin-left: auto;
         display: flex !important;
-        flex-direction: row !important;
         white-space: nowrap !important;
-        margin-left: auto !important; /* Ensure it stays right-aligned */
     }
 
     /* User name styles */
@@ -327,28 +356,55 @@ import {browser} from '$app/environment';
             display: block;
         }
 
-        /* Make sure the navbar doesn't overflow on mobile */
+        /* Make sure the navbar header is properly styled */
         :global(.navbar) {
             width: 100%;
             max-width: 100%;
             padding-left: 0.5rem;
             padding-right: 0.5rem;
             box-sizing: border-box;
-            overflow-x: auto; /* Enable horizontal scrolling if needed */
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-            scrollbar-width: none; /* Hide scrollbar in Firefox */
-            -ms-overflow-style: none; /* Hide scrollbar in IE/Edge */
+            position: relative;
         }
         
-        /* Hide scrollbar in WebKit browsers */
-        :global(.navbar::-webkit-scrollbar) {
-            display: none;
+        /* MOBILE OVERLAY STYLING */
+        /* Style the mobile overlay menu */
+        :global(.navbar-collapse) {
+            position: absolute !important;
+            top: 100% !important; /* Position right below the header */
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            background-color: #f8f9fa !important;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+            z-index: 1030 !important;
+            padding: 1rem !important;
+            border-bottom-left-radius: 8px !important;
+            border-bottom-right-radius: 8px !important;
+            flex-direction: column !important;
+            display: flex !important;
         }
-
-        /* Prevent "You" item from wrapping to a new line */
+        
+        /* Style navbar items in mobile view */
+        :global(.navbar-nav) {
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+        
+        /* Style nav items in mobile view */
         :global(.navbar-nav .nav-item) {
-            white-space: nowrap;
-            margin-right: 0.25rem; /* Reduce margin on small screens */
+            margin-bottom: 0.5rem !important;
+            margin-right: 0 !important;
+            width: 100% !important;
+        }
+        
+        /* Style nav links in mobile view */
+        :global(.nav-link) {
+            padding: 0.75rem 1rem !important;
+            border-radius: 4px !important;
+        }
+        
+        :global(.nav-link:hover) {
+            background-color: rgba(0,0,0,0.05) !important;
         }
 
         /* Make user name more compact on mobile */
@@ -368,27 +424,33 @@ import {browser} from '$app/environment';
             right: 0 !important;
             left: auto !important;
         }
-        
-        /* Make sure navbar doesn't break layout on small screens */
-        :global(.navbar-collapse) {
-            flex-basis: auto !important;
-            flex-grow: 1 !important;
-            display: flex !important;
-            flex-direction: row !important;
-            width: 100% !important;
-        }
-        
-        /* Force navbar to stay in a single line */
-        :global(.navbar), :global(.navbar-collapse), :global(.navbar-nav) {
-            flex-wrap: nowrap !important;
-        }
     }
 
-    /* Special fix for high zoom levels */
+    /* Desktop view styles */
     @media (min-width: 768px) {
         /* Ensure dropdown menus in navbar are correctly positioned */
         :global(.navbar .dropdown-menu) {
             position: absolute !important;
+        }
+        
+        /* Style horizontal navbar on desktop */
+        :global(.navbar-collapse) {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+        }
+        
+        /* Style navbar items in desktop view */
+        :global(.navbar-nav) {
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+        }
+        
+        /* Style nav items in desktop view */
+        :global(.navbar-nav .nav-item) {
+            margin-right: 0.5rem !important;
+            white-space: nowrap !important;
         }
     }
     
