@@ -306,6 +306,10 @@ import {browser} from '$app/environment';
     /* User section styling */
     .user-nav {
         flex-shrink: 0; /* Prevent shrinking */
+        display: flex !important;
+        flex-direction: row !important;
+        white-space: nowrap !important;
+        margin-left: auto !important; /* Ensure it stays right-aligned */
     }
 
     /* User name styles */
