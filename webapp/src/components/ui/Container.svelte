@@ -14,5 +14,6 @@
         margin-top: 0;
         margin-bottom: 0;
         max-width: 1140px;
+        overflow: visible !important; /* Ensure dropdowns can appear outside container */
     }
 </style>

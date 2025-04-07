@@ -122,10 +122,13 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
             const newUser = await free_user_id(userInfo.email || null);
 
             // For new users, create a unique URL with all the necessary data
+            // Always use the randomly generated username from free_user_id
+            // The user can change it on the signup page if desired
             const newUserData = {
                 userId: newUser.id,
-                suggestedName: keycloakInfo.preferred_username ||
-                              (keycloakInfo.name ? keycloakInfo.name.split(' ')[0] : newUser.name),
+                suggestedName: newUser.name, // Use the randomly generated name
+                keycloakRealName: keycloakInfo.name || '', // Store real name separately for reference
+                keycloakUsername: keycloakInfo.preferred_username || '', // Store Keycloak username separately
                 keycloakInfo: keycloakInfo,
                 keycloakToken: tokens.access_token
             };

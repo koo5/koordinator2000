@@ -100,6 +100,13 @@
                 <div class="text-center mb-4">
                     <h2>Welcome to Koordinator</h2>
                     <p class="text-muted">Complete your account setup</p>
+                    
+                    {#if userData && userData.keycloakInfo && userData.keycloakInfo.email}
+                        <div class="alert alert-info">
+                            <p class="mb-0">You've successfully authenticated with Keycloak using your email: <strong>{userData.keycloakInfo.email}</strong></p>
+                            <p class="mb-0">Now just choose a username to complete your account setup.</p>
+                        </div>
+                    {/if}
                 </div>
                 
                 {#if errorMessage}
@@ -110,6 +117,22 @@
                     <Label for="username">Username</Label>
                     <Input type="text" id="username" bind:value={username} placeholder="Choose a username" />
                     <small class="form-text text-muted">This name will be visible to other users</small>
+                    
+                    {#if userData && (userData.keycloakUsername || userData.keycloakRealName)}
+                        <div class="mt-2">
+                            <p class="mb-1"><small>Alternative options:</small></p>
+                            {#if userData.keycloakUsername}
+                                <Button size="sm" color="outline-secondary" class="me-2 mb-1" on:click={() => username = userData.keycloakUsername}>
+                                    Use Keycloak username: {userData.keycloakUsername}
+                                </Button>
+                            {/if}
+                            {#if userData.keycloakRealName}
+                                <Button size="sm" color="outline-secondary" class="me-2 mb-1" on:click={() => username = userData.keycloakRealName.split(' ')[0]}>
+                                    Use first name: {userData.keycloakRealName.split(' ')[0]}
+                                </Button>
+                            {/if}
+                        </div>
+                    {/if}
                 </FormGroup>
                 
                 <div class="d-grid gap-2 mt-4">

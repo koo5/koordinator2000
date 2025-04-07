@@ -32,7 +32,7 @@
 <div class="dropdown {direction}" bind:this={dropdownElement}>
     <slot name="toggle" {toggle}></slot>
     {#if isOpen}
-        <div transition:fade={{ duration: 100 }}>
+        <div class="dropdown-menu-container">
             <slot name="menu"></slot>
         </div>
     {/if}
@@ -42,5 +42,12 @@
     .dropdown {
         position: relative;
         display: inline-block;
+        overflow: visible !important;
+    }
+    
+    .dropdown-menu-container {
+        position: static;
+        z-index: 2000; /* Match the dropdown menu z-index */
+        overflow: visible !important;
     }
 </style>

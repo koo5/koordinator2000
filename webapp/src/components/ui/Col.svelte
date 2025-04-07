@@ -38,11 +38,13 @@
         flex-basis: 0;
         flex-grow: 1;
         max-width: 100%;
+        overflow: visible !important; /* Allow dropdowns to be visible */
     }
 
     .col-auto {
         flex: 0 0 auto;
         width: auto;
         max-width: 100%;
+        overflow: visible !important; /* Allow dropdowns to be visible */
     }
 </style>

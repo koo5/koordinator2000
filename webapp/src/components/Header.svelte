@@ -141,7 +141,7 @@ import {browser} from '$app/environment';
     }
 </script>
 
-<Navbar expand="md" light>
+<Navbar expand="md" light class="header-navbar">
     <PageReloadClock/>
     <div class="navbar-toggler-container">
         <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
@@ -174,17 +174,19 @@ import {browser} from '$app/environment';
         </div>
 
         <!-- Right-aligned user section -->
-        <div class="navbar-nav ms-auto">
+        <div class="navbar-nav ms-auto user-nav">
             {#if $is_user}
-                <NavItem>
+                <NavItem class="user-dropdown-container">
                     <Dropdown bind:isOpen={userDropdownOpen}>
                         <div slot="toggle" let:toggle>
                             <DropdownToggle toggle={toggle} color="link">
+                                <span class="user-name">
                                 {$my_user.name || ('You (User ID: ' + $my_user.id + ')')}
                                 {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
                                 {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
                                 {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
                                 {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
+                                </span>
                             </DropdownToggle>
                         </div>
                         <div slot="menu">
@@ -233,6 +235,7 @@ import {browser} from '$app/environment';
         margin-bottom: 0;
         list-style: none;
         align-items: center;
+        flex-wrap: nowrap; /* Prevent items from wrapping */
     }
 
     /* Hide navbar toggler except on mobile */
@@ -240,11 +243,105 @@ import {browser} from '$app/environment';
         display: none;
     }
 
-    /* Only show navbar toggler on mobile screens */
+    /* User dropdown specific adjustments */
+    .user-dropdown-container {
+        position: relative;
+        white-space: nowrap;
+        z-index: 20000; /* High z-index to ensure dropdown visibility */
+    }
+
+    /* Force the dropdown to always be visible regardless of other elements */
+    :global(.user-dropdown-container .dropdown) {
+        position: static;
+    }
+
+    :global(.user-dropdown-container .dropdown-menu) {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        z-index: 2000;
+    }
+
+    /* Header-specific styles */
+    :global(.header-navbar) {
+        width: 100%;
+        max-width: 100vw; /* Prevent overflow */
+        overflow: visible !important; /* Force dropdowns to be visible beyond boundaries */
+    }
+    
+    /* Make sure all navbar elements allow overflow */
+    :global(.navbar), 
+    :global(.navbar-collapse),
+    :global(.navbar-nav),
+    :global(.nav-item) {
+        overflow: visible !important;
+    }
+
+    /* User section styling */
+    .user-nav {
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    /* User name styles */
+    :global(.user-name) {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px; /* Limit width on larger screens */
+    }
+
+    /* Mobile responsiveness improvements */
     @media (max-width: 767.98px) {
         .navbar-toggler-container {
             display: block;
         }
+
+        /* Make sure the navbar doesn't overflow on mobile */
+        :global(.navbar) {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            box-sizing: border-box;
+        }
+
+        /* Prevent "You" item from wrapping to a new line */
+        :global(.navbar-nav .nav-item) {
+            white-space: nowrap;
+            margin-right: 0.25rem; /* Reduce margin on small screens */
+        }
+
+        /* Make user name more compact on mobile */
+        :global(.user-name) {
+            max-width: 100px; /* Limit width on mobile */
+        }
+
+        /* Make room for items on mobile */
+        :global(.dropdown-toggle) {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.9rem;
+        }
+
+        /* Ensure dropdown menus are properly positioned on mobile */
+        :global(.dropdown-menu) {
+            position: absolute !important;
+            right: 0 !important;
+            left: auto !important;
+        }
+    }
+
+    /* Special fix for high zoom levels */
+    @media (min-width: 768px) {
+        /* Ensure dropdown menus in navbar are correctly positioned */
+        :global(.navbar .dropdown-menu) {
+            position: absolute !important;
+        }
+    }
+    
+    /* Fix for dropdown menus being hidden */
+    :global(body), :global(.page), :global(main), :global(.app-container) {
+        overflow-x: visible !important;
     }
 
     /* The navbar state is controlled by JavaScript rather than CSS overrides */

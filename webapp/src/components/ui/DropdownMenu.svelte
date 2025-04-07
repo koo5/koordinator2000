@@ -9,7 +9,7 @@
 <style>
     .dropdown-menu {
         position: absolute;
-        z-index: 1000;
+        z-index: 2000; /* Significantly increased z-index to appear above all elements */
         min-width: 10rem;
         padding: 0.5rem 0;
         margin: 0.125rem 0 0;
