@@ -1,5 +1,6 @@
-/** @type {import('./$types').PageLoad} */
-export function load({ params }) {
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = ({ params }) => {
     console.log('user slug load');
     const { slug } = params;
     if (parseInt(slug) >= 0) {
@@ -8,4 +9,4 @@ export function load({ params }) {
         return { user_id };
     }
     return {};
-}
+};

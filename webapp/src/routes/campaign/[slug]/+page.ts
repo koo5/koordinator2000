@@ -1,5 +1,6 @@
-/** @type {import('./$types').PageLoad} */
-export function load({ params }) {
+import type { PageLoad } from './$types';
+
+export const load: PageLoad = ({ params }) => {
     const { slug } = params;
     if (parseInt(slug) >= 0) {
         const campaign_id = slug;
@@ -7,4 +8,4 @@ export function load({ params }) {
         return { campaign_id };
     }
     return {};
-}
+};
