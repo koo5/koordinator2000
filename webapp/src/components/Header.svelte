@@ -1,7 +1,8 @@
 <script lang="ts">
     import PageReloadClock from './PageReloadClock.svelte';
     import {page} from '$app/stores';
-    import {create_user, is_user, my_user} from '$lib/client/my_user.ts';
+    import {create_user, is_user, my_user, type MyUser} from '$lib/client/my_user';
+    import type { SharedStore } from '$lib/client/svelte-shared-store';
     import SettingsModal from 'src/components/SettingsModal.svelte';
     import {debug} from '$lib/stores.ts';
     import {onMount} from 'svelte';
@@ -80,7 +81,7 @@ import {browser} from '$app/environment';
         if (!browser) return; // Skip during SSR
 
         // First set my_user to {id:-1} for both logout types
-        my_user.set({id: -1});
+        (my_user as SharedStore<MyUser>).set({id: -1});
 
         if (public_env.ENABLE_KEYCLOAK) {
             // Handle Keycloak logout
@@ -258,11 +259,12 @@ import {browser} from '$app/environment';
 <TheNagModal/>
 
 <style>
-    .me-auto {
+    /* Utility classes for margin control - used as class names in the template */
+    :global(.me-auto) {
         margin-right: auto !important;
     }
 
-    .ms-auto {
+    :global(.ms-auto) {
         margin-left: auto !important;
     }
 
@@ -283,7 +285,7 @@ import {browser} from '$app/environment';
     }
 
     /* User dropdown specific adjustments */
-    .user-dropdown-container {
+    :global(.user-dropdown-container) {
         position: relative;
         white-space: nowrap;
         z-index: 20000; /* High z-index to ensure dropdown visibility */

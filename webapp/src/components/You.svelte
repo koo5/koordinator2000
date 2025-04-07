@@ -9,20 +9,18 @@
     }
 
     /* fixme, we should rather go for users.email column */
-    $: account_email_subscription = subscriptionStoreAsUser<AccountData>(
-        gql`
+    $: account_email_subscription = subscriptionStoreAsUser<AccountData>({
+        query: gql`
             subscription ($my_user_id: Int) {
                 accounts(where: { id: { _eq: $my_user_id } }) {
                     email
                 }
             }
         `,
-        {
-            variables: {
-                my_user_id,
-            },
+        variables: {
+            my_user_id,
         }
-    );
+    });
 
     function save(): void {
         // Placeholder for save functionality

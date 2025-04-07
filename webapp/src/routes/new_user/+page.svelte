@@ -2,13 +2,27 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
-    import { my_user } from '$lib/client/my_user.ts';
+    import { my_user, type MyUser } from '$lib/client/my_user';
+    import type { SharedStore } from '$lib/client/svelte-shared-store';
     import { Button, Card, Input, FormGroup, Label } from '../../components/ui';
     
     let username = '';
     let isLoading = false;
     let errorMessage = '';
-    let userData = null;
+    // Define the shape of the userData object
+    interface KeycloakUserData {
+        userId?: number;
+        suggestedName?: string;
+        keycloakInfo?: {
+            email?: string;
+            sub?: string;
+        };
+        keycloakToken?: string;
+        keycloakUsername?: string;
+        keycloakRealName?: string;
+    }
+    
+    let userData: KeycloakUserData | null = null;
     
     import { browser } from '$app/environment';
     
@@ -21,8 +35,8 @@
         
         if (dataParam) {
             try {
-                userData = JSON.parse(decodeURIComponent(dataParam));
-                username = userData.suggestedName || '';
+                userData = JSON.parse(decodeURIComponent(dataParam)) as KeycloakUserData;
+                username = userData?.suggestedName || '';
             } catch (error) {
                 console.error('Error parsing user data:', error);
                 errorMessage = 'Invalid session data. Please try again.';
@@ -69,7 +83,7 @@
             
             // Update local user state
             if (result && result.user) {
-                my_user.set(result.user);
+                (my_user as SharedStore<MyUser>).set(result.user);
                 goto('/');
             } else {
                 throw new Error('Invalid response from server');
@@ -84,7 +98,7 @@
     
     function forgetAuth() {
         // Simply reset user and redirect to home
-        my_user.set({ id: -1 });
+        (my_user as SharedStore<MyUser>).set({ id: -1 });
         goto('/');
     }
 </script>
@@ -114,20 +128,26 @@
                 {/if}
                 
                 <FormGroup>
-                    <Label for="username">Username</Label>
+                    <Label htmlFor="username">Username</Label>
                     <Input type="text" id="username" bind:value={username} placeholder="Choose a username" />
                     <small class="form-text text-muted">This name will be visible to other users</small>
                     
                     {#if userData && (userData.keycloakUsername || userData.keycloakRealName)}
                         <div class="mt-2">
                             <p class="mb-1"><small>Alternative options:</small></p>
-                            {#if userData.keycloakUsername}
-                                <Button size="sm" color="outline-secondary" class="me-2 mb-1" on:click={() => username = userData.keycloakUsername}>
+                            {#if userData && userData.keycloakUsername}
+                                <Button size="sm" color="secondary" class="me-2 mb-1" on:click={() => {
+                                    if (userData) username = userData.keycloakUsername || '';
+                                }}>
                                     Use Keycloak username: {userData.keycloakUsername}
                                 </Button>
                             {/if}
-                            {#if userData.keycloakRealName}
-                                <Button size="sm" color="outline-secondary" class="me-2 mb-1" on:click={() => username = userData.keycloakRealName.split(' ')[0]}>
+                            {#if userData && userData.keycloakRealName}
+                                <Button size="sm" color="secondary" class="me-2 mb-1" on:click={() => {
+                                    if (userData && userData.keycloakRealName) {
+                                        username = userData.keycloakRealName.split(' ')[0] || '';
+                                    }
+                                }}>
                                     Use first name: {userData.keycloakRealName.split(' ')[0]}
                                 </Button>
                             {/if}
@@ -148,7 +168,7 @@
                 
                 <div class="text-center">
                     <p class="mb-2">Not interested in using this authentication method?</p>
-                    <Button color="link" on:click={forgetAuth} disabled={isLoading}>
+                    <Button color="secondary" on:click={forgetAuth} disabled={isLoading}>
                         Forget this authentication method
                     </Button>
                 </div>

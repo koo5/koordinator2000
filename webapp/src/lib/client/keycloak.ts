@@ -5,8 +5,8 @@ import Keycloak from 'keycloak-js';
 import { browser } from '$app/environment';
 import { writable, get, type Writable } from 'svelte/store';
 import { public_env } from '$lib/public_env';
-import { auth_event } from './my_user.ts';
-import { my_user } from '../client/my_user.ts';
+import { auth_event, my_user, type MyUser } from './my_user';
+import type { SharedStore } from './svelte-shared-store';
 
 // Keycloak instance stores
 export const keycloakInstance: Writable<Keycloak | null> = writable(null);
@@ -88,7 +88,7 @@ export async function initKeycloak(): Promise<boolean> {
                     // This means the server wants us to use a different user ID
                     // (the one associated with this Keycloak identity)
                     if (authResponse.user.id !== currentUser.id) {
-                        my_user.set(authResponse.user);
+                        (my_user as SharedStore<MyUser>).set(authResponse.user);
                     }
                 }
             } catch (error) {
@@ -152,7 +152,7 @@ function setupKeycloakEvents(keycloak: Keycloak): void {
                         // This means the server wants us to use a different user ID
                         // (the one associated with this Keycloak identity)
                         if (authResponse.user.id !== currentUser.id) {
-                            my_user.set(authResponse.user);
+                            (my_user as SharedStore<MyUser>).set(authResponse.user);
                         }
                     }
                 });

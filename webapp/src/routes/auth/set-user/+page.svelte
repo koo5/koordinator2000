@@ -2,7 +2,8 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import { goto } from '$app/navigation';
-    import { my_user } from '$lib/client/my_user.ts';
+    import { my_user, type MyUser } from '$lib/client/my_user';
+    import type { SharedStore } from '$lib/client/svelte-shared-store';
     
     import { browser } from '$app/environment';
 
@@ -18,7 +19,7 @@
             try {
                 // Parse and set the user data in localStorage
                 const userData = JSON.parse(decodeURIComponent(userDataParam));
-                my_user.set(userData);
+                (my_user as SharedStore<MyUser>).set(userData);
                 
                 // Redirect to the target page
                 goto(decodeURIComponent(returnTo));

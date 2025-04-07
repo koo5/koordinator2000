@@ -13,7 +13,7 @@ import { createError, requireAuth } from './error-utils';
 export function checkAuth(event: RequestEvent): void {
     const { locals } = event;
     if (!locals.user) {
-        requireAuth('You must be logged in to access this page', event.url.pathname);
+        requireAuth(event);
     }
 }
 

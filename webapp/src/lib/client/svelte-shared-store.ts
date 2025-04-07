@@ -1,7 +1,14 @@
 import { writable, get, type Writable } from 'svelte/store';
+
+// Define SharedStore interface that extends Writable
+export interface SharedStore<T> extends Writable<T> {
+  subscribe: Writable<T>['subscribe'];
+  set: Writable<T>['set'];
+  update: Writable<T>['update'];
+}
 import { browser } from '$app/environment';
 
-export function localStorageSharedStore<T>(name: string, default_: T): Writable<T> {
+export function localStorageSharedStore<T>(name: string, default_: T): SharedStore<T> {
     const initialValue = browser ? getStorage() : default_;
     const { subscribe, set, update } = writable<T>(initialValue, set => {
         // start function: only run browser-specific logic if in the browser
@@ -70,7 +77,7 @@ export function localStorageSharedStore<T>(name: string, default_: T): Writable<
     };
 }
 
-export function localStorageReadOnceSharedStore<T>(name: string, default_: T): Writable<T> {
+export function localStorageReadOnceSharedStore<T>(name: string, default_: T): SharedStore<T> {
     const initialValue = browser ? getStorage() : default_;
     const { subscribe, set, update } = writable<T>(initialValue, set => {
         // start function: only run browser-specific logic if in the browser

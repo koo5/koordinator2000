@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { my_user } from '../my_user.ts';
+    import { my_user } from '$lib/client/my_user';
     import { keycloakProfile, isAuthenticated, keycloakInstance } from '$lib/client/keycloak';
 </script>
 

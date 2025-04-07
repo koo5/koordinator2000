@@ -1,5 +1,5 @@
 import {get, readable, type Readable, writable} from 'svelte/store';
-import {localStorageSharedStore, type SharedStore} from './svelte-shared-store.ts';
+import {localStorageSharedStore, type SharedStore} from './svelte-shared-store';
 import {browser} from '$app/environment';
 import EventEmitter from 'events';
 
@@ -62,7 +62,7 @@ export interface AuthUserResponse {
 type MyUserStore = typeof browser extends true ? SharedStore<MyUser> : Readable<MyUser>;
 
 // Create the appropriate store based on environment
-export const my_user: MyUserStore = browser ? localStorageSharedStore<MyUser>('my_user', {}) : readable<MyUser>({id: -1});
+export const my_user: MyUserStore = browser ? localStorageSharedStore<MyUser>('my_user', {id: 0}) : readable<MyUser>({id: -1});
 
 export const is_user = writable<boolean>(false);
 my_user.subscribe((user) => {
@@ -188,7 +188,7 @@ export async function auth_event(event: AuthEvent): Promise<any> {
 }
 
 
-export async function create_user(only_on_first_visit): Promise<void> {
+export async function create_user(only_on_first_visit: boolean): Promise<void> {
     const user = get(my_user);
     if (user.auth_debug) console.log('i am ' + JSON.stringify(user, null, '  '));
     try {
@@ -207,7 +207,7 @@ export async function create_user(only_on_first_visit): Promise<void> {
             }
         } else {
             console.log('User exists (ID:', user.id + ')');
-            return null;
+            return;
         }
         if (u) {
             await apply_newly_authenticated_user(u);
@@ -295,8 +295,16 @@ export function default_participations_display_style(user: MyUser): string {
     return 'tabular_breakdown';
 }
 
-// Nag system for authentication reminders
-export const nag = new EventEmitter<void>();
+// Define custom type for event emitter
+interface NagEventMap {
+    nag: () => void;
+}
+
+// Create a properly typed EventEmitter
+export const nag = new EventEmitter() as EventEmitter & {
+    emit<K extends keyof NagEventMap>(event: K, ...args: Parameters<NagEventMap[K]>): boolean;
+};
+
 let nag_timeout: ReturnType<typeof setTimeout> | undefined = undefined;
 
 /**

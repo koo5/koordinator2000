@@ -8,6 +8,7 @@ import { adjectives, colors, uniqueNamesGenerator } from 'unique-names-generator
 import { getServerClient, gql, serverMutation as mutate, serverQuery as query } from '$lib/server/urql';
 import { server_env } from '$lib/server/env';
 
+
 /**
  * User object interface
  */
@@ -186,6 +187,11 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
         console.warn('Failed to create user via GraphQL, using fallback user');
     }
 
+    // If we don't have a result, we can't create a user
+    if (!result?.data?.insert_accounts_one?.id) {
+        throw new Error('Failed to create user: no user ID returned from database');
+    }
+    
     const userObject: UserObject = {
         id: result.data.insert_accounts_one.id,
         name: name!,

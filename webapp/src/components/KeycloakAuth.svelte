@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { my_user } from '../my_user.ts';
+    import { my_user } from '$lib/client/my_user';
     import { browser } from '$app/environment';
     import { public_env } from '$lib/public_env';
     import { 

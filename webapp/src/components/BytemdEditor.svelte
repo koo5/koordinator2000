@@ -1,6 +1,7 @@
 <script lang="ts">
-    export let title: string;
-    export let paragraph: string;
+    // These properties can be used in the component if needed
+    const title = '';
+    const paragraph = '';
 
     import { onMount } from 'svelte';
 
