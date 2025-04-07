@@ -4,6 +4,7 @@
     import { createEventDispatcher } from 'svelte';
     import type { DocumentNode } from 'graphql';
     import MutationResult from "src/components/MutationResult.svelte";
+    import { getUserRoleClient } from "$lib/urql.ts";
 
     // Type for status displayer context
     type StatusDisplayer = (message: any[]) => void;
@@ -22,7 +23,7 @@
     $: variables_str = JSON.stringify(variables, null, ' ');
 
     let result;
-    let client = getContextClient();
+    let client = getUserRoleClient();
 
     async function submit(): Promise<void> {
         console.log('submit', variables);

@@ -148,7 +148,7 @@ import {browser} from '$app/environment';
         <div class="navbar-toggler-container">
             <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
         </div>
-        
+
         <!-- Always visible "You" button on mobile -->
         {#if $is_user}
             <div class="mobile-user-button d-md-none">
@@ -156,7 +156,7 @@ import {browser} from '$app/environment';
                     <Dropdown bind:isOpen={userDropdownOpen}>
                         <div slot="toggle" let:toggle>
                             <DropdownToggle toggle={toggle} color="link">
-                                <span class="user-name">You</span>
+                                <span class="user-name">{#if $my_user.name} {$my_user.name} {:else} You (ID {$my_user.id}) {/if}</span>
                             </DropdownToggle>
                         </div>
                         <div slot="menu">
@@ -173,7 +173,7 @@ import {browser} from '$app/environment';
             </div>
         {/if}
     </div>
-    
+
     <!-- Mobile overlay menu and desktop horizontal menu -->
     <Collapse expand="md" isOpen={navbar_open} navbar on:update={e => navbar_handleUpdate(e)}>
         <!-- Navigation items -->
@@ -200,7 +200,7 @@ import {browser} from '$app/environment';
             <NavItem>
                 <NavLink active={segment === 'about'} href="/about">About</NavLink>
             </NavItem>
-            
+
             <!-- "You" item only shown in desktop mode or in mobile overlay -->
             <div class="d-none d-md-block user-section">
                 {#if $is_user}
@@ -209,7 +209,7 @@ import {browser} from '$app/environment';
                             <div slot="toggle" let:toggle>
                                 <DropdownToggle toggle={toggle} color="link">
                                     <span class="user-name">
-                                    {$my_user.name || ('You')}
+                                    <span class="user-name">{#if $my_user.name} {$my_user.name} {:else} You (ID {$my_user.id}) {/if}</span>
                                     {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
                                     {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
                                     {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
@@ -240,7 +240,7 @@ import {browser} from '$app/environment';
                     </NavItem>
                 {/if}
             </div>
-            
+
             <!-- Login link only in mobile overlay and only if not logged in -->
             <div class="d-md-none">
                 {#if !$is_user}
@@ -313,9 +313,9 @@ import {browser} from '$app/environment';
         padding: 0.5rem 1rem;
         z-index: 1030; /* Ensure it's above content */
     }
-    
+
     /* Make sure all navbar elements allow overflow */
-    :global(.navbar), 
+    :global(.navbar),
     :global(.navbar-collapse),
     :global(.navbar-nav),
     :global(.nav-item) {
@@ -329,13 +329,13 @@ import {browser} from '$app/environment';
         align-items: center;
         flex: 1;
     }
-    
+
     /* Mobile user button styling */
     .mobile-user-button {
         margin-left: auto;
         margin-right: 1rem;
     }
-    
+
     /* User section styling - desktop only */
     .user-section {
         margin-left: auto;
@@ -367,7 +367,7 @@ import {browser} from '$app/environment';
             box-sizing: border-box;
             position: relative;
         }
-        
+
         /* MOBILE OVERLAY STYLING */
         /* Style the mobile overlay menu */
         :global(.navbar-collapse) {
@@ -385,26 +385,26 @@ import {browser} from '$app/environment';
             flex-direction: column !important;
             display: flex !important;
         }
-        
+
         /* Style navbar items in mobile view */
         :global(.navbar-nav) {
             flex-direction: column !important;
             width: 100% !important;
         }
-        
+
         /* Style nav items in mobile view */
         :global(.navbar-nav .nav-item) {
             margin-bottom: 0.5rem !important;
             margin-right: 0 !important;
             width: 100% !important;
         }
-        
+
         /* Style nav links in mobile view */
         :global(.nav-link) {
             padding: 0.75rem 1rem !important;
             border-radius: 4px !important;
         }
-        
+
         :global(.nav-link:hover) {
             background-color: rgba(0,0,0,0.05) !important;
         }
@@ -434,28 +434,28 @@ import {browser} from '$app/environment';
         :global(.navbar .dropdown-menu) {
             position: absolute !important;
         }
-        
+
         /* Style horizontal navbar on desktop */
         :global(.navbar-collapse) {
             display: flex !important;
             flex-direction: row !important;
             flex-wrap: nowrap !important;
         }
-        
+
         /* Style navbar items in desktop view */
         :global(.navbar-nav) {
             flex-direction: row !important;
             flex-wrap: nowrap !important;
             align-items: center !important;
         }
-        
+
         /* Style nav items in desktop view */
         :global(.navbar-nav .nav-item) {
             margin-right: 0.5rem !important;
             white-space: nowrap !important;
         }
     }
-    
+
     /* Fix for dropdown menus being hidden */
     :global(body), :global(.page), :global(main), :global(.app-container) {
         overflow-x: visible !important;
