@@ -426,7 +426,13 @@ export async function save_verified_authentication(user_id: number, provider: st
         const result = await mutate(
             gql`
                 mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
-                    insert_verified_user_authentications_one(object: { login_name: $login_name, provider: $provider, account_id: $user_id }) {
+                    insert_verified_user_authentications_one(
+                        object: { login_name: $login_name, provider: $provider, account_id: $user_id }
+                        on_conflict: { 
+                            constraint: verified_user_authentications_provider_login_name_key, 
+                            update_columns: [account_id] 
+                        }
+                    ) {
                         account_id
                     }
                 }
