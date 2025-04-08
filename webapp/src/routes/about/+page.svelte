@@ -10,14 +10,8 @@
     <h1>Koordinator</h1>
 
     <div class="content">
-        <p>Koordinator is a platform for coordinating campaigns and actions. It helps people organize and participate in various initiatives.</p>
+        <p>Koordinator is a platform for coordinating campaigns and actions. It helps people organize and participate in various initiatives. On a crowdfunding website, people support campaigns by pledging money. If enough money is pledged, the campaign author can collect them. On Koordinator, you pledge your participation in campaigns, under conditions that you set. You are notified when the conditions are met, and you are then expected to participate.</p>
 
-        <h2>Where am I?</h2>
-        <div class="content_block">
-            <p>This is a preview of Koordinator. It's like kickstarter, but not for collecting money, it's for doing things.</p>
-            <p>On Kickstarter, people support campaigns by pledging money. If enough money is pledged, the campaign author can collect them. On Koordinator, you pledge your participation in campaigns, under a condition of a number of other participants.</p>
-        </div>
-        
         <h2>Open Source</h2>
         <div class="content_block github-section">
             <a href="https://github.com/koo5/koordinator2000/" target="_blank" rel="noopener noreferrer" class="github-link">
@@ -27,37 +21,70 @@
                 <span>View source on GitHub</span>
             </a>
         </div>
+
+
+        <h2>Contact</h2>
+        <ul>
+            <li>
+        <a href="https://github.com/koo5/koordinator2000/issues/">github</a>
+            </li>
+            <li>
+
+        <a href="https://webchat.freenode.net/#koordinator">IRC</a>
+            </li>
+            <li>
+        <a href="https://discord.gg/QP9mhdEk">discord</a>
+            </li>
+        </ul>
+
+        <h2>Help</h2>
+        <ul>
+            <li>CodeTriage:
+        <a href="https://www.codetriage.com/koo5/koordinator2000">
+            <img src="https://www.codetriage.com/koo5/koordinator2000/badges/users.svg" alt="codetriage" />
+        </a>
+            </li>
+        </ul>
+
+        <h2>Fund</h2>
+
+        <ul>
+            <li>Liberapay:
+
+        <a href="https://liberapay.com/koo5/donate">
+            <img src="https://img.shields.io/liberapay/receives/koo5.svg?logo=liberapay" alt="liberapay" />
+        </a>
+
+            </li>
+            <li>GitHub Sponsors:
+        <a href="https://github.com/sponsors/koo5" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/badge/sponsor-koo5-ff69b4.svg?logo=github" alt="github" />
+        </a>
+            </li>
+        </ul>
+
+        <h2>Lawyerese</h2>
+        <ul>
+            <li>
+                <a href="/about/privacy_policy">Privacy Policy</a>
+            </li>
+            <li>
+                <a href="/about/terms_of_service">Terms of Service</a>
+            </li>
+        </ul>
+
+        <h2>Thank You</h2>
+
+        Created by koo &amp; aindilis.
+
     </div>
 </div>
 
 <style>
-    .about-container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-    }
-
-    h1 {
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
-    .content {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        padding: 2rem;
-    }
-
-    p {
-        margin-bottom: 1.5rem;
-        line-height: 1.6;
-    }
 
     .github-section {
         display: flex;
-        justify-content: center;
-        margin: 2rem 0;
+        margin: 1rem;
     }
 
     .github-link {
