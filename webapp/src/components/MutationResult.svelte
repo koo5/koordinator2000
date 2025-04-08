@@ -1,6 +1,13 @@
-<script>
+<script lang="ts">
+    import type { Readable } from 'svelte/store';
+    
+    interface MutationResultData {
+        fetching: boolean;
+        error?: Error;
+        data?: any;
+    }
 
-    export let result;
+    export let result: Readable<MutationResultData>;
 
     result.subscribe((value) => {
         console.log('MutationResult', value);

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -6,11 +6,11 @@
     import { browser } from '$app/environment';
     
     // Check for auth errors - safely handle during SSR
-    let authError = $page?.url?.searchParams?.get('auth_error') || null;
-    let errorDescription = $page?.url?.searchParams?.get('error_description') || null;
+    let authError: string | null = $page?.url?.searchParams?.get('auth_error') || null;
+    let errorDescription: string | null = $page?.url?.searchParams?.get('error_description') || null;
     
     // Auto-dismiss error after 5 seconds
-    let showError = !!authError;
+    let showError: boolean = !!authError;
     
     onMount(() => {
         if (!browser) return;
@@ -33,7 +33,7 @@
         }
     });
     
-    function dismissError() {
+    function dismissError(): void {
         showError = false;
         goto('/campaigns', { replaceState: true });
     }

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     export let responsive = false;
     export let striped = false;
     export let bordered = false;

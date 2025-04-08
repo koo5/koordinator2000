@@ -1,11 +1,17 @@
 import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import type { Config } from '@sveltejs/kit';
 
-/** @type {import('@sveltejs/kit').Config} */
-const config = {
-    // Consult https://kit.svelte.dev/docs/integrations#preprocessors
-    // for more information about preprocessors
-    preprocess: vitePreprocess(),
+const config: Config = {
+    // Configure the preprocessor for TypeScript support
+    preprocess: vitePreprocess({
+        typescript: {
+            // Force TypeScript to use the project's tsconfig.json
+            tsconfigFile: './tsconfig.json',
+            // Handle TypeScript code in Svelte components
+            handleMixedImports: true
+        }
+    }),
 
     kit: {
         // adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.

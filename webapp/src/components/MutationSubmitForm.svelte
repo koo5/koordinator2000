@@ -3,7 +3,7 @@
     import { my_user } from '$lib/client/my_user.ts';
     import { createEventDispatcher } from 'svelte';
     import type { DocumentNode } from 'graphql';
-    import MutationResult from "src/components/MutationResult.svelte";
+    import MutationResult from "./MutationResult.svelte";
     import { getUserRoleClient } from "$lib/urql.ts";
 
     // Type for status displayer context

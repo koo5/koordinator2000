@@ -64,7 +64,7 @@
     <br />
     <label for="description">Description</label>
     <br />
-    <textarea id="description" bind:value={description} />
+    <textarea id="description" bind:value={description}></textarea>
     <br />
     <label for="xxx">The lowest suggested threshold (the smallest number of people that should participate. Participating in a smaller number of people is expected to either bring no discernible effect, and/or to bring harm to the participants:</label>
     <br />

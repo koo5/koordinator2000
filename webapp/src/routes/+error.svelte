@@ -1,7 +1,6 @@
 <script lang="ts">
     import { page } from '$app/stores';
 
-    // Add a type guard for checking if error has stack property
     function hasStack(error: App.Error | null): error is App.Error & { stack: string } {
         return error !== null && error !== undefined && 'stack' in error;
     }

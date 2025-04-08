@@ -3,7 +3,7 @@
     import {page} from '$app/stores';
     import {create_user, is_user, my_user, type MyUser} from '$lib/client/my_user';
     import type { SharedStore } from '$lib/client/svelte-shared-store';
-    import SettingsModal from 'src/components/SettingsModal.svelte';
+    import SettingsModal from './SettingsModal.svelte';
     import {debug} from '$lib/stores.ts';
     import {onMount} from 'svelte';
 import {browser} from '$app/environment';
@@ -18,7 +18,7 @@ import {browser} from '$app/environment';
         NavItem,
         NavLink
     } from './ui';
-    import TheNagModal from 'src/components/TheNagModal.svelte';
+    import TheNagModal from './TheNagModal.svelte';
     import {public_env} from '$lib/public_env';
     import {goto} from '$app/navigation';
 

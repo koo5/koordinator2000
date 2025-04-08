@@ -14,7 +14,9 @@
 		"noImplicitThis": true,
 		"alwaysStrict": true,
 		"allowImportingTsExtensions": true,
+		"verbatimModuleSyntax": false, // Disable for better Svelte compatibility
 		"noEmit": true
-	}
+	},
+	"include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 }

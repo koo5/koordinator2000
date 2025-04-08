@@ -15,7 +15,7 @@
     import { saturate_computate, set_css_var } from '$lib/client/campaign.ts';
     import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
-    import type { SharedStore } from '$lib/client/svelte-shared-store.ts';
+    import { type SharedStore } from '$lib/client/svelte-shared-store.ts';
     import { debug } from '$lib/stores.ts';
 
     // Define types for layout data
@@ -91,7 +91,7 @@
         await create_user(true);
         // Verify SvelteKit versions
         initVersionCheck();
-        
+
         // Start JWT renewal service
         startJwtRenewalService();
 

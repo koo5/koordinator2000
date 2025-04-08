@@ -4,6 +4,14 @@ import {browser} from '$app/environment';
 import EventEmitter from 'events';
 
 /**
+ * Auth event interface
+ */
+export interface AuthEvent {
+    type: string;
+    [key: string]: any;
+}
+
+/**
  * User object interface for the current user
  */
 export interface MyUser {
@@ -36,15 +44,6 @@ export interface Campaign {
     title?: string;
     slug?: string;
     my_participations?: Participation[];
-
-    [key: string]: any;
-}
-
-/**
- * Auth event interface
- */
-export interface AuthEvent {
-    type: string;
 
     [key: string]: any;
 }

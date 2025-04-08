@@ -1,10 +1,28 @@
-<script lang="js">
+<script lang="ts">
     import ToolTipsy from './ToolTipsy.svelte';
     import { my_user } from '$lib/client/my_user.ts';
     import { get_status_class, get_tickmark } from '$lib/client/campaign.ts';
 
-    export let participation;
-    export let campaign;
+    interface Account {
+        id: number;
+        name: string;
+    }
+
+    interface Participation {
+        id: number;
+        threshold?: number;
+        condition_is_fulfilled?: boolean;
+        account: Account;
+        [key: string]: any;
+    }
+
+    interface Campaign {
+        collect_confirmations?: boolean;
+    }
+
+    export let participation: Participation;
+    export let campaign: Campaign;
+    
     $: status_class = get_status_class(participation, campaign?.collect_confirmations);
     $: tickmark = get_tickmark(participation, campaign?.collect_confirmations);
     $: my_badge = $my_user.id == participation.account.id;

@@ -1,10 +1,11 @@
-<script lang="js">
+<script lang="ts">
     import { Button, Progress } from './ui';
     import { sanitize_html } from '$lib/client/campaign.ts';
     import MyParticipation from './MyParticipation.svelte';
     import MutationForm from './MutationForm.svelte';
     import { getContextClient, gql, subscriptionStore } from '$lib/urql.ts';
     import { default_participations_display_style, get_my_participation, my_user } from '$lib/client/my_user.ts';
+    import type { Campaign as CampaignType, Participation as ParticipationType } from '$lib/client/my_user.ts';
     import ToolTipsy from './ToolTipsy.svelte';
     import ParticipationBadge from './ParticipationBadge.svelte';
     import DismissalBadge from './DismissalBadge.svelte';
@@ -15,7 +16,33 @@
     import { crossfade } from 'svelte/transition';
     import { quintOut } from 'svelte/easing';*/
 
-    export let campaign;
+    interface Dismissal {
+        account_id: number;
+    }
+
+    interface Tag {
+        tag: {
+            id: number;
+            name: string;
+        }
+    }
+
+    interface ExtendedParticipation extends ParticipationType {
+        id: number;
+        account: {
+            id: number;
+            name: string;
+        };
+    }
+
+    export let campaign: CampaignType & {
+        description?: string;
+        collect_confirmations?: boolean;
+        participations?: ExtendedParticipation[];
+        campaign_dismissals?: Dismissal[];
+        suggested_optimal_threshold?: number;
+        tags?: Tag[];
+    };
     export let is_detail_view = false;
 
     $: my_participation = get_my_participation(campaign, $my_user);
@@ -44,8 +71,8 @@
     // campaign.unconfirmed_fulfilled_count.aggregate.count;
     // campaign.confirmed_fulfilled_count.aggregate.count;
 
-    $: suggested_optimal_threshold = campaign.suggested_optimal_threshold;
-    $: suggested_mass = campaign.suggested_optimal_threshold + 1;
+    $: suggested_optimal_threshold = campaign.suggested_optimal_threshold || 0;
+    $: suggested_mass = campaign.suggested_optimal_threshold ? campaign.suggested_optimal_threshold + 1 : 1;
 
     // participations_contributing_towards_reaching_optimal_threshold
     const CONTRIBUTING_COUNT = gql`
@@ -58,7 +85,15 @@
         }
     `;
 
-    $: confirmed_contributing_count_q = subscriptionStore({
+    interface ContributingCountData {
+        participations_aggregate: {
+            aggregate: {
+                count: number;
+            }
+        }
+    }
+
+    $: confirmed_contributing_count_q = subscriptionStore<ContributingCountData>({
         client: getContextClient(),
         query: CONTRIBUTING_COUNT,
         variables: {
@@ -68,7 +103,7 @@
         },
     });
 
-    $: unconfirmed_contributing_count_q = subscriptionStore({
+    $: unconfirmed_contributing_count_q = subscriptionStore<ContributingCountData>({
         client: getContextClient(),
         query: CONTRIBUTING_COUNT,
         variables: {
@@ -79,8 +114,8 @@
     });
     $: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
     $: unconfirmed_contributing_count = $unconfirmed_contributing_count_q.data && $unconfirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
-    $: confirmed_contributing_count_str = confirmed_contributing_count == undefined ? '???' : confirmed_contributing_count;
-    $: unconfirmed_contributing_count_str = unconfirmed_contributing_count == undefined ? '???' : unconfirmed_contributing_count;
+    $: confirmed_contributing_count_str = confirmed_contributing_count === undefined ? '???' : confirmed_contributing_count;
+    $: unconfirmed_contributing_count_str = unconfirmed_contributing_count === undefined ? '???' : unconfirmed_contributing_count;
 
     const CAMPAIGN_DISMISSAL = gql`
         mutation MyMutation($campaign_id: Int, $user_id: Int) {
@@ -116,7 +151,7 @@
     </h2>
     <h5>Description</h5>
     <div class="content_block">
-        <p>{@html sanitize_html(campaign.description)}</p>
+        <p>{@html sanitize_html(campaign.description || '')}</p>
     </div>
 
     <h5>Tags</h5>
@@ -173,7 +208,7 @@
         {:else if default_participations_display_style($my_user) == 'koo1_introductory'}
             wordy stuff goes here
         {:else if default_participations_display_style($my_user) == 'koo1'}
-            {#each campaign.participations as participation (participation.id)}
+            {#each campaign.participations || [] as participation (participation.id)}
                 <span>
                     <ParticipationBadge {participation} {campaign} />
                 </span>
@@ -195,7 +230,7 @@
             </div>
         </ToolTipsy>
 
-        {#each campaign.campaign_dismissals as dismissal (dismissal.account_id)}
+        {#each campaign.campaign_dismissals || [] as dismissal (dismissal.account_id)}
             <span>
                 <DismissalBadge {dismissal} />
             </span>

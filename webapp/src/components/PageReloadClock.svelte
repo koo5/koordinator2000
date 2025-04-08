@@ -1,4 +1,4 @@
-<script type="js">
+<script lang="ts">
     import { onMount } from 'svelte';
     import { my_user } from '$lib/client/my_user.ts';
 

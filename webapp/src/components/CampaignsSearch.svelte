@@ -2,7 +2,7 @@
     import { getContextClient, gql, queryStore } from '$lib/urql.ts';
     import { my_user } from '$lib/client/my_user.ts';
     import CampaignList from './CampaignList.svelte';
-    import * as animateScroll from 'svelte-scrollto';
+    import { scrollTo } from '$lib/client/scroll-utils';
     import { browser } from '$app/environment';
     import { debug } from '$lib/stores';
     import { onMount, tick } from 'svelte';
@@ -229,7 +229,7 @@
     async function more(): Promise<void> {
         if (browser) {
             if (items_div) {
-                animateScroll.scrollTo({ delay: 0, element: items_div });
+                scrollTo({ delay: 0, element: items_div });
             }
             more_button?.blur();
         }

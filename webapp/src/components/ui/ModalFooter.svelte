@@ -1,3 +1,7 @@
+<script lang="ts">
+    // Add a simple script block to make this a proper component
+</script>
+
 <div class="modal-footer" {...$$restProps}>
     <slot />
 </div>
@@ -14,7 +18,8 @@
         border-bottom-left-radius: calc(0.3rem - 1px);
     }
 
-    .modal-footer > * {
+    /* Apply margin to any direct children of modal-footer */
+    :global(.modal-footer > *) {
         margin: 0.25rem;
     }
 </style>

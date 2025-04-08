@@ -1,7 +1,7 @@
 <script lang="ts">
     import Campaign from './Campaign.svelte';
     import { type Campaign as CampaignType, my_user } from '$lib/client/my_user.ts';
-    import * as animateScroll from 'svelte-scrollto';
+    import { scrollTo } from '$lib/client/scroll-utils';
     import { browser } from '$app/environment';
     import { mobile, debug } from '$lib/stores.ts';
     import { onDestroy, onMount } from 'svelte';
@@ -168,7 +168,7 @@
                 if (!next_ch) return;
 
                 // Scroll to next campaign
-                animateScroll.scrollTo({ delay: 0, element: next_ch });
+                scrollTo({ delay: 0, element: next_ch });
                 return;
             }
         }

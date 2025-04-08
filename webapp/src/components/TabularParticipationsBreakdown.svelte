@@ -1,9 +1,18 @@
 <script lang="ts">
     //import {my_user} from '../my_user.ts';
     import TabularParticipationsRow from './TabularParticipationsRow.svelte';
-    import type { Campaign, Participation } from '$lib/client/my_user.ts';
+    import type { Participation as BaseParticipation } from '$lib/client/my_user.ts';
 
-    export let campaign: Campaign;
+    export let campaign: any;
+
+    interface Participation extends BaseParticipation {
+        account: {
+            id: number;
+            name: string;
+        };
+        threshold: number;
+        condition_is_fulfilled: boolean;
+    }
 
     interface ParticipationWithIndex extends Participation {
         idx: number;
