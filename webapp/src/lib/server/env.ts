@@ -3,13 +3,21 @@
  * This file should never be imported in client-side code
  */
 
-// Import server-side environment variables
-import { 
-    HASURA_ADMIN_SECRET, 
-    MY_APP_KEYS,
-    KEYCLOAK_CLIENT_SECRET
-} from '$env/static/private';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 import { public_env, type PublicEnv } from '$lib/public_env';
+
+// Load environment variables from .env file
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const rootDir = path.resolve(__dirname, '../../../');
+dotenv.config({ path: path.join(rootDir, '.env') });
+
+// Access environment variables from process.env
+const HASURA_ADMIN_SECRET = process.env.HASURA_ADMIN_SECRET || '';
+const MY_APP_KEYS = process.env.MY_APP_KEYS || '';
+const KEYCLOAK_CLIENT_SECRET = process.env.KEYCLOAK_CLIENT_SECRET || '';
 
 /**
  * App keys configuration interface
@@ -34,6 +42,8 @@ interface ServerEnv extends PublicEnv {
 // Parse JSON configuration for MY_APP_KEYS - this must be provided
 let parsedKeys: AppKeys;
 try {
+    console.log('MY_APP_KEYS env var is:', MY_APP_KEYS.substring(0, 20) + '...');
+    
     if (!MY_APP_KEYS) {
         throw new Error('MY_APP_KEYS environment variable is missing');
     }

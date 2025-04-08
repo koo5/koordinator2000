@@ -1,5 +1,6 @@
 <script lang="ts">
     import KeycloakIdentityManager from '../../components/KeycloakIdentityManager.svelte';
+    import DeleteSelf from '../../components/DeleteSelf.svelte';
     import { my_user } from '$lib/client/my_user.ts';
 </script>
 
@@ -23,6 +24,14 @@
     <div class="identity-section">
         <KeycloakIdentityManager />
     </div>
+    
+    <div class="danger-zone-section">
+        <h3>Danger Zone</h3>
+        <div class="danger-zone-content">
+            <p>Need to delete your account? You can do that from our dedicated page.</p>
+            <a href="/account/delete" class="delete-account-link">Delete Account →</a>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -38,12 +47,46 @@
         border-bottom: 1px solid #dee2e6;
     }
 
-    .account-section {
+    .account-section, .identity-section {
         margin-bottom: 2rem;
         padding: 1.5rem;
         border-radius: 6px;
         background-color: #f8f9fa;
         border: 1px solid #dee2e6;
+    }
+
+    .danger-zone-section {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        border-radius: 6px;
+        background-color: #f8f9fa;
+        border: 1px solid #dc3545;
+    }
+
+    .danger-zone-section h3 {
+        color: #dc3545;
+        border-bottom: 1px solid #dc3545;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .danger-zone-content {
+        margin-bottom: 0.5rem;
+    }
+    
+    .delete-account-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #dc3545;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+    
+    .delete-account-link:hover {
+        background-color: #c82333;
     }
 
     h3 {

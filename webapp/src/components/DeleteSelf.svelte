@@ -1,53 +1,161 @@
 <script lang="ts">
-    /*
-    Not implemented yet: https://docs.nhost.io/auth/api-reference#delete-user
-    - "ON DELETE CASCADE for foreign keys on users table"
-    */
-    function nhost_delete_user(): void {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://backend-3f257037.nhost.app/auth/delete', true);
+    import { goto } from '$app/navigation';
+    import { my_user } from '$lib/client/my_user';
+    import { get } from 'svelte/store';
 
-        //Send the proper header information along with the request
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    let confirmDelete = false;
+    let isDeleting = false;
+    let error = '';
 
-        xhr.onreadystatechange = function () {
-            // Call a function when the state changes.
-            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-                console.log('Delete done...');
+    async function deleteAccount() {
+        if (!confirmDelete) {
+            confirmDelete = true;
+            return;
+        }
+
+        try {
+            isDeleting = true;
+            error = '';
+
+            // Get the current user data
+            const userData = get(my_user);
+
+            // Check if the user has a valid JWT token
+            if (!userData || !userData.jwt) {
+                throw new Error('No authentication token available. Please log in again.');
             }
-        };
-        xhr.send('');
+
+            // Call the server API to delete the account
+            const response = await fetch('/api/delete-account', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userData.jwt}`
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || 'Failed to delete account');
+            }
+
+            // Redirect to home page after successful deletion
+            localStorage.clear();
+            sessionStorage.clear();
+            my_user.set({ id: -1 });
+            goto('/');
+        } catch (err) {
+            console.error('Error deleting account:', err);
+            error = (err as Error).message || 'Failed to delete account. Please try again later.';
+        } finally {
+            isDeleting = false;
+        }
+    }
+
+    function cancelDelete() {
+        confirmDelete = false;
     }
 </script>
 
-<div class="form-container" id="delete_form_container">
-    <label class="form-header" for="delete-user">Delete User</label>
-    <input type="button" id="delete-user" value="Delete user" on:click={nhost_delete_user} />
+<div class="delete-account-container">
+    <h3>Delete Account</h3>
+
+    {#if error}
+        <div class="error-message">{error}</div>
+    {/if}
+
+    {#if !confirmDelete}
+        <p class="warning-text">
+            Warning: Deleting your account is permanent and cannot be undone.
+            All your data will be permanently removed.
+        </p>
+        <button class="delete-button" on:click={deleteAccount}>Delete My Account</button>
+    {:else}
+        <p class="confirm-text">
+            Are you sure you want to delete your account? This action cannot be undone.
+        </p>
+        <div class="button-group">
+            <button class="cancel-button" on:click={cancelDelete} disabled={isDeleting}>Cancel</button>
+            <button class="confirm-button" on:click={deleteAccount} disabled={isDeleting}>
+                {#if isDeleting}
+                    Deleting...
+                {:else}
+                    Confirm Delete
+                {/if}
+            </button>
+        </div>
+    {/if}
 </div>
 
 <style>
-    .form-container {
-        margin: 2em;
-        padding: 1em;
-        box-shadow: 0px 0px 40px -10px #e0e0e0;
-        border-radius: 10px;
+    .delete-account-container {
+        margin: 2em 0;
+        padding: 1.5em;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
     }
 
-    .form-header {
+    h3 {
+        margin-top: 0;
+        margin-bottom: 1rem;
+        color: #dc3545;
+    }
+
+    .warning-text, .confirm-text {
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+    }
+
+    .warning-text {
+        color: #721c24;
+    }
+
+    .confirm-text {
+        color: #721c24;
         font-weight: bold;
     }
 
-    #delete_form_container {
-        display: grid;
-        grid-template-rows: 1fr;
-        grid-template-columns: 1fr 1fr;
+    .error-message {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
     }
 
-    #delete_form_container label {
-        grid-column: 1/2;
+    .button-group {
+        display: flex;
+        gap: 1rem;
     }
 
-    #delete_form_container input {
-        grid-column: 2/3;
+    button {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        border: none;
+    }
+
+    button:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+    }
+
+    .delete-button {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .cancel-button {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .confirm-button {
+        background-color: #dc3545;
+        color: white;
     }
 </style>
