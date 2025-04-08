@@ -161,7 +161,6 @@ import {browser} from '$app/environment';
                         </div>
                         <div slot="menu">
                             <DropdownMenu right>
-                                <DropdownItem onClick={handleLogin}>Switch account</DropdownItem>
                                 <DropdownItem href="/you">Profile</DropdownItem>
                                 <DropdownItem href="/account">Account</DropdownItem>
                                 <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
@@ -219,16 +218,10 @@ import {browser} from '$app/environment';
                             </div>
                             <div slot="menu">
                                 <DropdownMenu right>
-                                    {#if $is_user}
-                                        <DropdownItem onClick={handleLogin}>Switch account</DropdownItem>
-                                        <DropdownItem href="/you">Profile</DropdownItem>
-                                        <DropdownItem href="/account">Account</DropdownItem>
-                                        <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
-                                        <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-                                    {:else}
-                                        <DropdownItem onClick={handleLogin}>Login</DropdownItem>
-                                        <DropdownItem onClick={() => create_user(false)}>New user</DropdownItem>
-                                    {/if}
+                                    <DropdownItem href="/you">Profile</DropdownItem>
+                                    <DropdownItem href="/account">Account</DropdownItem>
+                                    <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
+                                    <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
                                 </DropdownMenu>
                             </div>
                         </Dropdown>
@@ -237,6 +230,9 @@ import {browser} from '$app/environment';
                     <NavItem>
                         <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
                         </NavLink>
+                    </NavItem>
+                    <NavItem>
+                            <NavLink onClick={() => create_user(false)}>New user</NavLink>
                     </NavItem>
                 {/if}
             </div>

@@ -1,10 +1,16 @@
-import { redirect } from '@sveltejs/kit';
-import type { RequestHandler } from '@sveltejs/kit';
+import { redirect, json } from '@sveltejs/kit';
+import type { RequestHandler, RequestEvent } from '@sveltejs/kit';
 import { exchangeCodeForTokens, storeTokensInCookies, getUserInfo } from '$lib/server/keycloak';
 import { public_env } from '$lib/public_env';
 import { process_auth_event, user_id_from_auth, free_user_id } from '$lib/server/auth';
 
-export const GET: RequestHandler = async ({ url, cookies }) => {
+// Export both function format and RequestHandler format for compatibility
+export async function GET(event: RequestEvent) {
+    return handleCallback(event);
+}
+
+// Original implementation kept for reference
+const handleCallback: RequestHandler = async ({ url, cookies }) => {
     console.log('Keycloak callback URL:', url.href);
     console.log('Query parameters:', Object.fromEntries(url.searchParams.entries()));
 
@@ -41,6 +47,15 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 
     // Get redirect URI for token exchange (must match what was used in login request)
     const redirectUri = `${public_env.PUBLIC_URL}/auth/keycloak/callback`;
+
+    // Debug - log configuration
+    console.log('Keycloak callback configuration:', {
+        redirectUri,
+        publicUrl: public_env.PUBLIC_URL,
+        keycloakUrl: public_env.KEYCLOAK_URL,
+        keycloakRealm: public_env.KEYCLOAK_REALM,
+        keycloakClientId: public_env.KEYCLOAK_CLIENT_ID
+    });
 
     try {
         // Exchange code for tokens
@@ -148,3 +163,4 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
         });
     }
 };
+
