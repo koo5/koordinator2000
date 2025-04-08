@@ -2,6 +2,7 @@
     import { goto } from '$app/navigation';
     import { my_user } from '$lib/client/my_user';
     import { get } from 'svelte/store';
+    import type { SharedStore } from '$lib/client/svelte-shared-store';
 
     let confirmDelete = false;
     let isDeleting = false;
@@ -43,7 +44,10 @@
             // Redirect to home page after successful deletion
             localStorage.clear();
             sessionStorage.clear();
-            my_user.set({ id: -1 });
+            
+            // Cast to SharedStore type to access the set method
+            (my_user as SharedStore<any>).set({ id: -1 });
+            
             goto('/');
         } catch (err) {
             console.error('Error deleting account:', err);

@@ -30,6 +30,9 @@
         <div class="danger-zone-content">
             <p>Need to delete your account? You can do that from our dedicated page.</p>
             <a href="/account/delete" class="delete-account-link">Delete Account →</a>
+            <p class="help-text">
+                Learn more about account deletion in our <a href="/about/help/data-deletion">data deletion guide</a>.
+            </p>
         </div>
     </div>
 </div>
@@ -114,5 +117,20 @@
 
     .info-value {
         flex: 1;
+    }
+    
+    .help-text {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .help-text a {
+        color: #dc3545;
+        text-decoration: none;
+    }
+    
+    .help-text a:hover {
+        text-decoration: underline;
     }
 </style>

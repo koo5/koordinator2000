@@ -63,13 +63,16 @@
             </li>
         </ul>
 
-        <h2>Lawyerese</h2>
+        <h2>Docs</h2>
         <ul>
             <li>
                 <a href="/about/privacy_policy">Privacy Policy</a>
             </li>
             <li>
                 <a href="/about/terms_of_service">Terms of Service</a>
+            </li>
+            <li>
+                <a href="/about/help/data-deletion">Data Deletion & Account Removal</a>
             </li>
         </ul>
 
