@@ -9,7 +9,7 @@
     "dev": "vite dev --port 5533",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "node build ",
+    "start": "PORT=5533 node build ",
     "typecheck": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
