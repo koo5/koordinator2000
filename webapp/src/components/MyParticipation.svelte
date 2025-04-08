@@ -24,8 +24,8 @@
     $: update_button_disabled = my_participation.threshold == new_threshold;
 
     const UPSERT = gql`
-        mutation MyMutation($campaign_id: Int, $user_id: Int, $threshold: Int) {
-            insert_participations(objects: { campaign_id: $campaign_id, account_id: $user_id, threshold: $threshold }, on_conflict: { constraint: participations_campaign_id_user_id, update_columns: threshold }) {
+        mutation MyMutation($campaign_id: Int, $threshold: Int) {
+            insert_participations(objects: { campaign_id: $campaign_id, threshold: $threshold }, on_conflict: { constraint: participations_campaign_id_user_id, update_columns: threshold }) {
                 affected_rows
             }
         }
@@ -33,7 +33,6 @@
 
     $: upsert_vars = {
         campaign_id: campaign.id,
-        user_id: $my_user.id,
         threshold: new_threshold,
     };
 
