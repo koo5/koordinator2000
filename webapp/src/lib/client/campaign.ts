@@ -114,10 +114,10 @@ export function short_description(participation: Participation | undefined | nul
         if (participation.condition_is_fulfilled) {
             if (collect_confirmations) {
                 if (participation.confirmed) {
-                    return 'participation confirmed!';
-                } else return 'awaiting confirmation..';
-            } else return 'threshold reached';
-        } else return 'more participants needed...';
+                    return 'confirmed!';
+                } else return 'unconfirmed..';
+            } else return 'participating';
+        } else return 'waiting...';
     }
 }
 

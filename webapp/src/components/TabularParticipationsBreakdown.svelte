@@ -53,7 +53,7 @@
                 <b>
                     <center>
                         {#if remaining > 0}
-                            {remaining} more people with default threshold needed, to reach the goal of {suggested_participants} participants
+                            {remaining} more users with default threshold needed, to reach the goal of {suggested_participants} participants
                         {:else}
                             — — — goal of {suggested_participants} participants reached! — — —
                         {/if}
