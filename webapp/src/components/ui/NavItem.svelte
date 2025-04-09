@@ -1,6 +1,6 @@
-<li class="nav-item" {...$$restProps}>
+<div class="nav-item" {...$$restProps}>
     <slot />
-</li>
+</div>
 
 <style>
     .nav-item {

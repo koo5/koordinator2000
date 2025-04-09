@@ -1,12 +1,12 @@
 <script lang="ts">
     import PageReloadClock from './PageReloadClock.svelte';
-    import {page} from '$app/stores';
-    import {create_user, is_user, my_user, type MyUser} from '$lib/client/my_user';
+    import { page } from '$app/stores';
+    import { create_user, is_user, my_user, type MyUser } from '$lib/client/my_user';
     import type { SharedStore } from '$lib/client/svelte-shared-store';
     import SettingsModal from './SettingsModal.svelte';
-    import {debug} from '$lib/stores.ts';
-    import {onMount} from 'svelte';
-import {browser} from '$app/environment';
+    import { debug } from '$lib/stores.ts';
+    import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
     import {
         Collapse,
         Dropdown,
@@ -19,8 +19,8 @@ import {browser} from '$app/environment';
         NavLink
     } from './ui';
     import TheNagModal from './TheNagModal.svelte';
-    import {public_env} from '$lib/public_env';
-    import {goto} from '$app/navigation';
+    import { public_env } from '$lib/public_env';
+    import { goto } from '$app/navigation';
 
     $: currentPath = $page?.url?.pathname || '/';
     $: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
@@ -142,35 +142,12 @@ import {browser} from '$app/environment';
     }
 </script>
 
-<Navbar expand="md" light class="header-navbar">
-    <PageReloadClock/>
+<Navbar class="header-navbar" expand="md" light>
+    <PageReloadClock />
     <div class="navbar-brand-section">
         <div class="navbar-toggler-container">
-            <NavbarToggler on:click={() => (navbar_open = !navbar_open)}/>
+            <NavbarToggler on:click={() => (navbar_open = !navbar_open)} />
         </div>
-
-        <!-- Always visible "You" button on mobile -->
-        {#if $is_user}
-            <div class="mobile-user-button d-md-none">
-                <NavItem class="user-dropdown-container">
-                    <Dropdown bind:isOpen={userDropdownOpen}>
-                        <div slot="toggle" let:toggle>
-                            <DropdownToggle toggle={toggle} color="link">
-                                <span class="user-name">{#if $my_user.name} {$my_user.name} {:else} You (ID {$my_user.id}) {/if}</span>
-                            </DropdownToggle>
-                        </div>
-                        <div slot="menu">
-                            <DropdownMenu right>
-                                <DropdownItem href="/you">Profile</DropdownItem>
-                                <DropdownItem href="/account">Account</DropdownItem>
-                                <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
-                                <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-                            </DropdownMenu>
-                        </div>
-                    </Dropdown>
-                </NavItem>
-            </div>
-        {/if}
     </div>
 
     <!-- Mobile overlay menu and desktop horizontal menu -->
@@ -181,10 +158,6 @@ import {browser} from '$app/environment';
                 <NavLink active={segment === 'campaigns'} href="/campaigns">Campaigns</NavLink>
             </NavItem>
 
-            <NavItem>
-                <NavLink active={segment === 'add_campaign'} href="/add_campaign">Add campaign
-                </NavLink>
-            </NavItem>
             {#if $is_user}
                 <NavItem>
                     <NavLink active={segment === 'notifications'} href="/notifications">Notifications
@@ -199,60 +172,57 @@ import {browser} from '$app/environment';
             <NavItem>
                 <NavLink active={segment === 'about'} href="/about">About</NavLink>
             </NavItem>
-
-            <!-- "You" item only shown in desktop mode or in mobile overlay -->
-            <div class="d-none d-md-block user-section">
-                {#if $is_user}
-                    <NavItem class="user-dropdown-container">
-                        <Dropdown bind:isOpen={userDropdownOpen}>
-                            <div slot="toggle" let:toggle>
-                                <DropdownToggle toggle={toggle} color="link">
-                                    <span class="user-name">
-                                    <span class="user-name">{#if $my_user.name} {$my_user.name} {:else} You (ID {$my_user.id}) {/if}</span>
-                                    {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
-                                    {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
-                                    {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
-                                    {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
-                                    </span>
-                                </DropdownToggle>
-                            </div>
-                            <div slot="menu">
-                                <DropdownMenu right>
-                                    <DropdownItem href="/you">Profile</DropdownItem>
-                                    <DropdownItem href="/account">Account</DropdownItem>
-                                    <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
-                                    <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
-                                </DropdownMenu>
-                            </div>
-                        </Dropdown>
-                    </NavItem>
-                {:else}
-                    <NavItem>
-                        <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
-                        </NavLink>
-                    </NavItem>
-                    <NavItem>
-                            <NavLink onClick={() => create_user(false)}>New user</NavLink>
-                    </NavItem>
-                {/if}
-            </div>
-
-            <!-- Login link only in mobile overlay and only if not logged in -->
-            <div class="d-md-none">
-                {#if !$is_user}
-                    <NavItem>
-                        <NavLink href="#" onClick={handleLogin} active={segment === 'login'} >Login
-                        </NavLink>
-                    </NavItem>
-                {/if}
-            </div>
         </div>
     </Collapse>
+
+    <div class="unified-user-button">
+        <NavItem class="user-dropdown-container">
+            <Dropdown bind:isOpen={userDropdownOpen}>
+                <div let:toggle slot="toggle">
+                    <DropdownToggle color="link" toggle={toggle}>
+                        {#if $is_user}
+
+                            <span class="user-name">{#if $my_user.name} {$my_user.name} {:else} You (ID {$my_user.id}
+                                ) {/if}</span>
+                            {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
+                            {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
+                            {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
+                            {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
+
+                        {:else}
+                            User
+                        {/if}
+
+                    </DropdownToggle>
+                </div>
+                <div slot="menu">
+                    <DropdownMenu right>
+                        {#if $is_user}
+
+                            <DropdownItem href="/you">Profile</DropdownItem>
+                            <DropdownItem href="/account">Account</DropdownItem>
+                            <DropdownItem href="/notifications">Notifications</DropdownItem>
+                            <DropdownItem href="/add_campaign">Add campaign</DropdownItem>
+
+                            <DropdownItem onClick={toggle_settings}>Settings</DropdownItem>
+                            <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+
+                        {:else}
+                            <DropdownItem onClick={handleLogin}>Login</DropdownItem>
+                            <DropdownItem onClick={() => create_user(false)}>New user</DropdownItem>
+                        {/if}
+
+                    </DropdownMenu>
+                </div>
+            </Dropdown>
+        </NavItem>
+    </div>
+
 </Navbar>
 
 <!-- Settings Modal -->
-<SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal}/>
-<TheNagModal/>
+<SettingsModal isOpen={settingsModalOpen} on:close={closeSettingsModal} />
+<TheNagModal />
 
 <style>
     /* Utility classes for margin control - used as class names in the template */
@@ -306,6 +276,7 @@ import {browser} from '$app/environment';
         overflow: visible !important; /* Force dropdowns to be visible beyond boundaries */
         display: flex !important;
         flex-direction: row !important;
+        justify-content: space-between !important; /* Spread items across the navbar */
         padding: 0.5rem 1rem;
         z-index: 1030; /* Ensure it's above content */
     }
@@ -326,14 +297,16 @@ import {browser} from '$app/environment';
         flex: 1;
     }
 
-    /* Mobile user button styling */
-    .mobile-user-button {
+    /* Unified user button styling */
+    .unified-user-button {
         margin-left: auto;
-        margin-right: 1rem;
+        display: flex !important;
+        white-space: nowrap !important;
+        z-index: 1100; /* Ensure it's above other elements */
     }
 
-    /* User section styling - desktop only */
-    .user-section {
+    /* Login section styling - desktop only */
+    .login-section {
         margin-left: auto;
         display: flex !important;
         white-space: nowrap !important;
@@ -373,7 +346,7 @@ import {browser} from '$app/environment';
             right: 0 !important;
             width: 100% !important;
             background-color: #f8f9fa !important;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
             z-index: 1030 !important;
             padding: 1rem !important;
             border-bottom-left-radius: 8px !important;
@@ -402,7 +375,7 @@ import {browser} from '$app/environment';
         }
 
         :global(.nav-link:hover) {
-            background-color: rgba(0,0,0,0.05) !important;
+            background-color: rgba(0, 0, 0, 0.05) !important;
         }
 
         /* Make user name more compact on mobile */
