@@ -76,10 +76,6 @@
             </li>
         </ul>
 
-        <h2>Thank You</h2>
-
-        Created by koo &amp; aindilis.
-
     </div>
 </div>
 

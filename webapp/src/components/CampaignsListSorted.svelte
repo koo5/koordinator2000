@@ -423,9 +423,6 @@
     /* Mobile-specific styles */
     @media (max-width: 768px) {
         :global(swiper-container) {
-            height: 95vh; /* Fixed height on mobile */
-            max-height: 95vh;
-            min-height: 95vh;
         }
     }
 
@@ -464,7 +461,6 @@
         justify-content: center;
         transition: opacity 0.3s ease;
         height: 100%;
-        min-height: 60vh;
     }
 
     :global(.dismiss-all) {
