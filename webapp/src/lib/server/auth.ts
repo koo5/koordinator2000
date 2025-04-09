@@ -191,7 +191,7 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
     if (!result?.data?.insert_accounts_one?.id) {
         throw new Error('Failed to create user: no user ID returned from database');
     }
-    
+
     const userObject: UserObject = {
         id: result.data.insert_accounts_one.id,
         name: name!,
@@ -351,7 +351,7 @@ export async function user_id_from_auth(provider: string, sub: string): Promise<
     );
 
     // Log the entire query result to debug
-    console.log(`Auth lookup result: ${JSON.stringify(result, null, 2)}`);
+    //console.log(`Auth lookup result: ${JSON.stringify(result, null, 2)}`);
 
     if (result.data && 'verified_user_authentications' in result.data) {
         const authData = result.data as { verified_user_authentications: Array<{ account_id: number }> };
@@ -428,9 +428,9 @@ export async function save_verified_authentication(user_id: number, provider: st
                 mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
                     insert_verified_user_authentications_one(
                         object: { login_name: $login_name, provider: $provider, account_id: $user_id }
-                        on_conflict: { 
-                            constraint: verified_user_authentications_provider_login_name_key, 
-                            update_columns: [account_id] 
+                        on_conflict: {
+                            constraint: verified_user_authentications_provider_login_name_key,
+                            update_columns: [account_id]
                         }
                     ) {
                         account_id

@@ -1,4 +1,3 @@
-import { redirect, json } from '@sveltejs/kit';
 import type { RequestHandler, RequestEvent } from '@sveltejs/kit';
 import { exchangeCodeForTokens, storeTokensInCookies, getUserInfo } from '$lib/server/keycloak';
 import { public_env } from '$lib/public_env';
@@ -133,7 +132,7 @@ const handleCallback: RequestHandler = async ({ url, cookies }) => {
             }
         } else {
             // New user - redirect to new user setup page
-            // Generate a temporary user ID
+            // Generate a new user ID
             const newUser = await free_user_id(userInfo.email || null);
 
             // For new users, create a unique URL with all the necessary data
