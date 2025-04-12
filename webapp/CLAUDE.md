@@ -29,10 +29,11 @@ MY_APP_KEYS='{"private":{...},"public":{...}}'
 
 ⚠️ **IMPORTANT**: SvelteKit with Vite requires client-accessible environment variables to have the `VITE_` prefix. Variables without this prefix will only be available server-side.
 
-To generate the keys, run:
+To generate MY_APP_KEYS, run:
 ```
 node generate_key_pair.mjs
 ```
+these keys are used for user authentication through JWT signing and verification. At the same time, these JWTs allow users to authenticate with hasura.
 
 ## Configuration Structure
 
@@ -149,52 +150,3 @@ Components like FirepadEditor that use browser-only APIs need special handling:
 - Use `browser` check before initializing browser-only features
 - Handle errors gracefully during SSR
 
-## TypeScript Migration
-This project is undergoing migration from JavaScript to TypeScript:
-
-### Completed Conversions:
-- Core utility libraries in `$lib` directory:
-  - `utils.ts`
-  - `route-utils.ts`
-  - `data-utils.ts`
-  - `error-utils.ts`
-  - `form-utils.ts`
-  - `storage-utils.ts`
-  - `version-check.ts`
-  - `public_env.ts`
-  - `urql.ts`
-  - `fetch-utils.ts`
-  - `auth.ts` (was already TypeScript)
-  - `stores.ts`
-  - `auth-utils.ts`
-  - `empty-module.ts`
-  - `empty-polyfill.ts`
-- Server-side libraries in `$lib/server` directory:
-  - `env.ts`
-  - `urql.ts`
-  - `auth.ts`
-  - `keycloak.ts`
-  - `keycloak-auth.ts`
-- Client-side libraries in `$lib/client` directory:
-  - `auth.ts`
-- Utility modules in `src`:
-  - `svelte-shared-store.ts`
-  - `event_dispatcher.ts`
-  - `browser_theme_setting.ts`
-
-### Migration Guidelines:
-1. **File Extensions**: Rename `.js` to `.ts` when converting
-2. **Type Annotations**: Add explicit types to function parameters and return values
-3. **Interfaces**: Define interfaces for complex data structures
-4. **Generics**: Use generics for reusable functions
-5. **Type Assertions**: Use `as` for type assertions when necessary
-6. **TypeScript-compatible JSDoc**: Update JSDoc comments to work with TypeScript
-7. **Import Types**: Use `import type` for type-only imports
-
-### Outstanding TypeScript Errors:
-As of the latest typecheck, there are still type errors to fix, particularly in:
-- Server-side code
-- Component files
-- Client-side modules
-
-Run `npm run typecheck` to see the current status of TypeScript errors.
