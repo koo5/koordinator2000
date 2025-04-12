@@ -210,10 +210,6 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
  * @returns The user object with JWT added
  */
 export async function sign_user_object(userObject: UserObject): Promise<UserObject> {
-    await init_keys();
-    if (!keys_initialized) {
-        console.error('Keys not initialized');
-    }
     const jwt = await user_authenticity_jwt(userObject.id);
     return { ...userObject, jwt };
 }
@@ -258,9 +254,13 @@ export async function user_authenticity_jwt(id: number): Promise<string> {
  * This function handles the authentication event from Keycloak and associates
  * the Keycloak identity with our internal JWT identity system
  * @param event - Authentication event data
+ * @param existingUserId - Optional user ID that was already looked up from auth
  * @returns User data if authentication was successful
  */
-export async function process_auth_event(event: AuthEvent): Promise<{ user: UserObject } | null> {
+export async function process_auth_event(
+    event: AuthEvent,
+    existingUserId?: number
+): Promise<{ user: UserObject } | null> {
     try {
         // Validate the event data structure
         if (!event) {
@@ -295,8 +295,15 @@ export async function process_auth_event(event: AuthEvent): Promise<{ user: User
 
             console.log('Processing Keycloak authentication:', JSON.stringify(keycloak.info, null, 2));
 
-            // Find if this Keycloak identity is already associated with a user
-            const user_id = await user_id_from_auth('keycloak', keycloak.info.sub);
+            // Use the existing user ID if provided, otherwise look it up
+            let user_id = existingUserId;
+
+            if (user_id === undefined) {
+                // Only perform lookup if we don't already have the user ID
+                user_id = await user_id_from_auth('keycloak', keycloak.info.sub);
+            } else {
+                console.log(`Using provided existingUserId: ${existingUserId} (skipping lookup)`);
+            }
 
             if (user_id) {
                 // If found, return the associated user with a fresh JWT

@@ -113,7 +113,7 @@ const handleCallback: RequestHandler = async ({ url, cookies }) => {
                         info: keycloakInfo
                     }
                 }
-            });
+            }, existingUserId); // Pass the existingUserId to avoid duplicate lookup
 
             if (authResult && authResult.user) {
                 // Redirect to a page that will set localStorage and then redirect
