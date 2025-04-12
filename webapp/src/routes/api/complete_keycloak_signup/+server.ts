@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
-import { process_auth_event, sign_user_object, save_verified_authentication } from '$lib/server/auth';
+import { process_auth_event, create_signed_my_user, save_verified_authentication } from '$lib/server/auth';
 import { getServerClient, gql, serverMutation } from '$lib/server/urql';
 
 // Handle POST request to complete the Keycloak signup process
@@ -53,14 +53,11 @@ export const POST: RequestHandler = async ({ request }) => {
             email: keycloakInfo.email
         });
         
-        // Create a user object with JWT
-        const userObject = {
-            id: userId,
-            name: username.trim(),
-            email: keycloakInfo.email
-        };
-        
-        const signedUser = await sign_user_object(userObject);
+        // Create a signed user object with JWT using the new helper function
+        const signedUser = await create_signed_my_user(
+            userId, 
+            username.trim()
+        );
         
         return json({ 
             success: true,

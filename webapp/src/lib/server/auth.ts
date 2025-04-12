@@ -192,14 +192,17 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
         throw new Error('Failed to create user: no user ID returned from database');
     }
 
-    const userObject: UserObject = {
-        id: result.data.insert_accounts_one.id,
-        name: name!,
-        email: email,
-        autoscroll: true,
-    };
-
-    const r = await sign_user_object(userObject);
+    // Create a signed user object with the new helper function
+    const r = await create_signed_my_user(
+        result.data.insert_accounts_one.id,
+        name!,
+        { 
+            settings: {
+                autoscroll: true
+            }
+        }
+    );
+    
     console.log('free_user_id result:' + JSON.stringify(r, null, ' '));
     return r;
 }
@@ -212,6 +215,40 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
 export async function sign_user_object(userObject: UserObject): Promise<UserObject> {
     const jwt = await user_authenticity_jwt(userObject.id);
     return { ...userObject, jwt };
+}
+
+/**
+ * Creates and signs a my_user object in one step
+ * @param id - User ID (required)
+ * @param name - User name (defaults to empty string)
+ * @param extraProps - Additional properties to include
+ * @returns A signed user object with JWT ready for client use
+ */
+export async function create_signed_my_user(
+    id: number, 
+    name: string = '', 
+    extraProps: Record<string, any> = {}
+): Promise<UserObject> {
+    // Remove autoscroll from extraProps if present and put it into settings
+    const { autoscroll, ...otherProps } = extraProps;
+    
+    // Initialize settings object if needed
+    const settings: Record<string, any> = 
+        extraProps.settings ? { ...extraProps.settings } : {};
+    
+    // Add autoscroll to settings if provided
+    if (autoscroll !== undefined) {
+        settings.autoscroll = autoscroll;
+    }
+    
+    const userObject: UserObject = {
+        id,
+        name,
+        ...otherProps,
+        settings
+    };
+    
+    return await sign_user_object(userObject);
 }
 
 /**
@@ -308,7 +345,7 @@ export async function process_auth_event(
             if (user_id) {
                 // If found, return the associated user with a fresh JWT
                 console.log(`Found existing user (ID: ${user_id}) for Keycloak identity`);
-                return { user: await sign_user_object({ id: user_id, name: '' }) };
+                return { user: await create_signed_my_user(user_id) };
             } else if (event.id) {
                 // If not found but we have a current user ID, associate the identities
                 console.log(`Associating Keycloak identity with user ID: ${event.id}`);
@@ -317,7 +354,7 @@ export async function process_auth_event(
                 if (keycloak.info.email) {
                     await grab_email(event.id, keycloak.info);
                 }
-                return { user: await sign_user_object({ id: event.id, name: '' }) };
+                return { user: await create_signed_my_user(event.id) };
             } else {
                 console.log('No valid user ID for Keycloak association');
                 return null;

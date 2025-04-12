@@ -20,6 +20,10 @@ export interface MyUser {
     nag_postponement?: number;
     nag_backoff?: number;
     default_participations_display_style?: string;
+    settings?: {
+        autoscroll?: boolean;
+        [key: string]: any;
+    };
 
     [key: string]: any;
 }
@@ -61,7 +65,19 @@ export interface AuthUserResponse {
 type MyUserStore = typeof browser extends true ? SharedStore<MyUser> : Readable<MyUser>;
 
 // Create the appropriate store based on environment
-export const my_user: MyUserStore = browser ? localStorageSharedStore<MyUser>('my_user', {id: 0}) : readable<MyUser>({id: -1});
+export const my_user: MyUserStore = browser ? 
+    localStorageSharedStore<MyUser>('my_user', {
+        id: 0,
+        settings: {
+            autoscroll: true
+        }
+    }) : 
+    readable<MyUser>({
+        id: -1,
+        settings: {
+            autoscroll: true
+        }
+    });
 
 export const is_user = writable<boolean>(false);
 my_user.subscribe((user) => {

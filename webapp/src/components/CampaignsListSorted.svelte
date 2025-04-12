@@ -136,7 +136,7 @@
     };
 
     function handleSlideChange(campaignId: number, swiper: any) {
-        if (!$my_user.autoscroll) return;
+        if (!$my_user.settings?.autoscroll) return;
 
         const activeIndex = swiper.activeIndex;
 
@@ -150,7 +150,7 @@
     }
 
     function go_to_next_campaign(current_campaign_id: number): void {
-        if (!$my_user.autoscroll) return;
+        if (!$my_user.settings?.autoscroll) return;
 
         // Make sure campaign container exists
         if (!campaign_containers) return;

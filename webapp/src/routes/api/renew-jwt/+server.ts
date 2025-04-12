@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import { sign_user_object } from '$lib/server/auth.ts';
+import { create_signed_my_user } from '$lib/server/auth.ts';
 
 // Token refresh threshold in seconds (default: 10 minutes)
 const TOKEN_REFRESH_THRESHOLD = 10 * 60;
@@ -50,13 +50,15 @@ export async function POST(event: RequestEvent) {
             return json({ error: 'Invalid token format' }, { status: 400 });
         }
         
-        // Generate a new JWT for the user, preserving all user properties
-        // Make sure name is a string as required by UserObject
-        const userToSign = {
-            ...currentUser,
-            name: currentUser.name || ''
-        };
-        const user = await sign_user_object(userToSign);
+        // Get properties to preserve from the current user
+        const { id, name, ...extraProps } = currentUser;
+        
+        // Create a new signed user object with the helper function
+        const user = await create_signed_my_user(
+            id,
+            name || '',
+            extraProps
+        );
         
         // Return the user with new JWT
         return json({ user });

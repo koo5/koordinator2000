@@ -62,7 +62,7 @@
              in:fly={{ x: 20, duration: 250, delay: 50 }} out:fly={{ x: -20, duration: 200 }}>
             <div class="form-group">
                 <label class="form-check">
-                    <input bind:checked={$my_user.autoscroll} type="checkbox" class="form-check-input" />
+                    <input bind:checked={$my_user.settings.autoscroll} type="checkbox" class="form-check-input" />
                     <span class="form-check-label">Autoscroll</span>
                 </label>
             </div>

@@ -28,12 +28,16 @@ declare global {
             nag_postponement?: number;
             nag_backoff?: number;
             default_participations_display_style?: string;
-            autoscroll?: boolean;
+            // Visual preferences moved to settings object
             hue_rotate?: number;
             saturate?: number;
             invert?: boolean;
             contrast?: number;
             override_browser_setting?: boolean;
+            settings?: {
+                autoscroll?: boolean;
+                [key: string]: any;
+            };
 
             [key: string]: any;
         }
