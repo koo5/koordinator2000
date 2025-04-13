@@ -196,13 +196,13 @@ export async function free_user_id(email: string | null = null): Promise<UserObj
     const r = await create_signed_my_user(
         result.data.insert_accounts_one.id,
         name!,
-        { 
+        {
             settings: {
                 autoscroll: true
             }
         }
     );
-    
+
     console.log('free_user_id result:' + JSON.stringify(r, null, ' '));
     return r;
 }
@@ -225,29 +225,29 @@ export async function sign_user_object(userObject: UserObject): Promise<UserObje
  * @returns A signed user object with JWT ready for client use
  */
 export async function create_signed_my_user(
-    id: number, 
-    name: string = '', 
+    id: number,
+    name: string = '',
     extraProps: Record<string, any> = {}
 ): Promise<UserObject> {
     // Remove autoscroll from extraProps if present and put it into settings
     const { autoscroll, ...otherProps } = extraProps;
-    
+
     // Initialize settings object if needed
-    const settings: Record<string, any> = 
+    const settings: Record<string, any> =
         extraProps.settings ? { ...extraProps.settings } : {};
-    
+
     // Add autoscroll to settings if provided
     if (autoscroll !== undefined) {
         settings.autoscroll = autoscroll;
     }
-    
+
     const userObject: UserObject = {
         id,
         name,
         ...otherProps,
         settings
     };
-    
+
     return await sign_user_object(userObject);
 }
 
@@ -472,10 +472,6 @@ export async function save_verified_authentication(user_id: number, provider: st
                 mutation MyMutation($login_name: String = "", $provider: String = "", $user_id: Int) {
                     insert_verified_user_authentications_one(
                         object: { login_name: $login_name, provider: $provider, account_id: $user_id }
-                        on_conflict: {
-                            constraint: verified_user_authentications_provider_login_name_key,
-                            update_columns: [account_id]
-                        }
                     ) {
                         account_id
                     }
@@ -487,6 +483,11 @@ export async function save_verified_authentication(user_id: number, provider: st
                 login_name,
             }
         );
+
+        if (!result.data?.insert_verified_user_authentications_one?.account_id) {
+            console.error(`Failed to save ${provider} authentication: invalid or missing response data`);
+            throw new Error('Authentication mutation failed');
+        }
 
         console.log(`Authentication saved successfully: ${JSON.stringify(result, null, 2)}`);
     } catch (error) {

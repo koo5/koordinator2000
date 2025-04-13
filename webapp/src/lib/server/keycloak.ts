@@ -320,3 +320,79 @@ export function createLogoutUrl(redirectUri: string): string {
     
     return `${server_env.KEYCLOAK_URL}/realms/${server_env.KEYCLOAK_REALM}/protocol/openid-connect/logout?${params.toString()}`;
 }
+
+/**
+ * Get user's linked identity providers from Keycloak
+ * @param userId - Keycloak user ID (sub)
+ * @returns Promise with identity providers information
+ */
+export async function getUserIdProviders(userId: string): Promise<any> {
+    try {
+        if (!userId) {
+            console.error('getUserIdProviders: No user ID provided');
+            return null;
+        }
+        
+        // First, get admin access token
+        const tokenResponse = await getAdminToken();
+        if (!tokenResponse || !tokenResponse.access_token) {
+            console.error('Failed to obtain admin token for Keycloak API access');
+            return null;
+        }
+        
+        // Fetch user federated identities
+        const federatedIdentitiesUrl = `${server_env.KEYCLOAK_URL}/admin/realms/${server_env.KEYCLOAK_REALM}/users/${userId}/federated-identity`;
+        
+        const response = await fetch(federatedIdentitiesUrl, {
+            headers: {
+                Authorization: `Bearer ${tokenResponse.access_token}`
+            }
+        });
+        
+        if (!response.ok) {
+            console.error(`Failed to get user identity providers: ${await response.text()}`);
+            return null;
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error getting user identity providers:', error);
+        return null;
+    }
+}
+
+/**
+ * Get an admin access token for Keycloak API access
+ * @returns Promise with token response
+ */
+async function getAdminToken(): Promise<any> {
+    try {
+        // Build the token endpoint URL
+        const tokenUrl = `${server_env.KEYCLOAK_URL}/realms/master/protocol/openid-connect/token`;
+        
+        // Create form data for the request
+        const formData = new URLSearchParams();
+        formData.append('grant_type', 'client_credentials');
+        formData.append('client_id', server_env.KEYCLOAK_CLIENT_ID);
+        formData.append('client_secret', server_env.KEYCLOAK_CLIENT_SECRET);
+        
+        // Make the request to Keycloak
+        const response = await fetch(tokenUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: formData.toString(),
+        });
+        
+        if (!response.ok) {
+            console.error('Failed to get admin token:', await response.text());
+            return null;
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error getting admin token:', error);
+        return null;
+    }
+}
