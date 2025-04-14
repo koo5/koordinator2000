@@ -1,7 +1,8 @@
 <script lang="ts">
+    import '../app.css'; // Import Tailwind CSS
     import { onMount } from 'svelte';
     import { browser } from '$app/environment';
-    import { Col, Container, Row } from '../components/ui';
+    // No longer need Bootstrap components
     import Header from '../components/Header.svelte';
     import { createUrqlClient, setContextClient } from '$lib/urql.ts';
     import {
@@ -108,29 +109,18 @@
 </script>
 <svelte:window on:keydown={onkeydown} />
 <svelte:head>
-    <!-- Bootstrap theme -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/materia/bootstrap.min.css" integrity="sha384-B4morbeopVCSpzeC1c4nyV0d0cqvlSAfyXVfrPJa25im5p+yEN/YmhlgQP/OyMZD" crossorigin="anonymous" />
-
     <!-- Note: CodeMirror script is loaded in app.html -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firepad@1.5.9/dist/firepad.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
-<Container>
-    <Row>
-        <Col>
-            <Header />
-        </Col>
-    </Row>
-    <Row>
-        <Col xs={12} auto={false}>
-            <main>
-                <slot></slot>
-            </main>
-        </Col>
-    </Row>
-</Container>
+<div class="container mx-auto px-4">
+    <Header />
+    <main class="py-4">
+        <slot></slot>
+    </main>
+</div>
 
 <style>
     :root {
