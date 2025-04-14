@@ -6,7 +6,7 @@ import type { SharedStore } from './svelte-shared-store';
 
 // Configuration
 const TOKEN_CHECK_INTERVAL = 1000*60*60*1;
-const TOKEN_RENEWAL_BUFFER = 60 * 60 * 24 * 14;
+const TOKEN_RENEWAL_BUFFER = 60 * 60 * 24 * 1;
 let tokenCheckTimer: ReturnType<typeof setInterval> | null = null;
 
 /**
@@ -109,7 +109,7 @@ export async function checkAndRenewJwt(): Promise<void> {
 
     // Check if the token is expiring soon
     if (remaining <= TOKEN_RENEWAL_BUFFER) {
-      console.log('JWT token is expiring soon, renewing...');
+      console.log(`JWT token is expiring soon, renewing...(${remaining} seconds remaining, renewal buffer: ${TOKEN_RENEWAL_BUFFER} seconds)`);
       await renewJwt();
     } else {
       console.log(`JWT token expires in ${remaining} seconds.`);
