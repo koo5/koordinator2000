@@ -133,7 +133,7 @@ async function new_user(): Promise<AuthUserResponse> {
 
         console.log('Attempting to create new user...');
         console.log('get(my_user):', get(my_user));
-        const res = await fetch(import.meta.env.VITE_BACKEND + '/get_free_user_id', {
+        const res = await fetch((import.meta.env.VITE_BACKEND || '') + '/get_free_user_id', {
             method: 'POST',
             signal: controller.signal,
             headers: {
