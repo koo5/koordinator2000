@@ -11,7 +11,10 @@
     import { public_env } from '$lib/public_env';
     import { goto } from '$app/navigation';
     import { slide } from 'svelte/transition';
-    
+
+    // Import Bits UI components
+    import { DropdownMenu, NavigationMenu } from 'bits-ui';
+
     // Import Lucide icons
     import { Menu, X, ChevronDown } from 'lucide-svelte';
 
@@ -37,10 +40,32 @@
                 navbar_open = isDesktopNow;
             }, 100); // 100ms throttle
         };
+        
+        // Handle document clicks to close mobile menu 
+        const handleDocumentClick = (event: MouseEvent) => {
+            // Skip if we're on desktop
+            if (window.innerWidth >= 768) return;
+            
+            // Get the navbar content element and toggle button
+            const navbarContent = document.getElementById('navbar-content');
+            const toggleButton = document.querySelector('.menu-toggle-btn');
+            
+            // If we clicked outside both the navbar and the toggle button, close the menu
+            if (navbar_open && 
+                navbarContent && 
+                toggleButton && 
+                !navbarContent.contains(event.target as Node) && 
+                !toggleButton.contains(event.target as Node)) {
+                navbar_open = false;
+            }
+        };
 
         window.addEventListener('resize', handleResize);
+        document.addEventListener('click', handleDocumentClick);
+        
         return () => {
             window.removeEventListener('resize', handleResize);
+            document.removeEventListener('click', handleDocumentClick);
             clearTimeout(resizeTimeout);
         };
     });
@@ -61,7 +86,7 @@
         if (!browser) return; // Skip during SSR
 
         // First set my_user to {id:-1} for both logout types
-        (my_user as SharedStore<MyUser>).set({id: -1});
+        (my_user as SharedStore<MyUser>).set({id: -1, settings: {}});
 
         if (public_env.ENABLE_KEYCLOAK) {
             // Handle Keycloak logout
@@ -128,14 +153,7 @@
         { href: '/dev_area', label: 'Dev area', segment: 'dev_area', requiresAuth: false, requiresDebug: true },
         { href: '/about', label: 'About', segment: 'about', requiresAuth: false }
     ];
-    
-    // User dropdown state
-    let userDropdownOpen = false;
-    
-    function toggleUserDropdown() {
-        userDropdownOpen = !userDropdownOpen;
-    }
-    
+
     // Click outside directive
     function clickOutside(node: HTMLElement, callback: () => void) {
         const handleClick = (event: MouseEvent) => {
@@ -143,16 +161,16 @@
                 callback();
             }
         };
-        
+
         const handleKeydown = (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 callback();
             }
         };
-        
+
         document.addEventListener('click', handleClick, true);
         document.addEventListener('keydown', handleKeydown, true);
-        
+
         return {
             destroy() {
                 document.removeEventListener('click', handleClick, true);
@@ -164,88 +182,121 @@
 
 <nav class="header-navbar">
     <PageReloadClock />
-    
+
     <div class="navbar-brand-section">
-        <!-- Mobile menu toggle button -->
-        <button 
+        <!-- Mobile menu toggle button for small screens -->
+        <button
+            type="button"
             class="menu-toggle-btn"
-            on:click={() => (navbar_open = !navbar_open)}
+            on:click|preventDefault|stopPropagation={() => {
+                navbar_open = !navbar_open;
+                console.log('Menu toggled, new state:', navbar_open);
+            }}
             aria-label={navbar_open ? "Close menu" : "Open menu"}
+            aria-expanded={navbar_open}
+            aria-controls="navbar-content"
         >
-            {#if navbar_open}
-                <X size={24} />
-            {:else}
-                <Menu size={24} />
-            {/if}
+            <span class="icon-container">
+                {#if navbar_open}
+                    <X size={24} />
+                {:else}
+                    <Menu size={24} />
+                {/if}
+            </span>
         </button>
     </div>
 
-    <!-- Navigation menu - desktop horizontal, mobile overlay -->
-    <div class="navbar-content" class:open={navbar_open}>
-        <ul class="nav-items">
-            {#each navItems as item}
-                {#if (!item.requiresAuth || $is_user) && (!item.requiresDebug || $debug)}
-                    <li class="nav-item">
-                        <a 
-                            href={item.href} 
-                            class="nav-link" 
-                            class:active={segment === item.segment}
-                        >
-                            {item.label}
-                        </a>
-                    </li>
-                {/if}
-            {/each}
-        </ul>
+    <!-- Navigation menu using NavigationMenu from Bits UI -->
+    <div 
+        id="navbar-content" 
+        class="navbar-content" 
+        class:open={navbar_open}
+        use:clickOutside={() => {
+            if (window.innerWidth < 768 && navbar_open) {
+                navbar_open = false;
+            }
+        }}
+    >
+        <NavigationMenu.Root orientation="horizontal">
+            <NavigationMenu.List>
+                {#each navItems as item}
+                    {#if (!item.requiresAuth || $is_user) && (!item.requiresDebug || $debug)}
+                        <NavigationMenu.Item value={item.segment}>
+                            <NavigationMenu.Link 
+                                href={item.href} 
+                                class="nav-link"
+                                active={segment === item.segment}
+                                on:click={() => {
+                                    if (window.innerWidth < 768) {
+                                        navbar_open = false;
+                                    }
+                                }}
+                            >
+                                {item.label}
+                            </NavigationMenu.Link>
+                        </NavigationMenu.Item>
+                    {/if}
+                {/each}
+            </NavigationMenu.List>
+        </NavigationMenu.Root>
     </div>
 
-    <!-- User dropdown menu using Bits UI inspired styling -->
+    <!-- User dropdown menu using Bits UI -->
     <div class="user-dropdown">
-        <div class="dropdown-container" use:clickOutside={() => userDropdownOpen && (userDropdownOpen = false)}>
-            <button 
-                class="user-button" 
-                on:click={toggleUserDropdown}
-                aria-expanded={userDropdownOpen}
-                aria-haspopup="true"
-            >
-                {#if $is_user}
-                    <span class="user-name">
-                        {#if $my_user.name} 
-                            {$my_user.name} 
-                        {:else} 
-                            You (ID {$my_user.id})
+        <div>
+            <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                    <div class="user-button" role="button" tabindex="0">
+                        {#if $is_user}
+                            <span class="user-name">
+                                {#if $my_user.name}
+                                    {$my_user.name}
+                                {:else}
+                                    You (ID {$my_user.id})
+                                {/if}
+                            </span>
+                            {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
+                            {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
+                            {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
+                            {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
+                        {:else}
+                            User
                         {/if}
-                    </span>
-                    {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
-                    {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
-                    {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
-                    {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
-                {:else}
-                    User
-                {/if}
-                <ChevronDown size={16} class={userDropdownOpen ? "chevron-icon rotated" : "chevron-icon"} />
-            </button>
-            
-            {#if userDropdownOpen}
-                <div 
-                    class="dropdown-menu" 
-                    transition:slide={{ duration: 150 }}
-                    role="menu"
-                >
+                        <ChevronDown class="chevron-icon" size={16} />
+                    </div>
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Content class="dropdown-menu">
                     {#if $is_user}
-                        <a href="/you" class="dropdown-item" role="menuitem">Profile</a>
-                        <a href="/account" class="dropdown-item" role="menuitem">Account</a>
-                        <a href="/notifications" class="dropdown-item" role="menuitem">Notifications</a>
-                        <a href="/add_campaign" class="dropdown-item" role="menuitem">Add campaign</a>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" role="menuitem" on:click={toggle_settings}>Settings</button>
-                        <button class="dropdown-item" role="menuitem" on:click={handleLogout}>Logout</button>
+                        <DropdownMenu.Item>
+                            <a href="/you" class="dropdown-link">Profile</a>
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item>
+                            <a href="/account" class="dropdown-link">Account</a>
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item>
+                            <a href="/notifications" class="dropdown-link">Notifications</a>
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item>
+                            <a href="/add_campaign" class="dropdown-link">Add campaign</a>
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Separator />
+                        <DropdownMenu.Item on:click={toggle_settings}>
+                            Settings
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item on:click={handleLogout}>
+                            Logout
+                        </DropdownMenu.Item>
                     {:else}
-                        <button class="dropdown-item" role="menuitem" on:click={handleLogin}>Login</button>
-                        <button class="dropdown-item" role="menuitem" on:click={() => create_user(false)}>New user</button>
+                        <DropdownMenu.Item on:click={handleLogin}>
+                            Login
+                        </DropdownMenu.Item>
+                        <DropdownMenu.Item on:click={() => create_user(false)}>
+                            New user
+                        </DropdownMenu.Item>
                     {/if}
-                </div>
-            {/if}
+                </DropdownMenu.Content>
+            </DropdownMenu.Root>
         </div>
     </div>
 </nav>
@@ -276,18 +327,30 @@
     }
 
     /* Mobile menu toggle button - only visible on mobile */
-    .menu-toggle-btn {
-        display: none;
-        background: transparent;
-        border: none;
-        border-radius: 0.25rem;
-        padding: 0.5rem;
-        cursor: pointer;
-        color: #333;
+    :global(.menu-toggle-btn) {
+        display: none !important;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0.25rem !important;
+        padding: 0.5rem !important;
+        cursor: pointer !important;
+        color: #333 !important;
+        outline: none !important;
+        margin-right: 0.5rem !important;
+    }
+
+    :global(.menu-toggle-btn .icon-container) {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    :global(.menu-toggle-btn:hover) {
+        background-color: rgba(0, 0, 0, 0.05) !important;
     }
     
-    .menu-toggle-btn:hover {
-        background-color: rgba(0, 0, 0, 0.05);
+    :global(.menu-toggle-btn:focus) {
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.5) !important;
     }
 
     /* Navigation container */
@@ -295,21 +358,6 @@
         display: flex;
         align-items: center;
     }
-
-    /* Navigation items list */
-    .nav-items {
-        display: flex;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        gap: 1rem;
-    }
-
-    /* Individual nav item */
-    .nav-item {
-        display: flex;
-    }
-
     /* Navigation links */
     .nav-link {
         padding: 0.5rem 0.75rem;
@@ -318,26 +366,17 @@
         border-radius: 0.25rem;
         transition: all 0.2s ease;
     }
-    
+
     .nav-link:hover {
         background-color: rgba(0, 0, 0, 0.05);
     }
-    
-    .nav-link.active {
-        font-weight: 600;
-        color: #1a73e8;
-    }
+
 
     /* User dropdown section */
     .user-dropdown {
         margin-left: auto;
         position: relative;
         z-index: 51;
-    }
-
-    /* Dropdown container */
-    .dropdown-container {
-        position: relative;
     }
 
     /* User button styling */
@@ -353,20 +392,11 @@
         cursor: pointer;
         color: #333;
     }
-    
+
     .user-button:hover {
         background-color: rgba(0, 0, 0, 0.05);
     }
 
-    /* Chevron icon */
-    .chevron-icon {
-        opacity: 0.7;
-        transition: transform 0.2s ease;
-    }
-    
-    .chevron-icon.rotated {
-        transform: rotate(180deg);
-    }
 
     /* User name styling */
     .user-name {
@@ -377,52 +407,51 @@
         max-width: 200px;
     }
 
-    /* Dropdown menu */
-    .dropdown-menu {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        margin-top: 0.25rem;
-        min-width: 12rem;
-        background-color: white;
-        border-radius: 0.375rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        border: 1px solid #eee;
-        padding: 0.5rem;
-        z-index: 1000;
+    /* Dropdown menu styling */
+    :global(.dropdown-menu) {
+        background-color: white !important;
+        border-radius: 0.375rem !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid #eee !important;
+        padding: 0.5rem !important;
+        min-width: 12rem !important;
+        z-index: 1000 !important;
     }
 
-    /* Dropdown items */
-    .dropdown-item {
-        display: block;
-        width: 100%;
-        text-align: left;
-        background: transparent;
-        border: none;
-        padding: 0.5rem 0.75rem;
-        cursor: pointer;
-        color: #333;
-        border-radius: 0.25rem;
-        margin: 0;
-        text-decoration: none;
-        font-size: 0.875rem;
+    :global(.bits-dropdown-menu-item) {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.875rem !important;
+        border-radius: 0.25rem !important;
+        cursor: pointer !important;
+        outline: none !important;
+    }
+
+    :global(.bits-dropdown-menu-item:hover) {
+        background-color: rgba(0, 0, 0, 0.05) !important;
     }
     
-    .dropdown-item:hover {
-        background-color: rgba(0, 0, 0, 0.05);
+    :global(.bits-dropdown-menu-item:focus-visible) {
+        background-color: rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.5) !important;
     }
-    
-    /* Dropdown divider */
-    .dropdown-divider {
-        height: 1px;
-        background-color: #eee;
-        margin: 0.5rem 0;
+
+    :global(.bits-dropdown-menu-item a), :global(.dropdown-link) {
+        color: #333 !important;
+        text-decoration: none !important;
+        display: block !important;
+        width: 100% !important;
+    }
+
+    :global(.bits-dropdown-menu-separator) {
+        height: 1px !important;
+        background-color: #eee !important;
+        margin: 0.5rem 0 !important;
     }
 
     /* Mobile styles */
     @media (max-width: 767.98px) {
-        .menu-toggle-btn {
-            display: flex;
+        :global(.menu-toggle-btn) {
+            display: flex !important;
         }
 
         .navbar-content {
@@ -443,16 +472,6 @@
             display: block;
         }
 
-        .nav-items {
-            flex-direction: column;
-            width: 100%;
-            gap: 0.5rem;
-        }
-
-        .nav-item {
-            width: 100%;
-        }
-
         .nav-link {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -463,6 +482,37 @@
         }
     }
 
+    /* Bits UI NavigationMenu styling */
+    :global([data-navigation-menu-list]) {
+        display: flex !important;
+        gap: 0.5rem !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    :global([data-navigation-menu-item]) {
+        position: relative !important;
+    }
+    
+    :global([data-navigation-menu-link]) {
+        display: block !important;
+        text-decoration: none !important;
+    }
+    
+    :global([data-navigation-menu-link][data-active]) {
+        font-weight: 500 !important;
+        color: #0066cc !important;
+    }
+    
+    /* Mobile styles for NavigationMenu */
+    @media (max-width: 767.98px) {
+        :global([data-navigation-menu-list]) {
+            flex-direction: column !important;
+            width: 100% !important;
+        }
+    }
+    
     /* Fix for dropdown menus being hidden */
     :global(body), :global(.page), :global(main), :global(.app-container) {
         overflow-x: visible !important;

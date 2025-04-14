@@ -20,7 +20,7 @@ export interface MyUser {
     nag_postponement?: number;
     nag_backoff?: number;
     default_participations_display_style?: string;
-    settings?: {
+    settings: {
         autoscroll?: boolean;
         [key: string]: any;
     };
@@ -94,7 +94,7 @@ my_user.subscribe((user) => {
  */
 export function impersonate(_id: number): void {
     // Cast to writable type since we know this is only called in browser
-    (my_user as SharedStore<MyUser>).set({id: _id});
+    (my_user as SharedStore<MyUser>).set({id: _id, settings: {}});
 }
 
 // Track requests to prevent multiple simultaneous user creations
@@ -275,7 +275,7 @@ export async function apply_newly_authenticated_user(newly_authenticated_user: A
  * @returns Promise that resolves when logout is complete
  */
 export async function logout(): Promise<void> {
-    (my_user as SharedStore<MyUser>).set({id: -1});
+    (my_user as SharedStore<MyUser>).set({id: -1, settings: {}});
     // The auth_logout() function doesn't exist, so we're removing this call
 }
 

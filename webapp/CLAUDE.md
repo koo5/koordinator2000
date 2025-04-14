@@ -123,6 +123,8 @@ This application uses Hasura Cloud for GraphQL:
 - **Environment**: Use `browser` from `$app/environment` (not process.browser)
 - **Authentication**: Custom auth implementation with Auth0 integration
 - **GraphQL**: URQL client for data fetching with TypeScript support
+- **UI Components**: https://www.bits-ui.com
+
 
 ## SvelteKit Conventions
 - Pages use `+page.svelte` and `+page.js` files in route directories

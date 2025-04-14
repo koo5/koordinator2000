@@ -420,12 +420,6 @@
         -webkit-user-select: none;
     }
 
-    /* Mobile-specific styles */
-    @media (max-width: 768px) {
-        :global(swiper-container) {
-        }
-    }
-
     :global(swiper-slide) {
         padding: 1.5rem;
         border-radius: 8px;

@@ -29,7 +29,7 @@
 <div>
     <label for="markdown-content">
         Enter some markdown:<br />
-        <textarea id="markdown-content" bind:value />
+        <textarea id="markdown-content" bind:value ></textarea>
     </label>
     <h3>Rendering:</h3>
     <div class="content">

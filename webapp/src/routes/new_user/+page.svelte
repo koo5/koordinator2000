@@ -5,7 +5,7 @@
     import { my_user, type MyUser } from '$lib/client/my_user';
     import type { SharedStore } from '$lib/client/svelte-shared-store';
     import { Button, Card, Input, FormGroup, Label } from '../../components/ui';
-    
+
     let username = '';
     let isLoading = false;
     let errorMessage = '';
@@ -21,18 +21,18 @@
         keycloakUsername?: string;
         keycloakRealName?: string;
     }
-    
+
     let userData: KeycloakUserData | null = null;
-    
+
     import { browser } from '$app/environment';
-    
+
     onMount(() => {
         if (!browser) return;
-        
+
         // Get user data from URL parameter
         const searchParams = new URLSearchParams(window.location.search);
         const dataParam = searchParams.get('data');
-        
+
         if (dataParam) {
             try {
                 userData = JSON.parse(decodeURIComponent(dataParam)) as KeycloakUserData;
@@ -45,21 +45,21 @@
             errorMessage = 'Missing session data. Please try again.';
         }
     });
-    
+
     async function saveUser() {
         if (!username.trim()) {
             errorMessage = 'Username cannot be empty';
             return;
         }
-        
+
         if (!userData) {
             errorMessage = 'Missing session data. Please try again.';
             return;
         }
-        
+
         isLoading = true;
         errorMessage = '';
-        
+
         try {
             const response = await fetch('/api/complete_keycloak_signup', {
                 method: 'POST',
@@ -73,14 +73,14 @@
                     keycloakToken: userData.keycloakToken
                 })
             });
-            
+
             if (!response.ok) {
                 const error = await response.json();
                 throw new Error(error.message || 'Failed to save user');
             }
-            
+
             const result = await response.json();
-            
+
             // Update local user state
             if (result && result.user) {
                 (my_user as SharedStore<MyUser>).set(result.user);
@@ -95,10 +95,10 @@
             isLoading = false;
         }
     }
-    
+
     function forgetAuth() {
         // Simply reset user and redirect to home
-        (my_user as SharedStore<MyUser>).set({ id: -1 });
+        (my_user as SharedStore<MyUser>).set({ id: -1, settings: {} });
         goto('/');
     }
 </script>
@@ -114,7 +114,7 @@
                 <div class="text-center mb-4">
                     <h2>Welcome to Koordinator</h2>
                     <p class="text-muted">Complete your account setup</p>
-                    
+
                     {#if userData && userData.keycloakInfo && userData.keycloakInfo.email}
                         <div class="alert alert-info">
                             <p class="mb-0">You've successfully authenticated with Keycloak using your email: <strong>{userData.keycloakInfo.email}</strong></p>
@@ -122,16 +122,16 @@
                         </div>
                     {/if}
                 </div>
-                
+
                 {#if errorMessage}
                     <div class="alert alert-danger">{errorMessage}</div>
                 {/if}
-                
+
                 <FormGroup>
                     <Label htmlFor="username">Username</Label>
                     <Input type="text" id="username" bind:value={username} placeholder="Choose a username" />
                     <small class="form-text text-muted">This name will be visible to other users</small>
-                    
+
                     {#if userData && (userData.keycloakUsername || userData.keycloakRealName)}
                         <div class="mt-2">
                             <p class="mb-1"><small>Alternative options:</small></p>
@@ -154,7 +154,7 @@
                         </div>
                     {/if}
                 </FormGroup>
-                
+
                 <div class="d-grid gap-2 mt-4">
                     <Button color="primary" disabled={isLoading} on:click={saveUser}>
                         {#if isLoading}
@@ -163,9 +163,9 @@
                         Complete Setup
                     </Button>
                 </div>
-                
+
                 <hr class="my-4" />
-                
+
                 <div class="text-center">
                     <p class="mb-2">Not interested in using this authentication method?</p>
                     <Button color="secondary" on:click={forgetAuth} disabled={isLoading}>
