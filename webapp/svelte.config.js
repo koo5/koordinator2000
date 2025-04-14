@@ -1,7 +1,10 @@
-import adapter from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-static'
+//import adapter from '@sveltejs/adapter-node'
+
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
-/** @type {import('@sveltejs/kit').Config} */
+//const adapter = process.env.VITE_TAURI ? adapter_static : adapter_node;
+
 const config = {
     // Configure the preprocessor for TypeScript support
     preprocess: vitePreprocess({
@@ -20,7 +23,8 @@ const config = {
             // default options are shown
             out: 'build',
             precompress: false,
-            envPrefix: ''
+            envPrefix: '',
+            fallback: '200.html'
         }),
         alias: {
             '$lib': './src/lib',

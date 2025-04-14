@@ -1,4 +1,5 @@
 <script>
+    import { debug } from '$lib/stores.ts';
 
 </script>
 
@@ -78,6 +79,10 @@
 
     </div>
 </div>
+
+{#if $debug}
+    <a href="/dev_area" class="dev-area-link">Dev Area</a>
+{/if}
 
 <style>
 

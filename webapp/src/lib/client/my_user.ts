@@ -65,13 +65,13 @@ export interface AuthUserResponse {
 type MyUserStore = typeof browser extends true ? SharedStore<MyUser> : Readable<MyUser>;
 
 // Create the appropriate store based on environment
-export const my_user: MyUserStore = browser ? 
+export const my_user: MyUserStore = browser ?
     localStorageSharedStore<MyUser>('my_user', {
         id: 0,
         settings: {
             autoscroll: true
         }
-    }) : 
+    }) :
     readable<MyUser>({
         id: -1,
         settings: {
@@ -133,12 +133,11 @@ async function new_user(): Promise<AuthUserResponse> {
 
         console.log('Attempting to create new user...');
         console.log('get(my_user):', get(my_user));
-        const res = await fetch('/get_free_user_id', {
+        const res = await fetch(import.meta.env.VITE_BACKEND + '/get_free_user_id', {
             method: 'POST',
             signal: controller.signal,
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + get(my_user)?.jwt
+                'Content-Type': 'application/json'
             },
         });
 

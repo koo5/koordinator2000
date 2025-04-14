@@ -25,6 +25,7 @@
 
     function toggle() {
         isOpen = !isOpen;
+        console.log('Dropdown toggled:', isOpen);
         dispatch('toggle', { isOpen });
     }
 </script>
@@ -44,7 +45,7 @@
         display: inline-block;
         overflow: visible !important;
     }
-    
+
     .dropdown-menu-container {
         position: static;
         z-index: 2000; /* Match the dropdown menu z-index */

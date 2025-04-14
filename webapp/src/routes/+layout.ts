@@ -8,5 +8,9 @@ export const load: LayoutLoad = async ({ data }: { data: any }) => {
     };
 };
 
-// Allow server-side rendering
-export const ssr = true;
+
+export const prerender = import.meta.env.VITE_TAURI ? true : false;
+export const ssr = import.meta.env.VITE_TAURI ? false : true;
+
+console.log('Layout prerender:', prerender);
+console.log('Layout ssr:', ssr);

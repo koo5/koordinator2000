@@ -72,6 +72,11 @@
             <p>No data yet...</p>
         {/if}
     </div>
+
+    <a href="/campaign/slug">campaign slug</a>
+    <a href="/edit_cause/slug">edit cause slug</a>
+    <a href="/users/slug">user slug</a>
+
 </div>
 
 <style>

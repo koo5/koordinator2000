@@ -6,6 +6,7 @@
     export let toggle: (() => void) | undefined = undefined;
 
     function handleClick(event: MouseEvent) {
+        console.log("DropdownToggle clicked");
         if (toggle) {
             toggle();
         }
