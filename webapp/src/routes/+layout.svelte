@@ -115,9 +115,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
-<div class="container mx-auto px-4">
+<div class="flex flex-col min-h-screen">
     <Header />
-    <main class="py-4">
+    <main class="container mx-auto px-4 py-4 flex-grow">
         <slot></slot>
     </main>
 </div>
@@ -147,31 +147,10 @@
         }
     }
 
-    :global(#sapper) {
-        background-color: #ffeeee;
-    }
-
     :global(html) {
         margin: 0 auto;
-        background-color: #ffeeee;
         filter: hue-rotate(var(--hue_rotate)) contrast(var(--contrast)) invert(var(--invert)) saturate(var(--saturate));
         height: 100%;
-    }
-
-    :global(.navbar) {
-        background: #ffffee !important;
-        margin: 0 0;
-    }
-
-    :global(.content_block) {
-        margin: 0;
-        max-width: 60rem;
-        padding: 0;
-        background: #ffffee;
-    }
-
-    :global(h1, h2, h3, h4, h5) {
-        background: #eee;
     }
 
     @keyframes flickerAnimation {

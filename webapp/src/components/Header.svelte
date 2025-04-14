@@ -101,12 +101,8 @@
         { href: '/about', label: 'About', segment: 'about', requiresAuth: false }
     ];
 
-    // User dropdown is open or not
-    let isUserDropdownOpen = false;
-
-    function toggleUserDropdown() {
-        isUserDropdownOpen = !isUserDropdownOpen;
-    }
+    // DaisyUI dropdown control is managed by the library
+    // We don't need explicit state anymore as DaisyUI handles it
     
     // Combine all mount logic in a single onMount function
     onMount(() => {
@@ -142,11 +138,7 @@
                 navbar_open = false;
             }
             
-            // Also handle user dropdown closing
-            const dropdown = document.querySelector('.user-dropdown');
-            if (dropdown && !dropdown.contains(event.target as Node) && isUserDropdownOpen) {
-                isUserDropdownOpen = false;
-            }
+            // DaisyUI will handle dropdown closing automatically
         };
 
         window.addEventListener('resize', handleResize);
@@ -212,12 +204,7 @@
     <!-- User dropdown menu -->
     <div class="flex-none">
         <div class="dropdown dropdown-end user-dropdown">
-            <div 
-                role="button" 
-                tabindex="0" 
-                class="btn btn-ghost" 
-                on:click|stopPropagation={toggleUserDropdown}
-            >
+            <label tabindex="0" class="btn btn-ghost">
                 {#if $is_user}
                     <span class="font-medium truncate max-w-[140px]">
                         {#if $my_user.name}
@@ -233,15 +220,14 @@
                 {:else}
                     User
                 {/if}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-200" 
-                    class:rotate-180={isUserDropdownOpen}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" 
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
-            </div>
+            </label>
             
             <ul tabindex="0" 
-                class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 mt-4"
+                class="dropdown-content z-50 menu p-2 shadow bg-base-100 rounded-box w-52 mt-4"
             >
                 {#if $is_user}
                     <li><a href="/you">Profile</a></li>
