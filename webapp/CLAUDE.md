@@ -1,6 +1,7 @@
 # Koordinator Frontend Development Guide
 
 ## Development Commands
+- **Initialize node environment**: `nvm use`
 - **Start Dev Server**: `npm run dev`
 - **Build for Production**: `npm run build`
 - **Preview Production Build**: `npm run preview`

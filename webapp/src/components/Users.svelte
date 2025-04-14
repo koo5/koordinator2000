@@ -1,4 +1,4 @@
-<script type="js">
+<script lang="js">
     import { impersonate } from '$lib/client/my_user.ts';
     import { gql, subscribe } from '$lib/urql.ts';
     import SubscribedItemsInner from './SubscribedItemsInner.svelte';
