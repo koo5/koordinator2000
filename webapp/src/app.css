@@ -5,18 +5,18 @@
 /* Heading styles */
 @layer base {
   h1 {
-    @apply text-3xl font-bold mt-6 mb-4;
+    @apply text-4xl font-bold mt-6 mb-4 p-2 bg-base-200 rounded;
   }
   h2 {
-    @apply text-2xl font-semibold mt-5 mb-3;
+    @apply text-3xl font-semibold mt-5 mb-3 p-2 bg-base-200 rounded;
   }
   h3 {
-    @apply text-xl font-medium mt-4 mb-2;
+    @apply text-2xl font-medium mt-4 mb-2 p-1.5 bg-base-200 rounded;
   }
   h4 {
-    @apply text-lg font-medium mt-3 mb-2;
+    @apply text-xl font-medium mt-3 mb-2 p-1.5 bg-base-200 rounded;
   }
   h5 {
-    @apply text-base font-medium mt-2 mb-1;
+    @apply text-lg font-semibold mt-2 mb-2 p-1.5 bg-base-200 rounded border-l-4 border-primary pl-3;
   }
 }
