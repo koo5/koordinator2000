@@ -241,23 +241,19 @@
             </div>
             
             <ul tabindex="0" 
-                class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 mt-4 transition-opacity duration-200"
-                class:opacity-100={isUserDropdownOpen}
-                class:opacity-0={!isUserDropdownOpen}
-                class:pointer-events-auto={isUserDropdownOpen}
-                class:pointer-events-none={!isUserDropdownOpen}
+                class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 mt-4"
             >
                 {#if $is_user}
-                    <li><a href="/you" on:click={() => isUserDropdownOpen = false}>Profile</a></li>
-                    <li><a href="/account" on:click={() => isUserDropdownOpen = false}>Account</a></li>
-                    <li><a href="/notifications" on:click={() => isUserDropdownOpen = false}>Notifications</a></li>
-                    <li><a href="/add_campaign" on:click={() => isUserDropdownOpen = false}>Add campaign</a></li>
+                    <li><a href="/you">Profile</a></li>
+                    <li><a href="/account">Account</a></li>
+                    <li><a href="/notifications">Notifications</a></li>
+                    <li><a href="/add_campaign">Add campaign</a></li>
                     <li class="divider"></li>
-                    <li><a on:click|preventDefault={() => { toggle_settings(); isUserDropdownOpen = false; }}>Settings</a></li>
-                    <li><a on:click|preventDefault={() => { handleLogout(); isUserDropdownOpen = false; }}>Logout</a></li>
+                    <li><button class="text-left w-full" on:click={toggle_settings}>Settings</button></li>
+                    <li><button class="text-left w-full" on:click={handleLogout}>Logout</button></li>
                 {:else}
-                    <li><a on:click|preventDefault={() => { handleLogin(); isUserDropdownOpen = false; }}>Login</a></li>
-                    <li><a on:click|preventDefault={() => { create_user(false); isUserDropdownOpen = false; }}>New user</a></li>
+                    <li><button class="text-left w-full" on:click={handleLogin}>Login</button></li>
+                    <li><button class="text-left w-full" on:click={() => create_user(false)}>New user</button></li>
                 {/if}
             </ul>
         </div>
@@ -293,5 +289,23 @@
         .navbar-content.hidden {
             display: none;
         }
+    }
+    
+    /* Style dropdown buttons to match links */
+    :global(.menu li button) {
+        display: block;
+        padding: 0.5rem 0.75rem;
+        color: inherit;
+        font-size: 0.875rem;
+        border-radius: 0.25rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+    }
+    
+    :global(.menu li button:hover) {
+        background-color: hsl(var(--b2));
     }
 </style>
