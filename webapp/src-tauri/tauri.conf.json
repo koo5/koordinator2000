@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "com.github.koo5",
   "build": {
-    "frontendDist": "../static",
+    "frontendDist": "../build",
     "devUrl": "http://localhost:5533",
     "beforeDevCommand": "bun run dev",
     "beforeBuildCommand": "bun run build"

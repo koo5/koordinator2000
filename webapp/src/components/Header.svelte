@@ -305,13 +305,6 @@
         z-index: 1100; /* Ensure it's above other elements */
     }
 
-    /* Login section styling - desktop only */
-    .login-section {
-        margin-left: auto;
-        display: flex !important;
-        white-space: nowrap !important;
-    }
-
     /* User name styles */
     :global(.user-name) {
         display: inline-block;
