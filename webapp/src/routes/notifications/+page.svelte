@@ -13,10 +13,6 @@
                     campaign {
                         id
                         title
-                        my_participations: participations(where: { account_id: { _eq: $_user_id } }) {
-                            id
-                            confirmed
-                        }
                     }
 
                     content

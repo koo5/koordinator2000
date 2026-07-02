@@ -6,17 +6,12 @@
     import Header from '../components/Header.svelte';
     import { createUrqlClient, setContextClient } from '$lib/urql.ts';
     import {
-        apply_newly_authenticated_user,
-        auth_event,
-        type AuthEvent,
         create_user,
-        my_user,
-        type MyUser
+        my_user
     } from '$lib/client/my_user.ts';
     import { saturate_computate, set_css_var } from '$lib/client/campaign.ts';
     import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
-    import { type SharedStore } from '$lib/client/svelte-shared-store.ts';
     import { debug } from '$lib/stores.ts';
 
     // Define types for layout data
@@ -37,33 +32,6 @@
 
     const urqlClient = createUrqlClient();
     setContextClient(urqlClient);
-
-    // Auth0 token handling
-    //$: maybe_ping_server_about_this($idToken, $userInfo);
-
-    async function maybe_ping_server_about_this(token: string | null, info: any): Promise<void> {
-        if (!browser) return;
-
-        const auth = { auth0: { token, info } };
-
-        // Need to cast to the correct type since we're in the browser
-        const writableMyUser = my_user as SharedStore<MyUser>;
-        writableMyUser.update((u: MyUser) => {
-            return { ...u, auth };
-        });
-
-        // Create a proper AuthEvent
-        const authEventData: AuthEvent = {
-            type: 'auth0',
-            ...get(my_user),
-        };
-
-        const event_result = await auth_event(authEventData);
-        if (event_result && event_result.user) {
-            console.log('ich bin logged in');
-            writableMyUser.set(event_result.user);
-        }
-    }
 
     // Theme setting variables
     $: color_theme_hue_rotate = $my_user.hue_rotate;

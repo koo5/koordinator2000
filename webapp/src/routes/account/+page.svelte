@@ -1,5 +1,4 @@
 <script lang="ts">
-    import KeycloakIdentityManager from '../../components/KeycloakIdentityManager.svelte';
     import DeleteSelf from '../../components/DeleteSelf.svelte';
     import { my_user } from '$lib/client/my_user.ts';
 </script>
@@ -21,10 +20,6 @@
         </div>
     </div>
 
-    <div class="identity-section">
-        <KeycloakIdentityManager />
-    </div>
-    
     <div class="danger-zone-section">
         <h3>Danger Zone</h3>
         <div class="danger-zone-content">
@@ -50,7 +45,7 @@
         border-bottom: 1px solid #dee2e6;
     }
 
-    .account-section, .identity-section {
+    .account-section {
         margin-bottom: 2rem;
         padding: 1.5rem;
         border-radius: 6px;

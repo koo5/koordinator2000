@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* DaisyUI v5 is loaded as a Tailwind v4 CSS plugin (no JS config needed). */
+@plugin 'daisyui' {
+  themes: light --default;
+}
 
 /* Heading styles */
 @layer base {

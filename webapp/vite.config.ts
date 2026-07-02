@@ -1,4 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import type { Logger, Plugin, UserConfig } from 'vite';
 import { defineConfig } from 'vite';
 
@@ -38,6 +39,7 @@ const disableSourcemapWarningsPlugin: Plugin = {
 // Create a type-safe configuration
 const config: UserConfig = {
     plugins: [
+        tailwindcss(),
         sveltekit(),
         disableSourcemapWarningsPlugin
     ],

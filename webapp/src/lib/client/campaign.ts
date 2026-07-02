@@ -16,88 +16,69 @@ export function sanitize_html(x: string): string {
  * GraphQL fragment for campaign data
  */
 export const CAMPAIGN_FRAGMENT = `
-		{
-			id,
-			title,
-			stealth,
-			description,
-			suggested_lowest_threshold,
-			suggested_highest_threshold,
-			suggested_optimal_threshold,
-			collect_confirmations,
-			created_at,
-			updated_at,
-			last_activity_at,
-			participations(order_by: [{threshold: asc}], where:{ account:{smazano:{_eq: false}}} ) {
-			  id
-			  threshold
-			  account {
-				id
-				name
-			  }
-			  confirmed
-			  condition_is_fulfilled
-			},
-			my_participations: participations(where: {account_id: {_eq: $_user_id}}) {
-			  id
-			  threshold
-			  confirmed
-			  condition_is_fulfilled
-			}
-			campaign_dismissals {
-			  account_id
-			  account {
-				id
-				name
-			  }
-			}
-			unconfirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: false}, condition_is_fulfilled: {_eq: true}, account:{smazano:{_eq: false}}}) {
-			  aggregate {
-				count
-			  }
-			}
-			confirmed_fulfilled_count: participations_aggregate(where: {confirmed: {_eq: true}, condition_is_fulfilled: {_eq: true}, account:{smazano:{_eq: false}}}) {
-			  aggregate {
-				count
-			  }
-			}
-			tags: campaign_tags {
-			  tag {
-				id
-				name
-				description
-			  }
-			}
-		}
+    {
+        id,
+        title,
+        stealth,
+        description,
+        suggested_lowest_threshold,
+        suggested_highest_threshold,
+        suggested_optimal_threshold,
+        created_at,
+        updated_at,
+        last_activity_at,
+        participations(order_by: [{threshold: asc}], where:{ account:{smazano:{_eq: false}}} ) {
+          id
+          threshold
+          account {
+            id
+            name
+          }
+          condition_is_fulfilled
+        },
+        my_participations: participations(where: {account_id: {_eq: $_user_id}}) {
+          id
+          threshold
+          condition_is_fulfilled
+        }
+        campaign_dismissals {
+          account_id
+          account {
+            id
+            name
+          }
+        }
+        tags: campaign_tags {
+          tag {
+            id
+            name
+            description
+          }
+        }
+    }
 `;
 
 /**
  * Gets the CSS class for a participation based on its status
  * @param participation - The participation object
- * @param collect_confirmations - Whether confirmations are collected
  * @returns CSS class name
  */
-export function get_status_class(participation: Participation, collect_confirmations: boolean = true): string {
+export function get_status_class(participation: Participation): string {
     if (participation.condition_is_fulfilled) {
-        if (!collect_confirmations || participation.confirmed) {
-            return 'confirmed';
-        } else return 'condition_is_fulfilled';
+        return 'confirmed';
     } else return 'condition_is_not_fulfilled';
 }
 
 /**
  * Gets the tickmark symbol for a participation
  * @param participation - The participation object
- * @param collect_confirmations - Whether confirmations are collected
  * @returns Unicode symbol for status
  */
-export function get_tickmark(participation: Participation | undefined | null, collect_confirmations: boolean = true): string {
+export function get_tickmark(participation: Participation | undefined | null): string {
     if (!participation || participation.threshold === undefined) return '';
     else {
         if (participation.condition_is_fulfilled) {
-            if (!collect_confirmations || participation.confirmed) {
-                return '✅';
-            } else return '✉'; // "☑?"
+            return '✅';
         } else return '👁';
     }
 }
@@ -105,18 +86,13 @@ export function get_tickmark(participation: Participation | undefined | null, co
 /**
  * Gets a short description of participation status
  * @param participation - The participation object
- * @param collect_confirmations - Whether confirmations are collected
  * @returns Short status description
  */
-export function short_description(participation: Participation | undefined | null, collect_confirmations: boolean = true): string {
+export function short_description(participation: Participation | undefined | null): string {
     if (!participation || participation.threshold === undefined) return '';
     else {
         if (participation.condition_is_fulfilled) {
-            if (collect_confirmations) {
-                if (participation.confirmed) {
-                    return 'confirmed!';
-                } else return 'unconfirmed..';
-            } else return 'participating';
+            return 'participating';
         } else return 'waiting...';
     }
 }
@@ -124,18 +100,13 @@ export function short_description(participation: Participation | undefined | nul
 /**
  * Gets a long description of participation status
  * @param participation - The participation object
- * @param collect_confirmations - Whether confirmations are collected
  * @returns Detailed status description
  */
-export function long_description(participation: Participation | undefined | null, collect_confirmations: boolean = true): string {
+export function long_description(participation: Participation | undefined | null): string {
     if (!participation || participation.threshold === undefined) return '';
     else {
         if (participation.condition_is_fulfilled) {
-            if (!collect_confirmations) {
-                return 'threshold is reached, participation is confirmed';
-            } else if (!participation.confirmed) {
-                return 'threshold is reached, waiting for confirmation';
-            } else return 'threshold is reached';
+            return 'threshold is reached';
         } else return 'this user is waiting for more participants...';
     }
 }

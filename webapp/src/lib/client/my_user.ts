@@ -4,14 +4,6 @@ import {browser} from '$app/environment';
 import EventEmitter from 'events';
 
 /**
- * Auth event interface
- */
-export interface AuthEvent {
-    type: string;
-    [key: string]: any;
-}
-
-/**
  * User object interface for the current user
  */
 export interface MyUser {
@@ -165,42 +157,6 @@ async function new_user(): Promise<AuthUserResponse> {
         userCreationInProgress = false;
     }
 }
-
-/**
- * Send an authentication event to the server
- * @param event - The authentication event to send
- * @returns Promise with the server response
- */
-export async function auth_event(event: AuthEvent): Promise<any> {
-    //console.log('/event');
-    //console.log(event);
-    let res;
-    let res2;
-    try {
-        res = fetch('/auth_event', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-            mode: 'same-origin',
-            body: JSON.stringify({event: event}),
-        });
-        //console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
-        res = await res;
-        //console.log("res:" + (typeof res) + ":" + JSON.stringify(res, null, '  '));
-        try {
-            res2 = await res.json();
-        } catch (ee) {
-            // Silent failure on JSON parse error
-        }
-        //console.log("res2:" + (typeof res2) + ":" + JSON.stringify(res2, null, '  '));
-    } catch (e) {
-        console.error(e);
-    }
-    return res2;
-}
-
 
 export async function create_user(only_on_first_visit: boolean): Promise<void> {
     const user = get(my_user);

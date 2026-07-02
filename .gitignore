@@ -5,3 +5,4 @@ aider
 **/node_modules
 .svelte-kit
 .mcp.json
+/backups/

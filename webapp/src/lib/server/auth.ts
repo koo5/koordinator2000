@@ -24,23 +24,6 @@ interface UserObject {
 }
 
 /**
- * Auth event interface
- */
-interface AuthEvent {
-    id?: number;
-    auth?: {
-        keycloak?: {
-            token?: string;
-            info?: {
-                sub: string;
-                email?: string;
-                [key: string]: any;
-            };
-        };
-    };
-}
-
-/**
  * Authentication info interface
  */
 interface AuthInfo {
@@ -286,88 +269,12 @@ export async function user_authenticity_jwt(id: number): Promise<string> {
     }
 }
 
-/**
- * Process authentication event from Keycloak
- * This function handles the authentication event from Keycloak and associates
- * the Keycloak identity with our internal JWT identity system
- * @param event - Authentication event data
- * @param existingUserId - Optional user ID that was already looked up from auth
- * @returns User data if authentication was successful
+/*
+ * Multi-provider identity primitives.
+ * These operate on the `verified_user_authentications` hub (account_id, provider,
+ * login_name) and are provider-agnostic. They are the building blocks for future
+ * verification providers; Keycloak was removed, but the hub is retained by design.
  */
-export async function process_auth_event(
-    event: AuthEvent,
-    existingUserId?: number
-): Promise<{ user: UserObject } | null> {
-    try {
-        // Validate the event data structure
-        if (!event) {
-            console.log('process_auth_event: Event object is null or undefined');
-            return null;
-        }
-
-        // For debugging
-        console.log('process_auth_event received:', JSON.stringify(event, null, 2));
-
-        // If no auth data at all, return null
-        if (!event.auth) {
-            console.log('process_auth_event: No auth data in event');
-            return null;
-        }
-
-        // Handle Keycloak auth
-        if (event.auth.keycloak) {
-            const keycloak = event.auth.keycloak;
-
-            // Skip empty tokens
-            if (!keycloak.token) {
-                console.log('process_auth_event: Empty Keycloak token');
-                return null;
-            }
-
-            // Validate required info
-            if (!keycloak.info || !keycloak.info.sub) {
-                console.log('process_auth_event: Missing Keycloak subject ID');
-                return null;
-            }
-
-            console.log('Processing Keycloak authentication:', JSON.stringify(keycloak.info, null, 2));
-
-            // Use the existing user ID if provided, otherwise look it up
-            let user_id = existingUserId;
-
-            if (user_id === undefined) {
-                // Only perform lookup if we don't already have the user ID
-                user_id = await user_id_from_auth('keycloak', keycloak.info.sub);
-            } else {
-                console.log(`Using provided existingUserId: ${existingUserId} (skipping lookup)`);
-            }
-
-            if (user_id) {
-                // If found, return the associated user with a fresh JWT
-                console.log(`Found existing user (ID: ${user_id}) for Keycloak identity`);
-                return { user: await create_signed_my_user(user_id) };
-            } else if (event.id) {
-                // If not found but we have a current user ID, associate the identities
-                console.log(`Associating Keycloak identity with user ID: ${event.id}`);
-                await save_verified_authentication(event.id, 'keycloak', keycloak.info);
-                // Save email if available
-                if (keycloak.info.email) {
-                    await grab_email(event.id, keycloak.info);
-                }
-                return { user: await create_signed_my_user(event.id) };
-            } else {
-                console.log('No valid user ID for Keycloak association');
-                return null;
-            }
-        }
-
-        console.log('No supported auth provider found in event');
-        return null;
-    } catch (error) {
-        console.error('Error in process_auth_event:', error);
-        return null;
-    }
-}
 
 /**
  * Find user ID from authentication provider and subject

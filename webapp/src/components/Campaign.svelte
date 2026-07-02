@@ -37,7 +37,6 @@
 
     export let campaign: CampaignType & {
         description?: string;
-        collect_confirmations?: boolean;
         participations?: ExtendedParticipation[];
         campaign_dismissals?: Dismissal[];
         suggested_optimal_threshold?: number;
@@ -68,16 +67,13 @@
         }
     ]*/
 
-    // campaign.unconfirmed_fulfilled_count.aggregate.count;
-    // campaign.confirmed_fulfilled_count.aggregate.count;
-
     $: suggested_optimal_threshold = campaign.suggested_optimal_threshold || 0;
     $: suggested_mass = campaign.suggested_optimal_threshold ? campaign.suggested_optimal_threshold + 1 : 1;
 
     // participations_contributing_towards_reaching_optimal_threshold
     const CONTRIBUTING_COUNT = gql`
-        subscription ($threshold: Int, $campaign_id: Int, $confirmed: Boolean) {
-            participations_aggregate(where: { threshold: { _lt: $threshold }, confirmed: { _eq: $confirmed }, campaign_id: { _eq: $campaign_id }, account: { smazano: { _eq: false } } }) {
+        subscription ($threshold: Int, $campaign_id: Int) {
+            participations_aggregate(where: { threshold: { _lt: $threshold }, campaign_id: { _eq: $campaign_id }, account: { smazano: { _eq: false } } }) {
                 aggregate {
                     count
                 }
@@ -93,29 +89,16 @@
         }
     }
 
-    $: confirmed_contributing_count_q = subscriptionStore<ContributingCountData>({
+    $: contributing_count_q = subscriptionStore<ContributingCountData>({
         client: getContextClient(),
         query: CONTRIBUTING_COUNT,
         variables: {
             threshold: suggested_mass,
             campaign_id: campaign.id,
-            confirmed: true,
         },
     });
-
-    $: unconfirmed_contributing_count_q = subscriptionStore<ContributingCountData>({
-        client: getContextClient(),
-        query: CONTRIBUTING_COUNT,
-        variables: {
-            threshold: suggested_mass,
-            campaign_id: campaign.id,
-            confirmed: false,
-        },
-    });
-    $: confirmed_contributing_count = $confirmed_contributing_count_q.data && $confirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
-    $: unconfirmed_contributing_count = $unconfirmed_contributing_count_q.data && $unconfirmed_contributing_count_q.data.participations_aggregate.aggregate.count;
-    $: confirmed_contributing_count_str = confirmed_contributing_count === undefined ? '???' : confirmed_contributing_count;
-    $: unconfirmed_contributing_count_str = unconfirmed_contributing_count === undefined ? '???' : unconfirmed_contributing_count;
+    $: contributing_count = $contributing_count_q.data && $contributing_count_q.data.participations_aggregate.aggregate.count;
+    $: contributing_count_str = contributing_count === undefined ? '???' : contributing_count;
 
     const CAMPAIGN_DISMISSAL = gql`
         mutation MyMutation($campaign_id: Int, $user_id: Int) {
@@ -170,21 +153,11 @@
 
 
         <Progress multi>
-            {#if campaign.collect_confirmations}
-                <Progress bar color="success" value={confirmed_contributing_count} max={suggested_mass} confirmed>
-                    {confirmed_contributing_count}</Progress
-                >
-            {/if}
-            <!-- how to make the below the "light green" "unconfirmed participation"? -->
-            <Progress bar color="warning" value={unconfirmed_contributing_count} max={suggested_mass} unconfirmed>
-                {unconfirmed_contributing_count}</Progress
+            <Progress bar color="success" value={contributing_count} max={suggested_mass}>
+                {contributing_count}</Progress
             >
         </Progress>
-        {#if campaign.collect_confirmations}
-            {confirmed_contributing_count_str} confirmed, {unconfirmed_contributing_count_str} unconfirmed
-        {:else}
-            {unconfirmed_contributing_count_str} participating
-        {/if}
+        {contributing_count_str} participating
         <i>of {suggested_mass} campaign goal</i><br />
     </div>
     <h5>Participants</h5>
@@ -194,10 +167,7 @@
             <div slot="tooltip">
                 <div class="help_tooltip">
                     Help:
-                    <br /> "✅" - participating, {campaign.collect_confirmations ? 'confirmed' : 'threshold reached'}
-                    {#if campaign.collect_confirmations}
-                        <br /> "✉" - condition fulfilled, waiting for confirmation
-                    {/if}
+                    <br /> "✅" - participating, threshold reached
                     <br /> "👁" - condition was not fulfilled yet/waiting<br /> 👎 - disagreement/dismissal
                 </div>
             </div>

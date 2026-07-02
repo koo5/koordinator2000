@@ -8,7 +8,6 @@
     import { onMount } from 'svelte';
     import { browser } from '$app/environment';
     import TheNagModal from './TheNagModal.svelte';
-    import { public_env } from '$lib/public_env';
     import { goto } from '$app/navigation';
 
     $: currentPath = $page?.url?.pathname || '/';
@@ -32,65 +31,10 @@
     function handleLogout() {
         if (!browser) return; // Skip during SSR
 
-        // First set my_user to {id:-1} for both logout types
+        // Reset to a logged-out state; the anonymous flow can mint a fresh user.
         (my_user as SharedStore<MyUser>).set({id: -1, settings: {}});
-
-        if (public_env.ENABLE_KEYCLOAK) {
-            // Handle Keycloak logout
-            // Create a proper Keycloak logout URL directly instead of using the route
-            const logoutParams = new URLSearchParams({
-                client_id: public_env.KEYCLOAK_CLIENT_ID,
-                post_logout_redirect_uri: window.location.origin,
-            });
-
-            const logoutUrl = `${public_env.KEYCLOAK_URL}/realms/${public_env.KEYCLOAK_REALM}/protocol/openid-connect/logout?${logoutParams.toString()}`;
-            window.location.href = logoutUrl;
-        } else {
-            // Handle regular logout
-            goto('/');
-            location.reload();
-        }
-    }
-
-    function handleLogin() {
-        if (!browser) return; // Skip during SSR
-
-        console.log('handleLogin - Keycloak enabled:', public_env.ENABLE_KEYCLOAK);
-
-        if (public_env.ENABLE_KEYCLOAK) {
-            // Debug info
-            console.log('Keycloak URL:', public_env.KEYCLOAK_URL);
-            console.log('Keycloak Realm:', public_env.KEYCLOAK_REALM);
-            console.log('Keycloak Client ID:', public_env.KEYCLOAK_CLIENT_ID);
-
-            try {
-                // First try the server-side route
-                window.location.href = '/auth/keycloak/login';
-            } catch (error) {
-                console.error('Error navigating to login route:', error);
-
-                // Fallback: Directly construct Keycloak URL if needed
-                if (public_env.KEYCLOAK_URL && public_env.KEYCLOAK_REALM && public_env.KEYCLOAK_CLIENT_ID) {
-                    const params = new URLSearchParams({
-                        client_id: public_env.KEYCLOAK_CLIENT_ID,
-                        redirect_uri: `${window.location.origin}/auth/keycloak/callback`,
-                        response_type: 'code',
-                        scope: 'openid email profile'
-                    });
-
-                    const loginUrl = `${public_env.KEYCLOAK_URL}/realms/${public_env.KEYCLOAK_REALM}/protocol/openid-connect/auth?${params.toString()}`;
-                    console.log('Using fallback login URL:', loginUrl);
-                    window.location.href = loginUrl;
-                } else {
-                    console.error('Missing Keycloak configuration for fallback login');
-                    // Regular login as last resort
-                    goto('/login');
-                }
-            }
-        } else {
-            // Regular login
-            goto('/login');
-        }
+        goto('/');
+        location.reload();
     }
 
     // Navigation items
@@ -238,7 +182,6 @@
                     <li><button class="text-left w-full" on:click={toggle_settings}>Settings</button></li>
                     <li><button class="text-left w-full" on:click={handleLogout}>Logout</button></li>
                 {:else}
-                    <li><button class="text-left w-full" on:click={handleLogin}>Login</button></li>
                     <li><button class="text-left w-full" on:click={() => create_user(false)}>New user</button></li>
                 {/if}
             </ul>

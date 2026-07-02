@@ -8,6 +8,15 @@ import { gql } from 'graphql-tag';
 import { server_env } from '$lib/server/env';
 
 /**
+ * Normalize a GraphQL endpoint into a full http(s) URL. Full URL respected
+ * (allows local http); bare host defaults to https (previous cloud behaviour).
+ * Kept local to avoid importing the browser-only client module server-side.
+ */
+function toHttpUrl(endpoint: string): string {
+    return /^https?:\/\//.test(endpoint) ? endpoint : `https://${endpoint}`;
+}
+
+/**
  * Query result interface
  */
 interface QueryResult<T = any> {
@@ -35,7 +44,7 @@ function createServerClient(): Client {
     const ssr = ssrExchange({ isClient: false });
 
     return createClient({
-        url: `https://${server_env.GRAPHQL_ENDPOINT}`,
+        url: toHttpUrl(server_env.GRAPHQL_ENDPOINT),
         fetchOptions: {
             headers,
         },

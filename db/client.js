@@ -23,12 +23,19 @@ async function initDatabase() {
   const connectionInfo = connectionString.replace(/\/\/([^:]+):([^@]+)@/, '//\\1:******@');
   console.log(`Connecting to database: ${connectionInfo}`);
 
+  // Decide whether to use SSL. A local Postgres (our Docker container, or any
+  // localhost instance) speaks plaintext and will refuse an SSL handshake, so
+  // forcing SSL there breaks the connection. Managed providers (Aiven, etc.)
+  // require it. Rule: disable SSL for localhost / sslmode=disable, else keep it
+  // (with relaxed cert checking, matching the previous behaviour).
+  const isLocal = /@(localhost|127\.0\.0\.1|postgres|::1)[:/]/.test(connectionString)
+    || /[?&]sslmode=disable/.test(connectionString)
+    || process.env.DATABASE_SSL === 'disable';
+
   // Create a new pool instance
   const pool = new Pool({
     connectionString,
-    ssl: {
-      rejectUnauthorized: false // Ignore SSL certificate validation errors
-    }
+    ssl: isLocal ? false : { rejectUnauthorized: false }
   });
 
   // Test the connection

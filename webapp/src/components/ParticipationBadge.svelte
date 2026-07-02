@@ -17,14 +17,14 @@
     }
 
     interface Campaign {
-        collect_confirmations?: boolean;
+        [key: string]: any;
     }
 
     export let participation: Participation;
     export let campaign: Campaign;
-    
-    $: status_class = get_status_class(participation, campaign?.collect_confirmations);
-    $: tickmark = get_tickmark(participation, campaign?.collect_confirmations);
+
+    $: status_class = get_status_class(participation);
+    $: tickmark = get_tickmark(participation);
     $: my_badge = $my_user.id == participation.account.id;
 </script>
 

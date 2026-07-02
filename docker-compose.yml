@@ -1,11 +1,72 @@
 services:
+  # ---------------------------------------------------------------------------
+  # Data plane: self-hosted Postgres + Hasura.
+  # SECURITY: both are bound to 127.0.0.1 ONLY. Nothing here is reachable from
+  # the internet or the LAN. They talk to each other over the private
+  # `koord_net` bridge. Do NOT change the host binds to 0.0.0.0 without putting
+  # a reverse proxy + TLS + firewall in front (see docs/INFRA.md).
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16.8-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-koordinator}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-koordinator}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      # host-only, non-default port (5432 is taken by another project)
+      - "127.0.0.1:5434:5432"
+    networks:
+      - koord_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-koordinator} -d ${POSTGRES_DB:-koordinator}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  hasura:
+    image: hasura/graphql-engine:v2.44.1
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - koord_net
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://${POSTGRES_USER:-koordinator}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-koordinator}
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${POSTGRES_USER:-koordinator}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-koordinator}
+      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET:?set HASURA_ADMIN_SECRET in .env}
+      # Console is safe to enable because the port is bound to localhost only.
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      # Hardening: no verbose internal errors, no anonymous role, no phone-home.
+      HASURA_GRAPHQL_DEV_MODE: "false"
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log"
+      HASURA_GRAPHQL_CORS_DOMAIN: "http://localhost:5533, http://localhost:5000"
+
+  # ---------------------------------------------------------------------------
+  # Migration runner. Applies db/migrations/*.sql to the local Postgres above.
+  # To load the April data dump, use scripts/db-init.sh (it restores first,
+  # THEN migrates). A bare `docker compose up` on an EMPTY volume will instead
+  # build the schema fresh from migrations — fine for a blank start.
+  # ---------------------------------------------------------------------------
   migrations:
     build:
       context: .
       dockerfile: ./docker/migrations.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-koordinator}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-koordinator}
+    networks:
+      - koord_net
     volumes:
       - ./db:/app/db
-      - ./.env:/app/db/.env
 
   # Webapp service (frontend)
   webapp:
@@ -36,44 +97,9 @@ services:
       - ./services/matcher:/app/services/matcher
       - ./.env:/app/services/matcher/.env
 
-#  # Keycloak database
-#  keycloak-db:
-#    image: postgres:16-alpine
-#    volumes:
-#      - keycloak-db-data:/var/lib/postgresql/data
-#    environment:
-#      POSTGRES_DB: keycloak
-#      POSTGRES_USER: keycloak
-#      POSTGRES_PASSWORD: keycloak_password  # Change this in production
-#    healthcheck:
-#      test: ["CMD-SHELL", "pg_isready -U keycloak"]
-#      interval: 5s
-#      timeout: 5s
-#      retries: 5
-
-#  # Keycloak service
-#  keycloak:
-#    image: quay.io/keycloak/keycloak:23.0.6
-#    command:
-#      - start-dev
-#      - --import-realm  # This allows importing realms from the mounted volume
-#    depends_on:
-#      keycloak-db:
-#        condition: service_healthy
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ./keycloak/realms:/opt/keycloak/data/import  # For importing realms
-#    environment:
-#      KC_DB: postgres
-#      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
-#      KC_DB_USERNAME: keycloak
-#      KC_DB_PASSWORD: keycloak_password  # Must match the password set in keycloak-db
-#      KEYCLOAK_ADMIN: admin
-#      KEYCLOAK_ADMIN_PASSWORD: admin_password  # Change this in production
-#      KC_HOSTNAME_STRICT: "false"
-#      KC_HTTP_ENABLED: "true"
-#      KC_PROXY: edge
+networks:
+  koord_net:
+    driver: bridge
 
 volumes:
-  keycloak-db-data:
+  pgdata:

@@ -41,18 +41,6 @@
         }>;
     }
 
-    interface QueryVariables {
-        _user_id: number;
-        _seen_ids: number[];
-        _search_term: string;
-        _tag_ids: number[];
-        _limit: number;
-        _order_by: object[];
-        _near_lat: number | null;
-        _near_lng: number | null;
-        _max_distance: number | null;
-    }
-
     // Define search filter options
     interface SearchFilters {
         searchTerm: string;
@@ -114,36 +102,13 @@
         { value: 'map', label: 'Map' },
     ];
 
-    // Update the GraphQL query with additional filter options
+    // The where-clause is built in JS (see `vars` below) and passed as a
+    // variable, so search + tag filters compose cleanly (tag filter only
+    // applies when tags are actually selected). `tags` is fetched here to
+    // populate the tag picker.
     const CAMPAIGN_LIST = gql`
-        query CampaignList($_user_id: Int, $_seen_ids: [Int!], $_search_term: String, $_limit: Int, $_order_by: [campaigns_order_by!]) {
-            campaigns(
-                order_by: $_order_by
-                limit: $_limit
-                where: {
-                    _and: [
-                        { smazano: { _eq: false } }
-                        { stealth: { _eq: false } }
-                        { _not: { campaign_dismissals: { account_id: { _eq: $_user_id } } } }
-                        { id: { _nin: $_seen_ids } }
-                        { _or: [{ title: { _ilike: $_search_term } }, { description: { _ilike: $_search_term } }] }
-                        # Only apply tag filtering when tags are selected
-                        #{
-                        #    campaign_tags: {
-                        #        tag_id: { _in: $_tag_ids }
-                        #    }
-                        #}
-
-                        # To enable location filtering, uncomment and fix:
-                        # {
-                        #   _and: [
-                        #     {latitude: {_is_null: false}},
-                        #     {longitude: {_is_null: false}}
-                        #   ]
-                        # }
-                    ]
-                }
-            ) {
+        query CampaignList($_where: campaigns_bool_exp, $_limit: Int, $_order_by: [campaigns_order_by!]) {
+            campaigns(order_by: $_order_by, limit: $_limit, where: $_where) {
                 id
                 title
                 description
@@ -159,7 +124,11 @@
                     }
                 }
             }
-
+            tags(order_by: { name: asc }) {
+                id
+                name
+                description
+            }
         }
     `;
 
@@ -257,15 +226,21 @@
         }
     };
 
+    // Build the campaigns_bool_exp here so filters compose. Referencing the
+    // reactive vars directly keeps Svelte's dependency tracking working.
     $: vars = {
-        _user_id: my_user_id,
-        _seen_ids: seen,
-        _search_term: searchTermWithWildcards,
+        _where: {
+            _and: [
+                { smazano: { _eq: false } },
+                { stealth: { _eq: false } },
+                { _not: { campaign_dismissals: { account_id: { _eq: my_user_id } } } },
+                { id: { _nin: seen } },
+                { _or: [{ title: { _ilike: searchTermWithWildcards } }, { description: { _ilike: searchTermWithWildcards } }] },
+                ...(selectedTagIds.length > 0 ? [{ campaign_tags: { tag_id: { _in: selectedTagIds } } }] : []),
+            ],
+        },
         _limit: itemsPerPage,
         _order_by: orderBy(),
-        // Tag filtering variables
-
-        // Location filter variables removed - disabled in query
     };
 
     // Process results to update available tags

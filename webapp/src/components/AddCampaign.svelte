@@ -7,8 +7,8 @@
     import TagManager from './TagManager.svelte';
 
     const ADD = gql`
-        mutation MyMutation($description: String = "", $maintainer_id: Int, $title: String = "", $suggested_lowest_threshold: bigint, $suggested_highest_threshold: bigint, $suggested_optimal_threshold: bigint, $collect_confirmations: Boolean = false) {
-            insert_campaigns_one(object: { description: $description, maintainer_id: $maintainer_id, title: $title, suggested_lowest_threshold: $suggested_lowest_threshold, suggested_highest_threshold: $suggested_highest_threshold, suggested_optimal_threshold: $suggested_optimal_threshold, collect_confirmations: $collect_confirmations }) {
+        mutation MyMutation($description: String = "", $maintainer_id: Int, $title: String = "", $suggested_lowest_threshold: bigint, $suggested_highest_threshold: bigint, $suggested_optimal_threshold: bigint) {
+            insert_campaigns_one(object: { description: $description, maintainer_id: $maintainer_id, title: $title, suggested_lowest_threshold: $suggested_lowest_threshold, suggested_highest_threshold: $suggested_highest_threshold, suggested_optimal_threshold: $suggested_optimal_threshold }) {
                 id
             }
         }
@@ -19,7 +19,6 @@
     let suggested_lowest_threshold = 8;
     let suggested_highest_threshold = 8000000000;
     let suggested_optimal_threshold = 800;
-    let collect_confirmations = false;
     let selectedTags: Array<{ id: number; name: string }> = [];
     let newCampaignId: number | null = null;
 
@@ -44,7 +43,6 @@
         suggested_lowest_threshold,
         suggested_highest_threshold,
         suggested_optimal_threshold,
-        collect_confirmations,
     }}
     on:done={event => {
         const result = event.detail;
@@ -77,10 +75,6 @@
     <label for="xxxxx">Suggested threshold:</label>
     <br />
     <input type="number" id="xxxxx" bind:value={suggested_optimal_threshold} />
-    <br />
-    <label for="collect_confirmations">Collect confirmations:</label>
-    <br />
-    <input type="checkbox" id="collect_confirmations" bind:checked={collect_confirmations} />
     <br />
 
     {#if newCampaignId}

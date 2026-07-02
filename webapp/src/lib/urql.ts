@@ -79,10 +79,18 @@ const ssr = ssrExchange({
  * @param endpoint - GraphQL endpoint
  * @returns WebSocket URL
  */
+/**
+ * Normalize a GraphQL endpoint into a full http(s) URL.
+ * Accepts a full URL (scheme respected — allows local http) or a bare host
+ * (defaults to https, preserving the previous cloud-Hasura behaviour).
+ */
+export function toHttpUrl(endpoint: string): string {
+    return /^https?:\/\//.test(endpoint) ? endpoint : `https://${endpoint}`;
+}
+
 function getWebSocketUrl(endpoint: string): string {
-    // Convert HTTP URL to WebSocket URL
-    const wsEndpoint = endpoint.replace(/^http/, 'ws');
-    return `wss://${wsEndpoint}`;
+    // Derive ws:// (local http) or wss:// (https) from the normalized URL
+    return toHttpUrl(endpoint).replace(/^http/, 'ws');
 }
 
 /**
@@ -160,7 +168,7 @@ export function createUrqlClient(): Client {
     }
 
     return createClient({
-        url: `https://${public_env.GRAPHQL_ENDPOINT}`, // Ensure HTTPS
+        url: toHttpUrl(public_env.GRAPHQL_ENDPOINT), // full URL respected; bare host defaults to https
         fetchOptions: getFetchOptions, // Use the dynamic fetchOptions function
         exchanges,
     });

@@ -63,12 +63,10 @@ if (process.env.MY_APP_KEYS) {
 // Access environment variables from process.env
 const HASURA_ADMIN_SECRET = process.env.HASURA_ADMIN_SECRET || '';
 const MY_APP_KEYS = process.env.MY_APP_KEYS || '';
-const KEYCLOAK_CLIENT_SECRET = process.env.KEYCLOAK_CLIENT_SECRET || '';
 
 // Log environment variable status (with limited output for security)
 console.log(`HASURA_ADMIN_SECRET is ${HASURA_ADMIN_SECRET ? 'set' : 'not set'}`);
 console.log(`MY_APP_KEYS is ${MY_APP_KEYS ? 'set (length: ' + MY_APP_KEYS.length + ' chars)' : 'not set'}`);
-console.log(`KEYCLOAK_CLIENT_SECRET is ${KEYCLOAK_CLIENT_SECRET ? 'set' : 'not set'}`);
 
 /**
  * App keys configuration interface
@@ -86,7 +84,6 @@ interface AppKeys {
 interface ServerEnv extends PublicEnv {
     HASURA_ADMIN_SECRET: string;
     MY_APP_KEYS: AppKeys;
-    KEYCLOAK_CLIENT_SECRET: string;
     PUBLIC_GRAPHQL_HEADERS: Record<string, string>;
 }
 
@@ -114,7 +111,6 @@ export const server_env: ServerEnv = {
     // Private environment variables (server-side only)
     HASURA_ADMIN_SECRET,
     MY_APP_KEYS: parsedKeys,
-    KEYCLOAK_CLIENT_SECRET: KEYCLOAK_CLIENT_SECRET || '',
 
     // Override the public GraphQL headers with admin secret for server-side requests
     PUBLIC_GRAPHQL_HEADERS: {
