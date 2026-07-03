@@ -178,10 +178,12 @@
                     <li><a href="/account">Account</a></li>
                     <li><a href="/notifications">Notifications</a></li>
                     <li><a href="/add_campaign">Add campaign</a></li>
+                    <li><a href="/login">Verify identity</a></li>
                     <li class="divider"></li>
                     <li><button class="text-left w-full" on:click={toggle_settings}>Settings</button></li>
                     <li><button class="text-left w-full" on:click={handleLogout}>Logout</button></li>
                 {:else}
+                    <li><a href="/login">Login</a></li>
                     <li><button class="text-left w-full" on:click={() => create_user(false)}>New user</button></li>
                 {/if}
             </ul>

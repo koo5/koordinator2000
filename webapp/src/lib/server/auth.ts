@@ -3,7 +3,7 @@
  * This file should only be imported by server-side code
  */
 import type { KeyLike } from 'jose';
-import { importJWK, SignJWT } from 'jose';
+import { importJWK, jwtVerify, SignJWT } from 'jose';
 import { adjectives, colors, uniqueNamesGenerator } from 'unique-names-generator';
 import { getServerClient, gql, serverMutation as mutate, serverQuery as query } from '$lib/server/urql';
 import { server_env } from '$lib/server/env';
@@ -267,6 +267,100 @@ export async function user_authenticity_jwt(id: number): Promise<string> {
         console.error('JWT generation error:', error);
         throw error; // Re-throw in server context
     }
+}
+
+/**
+ * Verify a user JWT's SIGNATURE (not just decode it) and return the account id.
+ * Uses the ES256 public key from MY_APP_KEYS. Returns null if invalid/expired.
+ * This is the trustworthy check to use before acting on a claimed identity
+ * (e.g. linking an OAuth spoke to "the current account").
+ */
+export async function verify_user_jwt(jwt: string): Promise<number | null> {
+    try {
+        await init_keys();
+        if (!rsaPublicKey) return null;
+        const { payload } = await jwtVerify(jwt, rsaPublicKey, {
+            issuer: 'urn:example:issuer',
+            audience: 'urn:example:audience',
+        });
+        const id = payload['urn:id'];
+        if (typeof id === 'number') return id;
+        if (typeof id === 'string' && /^\d+$/.test(id)) return parseInt(id, 10);
+        return null;
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Sign a stateless magic-link token: a short-lived ES256 JWT carrying the email
+ * (and optionally the anonymous account to link to). No DB token table needed —
+ * the link is self-verifying. A distinct audience keeps it from being usable as
+ * a session token.
+ */
+export async function sign_magic_link_token(email: string, linkAccountId?: number): Promise<string> {
+    await init_keys();
+    if (!ecPrivateKey) throw new Error('Keys not initialized for magic-link signing');
+
+    const payload: Record<string, any> = { purpose: 'magic-link', email };
+    if (linkAccountId) payload.link_account_id = linkAccountId;
+
+    return await new SignJWT(payload)
+        .setProtectedHeader({ alg: server_env.MY_APP_KEYS.private.alg as string })
+        .setIssuedAt()
+        .setIssuer('urn:example:issuer')
+        .setAudience('urn:koordinator:magic-link')
+        .setExpirationTime('15m')
+        .sign(ecPrivateKey);
+}
+
+/** Verify a magic-link token; returns the email (+ optional account to link) or null. */
+export async function verify_magic_link_token(token: string): Promise<{ email: string; linkAccountId?: number } | null> {
+    try {
+        await init_keys();
+        if (!rsaPublicKey) return null;
+        const { payload } = await jwtVerify(token, rsaPublicKey, {
+            issuer: 'urn:example:issuer',
+            audience: 'urn:koordinator:magic-link',
+        });
+        if (payload.purpose !== 'magic-link' || typeof payload.email !== 'string') return null;
+        const linkAccountId = typeof payload.link_account_id === 'number' ? payload.link_account_id : undefined;
+        return { email: payload.email, linkAccountId };
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Turn a verified OAuth-provider identity into a signed session, following the
+ * hub-and-spoke model:
+ *   1. If the provider identity is already linked -> sign in to that account.
+ *   2. Else if we have a verified current (anonymous) account -> attach the
+ *      spoke to it (anonymous-first: your pledges carry over).
+ *   3. Else -> create a fresh account and attach the spoke.
+ */
+export async function link_or_create_oauth_account(
+    provider: string,
+    providerUserId: string,
+    email: string | null,
+    currentAccountId?: number
+): Promise<UserObject> {
+    const info: AuthInfo = { sub: providerUserId, email: email ?? undefined };
+
+    const existing = await user_id_from_auth(provider, providerUserId);
+    if (existing) {
+        return await create_signed_my_user(existing);
+    }
+
+    if (currentAccountId && currentAccountId > 0) {
+        await save_verified_authentication(currentAccountId, provider, info);
+        if (email) await grab_email(currentAccountId, info);
+        return await create_signed_my_user(currentAccountId);
+    }
+
+    const created = await free_user_id(email);
+    await save_verified_authentication(created.id, provider, info);
+    return created;
 }
 
 /*

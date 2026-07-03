@@ -46,27 +46,6 @@
 
     $: my_participation = get_my_participation(campaign, $my_user);
 
-    /*
-    $: confirmed_percent = get_confirmed_percent($my_user, my_participation);
-    function get_confirmed_percent(my_user, my_participation)
-    {
-        another importaint anspect here: percent of *my* threshold
-        if (!my_participation.id) return 0;
-        //my_participation.threshold
-        return 10;
-    }
-
-    $: series = [
-        {
-                perc: confirmed_percent,
-                color: '#88ff88'
-        },
-        {
-                perc: 32,
-                color: '#ccffcc'
-        }
-    ]*/
-
     $: suggested_optimal_threshold = campaign.suggested_optimal_threshold || 0;
     $: suggested_mass = campaign.suggested_optimal_threshold ? campaign.suggested_optimal_threshold + 1 : 1;
 

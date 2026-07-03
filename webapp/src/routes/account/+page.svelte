@@ -1,5 +1,6 @@
 <script lang="ts">
     import DeleteSelf from '../../components/DeleteSelf.svelte';
+    import AccountIdentities from '../../components/AccountIdentities.svelte';
     import { my_user } from '$lib/client/my_user.ts';
 </script>
 
@@ -19,6 +20,8 @@
             </div>
         </div>
     </div>
+
+    <AccountIdentities />
 
     <div class="danger-zone-section">
         <h3>Danger Zone</h3>

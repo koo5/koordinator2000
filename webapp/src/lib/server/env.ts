@@ -63,10 +63,15 @@ if (process.env.MY_APP_KEYS) {
 // Access environment variables from process.env
 const HASURA_ADMIN_SECRET = process.env.HASURA_ADMIN_SECRET || '';
 const MY_APP_KEYS = process.env.MY_APP_KEYS || '';
+const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || '';
+const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || '';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 
 // Log environment variable status (with limited output for security)
 console.log(`HASURA_ADMIN_SECRET is ${HASURA_ADMIN_SECRET ? 'set' : 'not set'}`);
 console.log(`MY_APP_KEYS is ${MY_APP_KEYS ? 'set (length: ' + MY_APP_KEYS.length + ' chars)' : 'not set'}`);
+console.log(`GITHUB_CLIENT_ID is ${GITHUB_CLIENT_ID ? 'set' : 'not set'}`);
 
 /**
  * App keys configuration interface
@@ -84,6 +89,10 @@ interface AppKeys {
 interface ServerEnv extends PublicEnv {
     HASURA_ADMIN_SECRET: string;
     MY_APP_KEYS: AppKeys;
+    GITHUB_CLIENT_ID: string;
+    GITHUB_CLIENT_SECRET: string;
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
     PUBLIC_GRAPHQL_HEADERS: Record<string, string>;
 }
 
@@ -111,6 +120,10 @@ export const server_env: ServerEnv = {
     // Private environment variables (server-side only)
     HASURA_ADMIN_SECRET,
     MY_APP_KEYS: parsedKeys,
+    GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET,
 
     // Override the public GraphQL headers with admin secret for server-side requests
     PUBLIC_GRAPHQL_HEADERS: {

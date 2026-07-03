@@ -292,7 +292,6 @@
                                 <swiper-slide class="campaign-slide dismiss-all">
                                     <div class="action-panel">
                                         <h3>Dismiss All</h3>
-                                        <p>Dismiss all campaigns of this cause/user</p>
                                         <button class="btn-action btn-dismiss-all">Dismiss all campaigns of this cause </button>
                                         <button class="btn-action btn-dismiss-user">Dismiss all campaigns of this user </button>
                                     </div>

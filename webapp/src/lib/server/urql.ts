@@ -2,7 +2,7 @@
  * Server-side URQL client configuration
  * This file should only be imported by server-side code
  */
-import { cacheExchange, type Client, createClient, fetchExchange, type OperationResult, ssrExchange } from '@urql/core';
+import { type Client, createClient, fetchExchange, type OperationResult } from '@urql/core';
 import type { DocumentNode } from 'graphql';
 import { gql } from 'graphql-tag';
 import { server_env } from '$lib/server/env';
@@ -40,16 +40,16 @@ function createServerClient(): Client {
     // Print the actual endpoint being used
     console.log('Server GraphQL Endpoint:', server_env.GRAPHQL_ENDPOINT);
 
-    // Create SSR exchange for server
-    const ssr = ssrExchange({ isClient: false });
-
     return createClient({
         url: toHttpUrl(server_env.GRAPHQL_ENDPOINT),
         fetchOptions: {
             headers,
         },
-        // Use only necessary exchanges for server-side
-        exchanges: [cacheExchange, ssr, fetchExchange],
+        // Fetch-only: NO document cache. This is a per-request admin client; a
+        // shared document cache serves stale reads across requests (e.g. an
+        // account lookup that returned zero rows stays cached even after the row
+        // is inserted, causing duplicate-account creation on auth).
+        exchanges: [fetchExchange],
     });
 }
 
