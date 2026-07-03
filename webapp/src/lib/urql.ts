@@ -247,7 +247,7 @@ export function createRoleClient(role: string): Client {
     
     // Create a new client with role header
     return createClient({
-        url: `https://${public_env.GRAPHQL_ENDPOINT}`,
+        url: toHttpUrl(public_env.GRAPHQL_ENDPOINT),
         fetchOptions: getRoleFetchOptions,
         exchanges
     });

@@ -35,7 +35,7 @@
     }
 </script>
 
-<table class="responsive">
+<table class="table table-sm">
     <thead>
         <tr>
             <th scope="col">#</th>

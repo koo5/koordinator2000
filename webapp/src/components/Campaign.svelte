@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Button, Progress } from './ui';
     import { sanitize_html } from '$lib/client/campaign.ts';
     import MyParticipation from './MyParticipation.svelte';
     import MutationForm from './MutationForm.svelte';
@@ -108,11 +107,10 @@
         {#if is_detail_view}
             {campaign.title}
         {:else}
-            {campaign.title}<a href="/campaign/{campaign.id}">...</a>
+            <a class="title-link" href="/campaign/{campaign.id}">{campaign.title}</a>
         {/if}
     </h2>
-    <h5>Description</h5>
-    <div class="content_block">
+    <div class="content_block description">
         <p>{@html sanitize_html(campaign.description || '')}</p>
     </div>
 
@@ -123,21 +121,24 @@
 
     <h5>My participation</h5>
     <div class="content_block">
-        <i>I will join when other people join:</i><br />
-
         <MyParticipation {campaign} on:my_participation_upsert />
     </div>
+
     <h5>Progress</h5>
     <div class="content_block">
-
-
-        <Progress multi>
-            <Progress bar color="success" value={contributing_count} max={suggested_mass}>
-                {contributing_count}</Progress
-            >
-        </Progress>
-        {contributing_count_str} participating
-        <i>of {suggested_mass} campaign goal</i><br />
+        <progress
+            class="progress progress-success w-full"
+            value={Math.min(contributing_count || 0, suggested_mass)}
+            max={suggested_mass}
+        ></progress>
+        <div class="flex items-center justify-between text-sm">
+            <span><b>{contributing_count_str}</b> pledged</span>
+            {#if (contributing_count || 0) >= suggested_mass}
+                <span class="badge badge-success badge-sm">🎉 goal of {suggested_mass} reached</span>
+            {:else}
+                <span class="opacity-60">goal: {suggested_mass}</span>
+            {/if}
+        </div>
     </div>
     <h5>Participants</h5>
     <div class="content_block">
@@ -192,7 +193,7 @@
                 campaign_id: campaign.id,
             }}
         >
-            <Button color="warning" type="submit">dismiss</Button>
+            <button class="btn btn-outline btn-warning btn-xs" type="submit">Dismiss this campaign</button>
         </MutationForm>
     </div>
 
@@ -205,5 +206,17 @@
         overflow-y: scroll;
         width: 100%;
         height: 100%;
+    }
+    .title-link {
+        color: inherit;
+        text-decoration: none;
+    }
+    .title-link:hover {
+        color: var(--color-primary);
+    }
+    .description :global(p) {
+        color: color-mix(in oklab, var(--color-base-content) 85%, transparent);
+        line-height: 1.6;
+        margin: 0;
     }
 </style>

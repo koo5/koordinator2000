@@ -69,17 +69,47 @@ What's already done here:
 - **Pinned image versions** (not `:latest`) so an image can't silently change
   under you.
 
-If you ever expose this to the internet (to run the real site), do NOT just flip
-the bind to `0.0.0.0`. Instead:
+## Production mode
 
-- put a reverse proxy (Caddy/nginx) with TLS in front of Hasura; keep Postgres
-  private (never publish 5434 publicly)
-- set a firewall (ufw) default-deny inbound
-- consider pinning images by **digest** (`@sha256:...`) — get the digest with
-  `docker inspect --format '{{index .RepoDigests 0}}' postgres:16.8-alpine`
-- rotate `HASURA_ADMIN_SECRET` and the DB password; never reuse them elsewhere
-- keep the admin secret out of any client-side bundle (the webapp currently sends
-  it from the browser — that changes when we do the auth pass)
+Everything stays localhost-bound; the VPS's **global Caddy** does TLS and
+reverse-proxies the domain to the webapp. Bring-up:
+
+```bash
+docker compose --profile prod up -d --build
+```
+
+That runs: postgres + hasura + migrations + **matcher** (the threshold heartbeat,
+always on) + **webapp-prod** (adapter-node build, `127.0.0.1:5533`) +
+**telegram** (needs `TELEGRAM_BOT_TOKEN` in `services/telegram/.env`).
+
+Global Caddy site block (the only public entry point):
+
+```caddy
+koordinator.example.org {
+    reverse_proxy 127.0.0.1:5533
+}
+```
+
+The browser talks GraphQL to Hasura — either give Hasura its own subdomain
+(`hasura.example.org { reverse_proxy 127.0.0.1:8080 }`) or proxy a path. Set
+`VITE_PUBLIC_GRAPHQL_ENDPOINT` accordingly.
+
+### Go-live checklist (things that change with the domain)
+
+- `webapp/.env`: `VITE_PUBLIC_URL=https://your.domain` (OAuth redirects derive
+  from it), `VITE_PUBLIC_GRAPHQL_ENDPOINT=https://hasura.your.domain/v1/graphql`
+- root `.env`: `KOORD_CORS_DOMAIN=https://your.domain` (Hasura CORS)
+- **OAuth apps**: update the GitHub/Google callback URLs to
+  `https://your.domain/auth/{github,google}/callback` (or register second apps
+  and keep localhost ones for dev)
+- email: set the email API key so magic links actually send (see
+  `webapp/src/lib/server/email.ts`)
+- **backups off-machine**: cron `scripts/db-backup.sh` AND rsync/rclone
+  `backups/` to another box — a same-disk backup doesn't survive a dead drive
+- firewall: default-deny inbound except Caddy's 80/443; never publish 5434/8080
+- consider pinning images by digest (`docker inspect --format
+  '{{index .RepoDigests 0}}' postgres:16.8-alpine`)
+- rotate `HASURA_ADMIN_SECRET` + the DB password for the public instance
 
 ## Common commands
 

@@ -6,3 +6,8 @@ aider
 .svelte-kit
 .mcp.json
 /backups/
+# Never commit key material (see the ES256 keys — they live in gitignored .env)
+*.key
+*.pem
+# adapter-node build output
+/webapp/build/

@@ -1,6 +1,6 @@
 # Telegram bot — preliminary design
 
-Status: **skeleton built** in [`services/telegram/`](../services/telegram/) — `/start` and `/campaigns` work against the local Hasura (verified). Needs a bot token from @BotFather to run against Telegram. Next: account linking, `/pledge`, threshold-crossing push (see the service README).
+Status: **built** in [`services/telegram/`](../services/telegram/). `/start` (account linking → `telegram` spoke), `/campaigns`, `/pledge`, `/me`, **and the threshold-crossing push** (DMs the user when the matcher flips their condition) all work against the local Hasura (verified). Needs a bot token from @BotFather to run against Telegram. See the service README.
 
 ## Why Telegram is a strong bet
 

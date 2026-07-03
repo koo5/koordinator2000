@@ -46,6 +46,18 @@ fi
 echo "==> Applying migrations (any newer than the dump)..."
 docker compose run --rm migrations
 
+# Derive the Hasura JWT verification secret (public key) from webapp MY_APP_KEYS
+# into .env (single source of truth; never committed). Upsert the line.
+echo "==> Deriving Hasura JWT secret from MY_APP_KEYS..."
+BUN="$(command -v bun || echo "$HOME/.bun/bin/bun")"
+if [ -f "$ROOT/webapp/.env" ] && "$BUN" "$ROOT/scripts/gen-jwt-secret.mjs" >/tmp/koord_jwt_secret 2>/dev/null; then
+  grep -v '^HASURA_GRAPHQL_JWT_SECRET=' "$ROOT/.env" > "$ROOT/.env.tmp" && mv "$ROOT/.env.tmp" "$ROOT/.env"
+  cat /tmp/koord_jwt_secret >> "$ROOT/.env"; rm -f /tmp/koord_jwt_secret
+  echo "    JWT secret written to .env"
+else
+  echo "    !! Skipped (webapp/.env or MY_APP_KEYS missing). Hasura will refuse to start without HASURA_GRAPHQL_JWT_SECRET." >&2
+fi
+
 echo "==> Starting Hasura..."
 docker compose up -d hasura
 
@@ -57,6 +69,9 @@ until curl -sf "http://127.0.0.1:8080/healthz" >/dev/null 2>&1; do sleep 1; done
 # built on nested relationships (participations { account }, campaign_tags, ...).
 "$ROOT/scripts/hasura-track.sh"
 "$ROOT/scripts/hasura-relationships.sh"
+# Row-level permissions for the 'anonymous' and 'user' roles (restores the
+# permission layer the app relies on — it was configured in Hasura Cloud before).
+"$ROOT/scripts/hasura-permissions.sh"
 
 echo ""
 echo "Data plane is up:"

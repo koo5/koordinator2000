@@ -50,12 +50,14 @@ obj causes                       maintainer  maintainer_id
 obj participations               account     account_id
 obj participations               campaign    campaign_id
 obj verified_user_authentications account    account_id
+obj notification_deliveries      notification notification_id
 
 echo "==> Array relationships (parent -> children)..."
 arr campaigns  participations           participations            campaign_id
 arr campaigns  campaign_dismissals      campaign_dismissals       campaign_id
 arr campaigns  campaign_tags            campaign_tags             campaign_id
 arr campaigns  campaign_notifications   campaign_notifications    campaign_id
+arr campaign_notifications notification_deliveries notification_deliveries notification_id
 arr campaigns  campaign_slugs           campaign_slugs            campaign_id
 arr accounts   participations           participations            account_id
 arr accounts   campaign_dismissals      campaign_dismissals       account_id

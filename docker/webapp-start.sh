@@ -15,15 +15,13 @@ fi
 echo "Starting application in $NODE_ENV mode..."
 
 if [ "$NODE_ENV" = "production" ]; then
-  # Build the application for production
+  # Build (adapter-node) and start the production server on 5533.
   echo "Building for production..."
   bun run build
-
-  # Start the production server with PORT environment variable
-  echo "Starting production server on port 5000..."
-  PORT=5000 bun run start
+  echo "Starting production server on port 5533..."
+  bun run start
 else
-  # Start the development server
+  # Development server (same port as host-side dev for consistency)
   echo "Starting development server..."
-  bun run dev --port 3005
+  bun run dev
 fi

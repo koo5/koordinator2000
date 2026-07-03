@@ -40,13 +40,20 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://${POSTGRES_USER:-koordinator}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-koordinator}
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://${POSTGRES_USER:-koordinator}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-koordinator}
       HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET:?set HASURA_ADMIN_SECRET in .env}
+      # JWT auth: the ES256 public key that verifies webapp-signed sessions.
+      # Kept in the gitignored .env (derived from MY_APP_KEYS by
+      # scripts/gen-jwt-secret.mjs) so no key material lives in a committed file.
+      HASURA_GRAPHQL_JWT_SECRET: '${HASURA_GRAPHQL_JWT_SECRET:?run scripts/gen-jwt-secret.mjs to derive it into .env}'
+      # Requests with no JWT get this role (public, read-only browsing).
+      HASURA_GRAPHQL_UNAUTHORIZED_ROLE: anonymous
       # Console is safe to enable because the port is bound to localhost only.
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       # Hardening: no verbose internal errors, no anonymous role, no phone-home.
       HASURA_GRAPHQL_DEV_MODE: "false"
       HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: "startup, http-log, webhook-log, websocket-log"
-      HASURA_GRAPHQL_CORS_DOMAIN: "http://localhost:5533, http://localhost:5000"
+      # For prod, set KOORD_CORS_DOMAIN in .env to your site origin (https://your.domain)
+      HASURA_GRAPHQL_CORS_DOMAIN: '${KOORD_CORS_DOMAIN:-http://localhost:5533, http://localhost:5000}'
 
   # ---------------------------------------------------------------------------
   # Migration runner. Applies db/migrations/*.sql to the local Postgres above.
@@ -68,8 +75,20 @@ services:
     volumes:
       - ./db:/app/db
 
-  # Webapp service (frontend)
+  # ---------------------------------------------------------------------------
+  # App services. Profiles:
+  #   (none)  postgres/hasura/migrations/matcher — always on
+  #   dev     webapp dev server in a container (most dev happens on the host
+  #           via `cd webapp && bun run dev` instead)
+  #   prod    built webapp (adapter-node) + telegram bot
+  # Prod bring-up:  docker compose --profile prod up -d --build
+  # TLS: handled by the VPS's global Caddy, reverse-proxying the domain to
+  # 127.0.0.1:5533 (see docs/INFRA.md). Nothing here binds beyond localhost.
+  # ---------------------------------------------------------------------------
+
+  # Webapp — dev container (optional)
   webapp:
+    profiles: ["dev"]
     build:
       context: .
       dockerfile: ./docker/webapp.Dockerfile
@@ -77,15 +96,30 @@ services:
       migrations:
         condition: service_completed_successfully
     network_mode: "host"
-    ports:
-      - "5000:5000"
     volumes:
       - ./webapp:/app/webapp
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
+      - NODE_ENV=development
 
-  # Matcher service
+  # Webapp — production build (adapter-node), served on 127.0.0.1:5533
+  webapp-prod:
+    profiles: ["prod"]
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/webapp.Dockerfile
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    network_mode: "host"
+    volumes:
+      - ./webapp:/app/webapp
+    environment:
+      - NODE_ENV=production
+
+  # Matcher — the threshold-resolution heartbeat. Always on.
   matcher:
+    restart: unless-stopped
     build:
       context: .
       dockerfile: ./docker/matcher.Dockerfile
@@ -96,6 +130,20 @@ services:
     volumes:
       - ./services/matcher:/app/services/matcher
       - ./.env:/app/services/matcher/.env
+
+  # Telegram bot — needs TELEGRAM_BOT_TOKEN in services/telegram/.env
+  telegram:
+    profiles: ["prod", "telegram"]
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/telegram.Dockerfile
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    network_mode: "host"
+    volumes:
+      - ./services/telegram:/app/services/telegram
 
 networks:
   koord_net:

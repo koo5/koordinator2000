@@ -312,11 +312,35 @@ https://www.reddit.com/r/thevenusproject
 
 # technology
 
-Currently PostgreSQL / Hasura(GraphQL) / Svelte, soon Sapper. RDF will be used as an overlay over the core data model, to allow users and admins to express nuanced matters of provenance, trust and identity, help fight off bots, enable federation, express forecasts etc.
+Self-hosted PostgreSQL + Hasura (GraphQL, live subscriptions, row-level
+permissions) / SvelteKit (Tailwind v4 + DaisyUI) running on **bun** / zero-dep
+backend services. Auth is a custom hub-and-spoke model: an account can carry
+multiple **verified identities** (GitHub, Google, email magic-link, Telegram —
+via minimal OAuth with Arctic and our own ES256 JWTs that Hasura verifies).
+RDF will be used as an overlay over the core data model, to allow users and admins to express nuanced matters of provenance, trust and identity, help fight off bots, enable federation, express forecasts etc.
 
-## Environment Configuration
+Components:
 
-Environment variables are stored in a `.env` file at the project root. This file contains shared configuration used across all services. Copy `.env.example` to `.env` and update the values as needed.
+- **webapp/** — SvelteKit frontend (adapter-node in prod)
+- **services/matcher/** — the threshold-resolution engine; flips
+  `condition_is_fulfilled` and writes notifications when critical mass is crossed
+- **services/telegram/** — Telegram bot: pledge from chat, get DM'd the moment
+  your threshold is met
+- **db/** — SQL migrations; **scripts/** — data-plane setup (Hasura
+  tracking/relationships/permissions), backups, secrets
+
+## Development quickstart
+
+```bash
+cp .env.example .env                  # root: postgres + hasura secrets
+cp webapp/.env.example webapp/.env    # webapp: keys, oauth, email
+scripts/db-init.sh                    # postgres + hasura up, dump restored, migrated, tracked
+cd webapp && bun install && bun run dev    # app on http://localhost:5533
+```
+
+Tests: `cd webapp && bun run test:playwright` (needs the data plane + dev server).
+Prod: `docker compose --profile prod up -d --build` behind a reverse proxy —
+see [docs/INFRA.md](docs/INFRA.md).
 
 ## Database Migrations
 

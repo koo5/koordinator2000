@@ -27,20 +27,18 @@ The matcher continuously polls the database for campaigns and their participatio
 ## Technical Details
 
 ### Dependencies
-- GraphQL with Apollo Client for database operations
-- Node.js runtime environment
-- Moment.js for timestamp handling
+None — raw `fetch` against Hasura's GraphQL API, running on **bun**.
 
 ### Execution Model
-- Runs as a continuous loop with configurable intervals
-- Self-healing with error handling and automatic retries
-- Processes one threshold change at a time to ensure consistency
+- Continuous polling loop, `MATCHER_INTERVAL_SECONDS` (default 2s); 20s backoff on errors.
+- **All flips in a pass are applied as one batched mutation** (notification inserts
+  plus both update directions), so a mass crossing notifies everyone in one pass.
+- `compute_flips()` is a pure function — test algorithm changes there.
 
-### Data Structure
-The matcher works with:
-- **Campaigns**: Containing ID, title, and other metadata
-- **Participation Records**: User thresholds and fulfillment status
-- **Notifications**: System-generated messages about threshold events
+### Environment
+Loaded from `./.env` (docker mounts the repo root `.env` here), falling back to
+the repo root `.env`: `KOORDINATOR_GRAPHQL_ENDPOINT` (default
+`http://127.0.0.1:8080/v1/graphql`), `HASURA_ADMIN_SECRET`, `MATCHER_INTERVAL_SECONDS`.
 
 ## Usage
-Run the service with `npm start` or in development mode with `npm run dev`.
+Run with `bun start`, or `bun run dev` for watch mode.

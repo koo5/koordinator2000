@@ -97,10 +97,13 @@
 </script>
 
 <div class="navbar bg-base-100 shadow-sm">
-    <div class="flex-none">
-        <PageReloadClock />
+    <div class="flex-none flex items-center gap-2">
+        <a href="/" class="brand" aria-label="Koordinator home">
+            <span class="brand-mark">⇶</span><span class="brand-name">Koordinator</span>
+        </a>
+        {#if $debug}<PageReloadClock />{/if}
     </div>
-    
+
     <div class="flex-1">
         <!-- Mobile menu toggle button -->
         <div class="md:hidden">
@@ -146,25 +149,20 @@
     </div>
     
     <!-- User dropdown menu -->
-    <div class="flex-none">
+    <div class="flex-none flex items-center gap-2">
+        <a href="/add_campaign" class="btn btn-primary btn-sm hidden sm:inline-flex">+ Start a campaign</a>
         <div class="dropdown dropdown-end user-dropdown">
-            <label tabindex="0" class="btn btn-ghost">
+            <label tabindex="0" class="btn btn-ghost px-2">
                 {#if $is_user}
-                    <span class="font-medium truncate max-w-[140px]">
-                        {#if $my_user.name}
-                            {$my_user.name}
-                        {:else}
-                            You (ID {$my_user.id})
-                        {/if}
+                    <span class="avatar-chip" aria-hidden="true">{($my_user.name || 'U').slice(0, 1).toUpperCase()}</span>
+                    <span class="font-medium truncate max-w-[120px] hidden md:inline">
+                        {$my_user.name || `You (ID ${$my_user.id})`}
                     </span>
                     {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
-                    {#if $my_user?.auth_debug} ({$my_user.auth_provider}){/if}
-                    {#if $my_user?.auth_debug} ({$my_user.auth_type}){/if}
-                    {#if $my_user?.auth_debug} (id: {$my_user.id}){/if}
                 {:else}
-                    User
+                    <span class="font-medium">Account</span>
                 {/if}
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" 
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
@@ -196,6 +194,37 @@
 <TheNagModal />
 
 <style>
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        text-decoration: none;
+        color: inherit;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        padding: 0 0.25rem;
+    }
+    .brand-mark {
+        color: var(--color-primary);
+        font-size: 1.35rem;
+        line-height: 1;
+    }
+    .brand-name {
+        font-size: 1.1rem;
+    }
+    .avatar-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 9999px;
+        background: color-mix(in oklab, var(--color-secondary) 18%, transparent);
+        color: var(--color-secondary);
+        font-weight: 700;
+        font-size: 0.85rem;
+    }
+
     /* Ensure dropdown menu stays above other content */
     :global(.dropdown-content) {
         z-index: 100;

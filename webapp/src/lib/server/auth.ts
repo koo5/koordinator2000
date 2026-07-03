@@ -251,8 +251,8 @@ export async function user_authenticity_jwt(id: number): Promise<string> {
         return await new SignJWT({
             // Include the standard Hasura claims namespace
             'https://hasura.io/jwt/claims': {
-                'x-hasura-allowed-roles': ['nobody', 'user'], // Define allowed roles (adjust if needed)
-                'x-hasura-default-role': 'nobody',    // Define the default role
+                'x-hasura-allowed-roles': ['user'], // every account (incl. anonymous-first) is a 'user'
+                'x-hasura-default-role': 'user',    // own-row read/write; scoped by X-Hasura-User-Id
                 'x-hasura-user-id': String(id),     // Pass the user ID as a string
             },
             'urn:id': id, // Keep your internal identifier if needed

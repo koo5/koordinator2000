@@ -1,158 +1,132 @@
-var gql = require('graphql-tag');
-var db_client = require('./db_client.js');
-var moment = require('moment');
+/**
+ * Participation matcher — the threshold-resolution engine.
+ *
+ * Walks each campaign's participations sorted by threshold ascending and finds
+ * the stable fulfilled prefix (the classic assurance cascade: a participation
+ * counts as fulfilled when more than `threshold` participants precede-or-equal
+ * it in the cascade). Any participation whose stored `condition_is_fulfilled`
+ * disagrees gets flipped, and a campaign_notifications row is written (which
+ * the webapp shows and the Telegram bot pushes).
+ *
+ * All flips in a pass are applied in ONE batch (previously it flipped one per
+ * pass, so a 47-person crossing took 47 polling cycles to notify everyone).
+ *
+ * Zero deps: raw fetch against Hasura, same style as services/telegram.
+ */
 
+const GQL = process.env.KOORDINATOR_GRAPHQL_ENDPOINT || 'http://127.0.0.1:8080/v1/graphql';
+const ADMIN = process.env.HASURA_ADMIN_SECRET || '';
 
-
-
-var counter = 0;
-let verbose = false;
-const client = db_client.client();
-
-
-
-
-async function flip_bit(participation, val)
-{
-    try
-    {
-        let content;
-        if (val)
-            content = `Heads up! "${participation.campaign.title}" just reached your defined critical mass of ${participation.threshold}! Start acting now!`;
-        else
-            content = `Heads up! "${participation.campaign.title}" just un-reached your defined critical mass of ${participation.threshold}! Go back home now, it's pointless!`;
-
-        console.log(await client.mutate({
-            mutation: gql`
-                mutation MyMutation($user_id: Int, $content: String, $campaign_id: Int) {
-                  insert_campaign_notifications(objects: {campaign_id: $campaign_id, content: $content, account_id: $user_id}) {
-                    affected_rows
-                  }
-                }
-            `,
-            variables: {
-                user_id: participation.account_id,
-                campaign_id: participation.campaign_id,
-                content: content
-            }
-        }));
-
-        console.log(await client.mutate({
-            mutation: gql`
-                mutation MyMutation($_id: Int, $condition_is_fulfilled: Boolean) {
-                  update_participations(where: {id: {_eq: $_id}}, _set: {condition_is_fulfilled: $condition_is_fulfilled}){
-                    affected_rows
-                  }
-                }
-            `,
-            variables: {
-                _id: participation.id,
-                condition_is_fulfilled: val
-            }
-        }));
-    } catch (e)
-    {
-        console.log(e)
-    }
+export async function gql(query, variables) {
+    const res = await fetch(GQL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(ADMIN ? { 'x-hasura-admin-secret': ADMIN } : {}) },
+        body: JSON.stringify({ query, variables }),
+    });
+    const j = await res.json();
+    if (j.errors) throw new Error(JSON.stringify(j.errors));
+    return j.data;
 }
 
-/*
-walk the list of participations sorted by threshold. Any participation with threshold < current index is fulfilled.
-*/
-async function update_participations(data)
-{
-    for (const campaign of data.campaigns)
-    {
-        if (verbose)console.log(campaign.id + ' - ' + campaign.title + ':');
-        let participation_idx_starting_at_1 = 1;
-        let last_fulfilled_idx = -1;
-        campaign.participations.forEach((participation) =>
-        {
-            if (participation.threshold < participation_idx_starting_at_1)
-                last_fulfilled_idx = participation_idx_starting_at_1 - 1;
-            participation_idx_starting_at_1++;
-        });
-        let idx = 0;
-        let fulfilled = true;
-        //campaign.participations.forEach(async (participation) =>
-        for (const participation of campaign.participations)
-        {
-            if (idx > last_fulfilled_idx)
-            {
-                fulfilled = false;
-            }
-            if (verbose) console.log(JSON.stringify(participation, null, ''));
-            if (participation.condition_is_fulfilled != fulfilled)
-            {
-                //console.log('flip ' + JSON.stringify(participation, null, '') + '.');
-                console.log('FLIP!');
-                if (!verbose)console.log(campaign.id + ' - ' + campaign.title + ':');
-                if (!verbose)console.log(JSON.stringify(participation, null, ''));
-                // only do one at a time for now..
-                await flip_bit(participation, fulfilled);
-                return
-            }
-            idx++;
-        }
-        if (verbose) console.log();
-    }
-
-    if (verbose) console.log();
-    //console.log(Date.now());
-    console.log(moment().format());
-    if (verbose) console.log();
-}
-
-
-async function my_fetch()
-{
-    const { data } = await client.query({
-        query: gql`
-            query GET_PARTICIPATIONS {
-              campaigns(order_by: [{id: asc}]) {
+async function fetch_campaigns() {
+    const data = await gql(`
+        query GET_PARTICIPATIONS {
+            campaigns(order_by: [{ id: asc }]) {
                 id
                 title
-                participations(order_by: [{threshold: asc}], where: {account: {smazano: {_eq: false}}} ) {
+                participations(order_by: [{ threshold: asc }], where: { account: { smazano: { _eq: false } } }) {
                     id
                     account_id
                     campaign_id
-                    campaign
-                    {
-                        title
-                    }
                     threshold
                     condition_is_fulfilled
-                },
-              }
+                }
             }
-        `,
+        }
+    `);
+    return data.campaigns;
+}
+
+/**
+ * Pure function: compute the flips a campaign needs.
+ * Algorithm preserved exactly from the original matcher: for 1-based position i
+ * in the threshold-ascending order, the fulfilled prefix ends at the last i
+ * where threshold < i; everything after is unfulfilled.
+ * Returns [{ participation, fulfilled }] for participations that need flipping.
+ */
+export function compute_flips(campaign) {
+    const ps = campaign.participations;
+    let last_fulfilled_idx = -1; // 0-based index of the last fulfilled participation
+    ps.forEach((p, i0) => {
+        if (p.threshold < i0 + 1) last_fulfilled_idx = i0;
     });
-    return data;
-};
 
+    const flips = [];
+    ps.forEach((p, i0) => {
+        const fulfilled = i0 <= last_fulfilled_idx;
+        if (p.condition_is_fulfilled !== fulfilled) flips.push({ participation: p, fulfilled });
+    });
+    return flips;
+}
 
-export async function run() {
-    //console.log('running..');
-    let sleep = 1;
-    try
-    {
-        let data = await my_fetch();
-        await update_participations(data);
-        //console.log('done.');
+function notification_content(campaign, p, fulfilled) {
+    return fulfilled
+        ? `Heads up! "${campaign.title}" just reached your defined critical mass of ${p.threshold}! Start acting now!`
+        : `Heads up! "${campaign.title}" just un-reached your defined critical mass of ${p.threshold}! Go back home now, it's pointless!`;
+}
+
+/** Apply all flips for all campaigns in one batched round of mutations. */
+export async function apply_flips(all_flips) {
+    if (!all_flips.length) return;
+
+    const notifications = all_flips.map(({ campaign, participation: p, fulfilled }) => ({
+        account_id: p.account_id,
+        campaign_id: p.campaign_id,
+        content: notification_content(campaign, p, fulfilled),
+    }));
+    const to_true = all_flips.filter(f => f.fulfilled).map(f => f.participation.id);
+    const to_false = all_flips.filter(f => !f.fulfilled).map(f => f.participation.id);
+
+    await gql(
+        `mutation Flip($notifications: [campaign_notifications_insert_input!]!, $to_true: [Int!]!, $to_false: [Int!]!) {
+            insert_campaign_notifications(objects: $notifications) { affected_rows }
+            fulfilled: update_participations(where: { id: { _in: $to_true } }, _set: { condition_is_fulfilled: true }) { affected_rows }
+            unfulfilled: update_participations(where: { id: { _in: $to_false } }, _set: { condition_is_fulfilled: false }) { affected_rows }
+        }`,
+        { notifications, to_true, to_false }
+    );
+}
+
+/** One full matcher pass. Returns the number of flips applied. */
+export async function run_once() {
+    const campaigns = await fetch_campaigns();
+    const all_flips = [];
+    for (const campaign of campaigns) {
+        for (const flip of compute_flips(campaign)) {
+            all_flips.push({ campaign, ...flip });
+        }
     }
-    catch (e)
-    {
-        console.log(e)
-        sleep = 20;
+    if (all_flips.length) {
+        console.log(`${new Date().toISOString()} flipping ${all_flips.length} participation(s):`);
+        for (const f of all_flips) {
+            console.log(`  ${f.fulfilled ? '✅' : '↩️'} campaign ${f.campaign.id} "${f.campaign.title}" participation ${f.participation.id} (threshold ${f.participation.threshold})`);
+        }
+        await apply_flips(all_flips);
     }
-    /* just to avoid mem/handle leaks .. should be fixed now */
-    // if (--counter == 0)
-    //     process.exit(0)
-    /* and repeat */
-    setTimeout(async () => {await run();}, sleep * 1000);
-};
+    return all_flips.length;
+}
 
-//(async () => {await run()})();
-
-
-
+/** The polling loop. */
+export async function run(interval_seconds) {
+    const interval = interval_seconds ?? Number(process.env.MATCHER_INTERVAL_SECONDS || 2);
+    console.log(`Matcher polling every ${interval}s against ${GQL}`);
+    while (true) {
+        try {
+            await run_once();
+        } catch (e) {
+            console.error('matcher pass error:', e.message || e);
+            await new Promise(r => setTimeout(r, 20000));
+        }
+        await new Promise(r => setTimeout(r, interval * 1000));
+    }
+}

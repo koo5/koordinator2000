@@ -186,6 +186,10 @@
     let items;
     let seen: number[] = [];
     $: seeing = get_seeing($items?.data?.campaigns);
+    // The full loaded deck (all pages so far), deduped, passed to the view.
+    $: loaded_ids = [...new Set([...seen, ...seeing])];
+    // Another page is likely if the latest batch filled the page size.
+    $: has_more = seeing.length >= itemsPerPage;
 
     function get_seeing(campaigns: Array<{ id: number }> | undefined): number[] {
         const result: number[] = [];
@@ -195,13 +199,10 @@
         return result;
     }
 
+    // Load the next page (lazy — appends to the deck). Guarded so overlapping
+    // scroll/swipe triggers don't skip pages; uses the query's own fetching flag.
     async function more(): Promise<void> {
-        if (browser) {
-            if (items_div) {
-                scrollTo({ delay: 0, element: items_div });
-            }
-            more_button?.blur();
-        }
+        if ($items?.fetching || !has_more) return;
         seen = seen.concat(seeing);
         await tick();
         search();
@@ -373,7 +374,7 @@
             <Label>Tags</Label>
             <div class="tags-container mb-3">
                 {#if availableTags.length === 0}
-                    <div class="text-muted">Loading tags...</div>
+                    <div class="opacity-60">Loading tags...</div>
                 {:else}
                     <div class="d-flex flex-wrap">
                         {#each availableTags as tag}
@@ -383,7 +384,7 @@
                         {/each}
                     </div>
                     <div class="note mt-2">
-                        <small class="text-muted">Select tags to filter campaigns</small>
+                        <small class="opacity-60">Select tags to filter campaigns</small>
                     </div>
                 {/if}
             </div>
@@ -394,7 +395,7 @@
             <Label>Location</Label>
             <div class="mb-3">
                 <div class="form-check form-switch mb-2">
-                    <input class="form-check-input" type="checkbox" id="location-filter" checked={showLocationFilter} on:change={toggleLocationFilter} disabled={true} />
+                    <input class="toggle toggle-sm" type="checkbox" id="location-filter" checked={showLocationFilter} on:change={toggleLocationFilter} disabled={true} />
                     <label class="form-check-label" for="location-filter"> Enable location filter (coming soon) </label>
                 </div>
 
@@ -408,7 +409,7 @@
                     <div class="d-flex">
                         {#each itemsPerPageOptions as option}
                             <div class="form-check form-check-inline mr-2">
-                                <input class="form-check-input" type="radio" name="itemsPerPage" id="items-{option}" value={option} checked={itemsPerPage === option} on:change={() => (itemsPerPage = option)} />
+                                <input class="radio radio-sm" type="radio" name="itemsPerPage" id="items-{option}" value={option} checked={itemsPerPage === option} on:change={() => (itemsPerPage = option)} />
                                 <label class="form-check-label" for="items-{option}">{option}</label>
                             </div>
                         {/each}
@@ -419,7 +420,7 @@
             <div class="col-md-4">
                 <FormGroup>
                     <Label htmlFor="sort-by">Sort by</Label>
-                    <select class="form-select" id="sort-by" bind:value={sortBy}>
+                    <select class="select select-bordered select-sm w-full" id="sort-by" bind:value={sortBy}>
                         {#each sortOptions as option}
                             <option value={option.value}>{option.label}</option>
                         {/each}
@@ -433,7 +434,7 @@
                     <div class="d-flex">
                         {#each viewModes as mode}
                             <div class="form-check form-check-inline mr-2">
-                                <input class="form-check-input" type="radio" name="viewMode" id="view-{mode.value}" value={mode.value} checked={viewMode === mode.value} on:change={() => (viewMode = mode.value)} />
+                                <input class="radio radio-sm" type="radio" name="viewMode" id="view-{mode.value}" value={mode.value} checked={viewMode === mode.value} on:change={() => (viewMode = mode.value)} />
                                 <label class="form-check-label" for="view-{mode.value}">{mode.label}</label>
                             </div>
                         {/each}
@@ -445,7 +446,7 @@
         <FormGroup>
             <Label>Live updates</Label>
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="live-updates" bind:checked={liveUpdates} />
+                <input class="toggle toggle-sm" type="checkbox" id="live-updates" bind:checked={liveUpdates} />
                 <label class="form-check-label" for="live-updates">{liveUpdates ? 'On' : 'Off'}</label>
             </div>
         </FormGroup>
@@ -482,24 +483,26 @@
 </div>
 
 <div bind:this={items_div} class="mt-4">
-    {#if $items?.fetching}
-        <div class="text-center">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-    {:else if $items?.error}
-        <div class="alert alert-danger">
+    {#if $items?.error}
+        <div class="alert alert-error">
             Error loading campaigns: {$items.error.message}
         </div>
+    {:else if loaded_ids.length}
+        <!-- Persist the view across page loads; it lazy-loads more via on:loadmore. -->
+        <CampaignList ids={loaded_ids} on:loadmore={more} />
+    {:else if $items?.fetching}
+        <div class="text-center py-8">
+            <span class="loading loading-spinner loading-lg" role="status" aria-label="Loading"></span>
+        </div>
     {:else}
-        <CampaignList ids={seeing} />
+        <p class="text-center opacity-60">No campaigns match your filters.</p>
     {/if}
 </div>
 
-{#if !($items?.fetching) && $items?.data?.campaigns.length > 0}
-<div class="text-center mt-3 mb-5">
-    <button class="btn btn-primary" bind:this={more_button} color="primary" aria-label="more..." on:click={more}> Load More </button>
+{#if has_more}
+<!-- Fallback pager; hidden on mobile where the swipe deck auto-loads. -->
+<div class="text-center mt-3 mb-5 hidden md:block">
+    <button class="btn btn-outline btn-primary btn-sm" bind:this={more_button} aria-label="more..." on:click={more}>Load more</button>
 </div>
 {/if}
 
@@ -510,14 +513,14 @@
         align-items: center;
         margin-bottom: 1rem;
         border-radius: 0.5rem;
-        background-color: #f8f9fa;
+        background-color: var(--color-base-200);
         padding: 0.75rem;
     }
 
     .collapse-toggle {
         padding: 0.5rem 0.75rem;
         text-decoration: none;
-        color: #495057;
+        color: var(--color-secondary);
         font-weight: 600;
         display: flex;
         align-items: center;
@@ -529,14 +532,14 @@
     }
 
     .search-container {
-        background-color: #f8f9fa;
+        background-color: var(--color-base-200);
         padding: 1.5rem;
         border-radius: 0.5rem;
         margin-bottom: 1.5rem;
     }
 
     .debug-info {
-        background-color: #f0f0f0;
+        background-color: var(--color-base-200);
         padding: 1rem;
         border-radius: 0.25rem;
         font-family: monospace;
@@ -549,8 +552,8 @@
 
     .tag-badge {
         display: inline-block;
-        background-color: #e9ecef;
-        color: #495057;
+        background-color: color-mix(in oklab, var(--color-secondary) 10%, transparent);
+        color: var(--color-secondary);
         border-radius: 1rem;
         padding: 0.25rem 0.75rem;
         margin-right: 0.5rem;
@@ -566,16 +569,16 @@
     }
 
     .tag-badge:hover {
-        background-color: #dee2e6;
+        background-color: color-mix(in oklab, var(--color-secondary) 20%, transparent);
     }
 
     .tag-badge:focus {
-        outline: 2px solid #007bff;
+        outline: 2px solid var(--color-secondary);
         outline-offset: 2px;
     }
 
     .tag-badge.active {
-        background-color: #007bff;
+        background-color: var(--color-secondary);
         color: white;
     }
 </style>

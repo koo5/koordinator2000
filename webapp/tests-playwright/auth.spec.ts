@@ -17,6 +17,19 @@ test('google callback rejects a bad CSRF state (400)', async ({ page }) => {
   expect(res?.status()).toBe(400);
 });
 
+test('renew-jwt rejects a forged (bad-signature) token (401)', async ({ request }) => {
+  // A structurally-valid JWT with real-looking claims but a bogus signature.
+  // Before signature verification this would have been trusted and handed back
+  // a real signed JWT (account takeover). It must be rejected.
+  const base = process.env.FRONTEND_URL || 'http://localhost:5533';
+  const payload = Buffer.from(
+    JSON.stringify({ 'urn:id': 1, exp: 9999999999, iss: 'urn:example:issuer', aud: 'urn:example:audience' })
+  ).toString('base64url');
+  const forged = `eyJhbGciOiJFUzI1NiJ9.${payload}.not_a_real_signature`;
+  const res = await request.post(`${base}/api/renew-jwt`, { headers: { Authorization: `Bearer ${forged}` } });
+  expect(res.status()).toBe(401);
+});
+
 test('github callback rejects a bad CSRF state (400)', async ({ page }) => {
   const res = await page.goto('/auth/github/callback?code=x&state=bad', { waitUntil: 'domcontentloaded' });
   expect(res?.status()).toBe(400);

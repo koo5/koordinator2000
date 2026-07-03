@@ -4,39 +4,27 @@
     import SubscribedItemsInner from './SubscribedItemsInner.svelte';
     import { CAMPAIGN_FRAGMENT } from '$lib/client/campaign.ts';
     import { browser } from '$app/environment';
-    import type { OperationResultState } from '@urql/core';
-    import CampaignsListSorted from './CampaignsListSorted.svelte';
-    import { debug } from '$lib/stores.ts';
-
+    import { onMount } from 'svelte';
+    import CampaignSwiper from './CampaignSwiper.svelte';
+    import CampaignListView from './CampaignListView.svelte';
+    import { debug, mobile } from '$lib/stores.ts';
 
     export let ids: number[];
-    let campaigns;
 
-
-    // Interface definitions
     interface CampaignQueryResult {
         campaigns: CampaignType[];
     }
 
-    interface CampaignQueryStore extends OperationResultState<CampaignQueryResult> {
-        data?: CampaignQueryResult;
-    }
-
-
-
-    // Query with ids filter
+    // Subscribe to the full loaded deck so each card updates live (the id set is
+    // fixed by the parent; lazy-loading grows it).
     const CAMPAIGN_LIST = gql`
 		subscription ($_user_id: Int, $_ids: [Int!]) {
-			campaigns(
-				where: {
-					id: {_in: $_ids}
-				}
-			)
+			campaigns(where: { id: { _in: $_ids } })
 			${CAMPAIGN_FRAGMENT}
 		}
 	`;
 
-    $: campaigns_query = subscriptionStore({
+    $: campaigns_query = subscriptionStore<CampaignQueryResult>({
         client: getContextClient(),
         query: CAMPAIGN_LIST,
         variables: {
@@ -45,37 +33,32 @@
         },
     });
 
+    // Discovery is a swipe deck on mobile, a lazy-loaded listing on desktop.
+    onMount(() => {
+        if (!browser) return;
+        const mq = window.matchMedia('(max-width: 768px)');
+        const update = () => mobile.set(mq.matches);
+        update();
+        mq.addEventListener('change', update);
+        return () => mq.removeEventListener('change', update);
+    });
 </script>
-
-<!-- Import Swiper styles -->
-<svelte:head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-</svelte:head>
 
 {#if $debug}CampaignList ids={ids}{/if}
 
 <div class="campaign-container">
     <SubscribedItemsInner items={campaigns_query} let:da={itemsData}>
-        <CampaignsListSorted ids={ids} items={itemsData} />
+        {#if $mobile}
+            <CampaignSwiper ids={ids} items={itemsData} on:loadmore on:my_participation_upsert />
+        {:else}
+            <CampaignListView ids={ids} items={itemsData} on:loadmore on:my_participation_upsert />
+        {/if}
     </SubscribedItemsInner>
 </div>
 
 <style>
-    /* Container styles to prevent column overflow */
     .campaign-container {
-        display: flex;
-        flex-direction: column;
         width: 100%;
         max-width: 100%;
     }
-
-    :global(.campaign-container > div),
-    :global(.campaign-container > div > div){
-        display: block !important;
-        width: 100% !important;
-        grid-template-columns: 1fr !important;
-        column-count: 1 !important;
-        columns: 1 !important;
-    }
-
 </style>

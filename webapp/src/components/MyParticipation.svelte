@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { Button, Input, Label } from './ui';
-    // Label and Input not implemented yet
     import { type Campaign, decrease_auth_nag_postponement, get_my_participation, my_user, type MyUser } from '$lib/client/my_user.ts';
     import gql from 'graphql-tag';
     import MutationForm from './MutationForm.svelte';
@@ -15,11 +13,8 @@
     $: update_new_threshold_when_user_changes($my_user);
 
     function update_new_threshold_when_user_changes(u: MyUser): void {
-        console.log('update_new_threshold_when_user_changes', u);
         if (my_participation.threshold != undefined) new_threshold = my_participation.threshold;
     }
-
-    $: console.log("new_threshold:", new_threshold);
 
     $: update_button_disabled = my_participation.threshold == new_threshold;
 
@@ -27,6 +22,14 @@
         mutation MyMutation($campaign_id: Int, $threshold: Int) {
             insert_participations(objects: { campaign_id: $campaign_id, threshold: $threshold }, on_conflict: { constraint: participations_campaign_id_user_id, update_columns: threshold }) {
                 affected_rows
+            }
+        }
+    `;
+
+    const DELETE = gql`
+        mutation MyMutation($id: Int!) {
+            delete_participations_by_pk(id: $id) {
+                id
             }
         }
     `;
@@ -42,57 +45,58 @@
     }
 </script>
 
-minimum suggested: {campaign.suggested_lowest_threshold}<br />
-
-{#if my_participation.id}
-    <MutationForm on:done={() => dispatch('my_participation_upsert')} mutation={UPSERT} variables={upsert_vars}>
-        <Label
-            >My threshold:
-            <Input type="number" placeholder={campaign.suggested_optimal_threshold} maxlength="10" min="0" max="9999999999" bind:value={new_threshold} />
-        </Label>
-        <Button color="success" type="submit" disabled={update_button_disabled}>Update</Button>
-
-        <MutationForm
-            on:done={() => dispatch('my_participation_upsert')}
-            mutation={gql`
-                mutation MyMutation($id: Int!) {
-                    delete_participations_by_pk(id: $id) {
-                        id
-                    }
-                }
-            `}
-            variables={{
-                id: my_participation.id,
-            }}
-        >
-            <Button color="secondary" class="inline" type="submit">Delete</Button>
-        </MutationForm>
+<div class="participation-box" class:active={my_participation.id && my_participation.condition_is_fulfilled}>
+    <MutationForm on:done={() => (my_participation.id ? dispatch('my_participation_upsert') : on_participated())} mutation={UPSERT} variables={upsert_vars}>
+        <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm">I'll join if</span>
+            <input
+                class="input input-bordered input-sm w-24 text-center font-semibold"
+                type="number"
+                min="0"
+                max="9999999999"
+                placeholder={String(campaign.suggested_optimal_threshold ?? '')}
+                bind:value={new_threshold}
+                aria-label="my threshold"
+            />
+            <span class="text-sm">others do</span>
+            {#if my_participation.id}
+                <button class="btn btn-success btn-sm" type="submit" disabled={update_button_disabled}>Update</button>
+            {:else}
+                <button class="btn btn-primary btn-sm" type="submit">✓ Pledge</button>
+            {/if}
+        </div>
     </MutationForm>
-{:else}
-    <MutationForm on:done={() => on_participated()} css_ref="inline" mutation={UPSERT} variables={upsert_vars}>
-        <Label
-            >My threshold:
-            <Input type="number" placeholder={campaign.suggested_optimal_threshold} min="0" max="9999999999" bind:value={new_threshold} />
-        </Label>
-        <Button color="primary" type="submit">Participate</Button>
-        <br />
-    </MutationForm>
-{/if}
 
-<br />maximum suggested:{campaign.suggested_highest_threshold}
+    <p class="mt-1.5 mb-0 text-xs opacity-60">
+        suggested {campaign.suggested_lowest_threshold}–{campaign.suggested_highest_threshold}, default {campaign.suggested_optimal_threshold}
+    </p>
 
-<p>
-    {get_tickmark(my_participation)}
-    {#if my_participation.threshold != undefined}
-        {#if my_participation.condition_is_fulfilled}
-            <span class="confirmed">My participation is active.</span>
+    <div class="mt-2 flex items-center gap-2 text-sm">
+        {#if my_participation.threshold != undefined}
+            <span>{get_tickmark(my_participation)}</span>
+            {#if my_participation.condition_is_fulfilled}
+                <span class="font-semibold text-success">Your threshold is met — your participation is active.</span>
+            {:else}
+                <span class="opacity-75">Pledged — waiting for more people to join.</span>
+            {/if}
+            <MutationForm on:done={() => dispatch('my_participation_upsert')} mutation={DELETE} variables={{ id: my_participation.id }}>
+                <button class="btn btn-ghost btn-xs text-error" type="submit">Withdraw</button>
+            </MutationForm>
         {:else}
-            <span class="condition_is_not_fulfilled">I'm waiting for more people</span>
+            <span class="opacity-60">You're not pledged on this campaign.</span>
         {/if}
-    {:else}
-        I'm not participating.
-    {/if}
-</p>
+    </div>
+</div>
 
 <style>
+    .participation-box {
+        border: 1px solid var(--color-base-300);
+        border-radius: var(--radius-box, 0.75rem);
+        padding: 0.9rem 1rem;
+        background: color-mix(in oklab, var(--color-base-200) 55%, transparent);
+    }
+    .participation-box.active {
+        border-color: color-mix(in oklab, var(--color-success) 45%, transparent);
+        background: color-mix(in oklab, var(--color-success) 7%, transparent);
+    }
 </style>

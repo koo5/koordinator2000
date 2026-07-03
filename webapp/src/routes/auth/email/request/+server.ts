@@ -35,7 +35,17 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     const token = await sign_magic_link_token(email, linkAccountId);
     const link = `${server_env.PUBLIC_URL}/auth/email/verify?token=${encodeURIComponent(token)}`;
 
-    await send_magic_link_email(email, link);
+    try {
+        await send_magic_link_email(email, link);
+    } catch (e) {
+        console.error('magic-link email send failed:', e);
+        if (!dev) {
+            return json({ error: 'Could not send the email. Please try again later.' }, { status: 502 });
+        }
+        // In dev the link is returned below anyway, so a send failure is not fatal.
+    }
 
+    // Dev convenience only — NEVER in prod (returning the link would let anyone
+    // who can POST an email address obtain a sign-in link for it).
     return json({ ok: true, ...(dev ? { devLink: link } : {}) });
 };

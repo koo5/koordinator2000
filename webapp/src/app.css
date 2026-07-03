@@ -1,25 +1,87 @@
 @import 'tailwindcss';
 
-/* DaisyUI v5 is loaded as a Tailwind v4 CSS plugin (no JS config needed). */
+/* DaisyUI v5 as a Tailwind v4 CSS plugin (no JS config). */
 @plugin 'daisyui' {
-  themes: light --default;
+  themes: koordinator --default;
 }
 
-/* Heading styles */
+/* Koordinator brand theme.
+   primary   — warm "act now" coral (nods to the original #ff3e00)
+   secondary — deep teal: trust / verified identity
+   success   — pledge green
+   base      — near-white with a faint warm tint */
+@plugin 'daisyui/theme' {
+  name: 'koordinator';
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: oklch(99% 0.004 85);
+  --color-base-200: oklch(96.5% 0.006 85);
+  --color-base-300: oklch(91.5% 0.01 85);
+  --color-base-content: oklch(25% 0.02 55);
+
+  --color-primary: oklch(62% 0.2 33);
+  --color-primary-content: oklch(98.5% 0.008 33);
+  --color-secondary: oklch(50% 0.09 190);
+  --color-secondary-content: oklch(98% 0.01 190);
+  --color-accent: oklch(78% 0.14 85);
+  --color-accent-content: oklch(28% 0.06 85);
+  --color-neutral: oklch(28% 0.02 55);
+  --color-neutral-content: oklch(97% 0.004 85);
+
+  --color-info: oklch(62% 0.12 240);
+  --color-info-content: oklch(98% 0.01 240);
+  --color-success: oklch(58% 0.13 155);
+  --color-success-content: oklch(98% 0.01 155);
+  --color-warning: oklch(78% 0.14 80);
+  --color-warning-content: oklch(28% 0.06 80);
+  --color-error: oklch(55% 0.19 27);
+  --color-error-content: oklch(97% 0.01 27);
+
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Typographic hierarchy (replaces the old gray-slab heading blocks). h5 is used
+   throughout the campaign views as a small section label. */
 @layer base {
   h1 {
-    @apply text-4xl font-bold mt-6 mb-4 p-2 bg-base-200 rounded;
+    @apply text-3xl font-bold tracking-tight mt-6 mb-3;
   }
   h2 {
-    @apply text-3xl font-semibold mt-5 mb-3 p-2 bg-base-200 rounded;
+    @apply text-2xl font-bold tracking-tight mt-5 mb-3;
   }
   h3 {
-    @apply text-2xl font-medium mt-4 mb-2 p-1.5 bg-base-200 rounded;
+    @apply text-lg font-semibold mt-4 mb-2;
   }
   h4 {
-    @apply text-xl font-medium mt-3 mb-2 p-1.5 bg-base-200 rounded;
+    @apply text-base font-semibold mt-3 mb-1.5;
   }
   h5 {
-    @apply text-lg font-semibold mt-2 mb-2 p-1.5 bg-base-200 rounded border-l-4 border-primary pl-3;
+    @apply text-xs font-bold uppercase tracking-widest mt-6 mb-1.5;
+    color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
   }
+}
+
+/* Shared content section: breathing room instead of boxes. */
+.content_block {
+  margin-bottom: 0.75rem;
+}
+
+/* Participation status colors (participant tables/badges across components). */
+.confirmed {
+  color: var(--color-success);
+  font-weight: 600;
+}
+.condition_is_fulfilled {
+  color: var(--color-success);
+}
+.condition_is_not_fulfilled {
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
 }
