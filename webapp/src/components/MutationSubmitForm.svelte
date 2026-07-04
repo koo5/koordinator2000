@@ -24,10 +24,19 @@
 
     let result;
     let client = getUserRoleClient();
+    let dispatched = false;
 
     async function submit(): Promise<void> {
         console.log('submit', variables);
+        dispatched = false;
         result = mutationStore({ client, query: mutation, variables });
+    }
+
+    // Forward the settled mutation result to parents via on:done (once per
+    // submit). The result store stays `fetching` until the request resolves.
+    $: if (result && !$result.fetching && !dispatched) {
+        dispatched = true;
+        dispatch('done', $result);
     }
 </script>
 

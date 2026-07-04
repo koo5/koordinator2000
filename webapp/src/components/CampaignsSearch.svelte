@@ -2,6 +2,7 @@
     import { t, tp, locale } from '$lib/i18n';
     import { getContextClient, gql, queryStore } from '$lib/urql.ts';
     import { my_user } from '$lib/client/my_user.ts';
+    import { COUNTRIES } from '$lib/client/countries.ts';
     import CampaignList from './CampaignList.svelte';
     import { browser } from '$app/environment';
     import { debug } from '$lib/stores';
@@ -54,6 +55,9 @@
     let searchTerm = '';
     let selectedTagIds: number[] = [];
     let sortBy = 'participant_count';
+    // Country relevance filter ('' = Everywhere / no filter). Persisted; unlike
+    // near-me it needs no geolocation, so it's the default coarse geo filter.
+    let country = '';
     const itemsPerPage = 10; // page size for lazy loading (not a user knob)
 
     // All available tags (will be populated from GraphQL)
@@ -126,6 +130,7 @@
                 latitude
                 longitude
                 language
+                country
                 participations_aggregate(where: { account: { smazano: { _eq: false } } }) {
                     aggregate {
                         count
@@ -216,6 +221,8 @@
                 ...(selectedTagIds.length > 0 ? [{ campaign_tags: { tag_id: { _in: selectedTagIds } } }] : []),
                 // Language relevance: viewer's language + language-agnostic rows.
                 ...(show_all_languages ? [] : [{ _or: [{ language: { _eq: $locale } }, { language: { _is_null: true } }] }]),
+                // Country relevance: chosen country + country-agnostic rows.
+                ...(country ? [{ _or: [{ country: { _eq: country } }, { country: { _is_null: true } }] }] : []),
                 // "Near me": bounding-box approximation of the chosen distance
                 // (composes with everything above; excludes location-less campaigns).
                 ...(near_on && nearLat != null && nearLng != null
@@ -257,6 +264,7 @@
             searchTerm,
             selectedTagIds,
             sortBy,
+            country,
         });
     }
 
@@ -291,6 +299,7 @@
         searchTerm = storedFilters.searchTerm || '';
         selectedTagIds = Array.isArray(storedFilters.selectedTagIds) ? storedFilters.selectedTagIds : [];
         sortBy = storedFilters.sortBy || 'participant_count';
+        country = typeof storedFilters.country === 'string' ? storedFilters.country : '';
 
         // Start initial search
         applySearch();
@@ -355,6 +364,17 @@
         >
             {show_all_languages ? $t('deck.all_languages') : $t('deck.my_language', { lang: $t('lang.' + $locale) })}
         </button>
+        <select
+            class="select select-bordered select-sm"
+            bind:value={country}
+            on:change={applySearch}
+            aria-label="Country"
+        >
+            <option value="">{$t('deck.everywhere')}</option>
+            {#each COUNTRIES as c}
+                <option value={c.code}>{$t(c.label_key)}</option>
+            {/each}
+        </select>
     </form>
 
     {#if availableTags.length}

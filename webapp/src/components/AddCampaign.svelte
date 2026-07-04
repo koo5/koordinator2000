@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t, locale } from '$lib/i18n';
+    import { COUNTRIES, default_country_for_locale } from '$lib/client/countries.ts';
     import MutationForm from './MutationForm.svelte';
     import gql from 'graphql-tag';
     import { my_user } from '$lib/client/my_user.ts';
@@ -8,8 +9,8 @@
     import LocationPicker from './LocationPicker.svelte';
 
     const ADD = gql`
-        mutation MyMutation($description: String = "", $maintainer_id: Int, $title: String = "", $suggested_lowest_threshold: bigint, $suggested_highest_threshold: bigint, $suggested_optimal_threshold: bigint, $location_name: String, $latitude: numeric, $longitude: numeric, $location_radius: numeric, $language: String) {
-            insert_campaigns_one(object: { description: $description, maintainer_id: $maintainer_id, title: $title, suggested_lowest_threshold: $suggested_lowest_threshold, suggested_highest_threshold: $suggested_highest_threshold, suggested_optimal_threshold: $suggested_optimal_threshold, location_name: $location_name, latitude: $latitude, longitude: $longitude, location_radius: $location_radius, language: $language }) {
+        mutation MyMutation($description: String = "", $maintainer_id: Int, $title: String = "", $suggested_lowest_threshold: bigint, $suggested_highest_threshold: bigint, $suggested_optimal_threshold: bigint, $location_name: String, $latitude: numeric, $longitude: numeric, $location_radius: numeric, $language: String, $country: String) {
+            insert_campaigns_one(object: { description: $description, maintainer_id: $maintainer_id, title: $title, suggested_lowest_threshold: $suggested_lowest_threshold, suggested_highest_threshold: $suggested_highest_threshold, suggested_optimal_threshold: $suggested_optimal_threshold, location_name: $location_name, latitude: $latitude, longitude: $longitude, location_radius: $location_radius, language: $language, country: $country }) {
                 id
             }
         }
@@ -27,6 +28,7 @@
     let location_name: string | null = null;
     let location_radius: number | null = 50;
     let language: string = get(locale);
+    let country: string = default_country_for_locale(get(locale));
 
     function clearForm() {
         title = '';
@@ -58,6 +60,7 @@
             longitude,
             location_radius: latitude != null ? location_radius : null,
             language,
+            country: country || null,
         }}
         on:done={event => {
             const result = event.detail;
@@ -109,6 +112,17 @@
                     <option value="cs">{$t('lang.cs')}</option>
                 </select>
                 <span class="label-text-alt opacity-60 mt-1 block">{$t('lang.hint')}</span>
+            </label>
+
+            <label class="form-control w-full">
+                <span class="label-text font-medium mb-1 block">{$t('country.field')}</span>
+                <select class="select select-bordered w-full sm:w-56" bind:value={country}>
+                    {#each COUNTRIES as c}
+                        <option value={c.code}>{$t(c.label_key)}</option>
+                    {/each}
+                    <option value="">{$t('country.global')}</option>
+                </select>
+                <span class="label-text-alt opacity-60 mt-1 block">{$t('country.hint')}</span>
             </label>
         </div>
 

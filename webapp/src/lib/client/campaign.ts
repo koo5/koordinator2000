@@ -31,6 +31,7 @@ export const CAMPAIGN_FRAGMENT = `
         longitude,
         location_radius,
         language,
+        country,
         cause { id title },
         maintainer { id name },
         created_at,

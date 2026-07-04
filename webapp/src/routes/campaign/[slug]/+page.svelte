@@ -41,7 +41,7 @@
     {#if loading_slug}
         <div class="animate-flicker">{$t('detail.slug_lookup')}</div>
     {:else if campaign}
-        <Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert('yeeeeeehaaaaaaa')} />
+        <Campaign is_detail_view={true} {campaign} />
     {:else if dddd}
         {$t('detail.not_found')}
     {:else}

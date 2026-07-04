@@ -290,6 +290,23 @@ export const en = {
     'lang.unspecified': 'Unspecified',
     'deck.all_languages': '🌐 All languages',
     'deck.my_language': '🌐 {lang} only',
+
+    // edit campaign (maintainer only)
+    'edit.button': '✎ Edit campaign',
+    'edit.title': 'Edit campaign',
+    'edit.save': 'Save changes',
+    'edit.saving': 'Saving…',
+    'edit.cancel': 'Cancel',
+    'edit.saved': '✅ Saved.',
+    'edit.error': 'Could not save your changes.',
+
+    // country field + deck filter
+    'country.CZ': 'Czech Republic',
+    'country.US': 'United States',
+    'country.global': 'Global (any country)',
+    'country.field': 'Country',
+    'country.hint': 'Which country this campaign is about — used to surface it to the right audience.',
+    'deck.everywhere': '🌍 Everywhere',
 } as const;
 
 export type TranslationKey = keyof typeof en;

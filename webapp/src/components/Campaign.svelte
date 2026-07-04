@@ -11,6 +11,7 @@
     import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
     import TagManager from './TagManager.svelte';
     import LocationMap from './LocationMap.svelte';
+    import EditCampaign from './EditCampaign.svelte';
     //import {slide, fade} from 'svelte/transition';
     /*import { flip } from 'svelte/animate';
     import { crossfade } from 'svelte/transition';
@@ -43,6 +44,10 @@
         tags?: Tag[];
     };
     export let is_detail_view = false;
+
+    // A maintainer editing their own campaign (detail view only).
+    let editing = false;
+    $: is_maintainer = is_detail_view && $my_user?.id > 0 && $my_user.id === campaign.maintainer_id;
 
     $: my_participation = get_my_participation(campaign, $my_user);
 
@@ -104,16 +109,30 @@
         </div>
     {/if}
 
-    <h2>
-        {#if is_detail_view}
-            {campaign.title}
-        {:else}
-            <a class="title-link" href="/campaign/{campaign.id}">{campaign.title}</a>
+    {#if editing}
+        <EditCampaign {campaign} on:saved={() => (editing = false)} on:cancel={() => (editing = false)} />
+    {:else}
+    <div class="title-row">
+        <h2 class="grow">
+            {#if is_detail_view}
+                {campaign.title}
+            {:else}
+                <a class="title-link" href="/campaign/{campaign.id}">{campaign.title}</a>
+            {/if}
+        </h2>
+        {#if is_maintainer}
+            <button class="btn btn-ghost btn-sm" type="button" on:click={() => (editing = true)}>{$t('edit.button')}</button>
         {/if}
-    </h2>
+    </div>
     <div class="content_block description">
         <p>{@html sanitize_html(campaign.description || '')}</p>
     </div>
+
+    {#if campaign.country}
+        <div class="content_block">
+            <span class="badge badge-ghost badge-sm">🌍 {$t('country.' + campaign.country)}</span>
+        </div>
+    {/if}
 
     {#if campaign.location_name || campaign.latitude != null}
         <div class="content_block">
@@ -178,6 +197,7 @@
             </MutationForm>
         </div>
     {/if}
+    {/if}
 
     <!-- <a href="/campaign/{campaign.id}">details...</a> -->
 </div>
@@ -188,6 +208,11 @@
         overflow-y: scroll;
         width: 100%;
         height: 100%;
+    }
+    .title-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
     .title-link {
         color: inherit;

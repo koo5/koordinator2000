@@ -5,7 +5,10 @@
 #               + read/write ONLY their own rows (account_id / maintainer_id =
 #               X-Hasura-User-Id).
 # The admin secret (server-side only) bypasses all of this.
-# Idempotent: re-running skips already-defined permissions.
+# Idempotent AND reconciling: each permission is dropped-then-recreated, so
+# re-running picks up column/filter changes (a plain create is a no-op on an
+# existing permission — that silently drops new columns). The drop/create window
+# is milliseconds per permission; this is a deploy-time script, not a live-reload.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -24,7 +27,16 @@ call() { # <type> <permission-json> <label>
   else echo "   NOTE ($3): $resp"; fi
 }
 
+# Drop an existing permission so the following create reconciles rather than
+# no-ops. Silent about "not exists" (first run) — that's the normal case.
+pdrop() { # <verb: select|insert|update|delete> <table> <role>
+  curl -s "${hdr[@]}" "$META" \
+    -d "{\"type\":\"pg_drop_${1}_permission\",\"args\":{\"source\":\"default\",\"table\":{\"schema\":\"public\",\"name\":\"$2\"},\"role\":\"$3\"}}" \
+    >/dev/null 2>&1 || true
+}
+
 sel() { # <table> <role> <columns-json> <filter-json> <allow_agg>
+  pdrop select "$1" "$2"
   call pg_create_select_permission \
     "{\"source\":\"default\",\"table\":{\"schema\":\"public\",\"name\":\"$1\"},\"role\":\"$2\",\"permission\":{\"columns\":$3,\"filter\":$4,\"allow_aggregations\":$5}}" \
     "select $1/$2"
@@ -32,16 +44,19 @@ sel() { # <table> <role> <columns-json> <filter-json> <allow_agg>
 ins() { # <table> <role> <columns-json> <check-json> [set-json]
   local set="${5-}"
   [ -z "$set" ] && set='{}'
+  pdrop insert "$1" "$2"
   call pg_create_insert_permission \
     "{\"source\":\"default\",\"table\":{\"schema\":\"public\",\"name\":\"$1\"},\"role\":\"$2\",\"permission\":{\"columns\":$3,\"check\":$4,\"set\":$set}}" \
     "insert $1/$2"
 }
 upd() { # <table> <role> <columns-json> <filter-json> <check-json>
+  pdrop update "$1" "$2"
   call pg_create_update_permission \
     "{\"source\":\"default\",\"table\":{\"schema\":\"public\",\"name\":\"$1\"},\"role\":\"$2\",\"permission\":{\"columns\":$3,\"filter\":$4,\"check\":$5}}" \
     "update $1/$2"
 }
 del() { # <table> <role> <filter-json>
+  pdrop delete "$1" "$2"
   call pg_create_delete_permission \
     "{\"source\":\"default\",\"table\":{\"schema\":\"public\",\"name\":\"$1\"},\"role\":\"$2\",\"permission\":{\"filter\":$3}}" \
     "delete $1/$2"
@@ -89,8 +104,8 @@ ins campaign_dismissals user '["campaign_id","account_id"]' "{\"account_id\":$UI
 del campaign_dismissals user "{\"account_id\":$UID_EQ}"
 
 # campaigns: create + edit your own
-ins campaigns user '["title","description","maintainer_id","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language"]' "{\"maintainer_id\":$UID_EQ}"
-upd campaigns user '["title","description","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language"]' "{\"maintainer_id\":$UID_EQ}" "{\"maintainer_id\":$UID_EQ}"
+ins campaigns user '["title","description","maintainer_id","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language","country"]' "{\"maintainer_id\":$UID_EQ}"
+upd campaigns user '["title","description","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language","country"]' "{\"maintainer_id\":$UID_EQ}" "{\"maintainer_id\":$UID_EQ}"
 
 # tags: anyone signed in can create a tag; tag/untag only your own campaigns
 ins tags user '["name","description"]' '{}'

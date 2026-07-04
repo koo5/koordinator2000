@@ -295,4 +295,21 @@ export const cs: Record<string, string> = {
     'lang.unspecified': 'Neurčeno',
     'deck.all_languages': '🌐 Všechny jazyky',
     'deck.my_language': '🌐 Jen {lang}',
+
+    // edit campaign (maintainer only)
+    'edit.button': '✎ Upravit kampaň',
+    'edit.title': 'Upravit kampaň',
+    'edit.save': 'Uložit změny',
+    'edit.saving': 'Ukládám…',
+    'edit.cancel': 'Zrušit',
+    'edit.saved': '✅ Uloženo.',
+    'edit.error': 'Změny se nepodařilo uložit.',
+
+    // country field + deck filter
+    'country.CZ': 'Česko',
+    'country.US': 'Spojené státy',
+    'country.global': 'Globální (bez země)',
+    'country.field': 'Země',
+    'country.hint': 'Které země se kampaň týká — pomáhá ji ukázat správnému publiku.',
+    'deck.everywhere': '🌍 Všude',
 };

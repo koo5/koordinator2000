@@ -8,19 +8,14 @@
     }
 
     export let result: Readable<MutationResultData>;
-
-    result.subscribe((value) => {
-        console.log('MutationResult', value);
-    });
-
 </script>
 
 {#if $result.fetching}
     <div class="content_block">
-        <div class="animate-flicker">Loading...</div>
+        <div class="animate-flicker">…</div>
     </div>
 {:else if $result.error}
-    error:<pre>{JSON.stringify($result.error, null, '  ')}</pre>
-{:else}
-    success={$result.data}>
+    <div class="alert alert-error my-2"><span>{$result.error.message}</span></div>
 {/if}
+<!-- On success, parents handle their own confirmation UI (via on:done). -->
+
