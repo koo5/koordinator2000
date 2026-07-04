@@ -9,6 +9,7 @@
     import { onMount } from 'svelte';
     import { getContextClient, gql } from '$lib/urql.ts';
     import { goto } from '$app/navigation';
+    import { my_user } from '$lib/client/my_user.ts';
 
     export let id: string;
 
@@ -17,9 +18,16 @@
 
     let title = '';
     let description = '';
+    let maintainer_id: number | null = null;
+    let found = false;
     let loading = true;
     let saving = false;
     let error = false;
+
+    // Only the cause's maintainer may edit. Hasura already blocks the write for
+    // anyone else; this gates the UI too, so a non-owner doesn't see a dead-end
+    // form (mirrors campaign editing's is_maintainer check).
+    $: is_maintainer = found && $my_user?.id > 0 && $my_user.id === maintainer_id;
 
     const FETCH = gql`
         query Cause($id: Int!) {
@@ -27,6 +35,7 @@
                 id
                 title
                 description
+                maintainer_id
             }
         }
     `;
@@ -42,8 +51,10 @@
         const res = await client.query(FETCH, { id: cause_id }).toPromise();
         const c = res.data?.causes_by_pk;
         if (c) {
+            found = true;
             title = c.title ?? '';
             description = c.description ?? '';
+            maintainer_id = c.maintainer_id ?? null;
         }
         loading = false;
     });
@@ -68,11 +79,19 @@
 </script>
 
 <div class="cause-wrap">
-    <h3 class="mt-0">{$t('cause.edit_title')}</h3>
-
     {#if loading}
         <p class="opacity-60">{$t('cause.loading')}</p>
+    {:else if !found}
+        <h3 class="mt-0">{$t('cause.not_found')}</h3>
+        <a class="btn btn-primary btn-sm mt-2" href="/campaigns">{$t('detail.more')}</a>
+    {:else if !is_maintainer}
+        <!-- Read-only view for non-maintainers (Hasura also blocks the write). -->
+        <h3 class="mt-0">{title}</h3>
+        <p class="whitespace-pre-wrap">{description}</p>
+        <p class="mt-4 text-sm opacity-60">{$t('cause.not_yours')}</p>
+        <a class="btn btn-ghost btn-sm mt-1" href="/campaigns">{$t('detail.more')}</a>
     {:else}
+        <h3 class="mt-0">{$t('cause.edit_title')}</h3>
         <form on:submit|preventDefault={save} class="flex flex-col gap-4">
             <label class="form-control w-full">
                 <span class="label-text font-medium mb-1 block">{$t('cause.title_label')}</span>

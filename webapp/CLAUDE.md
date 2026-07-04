@@ -75,3 +75,43 @@ There is no tailwind.config.js / postcss.config.js — don't recreate them.
   pre-hydration clicks silently no-op.
 - The email magic-link dev flow (`devLink` in the response) is the standard way
   to get a signed-in user in tests.
+- After editing many components, RESTART the dev server before testing — stale
+  HMR module graphs render mixed/partial state (esp. i18n showing two languages).
+- **Deck relevance filtering is on by default:** the campaigns deck filters to the
+  viewer's UI language (+ language-agnostic rows). A test that needs cross-language
+  campaigns must click the "All languages" toggle first. Country is a separate,
+  opt-in filter (default "Everywhere").
+
+## Gotchas (hard-won — read before you re-discover them)
+- **DaisyUI v5 class collisions.** `.stack` (which is `inline-grid`!) and `.card`
+  are DaisyUI *component* classes — reusing those names for your own elements
+  silently breaks layout (it collapsed the mobile swiper to a sliver once). Check
+  daisyui's class list before naming a component's classes; the swiper uses
+  `.kcard`/`.deck` for this reason.
+- **Hasura `numeric`/`bigint` serialize as STRINGS** in GraphQL responses (to
+  preserve precision). `Number()`-coerce before any math — un-coerced coords made
+  Leaflet silently render no map.
+- **Leaflet init order.** Maps are `import()`-ed client-side only. (1) Wait for the
+  container to have a non-zero size (rAF poll) before `L.map()` — it's 0-size
+  mid-hydration. (2) Call `map.setView(...)` BEFORE adding any vector layer
+  (circle/marker), or Leaflet throws `layerPointToLatLng of undefined` and aborts,
+  leaving a map with no tiles. See `LocationMap.svelte`.
+- **Permissions script reconciles now.** `scripts/hasura-permissions.sh`
+  drops-then-creates each permission, so just RE-RUN it after any column/filter
+  change (a plain create no-ops on an existing permission and silently drops new
+  columns — that bit us with the `language` column).
+- **`MutationForm` on:done.** The `Mutation*` wrapper family dispatches `on:done`
+  only since the fix that made AddCampaign's success flow work. New code prefers a
+  direct `client.mutation(...)` call (see EditCampaign/EditCause) — cleaner; lean
+  that way.
+
+## Design system (in `src/app.css`)
+Custom DaisyUI v5 theme `koordinator` (oklch tokens): warm coral primary (nods to
+`#ff3e00`), teal secondary (trust/verified), pledge-green success, warm near-white
+base. **Always use theme vars** (`var(--color-primary)`,
+`color-mix(in oklab, var(--color-x) N%, transparent)`) — never hardcoded hexes.
+Typography: h1–h4 are a plain scale; **h5 is a small-caps section label**
+(uppercase, tracking-widest, muted) — that's the "TAGS / PROGRESS / PARTICIPANTS"
+look. `.content_block` = section spacing. The app is fully self-contained: no
+third-party CDN, no Firebase; the only external calls are OSM tiles + Nominatim
+geocoding, and only on map interactions.

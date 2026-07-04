@@ -318,6 +318,8 @@ export const en = {
     'cause.saving': 'Saving…',
     'cause.saved': '✅ Saved.',
     'cause.error': 'Could not save the cause.',
+    'cause.not_found': 'This cause no longer exists.',
+    'cause.not_yours': 'Only the cause’s creator can edit it.',
     'cause.loading': 'Loading…',
 } as const;
 

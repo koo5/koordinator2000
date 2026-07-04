@@ -323,5 +323,7 @@ export const cs: Record<string, string> = {
     'cause.saving': 'Ukládám…',
     'cause.saved': '✅ Uloženo.',
     'cause.error': 'Kauzu se nepodařilo uložit.',
+    'cause.not_found': 'Tato kauza již neexistuje.',
+    'cause.not_yours': 'Kauzu může upravovat jen její zakladatel.',
     'cause.loading': 'Načítám…',
 };
