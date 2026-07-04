@@ -1,0 +1,34 @@
+# Prod override — always run WITH the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# The webapp runs on the koord_net BRIDGE (not host networking) and is published
+# to loopback ONLY, so the sole public entry point is the VPS's global Caddy,
+# which terminates TLS and reverse-proxies 127.0.0.1:5533 (see docs/INFRA.md).
+# The server-side app reaches Hasura via VITE_PUBLIC_GRAPHQL_ENDPOINT (the public
+# https URL the browser also uses), so bridge networking needs only egress.
+services:
+  webapp:
+    networks:
+      - koord_net
+    ports:
+      # Loopback-only publish — NOT 0.0.0.0. Caddy proxies this; nothing else can
+      # reach it. A bare "5533:5533" would expose it on every host interface.
+      - "127.0.0.1:5533:5533"
+    environment:
+      - NODE_ENV=production
+
+  # Telegram bot — prod-only; needs TELEGRAM_BOT_TOKEN in services/telegram/.env.
+  # Outbound-only client (no listening socket), so host networking exposes nothing.
+  # Standalone bring-up: append the service name, e.g.
+  #   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d telegram
+  telegram:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/telegram.Dockerfile
+    depends_on:
+      migrations:
+        condition: service_completed_successfully
+    network_mode: "host"
+    volumes:
+      - ./services/telegram:/app/services/telegram

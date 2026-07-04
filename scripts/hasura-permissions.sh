@@ -89,8 +89,8 @@ ins campaign_dismissals user '["campaign_id","account_id"]' "{\"account_id\":$UI
 del campaign_dismissals user "{\"account_id\":$UID_EQ}"
 
 # campaigns: create + edit your own
-ins campaigns user '["title","description","maintainer_id","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius"]' "{\"maintainer_id\":$UID_EQ}"
-upd campaigns user '["title","description","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius"]' "{\"maintainer_id\":$UID_EQ}" "{\"maintainer_id\":$UID_EQ}"
+ins campaigns user '["title","description","maintainer_id","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language"]' "{\"maintainer_id\":$UID_EQ}"
+upd campaigns user '["title","description","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language"]' "{\"maintainer_id\":$UID_EQ}" "{\"maintainer_id\":$UID_EQ}"
 
 # tags: anyone signed in can create a tag; tag/untag only your own campaigns
 ins tags user '["name","description"]' '{}'

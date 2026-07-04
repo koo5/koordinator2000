@@ -12,7 +12,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Telegram bot**: `cd services/telegram && bun start` (needs TELEGRAM_BOT_TOKEN)
 - **DB migration**: add `db/migrations/<timestamp>_name.sql`, apply with `docker compose run --rm migrations`
 - **Backups**: `scripts/db-backup.sh` (rotating pg_dump into backups/)
-- **Prod**: `docker compose --profile prod up -d --build` (see docs/INFRA.md; TLS via the host's global Caddy)
+- **Prod**: `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build`
+  (see docs/INFRA.md; webapp on the bridge, published to 127.0.0.1 only, TLS via the host's global Caddy)
 
 ## Architecture
 - **webapp/**: SvelteKit + TypeScript, Tailwind v4 + DaisyUI v5 (CSS-first config in

@@ -72,15 +72,20 @@ What's already done here:
 ## Production mode
 
 Everything stays localhost-bound; the VPS's **global Caddy** does TLS and
-reverse-proxies the domain to the webapp. Bring-up:
+reverse-proxies the domain to the webapp. Bring-up (base file + prod override):
 
 ```bash
-docker compose --profile prod up -d --build
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 That runs: postgres + hasura + migrations + **matcher** (the threshold heartbeat,
-always on) + **webapp-prod** (adapter-node build, `127.0.0.1:5533`) +
-**telegram** (needs `TELEGRAM_BOT_TOKEN` in `services/telegram/.env`).
+always on) + **webapp** (adapter-node build; runs on the `koord_net` bridge and
+is published to `127.0.0.1:5533` **only** — not `0.0.0.0`) + **telegram** (needs
+`TELEGRAM_BOT_TOKEN` in `services/telegram/.env`).
+
+Compose is split so the bind can't drift: the base `docker-compose.yml` holds the
+shared `webapp` definition with no network config; `docker-compose.dev.yml` adds
+host networking, `docker-compose.prod.yml` adds the bridge + the loopback publish.
 
 Global Caddy site block (the only public entry point):
 

@@ -339,8 +339,8 @@ cd webapp && bun install && bun run dev    # app on http://localhost:5533
 ```
 
 Tests: `cd webapp && bun run test:playwright` (needs the data plane + dev server).
-Prod: `docker compose --profile prod up -d --build` behind a reverse proxy —
-see [docs/INFRA.md](docs/INFRA.md).
+Prod: `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build`
+behind a reverse proxy — see [docs/INFRA.md](docs/INFRA.md).
 
 ## Database Migrations
 

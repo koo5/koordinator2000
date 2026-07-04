@@ -1,0 +1,11 @@
+# Dev override — always run WITH the base file:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Puts the webapp on host networking and runs the Vite dev server.
+# (Most dev happens on the host via `cd webapp && bun run dev`; this container
+# is the optional in-Docker equivalent.)
+services:
+  webapp:
+    network_mode: "host"
+    environment:
+      - NODE_ENV=development
