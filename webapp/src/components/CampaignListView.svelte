@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t, tp } from '$lib/i18n';
     /**
      * Desktop discovery: a lazy-loaded vertical listing of the detailed
      * <Campaign> cards (pledge via the card's own control). Dismiss hides a card;
@@ -71,7 +72,7 @@
 <div class="campaign-listing">
     {#each visible as campaign (campaign.id)}
         <div class="listing-item" animate:flip={{ duration: 260 }} out:scale={{ duration: 220, start: 0.96 }}>
-            <button class="dismiss-btn" title="Not interested" on:click={() => dismiss(campaign)}>✕ Not interested</button>
+            <button class="dismiss-btn" title={$t('listing.not_interested')} on:click={() => dismiss(campaign)}>{$t('listing.not_interested')}</button>
             <Campaign {campaign} on:my_participation_upsert />
         </div>
     {/each}
@@ -80,8 +81,8 @@
 
 {#if last_dismissed != null}
     <ActionToast>
-        <span class="toast-msg">Dismissed.</span>
-        <button class="link" on:click={undo_dismiss}>Undo</button>
+        <span class="toast-msg">{$t('toast.dismissed_plain')}</span>
+        <button class="link" on:click={undo_dismiss}>{$t('toast.undo')}</button>
     </ActionToast>
 {/if}
 

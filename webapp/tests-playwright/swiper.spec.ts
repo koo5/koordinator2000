@@ -35,7 +35,6 @@ test('bulk: escalate a dismiss to "all of this cause"', async ({ page }) => {
 
   // Search-filter to a campaign with a seeded cause (deterministic — the deck's
   // default order shifts as other tests pledge campaigns up).
-  await page.getByRole('button', { name: /Search & Filter/i }).click();
   await page.locator('#search-term').fill('Amazon');
   await page.getByRole('button', { name: /^Search$/ }).click();
   await expect(page.locator('.kcard.top h3').first()).toContainText(/Amazon/i, { timeout: 15_000 });

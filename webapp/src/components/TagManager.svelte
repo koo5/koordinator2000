@@ -1,7 +1,6 @@
 <script lang="ts">
     import { getContextClient, gql } from '$lib/urql.ts';
     import { onMount } from 'svelte';
-    import { Button, FormGroup, Input, Label } from './ui';
 
     // Define props
     export let campaignId: number;
@@ -225,36 +224,32 @@
     <div class="tag-management my-2">
         {#if showAddForm}
             <div class="add-tag-form">
-                <FormGroup>
-                    <Label>Add existing tag</Label>
-                    <div class="d-flex">
-                        <select bind:value={selectedTagId} class="form-select">
-                            <option value={null}>Select a tag</option>
-                            {#each availableForSelection as tag (tag.id)}
-                                <option value={tag.id}>{tag.name}</option>
-                            {/each}
-                        </select>
-                        <Button color="primary" class="ml-2" on:click={addTagToCampaign} disabled={loading || !selectedTagId}>Add</Button>
-                    </div>
-                </FormGroup>
+                <label class="label-text font-medium block mb-1" for="tag-select-{campaignId}">Add existing tag</label>
+                <div class="flex gap-2">
+                    <select id="tag-select-{campaignId}" bind:value={selectedTagId} class="select select-bordered select-sm grow">
+                        <option value={null}>Select a tag</option>
+                        {#each availableForSelection as tag (tag.id)}
+                            <option value={tag.id}>{tag.name}</option>
+                        {/each}
+                    </select>
+                    <button class="btn btn-primary btn-sm" on:click={addTagToCampaign} disabled={loading || !selectedTagId}>Add</button>
+                </div>
 
-                <FormGroup class="mt-2">
-                    <Label>Create new tag</Label>
-                    <div class="d-flex">
-                        <Input type="text" placeholder="Enter new tag name" bind:value={newTagName} />
-                        <Button color="secondary" class="ml-2" on:click={createTag} disabled={loading || !newTagName.trim()}>Create</Button>
-                    </div>
-                </FormGroup>
+                <label class="label-text font-medium block mb-1 mt-3" for="tag-new-{campaignId}">Create new tag</label>
+                <div class="flex gap-2">
+                    <input id="tag-new-{campaignId}" class="input input-bordered input-sm grow" type="text" placeholder="Enter new tag name" bind:value={newTagName} />
+                    <button class="btn btn-secondary btn-sm" on:click={createTag} disabled={loading || !newTagName.trim()}>Create</button>
+                </div>
             </div>
         {:else}
-            <Button color="secondary" outline={true} size="sm" on:click={() => (showAddForm = true)}>+ Add Tags</Button>
+            <button class="btn btn-outline btn-secondary btn-xs" on:click={() => (showAddForm = true)}>+ Add Tags</button>
         {/if}
     </div>
 {/if}
 
 <!-- Status messages -->
 {#if error}
-    <div class="alert alert-danger mt-2" role="alert">
+    <div class="alert alert-error mt-2" role="alert">
         {error}
     </div>
 {/if}
@@ -278,7 +273,7 @@
     }
 
     .no-tags {
-        color: #6c757d;
+        color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
         font-style: italic;
         font-size: 0.9rem;
     }
@@ -286,8 +281,8 @@
     .tag-badge {
         display: inline-flex;
         align-items: center;
-        background-color: #e9ecef;
-        color: #495057;
+        background-color: color-mix(in oklab, var(--color-secondary) 12%, transparent);
+        color: var(--color-secondary);
         border-radius: 1rem;
         padding: 0.25rem 0.75rem;
         font-size: 0.875rem;
@@ -307,7 +302,7 @@
     .tag-remove-btn {
         background: none;
         border: none;
-        color: #6c757d;
+        color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
         font-size: 1.1rem;
         padding: 0 0 0 0.25rem;
         margin-left: 0.25rem;
@@ -319,11 +314,11 @@
     }
 
     .tag-remove-btn:hover {
-        color: #dc3545;
+        color: var(--color-error);
     }
 
     .add-tag-form {
-        background-color: #f8f9fa;
+        background-color: var(--color-base-200);
         padding: 1rem;
         border-radius: 0.375rem;
         margin-top: 0.5rem;

@@ -1,17 +1,11 @@
 <script lang="ts">
+    import { t, tp } from '$lib/i18n';
     import { getContextClient, gql, queryStore } from '$lib/urql.ts';
     import { my_user } from '$lib/client/my_user.ts';
     import CampaignList from './CampaignList.svelte';
-    import { scrollTo } from '$lib/client/scroll-utils';
-    import { browser } from '$app/environment';
     import { debug } from '$lib/stores';
     import { onMount, tick } from 'svelte';
-    import { slide } from 'svelte/transition';
     import { localStorageSharedStore } from '$lib/client/svelte-shared-store.ts';
-    import { Button, FormGroup, Input, Label } from './ui';
-
-    // Filter panel state - collapsed by default
-    let isFilterPanelOpen = false;
 
     const client = getContextClient();
 
@@ -41,65 +35,34 @@
         }>;
     }
 
-    // Define search filter options
+    // Persisted search state (extra legacy keys in localStorage are ignored)
     interface SearchFilters {
         searchTerm: string;
         selectedTagIds: number[];
-        itemsPerPage: number;
         sortBy: string;
-        viewMode: string;
-        liveUpdates: boolean;
-        nearLat: number | null;
-        nearLng: number | null;
-        maxDistance: number | null;
+        [key: string]: any;
     }
 
-    // Initialize shared store with default values
     const searchFiltersStore = localStorageSharedStore<SearchFilters>('campaign-search-filters', {
         searchTerm: '',
         selectedTagIds: [],
-        itemsPerPage: 5,
         sortBy: 'participant_count',
-        viewMode: 'details',
-        liveUpdates: true,
-        nearLat: null,
-        nearLng: null,
-        maxDistance: 50,
     });
 
     // Local reactive variables bound to the UI
     let searchTerm = '';
     let selectedTagIds: number[] = [];
-    let itemsPerPage = 5;
     let sortBy = 'participant_count';
-    let viewMode = 'details';
-    let liveUpdates = true;
-    let nearLat: number | null = null;
-    let nearLng: number | null = null;
-    let maxDistance = 50;
-    let showLocationFilter = false;
-    let locationName = '';
+    const itemsPerPage = 10; // page size for lazy loading (not a user knob)
 
     // All available tags (will be populated from GraphQL)
     let availableTags: Array<{ id: number; name: string; description: string }> = [];
 
-    // Items per page options
-    const itemsPerPageOptions = [5, 15, 50];
-
-    // Sort options
     const sortOptions = [
-        { value: 'title', label: 'Title' },
-        { value: 'proximity', label: 'Proximity' },
-        { value: 'participant_count', label: 'Number of Participants' },
-        { value: 'created_at', label: 'Date Created' },
-        { value: 'last_activity_at', label: 'Last Activity' },
-    ];
-
-    // View mode options
-    const viewModes = [
-        { value: 'details', label: 'Details' },
-        { value: 'list', label: 'List' },
-        { value: 'map', label: 'Map' },
+        { value: 'participant_count', key: 'search.sort_most_pledged' },
+        { value: 'last_activity_at', key: 'search.sort_recent' },
+        { value: 'created_at', key: 'search.sort_newest' },
+        { value: 'title', key: 'search.sort_title' },
     ];
 
     // The where-clause is built in JS (see `vars` below) and passed as a
@@ -131,56 +94,6 @@
             }
         }
     `;
-
-    // Function to get user's current location
-    function getCurrentLocation(): void {
-        if (browser && navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                position => {
-                    nearLat = position.coords.latitude;
-                    nearLng = position.coords.longitude;
-                    // Look up location name using a geocoding service if needed
-                    locationName = 'Current Location';
-                    showLocationFilter = true;
-                },
-                error => {
-                    console.error('Error getting current location:', error);
-                }
-            );
-        }
-    }
-
-    // Format a date for display
-    function formatDate(dateString: string | null | undefined): string {
-        if (!dateString) return 'N/A';
-
-        const date = new Date(dateString);
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-        // Less than 1 day ago
-        if (diffDays < 1) {
-            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-            if (diffHours < 1) {
-                const diffMinutes = Math.floor(diffMs / (1000 * 60));
-                return diffMinutes === 0 ? 'Just now' : `${diffMinutes} minute${diffMinutes > 1 ? 's' : ''} ago`;
-            }
-            return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-        }
-
-        // Less than 7 days ago
-        if (diffDays < 7) {
-            return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
-        }
-
-        // More than 7 days ago - show full date
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
-    }
 
     $: my_user_id = $my_user?.id || -1; // Ensure we have a valid integer even for anonymous users
     let items;
@@ -265,20 +178,18 @@
         searchFiltersStore.set({
             searchTerm,
             selectedTagIds,
-            itemsPerPage,
             sortBy,
-            viewMode,
-            liveUpdates,
-            nearLat,
-            nearLng,
-            maxDistance,
         });
     }
 
-    // Apply the search with current filters
-    function applySearch(): void {
+    // Apply the search with current filters. Awaits a tick so the reactive
+    // `vars` (searchTerm/selectedTagIds/sortBy) recompute before querying —
+    // otherwise an immediate-apply control (tag chip, sort select) searches
+    // with the PREVIOUS filter state.
+    async function applySearch(): Promise<void> {
         syncFiltersToStore();
         seen = []; // Reset seen items when changing filters
+        await tick();
         search();
     }
 
@@ -295,36 +206,13 @@
         });
     }
 
-    // Toggle location filtering
-    function toggleLocationFilter(): void {
-        if (!showLocationFilter) {
-            getCurrentLocation();
-        } else {
-            showLocationFilter = false;
-            nearLat = null;
-            nearLng = null;
-        }
-    }
 
-
-    // Restore filters from localStorage on mount
+    // Restore filters from localStorage on mount (legacy extra keys are ignored)
     onMount(() => {
         const storedFilters = $searchFiltersStore;
-        searchTerm = storedFilters.searchTerm;
-        selectedTagIds = storedFilters.selectedTagIds;
-        itemsPerPage = storedFilters.itemsPerPage;
-        sortBy = storedFilters.sortBy;
-        viewMode = storedFilters.viewMode;
-        liveUpdates = storedFilters.liveUpdates;
-        nearLat = storedFilters.nearLat;
-        nearLng = storedFilters.nearLng;
-        maxDistance = storedFilters.maxDistance || 50;
-
-        // If location filtering was enabled in the stored settings
-        if (nearLat && nearLng) {
-            showLocationFilter = true;
-            locationName = 'Saved Location'; // Placeholder - could use reverse geocoding API to get actual name
-        }
+        searchTerm = storedFilters.searchTerm || '';
+        selectedTagIds = Array.isArray(storedFilters.selectedTagIds) ? storedFilters.selectedTagIds : [];
+        sortBy = storedFilters.sortBy || 'participant_count';
 
         // Start initial search
         applySearch();
@@ -335,128 +223,42 @@
 </script>
 
 <div class="content_block">
-    <div class="search-header">
-        <button class="btn btn-link collapse-toggle" type="button" on:click={() => isFilterPanelOpen = !isFilterPanelOpen}>
-            <div class="d-flex align-items-center">
-                <span>Search & Filter</span>
-                <span class="toggle-icon ms-2">
-                    {#if isFilterPanelOpen}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
-                        </svg>
-                    {:else}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-                    {/if}
-                </span>
-            </div>
-        </button>
-    </div>
+    <!-- Compact discovery toolbar: search + sort, tag chips below. Everything
+         applies immediately — no separate "apply" step. -->
+    <form class="toolbar" on:submit|preventDefault={applySearch}>
+        <input
+            id="search-term"
+            class="input input-bordered input-sm toolbar-search"
+            type="search"
+            placeholder={$t('search.placeholder')}
+            bind:value={searchTerm}
+            aria-label={$t('search.placeholder')}
+        />
+        <button class="btn btn-primary btn-sm" type="submit">{$t('search.button')}</button>
+        <select id="sort-by" class="select select-bordered select-sm" bind:value={sortBy} on:change={applySearch} aria-label="Sort by">
+            {#each sortOptions as option}
+                <option value={option.value}>{$t(option.key)}</option>
+            {/each}
+        </select>
+    </form>
 
-    {#if isFilterPanelOpen}
-    <div class="search-container" transition:slide={{ duration: 300 }}>
-        <!-- Search -->
-        <FormGroup>
-            <Label htmlFor="search-term">Search</Label>
-            <div class="d-flex">
-                <Input type="text" id="search-term" placeholder="Search titles and descriptions" bind:value={searchTerm} />
-                <Button class="ml-2" color="primary" on:click={applySearch}>Search</Button>
-            </div>
-        </FormGroup>
-
-        <FormGroup>
-            <Label>Filters</Label>
-        </FormGroup>
-
-        <!-- Tags selector -->
-        <FormGroup>
-            <Label>Tags</Label>
-            <div class="tags-container mb-3">
-                {#if availableTags.length === 0}
-                    <div class="opacity-60">Loading tags...</div>
-                {:else}
-                    <div class="d-flex flex-wrap">
-                        {#each availableTags as tag}
-                            <button type="button" class="tag-badge {selectedTagIds.includes(tag.id) ? 'active' : ''}" on:click={() => toggleTag(tag.id)} on:keydown={e => e.key === 'Enter' && toggleTag(tag.id)} title={tag.description || tag.name}>
-                                {tag.name}
-                            </button>
-                        {/each}
-                    </div>
-                    <div class="note mt-2">
-                        <small class="opacity-60">Select tags to filter campaigns</small>
-                    </div>
-                {/if}
-            </div>
-        </FormGroup>
-
-        <!-- Location Filter -->
-        <FormGroup>
-            <Label>Location</Label>
-            <div class="mb-3">
-                <div class="form-check form-switch mb-2">
-                    <input class="toggle toggle-sm" type="checkbox" id="location-filter" checked={showLocationFilter} on:change={toggleLocationFilter} disabled={true} />
-                    <label class="form-check-label" for="location-filter"> Enable location filter (coming soon) </label>
-                </div>
-
-            </div>
-        </FormGroup>
-
-        <div class="row">
-            <div class="col-md-4">
-                <FormGroup>
-                    <Label>Items per page</Label>
-                    <div class="d-flex">
-                        {#each itemsPerPageOptions as option}
-                            <div class="form-check form-check-inline mr-2">
-                                <input class="radio radio-sm" type="radio" name="itemsPerPage" id="items-{option}" value={option} checked={itemsPerPage === option} on:change={() => (itemsPerPage = option)} />
-                                <label class="form-check-label" for="items-{option}">{option}</label>
-                            </div>
-                        {/each}
-                    </div>
-                </FormGroup>
-            </div>
-
-            <div class="col-md-4">
-                <FormGroup>
-                    <Label htmlFor="sort-by">Sort by</Label>
-                    <select class="select select-bordered select-sm w-full" id="sort-by" bind:value={sortBy}>
-                        {#each sortOptions as option}
-                            <option value={option.value}>{option.label}</option>
-                        {/each}
-                    </select>
-                </FormGroup>
-            </div>
-
-            <div class="col-md-4">
-                <FormGroup>
-                    <Label>View mode</Label>
-                    <div class="d-flex">
-                        {#each viewModes as mode}
-                            <div class="form-check form-check-inline mr-2">
-                                <input class="radio radio-sm" type="radio" name="viewMode" id="view-{mode.value}" value={mode.value} checked={viewMode === mode.value} on:change={() => (viewMode = mode.value)} />
-                                <label class="form-check-label" for="view-{mode.value}">{mode.label}</label>
-                            </div>
-                        {/each}
-                    </div>
-                </FormGroup>
-            </div>
+    {#if availableTags.length}
+        <div class="tagbar" role="group" aria-label="Filter by tag">
+            {#each availableTags as tag}
+                <button
+                    type="button"
+                    class="tag-badge"
+                    class:active={selectedTagIds.includes(tag.id)}
+                    on:click={() => {
+                        toggleTag(tag.id);
+                        applySearch();
+                    }}
+                    title={tag.description || tag.name}
+                >
+                    {tag.name}
+                </button>
+            {/each}
         </div>
-
-        <FormGroup>
-            <Label>Live updates</Label>
-            <div class="form-check form-switch">
-                <input class="toggle toggle-sm" type="checkbox" id="live-updates" bind:checked={liveUpdates} />
-                <label class="form-check-label" for="live-updates">{liveUpdates ? 'On' : 'Off'}</label>
-            </div>
-        </FormGroup>
-
-        <div class="d-flex justify-content-end mt-4">
-            <Button color="primary" size="lg" on:click={applySearch}>
-                Apply Filters
-            </Button>
-        </div>
-    </div>
     {/if}
 
     {#if $debug}
@@ -495,47 +297,37 @@
             <span class="loading loading-spinner loading-lg" role="status" aria-label="Loading"></span>
         </div>
     {:else}
-        <p class="text-center opacity-60">No campaigns match your filters.</p>
+        <p class="text-center opacity-60">{$t('search.no_match')}</p>
     {/if}
 </div>
 
 {#if has_more}
 <!-- Fallback pager; hidden on mobile where the swipe deck auto-loads. -->
 <div class="text-center mt-3 mb-5 hidden md:block">
-    <button class="btn btn-outline btn-primary btn-sm" bind:this={more_button} aria-label="more..." on:click={more}>Load more</button>
+    <button class="btn btn-outline btn-primary btn-sm" bind:this={more_button} aria-label="more..." on:click={more}>{$t('search.load_more')}</button>
 </div>
 {/if}
 
 <style>
-    .search-header {
+    .toolbar {
         display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+        max-width: 48rem;
+        margin: 0 auto;
+    }
+    .toolbar-search {
+        flex: 1 1 12rem;
+        min-width: 10rem;
+    }
+    .tagbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
         justify-content: center;
-        align-items: center;
-        margin-bottom: 1rem;
-        border-radius: 0.5rem;
-        background-color: var(--color-base-200);
-        padding: 0.75rem;
-    }
-
-    .collapse-toggle {
-        padding: 0.5rem 0.75rem;
-        text-decoration: none;
-        color: var(--color-secondary);
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-    }
-
-    .toggle-icon {
-        transition: transform 0.3s ease;
-        margin-left: 0.5rem;
-    }
-
-    .search-container {
-        background-color: var(--color-base-200);
-        padding: 1.5rem;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem;
+        margin: 0.75rem auto 0;
+        max-width: 48rem;
     }
 
     .debug-info {
@@ -546,21 +338,16 @@
         font-size: 0.875rem;
     }
 
-    .tags-container {
-        margin-top: 0.5rem;
-    }
-
     .tag-badge {
         display: inline-block;
         background-color: color-mix(in oklab, var(--color-secondary) 10%, transparent);
         color: var(--color-secondary);
         border-radius: 1rem;
-        padding: 0.25rem 0.75rem;
-        margin-right: 0.5rem;
-        margin-bottom: 0.5rem;
+        padding: 0.2rem 0.7rem;
         cursor: pointer;
         transition: all 0.2s ease;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        font-weight: 600;
         user-select: none;
         border: none;
         font-family: inherit;

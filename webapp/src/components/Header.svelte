@@ -9,6 +9,7 @@
     import { browser } from '$app/environment';
     import TheNagModal from './TheNagModal.svelte';
     import { goto } from '$app/navigation';
+    import { t, locale, set_locale, LOCALES } from '$lib/i18n';
 
     $: currentPath = $page?.url?.pathname || '/';
     $: segment = currentPath === '/' ? undefined : currentPath.split('/')[1];
@@ -37,12 +38,12 @@
         location.reload();
     }
 
-    // Navigation items
+    // Navigation items (labels are i18n keys; 'Dev area' stays untranslated — debug only)
     const navItems = [
-        { href: '/campaigns', label: 'Campaigns', segment: 'campaigns', requiresAuth: false },
-        { href: '/notifications', label: 'Notifications', segment: 'notifications', requiresAuth: true },
-        { href: '/dev_area', label: 'Dev area', segment: 'dev_area', requiresAuth: false, requiresDebug: true },
-        { href: '/about', label: 'About', segment: 'about', requiresAuth: false }
+        { href: '/campaigns', key: 'nav.campaigns', segment: 'campaigns', requiresAuth: false },
+        { href: '/notifications', key: 'nav.notifications', segment: 'notifications', requiresAuth: true },
+        { href: '/dev_area', key: 'Dev area', segment: 'dev_area', requiresAuth: false, requiresDebug: true },
+        { href: '/about', key: 'nav.about', segment: 'about', requiresAuth: false }
     ];
 
     // DaisyUI dropdown control is managed by the library
@@ -139,7 +140,7 @@
                                     }
                                 }}
                             >
-                                {item.label}
+                                {$t(item.key)}
                             </a>
                         </li>
                     {/if}
@@ -150,7 +151,7 @@
     
     <!-- User dropdown menu -->
     <div class="flex-none flex items-center gap-2">
-        <a href="/add_campaign" class="btn btn-primary btn-sm hidden sm:inline-flex">+ Start a campaign</a>
+        <a href="/add_campaign" class="btn btn-primary btn-sm hidden sm:inline-flex">{$t('nav.start_campaign')}</a>
         <div class="dropdown dropdown-end user-dropdown">
             <label tabindex="0" class="btn btn-ghost px-2">
                 {#if $is_user}
@@ -160,7 +161,7 @@
                     </span>
                     {#if $my_user?.auth_debug} ({$my_user.auth_name}){/if}
                 {:else}
-                    <span class="font-medium">Account</span>
+                    <span class="font-medium">{$t('nav.account_menu')}</span>
                 {/if}
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -172,18 +173,24 @@
                 class="dropdown-content z-50 menu p-2 shadow bg-base-100 rounded-box w-52 mt-4"
             >
                 {#if $is_user}
-                    <li><a href="/you">Profile</a></li>
-                    <li><a href="/account">Account</a></li>
-                    <li><a href="/notifications">Notifications</a></li>
-                    <li><a href="/add_campaign">Add campaign</a></li>
-                    <li><a href="/login">Verify identity</a></li>
+                    <li><a href="/you">{$t('nav.profile')}</a></li>
+                    <li><a href="/account">{$t('nav.account')}</a></li>
+                    <li><a href="/notifications">{$t('nav.notifications')}</a></li>
+                    <li><a href="/add_campaign">{$t('nav.start_campaign')}</a></li>
+                    <li><a href="/login">{$t('nav.verify_identity')}</a></li>
                     <li class="divider"></li>
-                    <li><button class="text-left w-full" on:click={toggle_settings}>Settings</button></li>
-                    <li><button class="text-left w-full" on:click={handleLogout}>Logout</button></li>
+                    <li><button class="text-left w-full" on:click={toggle_settings}>{$t('nav.settings')}</button></li>
+                    <li><button class="text-left w-full" on:click={handleLogout}>{$t('nav.logout')}</button></li>
                 {:else}
-                    <li><a href="/login">Login</a></li>
-                    <li><button class="text-left w-full" on:click={() => create_user(false)}>New user</button></li>
+                    <li><a href="/login">{$t('nav.login')}</a></li>
+                    <li><button class="text-left w-full" on:click={() => create_user(false)}>{$t('nav.new_user')}</button></li>
                 {/if}
+                <li class="divider"></li>
+                <li class="lang-row">
+                    {#each LOCALES as l}
+                        <button class="lang-btn" class:active={$locale === l} on:click={() => set_locale(l)}>{l.toUpperCase()}</button>
+                    {/each}
+                </li>
             </ul>
         </div>
     </div>
@@ -212,6 +219,27 @@
     .brand-name {
         font-size: 1.1rem;
     }
+    .lang-row {
+        display: flex;
+        flex-direction: row;
+        gap: 0.4rem;
+        padding: 0.25rem 0.75rem;
+    }
+    .lang-btn {
+        background: none;
+        border: 1px solid var(--color-base-300);
+        border-radius: 0.4rem;
+        padding: 0.15rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+    }
+    .lang-btn.active {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
     .avatar-chip {
         display: inline-flex;
         align-items: center;

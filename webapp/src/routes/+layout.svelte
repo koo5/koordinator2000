@@ -10,9 +10,9 @@
         my_user
     } from '$lib/client/my_user.ts';
     import { saturate_computate, set_css_var } from '$lib/client/campaign.ts';
-    import { initVersionCheck } from '$lib/version-check.ts';
     import { get } from 'svelte/store';
     import { debug } from '$lib/stores.ts';
+    import { locale, as_locale } from '$lib/i18n';
 
     // Define types for layout data
     interface LayoutData {
@@ -25,6 +25,10 @@
     }
 
     export let data: LayoutData;
+
+    // Adopt the server-resolved locale (cookie override > Accept-Language)
+    // before first render — SSR and hydration agree, so no language flash.
+    $: locale.set(as_locale(data?.locale) || 'en');
 
     $: PUBLIC_URL = data.session?.PUBLIC_URL || '';
     const callback_url = PUBLIC_URL + '/you';
@@ -58,8 +62,6 @@
     // Handle any client-side initialization
     onMount(async () => {
         await create_user(true);
-        // Verify SvelteKit versions
-        initVersionCheck();
 
         // Start JWT renewal service
         startJwtRenewalService();

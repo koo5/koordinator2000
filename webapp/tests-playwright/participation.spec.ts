@@ -18,10 +18,10 @@ test('a signed-in user can pledge on a campaign', async ({ page }) => {
   // Wait for the campaign to hydrate (WS subscription) before probing the form.
   await expect(page.getByRole('heading', { name: /Baltimore Open Legislation/i })).toBeVisible({ timeout: 25_000 });
 
-  const participate = page.getByRole('button', { name: /^Participate$/ });
-  await expect(participate).toBeVisible({ timeout: 15_000 });
-  await participate.click();
+  const pledge = page.getByRole('button', { name: /Pledge/ });
+  await expect(pledge).toBeVisible({ timeout: 15_000 });
+  await pledge.click();
 
-  // After pledging, the control switches to the Update/Delete form.
-  await expect(page.getByRole('button', { name: /Update|Delete/ }).first()).toBeVisible({ timeout: 20_000 });
+  // After pledging, the control switches to the Update/Withdraw form.
+  await expect(page.getByRole('button', { name: /Update|Withdraw/ }).first()).toBeVisible({ timeout: 20_000 });
 });

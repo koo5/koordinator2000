@@ -1,57 +1,46 @@
 import { test, expect } from './fixtures';
 
 /**
- * Campaign list filtering & sorting (the CampaignsSearch component).
- * Guards the fixes for: tag picker never loading, tag filtering being a no-op,
- * and basic search/sort.
+ * Campaign discovery toolbar (the CampaignsSearch component): search + sort +
+ * tag chips, always visible, immediate-apply (no "Apply Filters" step).
  */
 
-async function openFilters(page) {
-  // Wait for hydration + initial data (a swiper card) so the toggle's Svelte
-  // click handler is actually attached — clicking pre-hydration is a no-op.
+async function waitForToolbar(page) {
+  // Wait for hydration + initial data so control handlers are attached —
+  // pre-hydration clicks silently no-op.
   await expect(page.locator('.listing-item').first()).toBeVisible({ timeout: 20_000 });
-  const panel = page.locator('.search-container');
-  const toggle = page.getByRole('button', { name: /Search & Filter/i });
-  for (let i = 0; i < 3 && !(await panel.isVisible()); i++) {
-    await toggle.click();
-    await page.waitForTimeout(400);
-  }
-  await expect(panel).toBeVisible({ timeout: 5_000 });
+  await expect(page.locator('#search-term')).toBeVisible();
 }
 
-test('tag picker loads (not stuck on "Loading tags...")', async ({ page }) => {
+test('tag chips load (not stuck on "Loading tags...")', async ({ page }) => {
   await page.goto('/campaigns', { waitUntil: 'domcontentloaded' });
-  await openFilters(page);
+  await waitForToolbar(page);
   await expect(page.getByRole('button', { name: 'environment' })).toBeVisible({ timeout: 10_000 });
   await expect(page.getByText(/Loading tags/i)).toHaveCount(0);
 });
 
 test('search filters the list by title', async ({ page }) => {
   await page.goto('/campaigns', { waitUntil: 'domcontentloaded' });
-  await openFilters(page);
-  // "Barclays" is NOT in the default top-5 view, so it only appears via search.
+  await waitForToolbar(page);
+  // "Barclays" is NOT in the default first page, so it only appears via search.
   await page.locator('#search-term').fill('Barclays');
   await page.getByRole('button', { name: /^Search$/ }).click();
   await expect(page.getByText(/Barclays/i).first()).toBeVisible({ timeout: 15_000 });
 });
 
-test('tag filter narrows the list to that tag', async ({ page }) => {
+test('tag filter applies immediately and narrows the list', async ({ page }) => {
   await page.goto('/campaigns', { waitUntil: 'domcontentloaded' });
-  await openFilters(page);
+  await waitForToolbar(page);
   // "consumer" is on Amazon/Barclays/Air France/HSBC but not Baltimore (politics).
   await page.getByRole('button', { name: 'consumer' }).click();
-  await page.getByRole('button', { name: /Apply Filters/i }).click();
-  // The deck now holds only consumer campaigns: a card is shown, and Baltimore
-  // (politics) is filtered out entirely (not the top card, not the peek card).
   await expect(page.locator('.listing-item').first()).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText('Baltimore Open Legislation')).toHaveCount(0);
 });
 
-test('changing sort does not break the list', async ({ page }) => {
+test('changing sort applies immediately', async ({ page }) => {
   await page.goto('/campaigns', { waitUntil: 'domcontentloaded' });
-  await openFilters(page);
+  await waitForToolbar(page);
   await page.locator('#sort-by').selectOption('title');
-  await page.getByRole('button', { name: /Apply Filters/i }).click();
-  // The deck still renders a campaign card after re-sorting.
+  // The list still renders after re-sorting.
   await expect(page.locator('.listing-item').first()).toBeVisible({ timeout: 15_000 });
 });

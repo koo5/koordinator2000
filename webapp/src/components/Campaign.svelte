@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t, tp } from '$lib/i18n';
     import { sanitize_html } from '$lib/client/campaign.ts';
     import MyParticipation from './MyParticipation.svelte';
     import MutationForm from './MutationForm.svelte';
@@ -7,7 +8,6 @@
     import type { Campaign as CampaignType, Participation as ParticipationType } from '$lib/client/my_user.ts';
     import ToolTipsy from './ToolTipsy.svelte';
     import ParticipationBadge from './ParticipationBadge.svelte';
-    import DismissalBadge from './DismissalBadge.svelte';
     import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
     import TagManager from './TagManager.svelte';
     //import {slide, fade} from 'svelte/transition';
@@ -114,17 +114,17 @@
         <p>{@html sanitize_html(campaign.description || '')}</p>
     </div>
 
-    <h5>Tags</h5>
+    <h5>{$t('campaign.tags')}</h5>
     <div class="content_block">
         <TagManager campaignId={campaign.id} tags={campaign.tags?.map(t => ({ id: t.tag.id, name: t.tag.name })) || []} readOnly={!is_detail_view} size="md" />
     </div>
 
-    <h5>My participation</h5>
+    <h5>{$t('campaign.my_participation')}</h5>
     <div class="content_block">
         <MyParticipation {campaign} on:my_participation_upsert />
     </div>
 
-    <h5>Progress</h5>
+    <h5>{$t('campaign.progress')}</h5>
     <div class="content_block">
         <progress
             class="progress progress-success w-full"
@@ -132,32 +132,18 @@
             max={suggested_mass}
         ></progress>
         <div class="flex items-center justify-between text-sm">
-            <span><b>{contributing_count_str}</b> pledged</span>
+            <span class="font-semibold">{$tp('progress.pledged', contributing_count || 0)}</span>
             {#if (contributing_count || 0) >= suggested_mass}
-                <span class="badge badge-success badge-sm">🎉 goal of {suggested_mass} reached</span>
+                <span class="badge badge-success badge-sm">{$t('progress.goal_reached', { n: suggested_mass })}</span>
             {:else}
-                <span class="opacity-60">goal: {suggested_mass}</span>
+                <span class="opacity-60">{$t('progress.goal', { n: suggested_mass })}</span>
             {/if}
         </div>
     </div>
-    <h5>Participants</h5>
+    <h5>{$t('campaign.participants')}</h5>
     <div class="content_block">
-        <ToolTipsy enabled={!$my_user.hide_help}>
-            participating users (sorted from lowest threshold to highest):
-            <div slot="tooltip">
-                <div class="help_tooltip">
-                    Help:
-                    <br /> "✅" - participating, threshold reached
-                    <br /> "👁" - condition was not fulfilled yet/waiting<br /> 👎 - disagreement/dismissal
-                </div>
-            </div>
-        </ToolTipsy>
-
-        {#if default_participations_display_style($my_user) == 'facebook'}
-            emojis go here
-        {:else if default_participations_display_style($my_user) == 'koo1_introductory'}
-            wordy stuff goes here
-        {:else if default_participations_display_style($my_user) == 'koo1'}
+        <p class="text-xs opacity-60 mt-0 mb-2">{$t('campaign.participants_hint')}</p>
+        {#if default_participations_display_style($my_user) == 'koo1'}
             {#each campaign.participations || [] as participation (participation.id)}
                 <span>
                     <ParticipationBadge {participation} {campaign} />
@@ -166,36 +152,22 @@
         {:else}
             <TabularParticipationsBreakdown {campaign} />
         {/if}
-        <br />
     </div>
-    <h5>Dismissals</h5>
-    <div class="content_block">
-        <ToolTipsy enabled={!$my_user.hide_help}>
-            And these users dismissed the campaign:<br />
-            <div slot="tooltip">
-                <div class="help_tooltip">
-                    <p>Maybe they think it is stupid, or they just want to get back to it later.</p>
-                     At any case, they don't want to see it now.
-                </div>
-            </div>
-        </ToolTipsy>
-
-        {#each campaign.campaign_dismissals || [] as dismissal (dismissal.account_id)}
-            <span>
-                <DismissalBadge {dismissal} />
-            </span>
-        {/each}
-        <br />
-        <MutationForm
-            mutation={CAMPAIGN_DISMISSAL}
-            variables={{
-                user_id: $my_user.id,
-                campaign_id: campaign.id,
-            }}
-        >
-            <button class="btn btn-outline btn-warning btn-xs" type="submit">Dismiss this campaign</button>
-        </MutationForm>
-    </div>
+    <!-- Dismissing is a PRIVATE action ("hide from my deck") — who dismissed a
+         campaign is deliberately not shown (negative social signal). -->
+    {#if is_detail_view}
+        <div class="content_block mt-4">
+            <MutationForm
+                mutation={CAMPAIGN_DISMISSAL}
+                variables={{
+                    user_id: $my_user.id,
+                    campaign_id: campaign.id,
+                }}
+            >
+                <button class="btn btn-ghost btn-xs opacity-60" type="submit" title={$t('listing.not_interested')}>{$t('campaign.not_interested')}</button>
+            </MutationForm>
+        </div>
+    {/if}
 
     <!-- <a href="/campaign/{campaign.id}">details...</a> -->
 </div>

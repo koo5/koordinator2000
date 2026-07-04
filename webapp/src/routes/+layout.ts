@@ -1,10 +1,11 @@
 import type { LayoutLoad } from './$types';
 
 export const load: LayoutLoad = async ({ data }: { data: any }) => {
-    // Pass session data from parent layout directly (enables passing auth data)
+    // Pass server layout data through (auth/session + resolved locale)
     return {
         session: data?.session || {},
         user: data?.user || null,
+        locale: data?.locale || 'en',
     };
 };
 

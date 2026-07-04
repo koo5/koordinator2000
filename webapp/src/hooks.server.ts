@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { minify } from 'html-minifier';
 import { building } from '$app/environment';
 import { server_env } from '$lib/server/env.ts';
@@ -66,13 +65,20 @@ const minification_options = {
 };
 
 /**
- * SvelteKit load function for server routes
+ * Resolve the request's locale: user's cookie override > Accept-Language > en.
  */
-export function load({ locals }: { locals: App.Locals }): { user: App.UserObject | null; session: Record<string, any> } {
-    return {
-        user: locals.user || null,
-        session: locals.session || {},
-    };
+function detect_locale(event: RequestEvent): 'en' | 'cs' {
+    const cookie = event.cookies.get('koord_locale');
+    if (cookie === 'cs' || cookie === 'en') return cookie;
+
+    const accept = event.request.headers.get('accept-language') || '';
+    // First supported language wins, honoring the header's order.
+    for (const part of accept.split(',')) {
+        const lang = part.split(';')[0].trim().toLowerCase();
+        if (lang === 'cs' || lang.startsWith('cs-') || lang === 'sk' || lang.startsWith('sk-')) return 'cs';
+        if (lang === 'en' || lang.startsWith('en-')) return 'en';
+    }
+    return 'en';
 }
 
 /**
@@ -80,7 +86,7 @@ export function load({ locals }: { locals: App.Locals }): { user: App.UserObject
  */
 export const handle: Handle = async ({ event, resolve }) => {
     // Log timestamp for each request (no token/user — those leak into logs)
-    console.log('server request at', moment().format('YYYY-MM-DD HH:mm:ss'), 'for', event.url.pathname);
+    console.log('server request at', new Date().toISOString(), 'for', event.url.pathname);
 
     // Get user from request if available (signature-verified)
     const user = await get_user_from_request(event);
@@ -90,12 +96,17 @@ export const handle: Handle = async ({ event, resolve }) => {
         event.locals.user = user;
     }
 
+    const locale = detect_locale(event);
+    event.locals.locale = locale;
+
     const response = await resolve(event, {
         transformPageChunk: ({ html, done }) => {
+            // Reflect the resolved locale in <html lang> for SSR/accessibility.
+            let out = html.replace('<html lang="en"', `<html lang="${locale}"`);
             if (done && building) {
-                return minify(html, minification_options);
+                return minify(out, minification_options);
             }
-            return html;
+            return out;
         },
     });
 

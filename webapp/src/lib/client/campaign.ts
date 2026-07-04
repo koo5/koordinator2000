@@ -47,10 +47,6 @@ export const CAMPAIGN_FRAGMENT = `
         }
         campaign_dismissals {
           account_id
-          account {
-            id
-            name
-          }
         }
         tags: campaign_tags {
           tag {

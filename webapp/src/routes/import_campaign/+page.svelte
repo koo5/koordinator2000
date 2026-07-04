@@ -1,7 +1,5 @@
 <script lang="ts">
     import gql from 'graphql-tag';
-    import FormGroup from '../../components/ui/FormGroup.svelte';
-    import Label from '../../components/ui/Label.svelte';
     import MutationForm from '../../components/MutationForm.svelte';
 
     interface CampaignObject {
@@ -63,14 +61,12 @@
 </script>
 
 <h1>bulk campaign import</h1>
-<FormGroup>
-    <Label
-        >Campaigns JSON file:
-        <input type="file" bind:files />
-    </Label>
-</FormGroup>
+<label class="label-text font-medium block mb-3">
+    Campaigns JSON file:
+    <input type="file" class="file-input file-input-bordered file-input-sm ml-2" bind:files />
+</label>
 
 <MutationForm mutation={UPSERT} variables={vars}>
-    <button type="submit">Submit</button>
+    <button class="btn btn-primary btn-sm" type="submit">Submit</button>
     <br />
 </MutationForm>

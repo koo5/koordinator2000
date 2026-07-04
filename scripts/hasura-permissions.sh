@@ -54,7 +54,6 @@ echo "==> Public read (anonymous + nobody + user get the same SELECTs on public 
 for role in anonymous nobody user; do
   sel campaigns          "$role" '"*"' '{}' true
   sel participations     "$role" '"*"' '{}' true
-  sel campaign_dismissals "$role" '"*"' '{}' false
   sel campaign_tags      "$role" '"*"' '{}' false
   sel tags               "$role" '"*"' '{}' false
   sel causes             "$role" '"*"' '{}' false
@@ -68,7 +67,14 @@ for role in nobody user; do
   sel verified_user_authentications "$role" '["account_id","provider","login_name"]' "{\"account_id\":$UID_EQ}" false
   sel campaign_notifications        "$role" '"*"' "{\"account_id\":$UID_EQ}" false
   upd campaign_notifications        "$role" '["read"]' "{\"account_id\":$UID_EQ}" "{\"account_id\":$UID_EQ}"
+  # Dismissals are PRIVATE ("hide from my deck") — only your own rows are
+  # visible. The deck's `_not: campaign_dismissals` filter still works: the
+  # exists-subquery is evaluated under these same row permissions.
+  sel campaign_dismissals           "$role" '"*"' "{\"account_id\":$UID_EQ}" false
 done
+# anonymous needs the FIELD to exist (the deck query filters on it before the
+# anonymous account/JWT is minted) but must see NO rows: never-matching filter.
+sel campaign_dismissals anonymous '["campaign_id","account_id"]' '{"account_id":{"_eq":-1}}' false
 
 echo "==> Writes (user only, own rows)"
 # participations: I'll join if N others do — the core action. account_id is a

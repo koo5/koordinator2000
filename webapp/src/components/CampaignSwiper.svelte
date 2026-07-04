@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t, tp } from '$lib/i18n';
     /**
      * Reels-style campaign discovery. One card at a time; you sift fast.
      *   swipe up    = next (neutral skip, no record)
@@ -309,8 +310,8 @@
 <div class="swiper-root">
     {#if done}
         <div class="empty">
-            <p>🎉 You're all caught up.</p>
-            <p class="muted">Adjust your filters above, or check back later.</p>
+            <p>{$t('swiper.caught_up')}</p>
+            <p class="muted">{$t('swiper.adjust_filters')}</p>
         </div>
     {:else if current}
         <div class="deck" class:promoting={!!exiting}>
@@ -329,7 +330,7 @@
                     role="group"
                     aria-label={c.title}
                 >
-                    {#if i === 0 && hint}<div class="hint {hint}">{hint === 'pledge' ? "I'M IN" : hint === 'dismiss' ? 'DISMISS' : 'SKIP'}</div>{/if}
+                    {#if i === 0 && hint}<div class="hint {hint}">{hint === 'pledge' ? $t('swiper.hint_pledge') : hint === 'dismiss' ? $t('swiper.hint_dismiss') : $t('swiper.hint_skip')}</div>{/if}
 
                     <h3><a href="/campaign/{c.id}" on:pointerdown|stopPropagation>{c.title}</a></h3>
                     {#if c.tags?.length}
@@ -337,56 +338,55 @@
                     {/if}
                     <div class="desc">{@html sanitize_html((c.description || '').slice(0, 320))}</div>
                     <div class="meta">
-                        <span>👥 {participant_count(c)} participating</span>
-                        <span>· swipe right to join if <b>{default_threshold(c)}</b> others do</span>
+                        <span>{$tp('swiper.participating', participant_count(c))}</span>
+                        <span>{$tp('swiper.swipe_meta', default_threshold(c))}</span>
                     </div>
                 </div>
             {/each}
         </div>
 
         <div class="actions">
-            <button class="act-btn dismiss" on:click={() => act('left')} title="Dismiss (←)">✕</button>
-            <button class="act-btn skip" on:click={() => act('up')} title="Skip (↑)">↑</button>
-            <button class="act-btn pledge" on:click={() => act('right')} title="Pledge (→)">✓ I'm in</button>
+            <button class="act-btn dismiss" on:click={() => act('left')} title={$t('swiper.dismiss_title')}>✕</button>
+            <button class="act-btn skip" on:click={() => act('up')} title={$t('swiper.skip_title')}>↑</button>
+            <button class="act-btn pledge" on:click={() => act('right')} title={$t('swiper.pledge_title')}>{$t('swiper.im_in')}</button>
         </div>
     {:else}
-        <div class="empty"><p>Loading campaigns…</p></div>
+        <div class="empty"><p>{$t('swiper.loading')}</p></div>
     {/if}
 
     {#if toast}
         <ActionToast>
             {#if adjusting}
-                <span>Join if</span>
+                <span>{$t('toast.join_if')}</span>
                 <input type="number" min="0" bind:value={adjust_value} class="adj" />
-                <span>others do</span>
-                <button class="link" on:click={save_adjust}>Save</button>
-                <button class="link" on:click={() => (adjusting = false)}>Cancel</button>
+                <span>{$t('toast.others_do')}</span>
+                <button class="link" on:click={save_adjust}>{$t('toast.save')}</button>
+                <button class="link" on:click={() => (adjusting = false)}>{$t('toast.cancel')}</button>
             {:else if toast.bulk}
                 <span class="toast-msg">
-                    {toast.bulk.action === 'pledge' ? '✅ Pledged' : 'Dismissed'} all
-                    <b>{toast.bulk.ids.length}</b> of <b>{toast.bulk.label}</b>.
+                    {$tp(toast.bulk.action === 'pledge' ? 'toast.bulk_pledged' : 'toast.bulk_dismissed', toast.bulk.ids.length, { label: toast.bulk.label })}
                 </span>
-                <button class="link" on:click={undo_bulk}>Undo all</button>
+                <button class="link" on:click={undo_bulk}>{$t('toast.undo_all')}</button>
             {:else}
                 <span class="toast-msg">
                     {#if toast.kind === 'pledge'}
-                        ✅ Pledged — you'll join if <b>{toast.threshold}</b> others do.
+                        {$tp('toast.pledged', toast.threshold)}
                     {:else}
-                        Dismissed <b>{toast.campaign.title}</b>.
+                        {$t('toast.dismissed', { title: toast.campaign.title })}
                     {/if}
                 </span>
-                {#if toast.kind === 'pledge'}<button class="link" on:click={open_adjust}>Adjust</button>{/if}
+                {#if toast.kind === 'pledge'}<button class="link" on:click={open_adjust}>{$t('toast.adjust')}</button>{/if}
                 {#if toast.campaign.cause_id}
                     <button class="link" on:click={() => do_bulk('cause')}>
-                        {toast.kind === 'pledge' ? 'Pledge' : 'Dismiss'} all of {toast.campaign.cause?.title || 'this cause'}
+                        {$t(toast.kind === 'pledge' ? 'toast.pledge_all_of' : 'toast.dismiss_all_of', { label: toast.campaign.cause?.title || '…' })}
                     </button>
                 {/if}
                 {#if toast.campaign.maintainer_id}
                     <button class="link" on:click={() => do_bulk('maintainer')}>
-                        {toast.kind === 'pledge' ? 'Pledge' : 'Dismiss'} all by {toast.campaign.maintainer?.name || 'this organizer'}
+                        {$t(toast.kind === 'pledge' ? 'toast.pledge_all_by' : 'toast.dismiss_all_by', { label: toast.campaign.maintainer?.name || '…' })}
                     </button>
                 {/if}
-                <button class="link" on:click={undo}>Undo</button>
+                <button class="link" on:click={undo}>{$t('toast.undo')}</button>
             {/if}
         </ActionToast>
     {/if}

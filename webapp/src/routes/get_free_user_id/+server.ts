@@ -1,6 +1,5 @@
 import { json } from '@sveltejs/kit';
 import { free_user_id } from '$lib/server/auth';
-import moment from 'moment';
 import type { RequestHandler } from './$types';
 
 interface RequestBody {
@@ -20,7 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     const result = await free_user_id(email);
-    console.log(moment().format());
+    console.log(new Date().toISOString());
     console.log();
 
     return json(result);

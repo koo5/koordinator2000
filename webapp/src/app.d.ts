@@ -17,6 +17,8 @@ declare global {
                 BASE_URL: string;
             };
             user?: UserObject;
+            /** Request locale resolved in hooks.server.ts (cookie > Accept-Language). */
+            locale?: 'en' | 'cs';
         }
 
         interface UserObject {

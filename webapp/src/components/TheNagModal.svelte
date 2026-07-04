@@ -2,14 +2,11 @@
     import { my_user, nag, postpone_nag } from '$lib/client/my_user.ts';
     import TheNagBody from './TheNagBody.svelte';
     import { modal_hack } from '$lib/client/campaign.ts';
-    import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from './ui';
 
     let isOpen = false;
     $: modal_hack(isOpen);
 
     nag.on('nag', () => {
-        //postpone_nag();
-        //alert("i'm gonna attempt to show a modal dialog. This seems to break in firefox. In that case, please reload the page.");
         isOpen = true;
     });
 
@@ -29,16 +26,23 @@
         isOpen = false;
         postpone_nag(999999999999);
     }
+
+    function onkeydown(e: KeyboardEvent): void {
+        if (isOpen && e.key === 'Escape') later();
+    }
 </script>
 
-<Modal {isOpen} toggle={later} fadeEffect={false} keyboard={true} scrollable={true}>
-    <ModalHeader toggle={later}>Please!</ModalHeader>
-    <ModalBody>
+<svelte:window on:keydown={onkeydown} />
+
+<div class="modal" class:modal-open={isOpen} role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <h3 class="mt-0">Please!</h3>
         <TheNagBody />
-    </ModalBody>
-    <ModalFooter>
-        <Button color="success" on:click={success} disabled={success_is_disabled}>Done</Button>
-        <Button color="secondary" on:click={later}>Remind me later</Button>
-        <Button color="warning" on:click={never}>Remind me never</Button>
-    </ModalFooter>
-</Modal>
+        <div class="modal-action">
+            <button class="btn btn-success btn-sm" on:click={success} disabled={success_is_disabled}>Done</button>
+            <button class="btn btn-ghost btn-sm" on:click={later}>Remind me later</button>
+            <button class="btn btn-outline btn-warning btn-sm" on:click={never}>Remind me never</button>
+        </div>
+    </div>
+    <button class="modal-backdrop" aria-label="Close" on:click={later}></button>
+</div>

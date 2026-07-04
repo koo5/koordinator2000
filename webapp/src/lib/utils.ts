@@ -19,7 +19,6 @@ export * from './error-utils';
 export * from './storage-utils';
 
 // Version checking
-export { checkVersions, initVersionCheck } from './version-check';
 
 /**
  * Check if we're in the browser environment

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t, tp } from '$lib/i18n';
     import { type Campaign, decrease_auth_nag_postponement, get_my_participation, my_user, type MyUser } from '$lib/client/my_user.ts';
     import gql from 'graphql-tag';
     import MutationForm from './MutationForm.svelte';
@@ -48,7 +49,7 @@
 <div class="participation-box" class:active={my_participation.id && my_participation.condition_is_fulfilled}>
     <MutationForm on:done={() => (my_participation.id ? dispatch('my_participation_upsert') : on_participated())} mutation={UPSERT} variables={upsert_vars}>
         <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm">I'll join if</span>
+            <span class="text-sm">{$t('pledge.prefix')}</span>
             <input
                 class="input input-bordered input-sm w-24 text-center font-semibold"
                 type="number"
@@ -58,32 +59,32 @@
                 bind:value={new_threshold}
                 aria-label="my threshold"
             />
-            <span class="text-sm">others do</span>
+            <span class="text-sm">{$tp('pledge.suffix', new_threshold ?? 0)}</span>
             {#if my_participation.id}
-                <button class="btn btn-success btn-sm" type="submit" disabled={update_button_disabled}>Update</button>
+                <button class="btn btn-success btn-sm" type="submit" disabled={update_button_disabled}>{$t('pledge.update')}</button>
             {:else}
-                <button class="btn btn-primary btn-sm" type="submit">✓ Pledge</button>
+                <button class="btn btn-primary btn-sm" type="submit">{$t('pledge.button')}</button>
             {/if}
         </div>
     </MutationForm>
 
     <p class="mt-1.5 mb-0 text-xs opacity-60">
-        suggested {campaign.suggested_lowest_threshold}–{campaign.suggested_highest_threshold}, default {campaign.suggested_optimal_threshold}
+        {$t('pledge.suggested', { lo: campaign.suggested_lowest_threshold, hi: campaign.suggested_highest_threshold, def: campaign.suggested_optimal_threshold })}
     </p>
 
     <div class="mt-2 flex items-center gap-2 text-sm">
         {#if my_participation.threshold != undefined}
             <span>{get_tickmark(my_participation)}</span>
             {#if my_participation.condition_is_fulfilled}
-                <span class="font-semibold text-success">Your threshold is met — your participation is active.</span>
+                <span class="font-semibold text-success">{$t('pledge.active')}</span>
             {:else}
-                <span class="opacity-75">Pledged — waiting for more people to join.</span>
+                <span class="opacity-75">{$t('pledge.waiting')}</span>
             {/if}
             <MutationForm on:done={() => dispatch('my_participation_upsert')} mutation={DELETE} variables={{ id: my_participation.id }}>
-                <button class="btn btn-ghost btn-xs text-error" type="submit">Withdraw</button>
+                <button class="btn btn-ghost btn-xs text-error" type="submit">{$t('pledge.withdraw')}</button>
             </MutationForm>
         {:else}
-            <span class="opacity-60">You're not pledged on this campaign.</span>
+            <span class="opacity-60">{$t('pledge.not_pledged')}</span>
         {/if}
     </div>
 </div>
