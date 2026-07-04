@@ -307,6 +307,18 @@ export const en = {
     'country.field': 'Country',
     'country.hint': 'Which country this campaign is about — used to surface it to the right audience.',
     'deck.everywhere': '🌍 Everywhere',
+
+    // cause create/edit (maintainer)
+    'cause.edit_title': 'Edit cause',
+    'cause.title_label': 'Title',
+    'cause.title_ph': 'e.g. Big Tech accountability',
+    'cause.desc_label': 'Description',
+    'cause.desc_ph': 'What ties these campaigns together?',
+    'cause.save': 'Save cause',
+    'cause.saving': 'Saving…',
+    'cause.saved': '✅ Saved.',
+    'cause.error': 'Could not save the cause.',
+    'cause.loading': 'Loading…',
 } as const;
 
 export type TranslationKey = keyof typeof en;

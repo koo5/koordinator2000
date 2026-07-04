@@ -79,9 +79,6 @@
 </script>
 <svelte:window on:keydown={onkeydown} />
 <svelte:head>
-    <!-- Note: CodeMirror script is loaded in app.html -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firepad@1.5.9/dist/firepad.css" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 

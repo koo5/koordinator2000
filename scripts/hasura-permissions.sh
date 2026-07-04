@@ -107,6 +107,11 @@ del campaign_dismissals user "{\"account_id\":$UID_EQ}"
 ins campaigns user '["title","description","maintainer_id","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language","country"]' "{\"maintainer_id\":$UID_EQ}"
 upd campaigns user '["title","description","cause_id","suggested_lowest_threshold","suggested_highest_threshold","suggested_optimal_threshold","uri","twitter_tag","location_name","latitude","longitude","location_radius","language","country"]' "{\"maintainer_id\":$UID_EQ}" "{\"maintainer_id\":$UID_EQ}"
 
+# causes: group campaigns under a cause; create + edit your own (maintainer_id
+# is a server-side PRESET on insert so you can only ever create your own).
+ins causes user '["title","description"]' '{}' "{\"maintainer_id\":\"X-Hasura-User-Id\"}"
+upd causes user '["title","description"]' "{\"maintainer_id\":$UID_EQ}" "{\"maintainer_id\":$UID_EQ}"
+
 # tags: anyone signed in can create a tag; tag/untag only your own campaigns
 ins tags user '["name","description"]' '{}'
 ins campaign_tags user '["campaign_id","tag_id"]' "{\"campaign\":{\"maintainer_id\":$UID_EQ}}"

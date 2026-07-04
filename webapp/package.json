@@ -57,7 +57,6 @@
     "@tauri-apps/plugin-os": "^2.2.1",
     "arctic": "3.7.0",
     "events": "^3.3.0",
-    "firebase": "^11.5.0",
     "html-minifier": "^4.0.0",
     "leaflet": "1.9.4"
   }

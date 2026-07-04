@@ -312,4 +312,16 @@ export const cs: Record<string, string> = {
     'country.field': 'Země',
     'country.hint': 'Které země se kampaň týká — pomáhá ji ukázat správnému publiku.',
     'deck.everywhere': '🌍 Všude',
+
+    // cause create/edit (maintainer)
+    'cause.edit_title': 'Upravit kauzu',
+    'cause.title_label': 'Název',
+    'cause.title_ph': 'např. Odpovědnost velkých technologických firem',
+    'cause.desc_label': 'Popis',
+    'cause.desc_ph': 'Co tyto kampaně spojuje?',
+    'cause.save': 'Uložit kauzu',
+    'cause.saving': 'Ukládám…',
+    'cause.saved': '✅ Uloženo.',
+    'cause.error': 'Kauzu se nepodařilo uložit.',
+    'cause.loading': 'Načítám…',
 };
