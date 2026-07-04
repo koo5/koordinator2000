@@ -1,4 +1,5 @@
 <script>
+    import { t } from '$lib/i18n';
     import Campaign from '../../../components/Campaign.svelte';
     import { my_user } from '$lib/client/my_user.ts';
     import { CAMPAIGN_FRAGMENT } from '$lib/client/campaign.ts';
@@ -38,16 +39,16 @@
 
 <div class="content_block">
     {#if loading_slug}
-        <div class="animate-flicker">Looking up campaign by slug...</div>
+        <div class="animate-flicker">{$t('detail.slug_lookup')}</div>
     {:else if campaign}
         <Campaign is_detail_view={true} {campaign} on:my_participation_upsert={() => alert('yeeeeeehaaaaaaa')} />
     {:else if dddd}
-        this campaign doesn't exist
+        {$t('detail.not_found')}
     {:else}
-        <div class="animate-flicker">Campaign is loading...</div>
+        <div class="animate-flicker">{$t('detail.loading')}</div>
     {/if}
 
     <br />
     <hr />
-    <a href="/campaigns">more campaigns</a>
+    <a href="/campaigns">{$t('detail.more')}</a>
 </div>

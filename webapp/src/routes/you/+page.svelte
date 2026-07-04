@@ -1,52 +1,52 @@
-<script>
-    export let data;
+<script lang="ts">
+    import { t } from '$lib/i18n';
+    import { goto } from '$app/navigation';
+    import { logout, my_user } from '$lib/client/my_user.ts';
+
+    async function do_logout(): Promise<void> {
+        await logout();
+        goto('/');
+    }
 </script>
 
 <svelte:head>
-    <title>Your Profile | Koordinator</title>
+    <title>{$t('you.title')} - Koordinator</title>
 </svelte:head>
 
 <div class="profile-container">
-    <h1>Your Profile</h1>
+    <h1>{$t('you.title')}</h1>
 
-        {#if data.user}
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="avatar">
-                        {data.user.name.charAt(0).toUpperCase()}
-                    </div>
-                    <h2>{data.user.name}</h2>
+    {#if $my_user.id > 0}
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">
+                    {($my_user.name || 'U').charAt(0).toUpperCase()}
                 </div>
-
-                <div class="profile-details">
-                    <div class="detail-item">
-                        <span class="label">User ID:</span>
-                        <span class="value">{data.user.id}</span>
-                    </div>
-
-                    {#if data.user.email}
-                        <div class="detail-item">
-                            <span class="label">Email:</span>
-                            <span class="value">{data.user.email}</span>
-                        </div>
-                    {/if}
-
-                    {#if data.user.jwt}
-                        <div class="detail-item">
-                            <span class="label">Auth Token:</span>
-                            <span class="value token">{data.user.jwt.substring(0, 20)}...</span>
-                        </div>
-                    {/if}
-                </div>
-
-                <div class="actions">
-                    <button class="edit-button">Edit Profile</button>
-                    <button class="logout-button" >Logout</button> <!-- Removed on:click={logout} -->
-                </div>
+                <h2>{$my_user.name}</h2>
             </div>
-        {:else}
-            <p>Loading user data...</p>
-        {/if}
+
+            <div class="profile-details">
+                <div class="detail-item">
+                    <span class="label">{$t('you.user_id')}</span>
+                    <span class="value">{$my_user.id}</span>
+                </div>
+                {#if $my_user.email}
+                    <div class="detail-item">
+                        <span class="label">{$t('you.email')}</span>
+                        <span class="value">{$my_user.email}</span>
+                    </div>
+                {/if}
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-primary btn-sm" href="/login">{$t('nav.verify_identity')}</a>
+                <a class="btn btn-ghost btn-sm" href="/account">{$t('nav.account')}</a>
+                <button class="btn btn-ghost btn-sm text-error" on:click={do_logout}>{$t('nav.logout')}</button>
+            </div>
+        </div>
+    {:else}
+        <p class="text-center opacity-60">{$t('you.loading')}</p>
+    {/if}
 </div>
 
 <style>
@@ -62,15 +62,16 @@
     }
 
     .profile-card {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: var(--color-base-100);
+        border: 1px solid var(--color-base-300);
+        border-radius: var(--radius-box, 0.75rem);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         overflow: hidden;
     }
 
     .profile-header {
-        background-color: #ff3e00;
-        color: white;
+        background-color: var(--color-primary);
+        color: var(--color-primary-content);
         padding: 2rem;
         text-align: center;
     }
@@ -78,8 +79,8 @@
     .avatar {
         width: 80px;
         height: 80px;
-        background-color: white;
-        color: #ff3e00;
+        background-color: var(--color-base-100);
+        color: var(--color-primary);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -95,14 +96,14 @@
     }
 
     .profile-details {
-        padding: 2rem;
+        padding: 1.5rem 2rem;
     }
 
     .detail-item {
         display: flex;
         margin-bottom: 1rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--color-base-200);
     }
 
     .detail-item:last-child {
@@ -113,53 +114,14 @@
 
     .label {
         font-weight: bold;
-        width: 100px;
-        color: #666;
-    }
-
-    .value {
-        flex: 1;
-        word-break: break-word;
-    }
-
-    .token {
-        font-family: monospace;
-        font-size: 0.85em;
-        background-color: #f5f5f5;
-        padding: 2px 4px;
-        border-radius: 3px;
+        width: 110px;
+        color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
     }
 
     .actions {
         display: flex;
-        padding: 1rem 2rem 2rem;
-        gap: 1rem;
-    }
-
-    button {
-        flex: 1;
-        padding: 0.75rem;
-        border-radius: 4px;
-        font-weight: 500;
-        cursor: pointer;
-        border: none;
-    }
-
-    .edit-button {
-        background-color: #f5f5f5;
-        color: #333;
-    }
-
-    .logout-button {
-        background-color: #ff3e00;
-        color: white;
-    }
-
-    .edit-button:hover {
-        background-color: #e0e0e0;
-    }
-
-    .logout-button:hover {
-        background-color: #e63600;
+        gap: 0.5rem;
+        padding: 0 2rem 1.5rem;
+        flex-wrap: wrap;
     }
 </style>

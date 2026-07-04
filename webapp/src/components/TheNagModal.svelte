@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { my_user, nag, postpone_nag } from '$lib/client/my_user.ts';
     import TheNagBody from './TheNagBody.svelte';
     import { modal_hack } from '$lib/client/campaign.ts';
@@ -36,12 +37,12 @@
 
 <div class="modal" class:modal-open={isOpen} role="dialog" aria-modal="true">
     <div class="modal-box">
-        <h3 class="mt-0">Please!</h3>
+        <h3 class="mt-0">{$t('nag.title')}</h3>
         <TheNagBody />
         <div class="modal-action">
-            <button class="btn btn-success btn-sm" on:click={success} disabled={success_is_disabled}>Done</button>
-            <button class="btn btn-ghost btn-sm" on:click={later}>Remind me later</button>
-            <button class="btn btn-outline btn-warning btn-sm" on:click={never}>Remind me never</button>
+            <button class="btn btn-success btn-sm" on:click={success} disabled={success_is_disabled}>{$t('nag.done')}</button>
+            <button class="btn btn-ghost btn-sm" on:click={later}>{$t('nag.later')}</button>
+            <button class="btn btn-outline btn-warning btn-sm" on:click={never}>{$t('nag.never')}</button>
         </div>
     </div>
     <button class="modal-backdrop" aria-label="Close" on:click={later}></button>

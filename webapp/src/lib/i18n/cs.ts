@@ -24,6 +24,7 @@ export const cs: Record<string, string> = {
     'search.sort_recent': 'Nedávno aktivní',
     'search.sort_newest': 'Nejnovější',
     'search.sort_title': 'Název A–Z',
+    'search.sort_nearest': 'Nejbližší',
     'search.no_match': 'Žádné kampaně neodpovídají filtrům.',
     'search.load_more': 'Načíst další',
 
@@ -127,4 +128,171 @@ export const cs: Record<string, string> = {
     'login.failed': 'Odkaz se nepodařilo odeslat.',
     'login.dev_link': 'Vývojářský odkaz (e-mail není nastaven):',
     'login.dev_link_open': 'otevřít',
+
+    // home (auth error banner)
+    'home.auth_error_title': 'Chyba přihlášení',
+    'home.auth_error_body': 'Při přihlašování nastal problém: {error}',
+    'home.auth_error_retry': 'Zkuste to prosím znovu; pokud problém přetrvává, ozvěte se nám.',
+
+    // error page
+    'error.home': 'Zpět na hlavní stránku',
+
+    // auth completion
+    'authc.signing_in': 'Přihlašuji…',
+    'authc.done': 'Přihlášeno! Přesměrovávám…',
+    'authc.failed': 'Přihlášení se nepodařilo dokončit.',
+
+    // campaign detail page
+    'detail.slug_lookup': 'Hledám kampaň…',
+    'detail.not_found': 'Tato kampaň neexistuje.',
+    'detail.loading': 'Kampaň se načítá…',
+    'detail.more': 'další kampaně',
+
+    // notifications
+    'notif.mark_all': 'Označit vše jako přečtené',
+    'notif.empty': 'Zatím žádná oznámení. Přijdou, když kampaň překročí některý z vašich prahů.',
+    'notif.mark_read': 'Označit jako přečtené',
+    'notif.mark_unread': 'Označit jako nepřečtené',
+    'notif.unknown_campaign': 'Neznámá kampaň',
+    'time.just_now': 'právě teď',
+    'time.m_ago': 'před {n} min',
+    'time.h_ago': 'před {n} h',
+    'time.d_ago': 'před {n} dny',
+
+    // account page
+    'account.title': 'Správa účtu',
+    'account.your': 'Váš účet',
+    'account.username': 'Uživatelské jméno:',
+    'account.not_set': 'Nenastaveno',
+    'account.id': 'ID účtu:',
+    'account.danger': 'Nebezpečná zóna',
+    'account.delete_info': 'Potřebujete smazat účet? Můžete na vyhrazené stránce.',
+    'account.delete_link': 'Smazat účet →',
+    'account.delete_help': 'Více o mazání účtu najdete v našem dokumentu',
+    'account.delete_guide': 'průvodce mazáním dat',
+
+    // verified identities
+    'ident.title': 'Ověřené identity',
+    'ident.subtitle': 'Každá ověřená identita zvyšuje důvěryhodnost vašeho účtu. Můžete jich připojit víc.',
+    'ident.loading': 'Načítám…',
+    'ident.error': 'Identity se nepodařilo načíst.',
+    'ident.none': 'Zatím žádné ověřené identity — tento účet je anonymní.',
+    'ident.add': 'Přidat ověřenou identitu',
+
+    // delete account
+    'del.title': 'Smazání účtu',
+    'del.warning': 'Pozor: Smazání účtu je trvalé a nelze jej vzít zpět. Všechna vaše data budou nenávratně odstraněna.',
+    'del.button': 'Smazat můj účet',
+    'del.confirm_text': 'Opravdu chcete svůj účet smazat? Tuto akci nelze vzít zpět.',
+    'del.cancel': 'Zrušit',
+    'del.deleting': 'Mažu…',
+    'del.confirm': 'Potvrdit smazání',
+
+    // start-a-campaign form
+    'addc.title': 'Založit kampaň',
+    'addc.subtitle': 'Popište společnou akci a navrhněte, kolik lidí je potřeba, aby měla smysl. Lidé slibují účast s vlastním prahem — „přidám se, když se zapojí N dalších".',
+    'addc.form_title': 'Název',
+    'addc.title_placeholder': 'např. Bojkot MegaCorpu, dokud nezmění dodavatele X',
+    'addc.description': 'Popis',
+    'addc.desc_placeholder': 'O jakou akci jde, na koho míří a kdy je cíle dosaženo?',
+    'addc.thresholds': 'Prahy',
+    'addc.min_hint': 'Minimum — pod touto hranicí účast nemá účinek (nebo hrozí újma)',
+    'addc.default_hint': 'Doporučený výchozí práh — cíl kampaně',
+    'addc.max_hint': 'Nejvyšší smysluplný — např. velikost dotčené komunity',
+    'addc.created': '🎉 Kampaň založena!',
+    'addc.add_tags': 'Přidejte štítky, ať ji lidé najdou',
+    'addc.view': 'Zobrazit kampaň',
+    'addc.another': 'Založit další',
+    'addc.submit': 'Založit kampaň',
+
+    // nag modal
+    'nag.title': 'Prosíme!',
+    'nag.done': 'Hotovo',
+    'nag.later': 'Připomenout později',
+    'nag.never': 'Nepřipomínat',
+
+    // you / profile
+    'you.welcome': 'Vítejte!',
+    'you.assigned_username': 'Vaše automaticky přidělené uživatelské jméno je „{name}".',
+    'you.enter_email': 'Přidejte prosím svůj e-mail nebo se přihlaste přes poskytovatele — jinak můžete o účet přijít!',
+    'you.account': 'účet',
+    'you.username': 'uživatelské jméno',
+    'you.change': '(změnit…)',
+    'you.save': 'Uložit',
+    'you.authentication': 'přihlášení',
+    'you.loading_account': 'Načítám údaje účtu…',
+    'you.link_social': 'Propojte svůj účet s dalším přihlášením:',
+    'you.login': 'Přihlásit se:',
+    'you.messaging': 'zprávy',
+    'you.email_optin': 'zaškrtnutím políček souhlasíte se zasíláním e-mailů:',
+    'you.optin1': 'dostávat e-mail, když kampaň, které se účastním, dosáhne cíle',
+    'you.optin2': 'dostávat novinky o mých kampaních',
+    'you.optin3': 'občas dostávat novinky o projektu Fullcracy/Koordinator',
+
+    // about
+    'about.intro': 'Koordinator je platforma pro koordinaci kampaní a společných akcí. Pomáhá lidem organizovat se a zapojovat do nejrůznějších iniciativ. Na crowdfundingovém webu lidé podporují kampaně přislíbením peněz — když se jich sejde dost, autor je může vybrat. Na Koordinatoru slibujete svou účast v kampaních, a to za podmínek, které si sami určíte. Když jsou podmínky splněny, dostanete zprávu — a pak se očekává, že se zapojíte.',
+    'about.open_source': 'Otevřený software',
+    'about.view_source': 'Zdrojový kód na GitHubu',
+    'about.contact': 'Kontakt',
+    'about.help': 'Pomozte',
+    'about.fund': 'Podpořte',
+
+
+    // account page
+
+
+    // notifications
+
+    // campaign detail page
+
+    // profile / nag
+    'you.email': 'E-mail:',
+    'you.title': 'Váš profil',
+    'you.user_id': 'ID uživatele:',
+    'you.loading': 'Načítám data uživatele…',
+
+
+    // tag manager
+    'tags.none': 'Bez štítků',
+    'tags.add_button': '+ Přidat štítky',
+    'tags.add_existing': 'Přidat existující štítek',
+    'tags.select': 'Vyberte štítek',
+    'tags.add': 'Přidat',
+    'tags.create_new': 'Vytvořit nový štítek',
+    'tags.new_ph': 'Název nového štítku',
+    'tags.create': 'Vytvořit',
+    'tags.remove': 'Odebrat štítek',
+    'tags.added': 'Štítek přidán',
+    'tags.removed': 'Štítek odebrán',
+    'tags.created': 'Štítek vytvořen',
+
+    // misc
+    'misc.loading': 'Načítám…',
+
+    // add cause
+    'cause.intro': 'Více kampaní lze seskupit pod jednu kauzu. Než začnete vyplňovat údaje, zvažte ověření identity, ať vaše data nezůstanou bez vlastníka.',
+    'cause.submit': 'Přidat kauzu',
+
+    // location
+    'loc.section': 'Místo (volitelné)',
+    'loc.hint': 'Kde je kampaň relevantní? Místní kampaně osloví ty správné lidi.',
+    'loc.search_ph': 'Hledat místo…',
+    'loc.search': 'Hledat',
+    'loc.use_mine': 'Použít moji polohu',
+    'loc.map_label': 'Mapa pro výběr místa',
+    'loc.click_hint': 'Klikněte do mapy pro umístění bodu; níže upravte okruh působnosti.',
+    'loc.radius': 'okruh',
+    'loc.clear': 'Odebrat místo',
+    'near.button': '📍 Poblíž mě',
+    'near.on': '📍 Poblíž mě ({km} km)',
+    'near.denied': 'Přístup k poloze byl odepřen.',
+
+    // language field + deck filter
+    'lang.field': 'Jazyk',
+    'lang.hint': 'Jazyk, ve kterém je kampaň napsaná — zobrazí se čtenářům tohoto jazyka.',
+    'lang.en': 'Angličtina',
+    'lang.cs': 'Čeština',
+    'lang.unspecified': 'Neurčeno',
+    'deck.all_languages': '🌐 Všechny jazyky',
+    'deck.my_language': '🌐 Jen {lang}',
 };

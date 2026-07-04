@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { createEventDispatcher } from 'svelte';
     import Settings from './Settings.svelte';
 
@@ -26,7 +27,7 @@
     <div class="modal modal-open z-50" role="dialog">
         <div class="modal-box w-11/12 max-w-xl relative z-50">
             <div class="flex justify-between items-center border-b pb-3 mb-3">
-                <h2 class="text-xl font-semibold">Settings</h2>
+                <h2 class="text-xl font-semibold">{$t('nav.settings')}</h2>
                 <button class="btn btn-sm btn-circle" on:click={closeModal}>✕</button>
             </div>
             <div>

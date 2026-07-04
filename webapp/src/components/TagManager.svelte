@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { getContextClient, gql } from '$lib/urql.ts';
     import { onMount } from 'svelte';
 
@@ -105,7 +106,7 @@
                 .toPromise();
 
             if (result.data) {
-                success = 'Tag added successfully';
+                success = 'tags.added';
                 // Add the tag to the local tags array
                 const tagToAdd = availableTags.find(t => t.id === selectedTagId);
                 if (tagToAdd && !tags.some(t => t.id === tagToAdd.id)) {
@@ -140,7 +141,7 @@
                 .toPromise();
 
             if (result.data) {
-                success = 'Tag removed successfully';
+                success = 'tags.removed';
                 // Remove the tag from the local tags array
                 tags = tags.filter(t => t.id !== tagId);
             } else if (result.error) {
@@ -173,7 +174,7 @@
                 .toPromise();
 
             if (result.data && result.data.insert_tags_one) {
-                success = 'Tag created successfully';
+                success = 'tags.created';
                 const newTag = result.data.insert_tags_one;
 
                 // Add the new tag to available tags
@@ -204,14 +205,14 @@
 <!-- Display existing tags -->
 <div class="tags-container">
     {#if tags.length === 0}
-        <div class="no-tags">No tags</div>
+        <div class="no-tags">{$t('tags.none')}</div>
     {:else}
         <div class="tag-badges">
             {#each tags as tag (tag.id)}
                 <div class={badgeClass}>
                     {tag.name}
                     {#if !readOnly}
-                        <button class="tag-remove-btn" on:click={() => removeTagFromCampaign(tag.id)} aria-label="Remove tag">× </button>
+                        <button class="tag-remove-btn" on:click={() => removeTagFromCampaign(tag.id)} aria-label={$t('tags.remove')}>× </button>
                     {/if}
                 </div>
             {/each}
@@ -224,25 +225,25 @@
     <div class="tag-management my-2">
         {#if showAddForm}
             <div class="add-tag-form">
-                <label class="label-text font-medium block mb-1" for="tag-select-{campaignId}">Add existing tag</label>
+                <label class="label-text font-medium block mb-1" for="tag-select-{campaignId}">{$t('tags.add_existing')}</label>
                 <div class="flex gap-2">
                     <select id="tag-select-{campaignId}" bind:value={selectedTagId} class="select select-bordered select-sm grow">
-                        <option value={null}>Select a tag</option>
+                        <option value={null}>{$t('tags.select')}</option>
                         {#each availableForSelection as tag (tag.id)}
                             <option value={tag.id}>{tag.name}</option>
                         {/each}
                     </select>
-                    <button class="btn btn-primary btn-sm" on:click={addTagToCampaign} disabled={loading || !selectedTagId}>Add</button>
+                    <button class="btn btn-primary btn-sm" on:click={addTagToCampaign} disabled={loading || !selectedTagId}>{$t('tags.add')}</button>
                 </div>
 
-                <label class="label-text font-medium block mb-1 mt-3" for="tag-new-{campaignId}">Create new tag</label>
+                <label class="label-text font-medium block mb-1 mt-3" for="tag-new-{campaignId}">{$t('tags.create_new')}</label>
                 <div class="flex gap-2">
-                    <input id="tag-new-{campaignId}" class="input input-bordered input-sm grow" type="text" placeholder="Enter new tag name" bind:value={newTagName} />
-                    <button class="btn btn-secondary btn-sm" on:click={createTag} disabled={loading || !newTagName.trim()}>Create</button>
+                    <input id="tag-new-{campaignId}" class="input input-bordered input-sm grow" type="text" placeholder={$t('tags.new_ph')} bind:value={newTagName} />
+                    <button class="btn btn-secondary btn-sm" on:click={createTag} disabled={loading || !newTagName.trim()}>{$t('tags.create')}</button>
                 </div>
             </div>
         {:else}
-            <button class="btn btn-outline btn-secondary btn-xs" on:click={() => (showAddForm = true)}>+ Add Tags</button>
+            <button class="btn btn-outline btn-secondary btn-xs" on:click={() => (showAddForm = true)}>{$t('tags.add_button')}</button>
         {/if}
     </div>
 {/if}
@@ -256,7 +257,7 @@
 
 {#if success}
     <div class="alert alert-success mt-2" role="alert">
-        {success}
+        {$t(success)}
     </div>
 {/if}
 

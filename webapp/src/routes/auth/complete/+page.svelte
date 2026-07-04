@@ -1,23 +1,24 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { apply_newly_authenticated_user } from '$lib/client/my_user';
 
     export let data: { user?: App.UserObject };
 
-    let status = 'Signing you in…';
+    let status = 'authc.signing_in';
 
     onMount(async () => {
         if (data?.user && data.user.id > 0) {
             await apply_newly_authenticated_user(data.user);
-            status = 'Signed in! Redirecting…';
+            status = 'authc.done';
         } else {
-            status = 'Sign-in could not be completed.';
+            status = 'authc.failed';
         }
         setTimeout(() => goto('/'), 500);
     });
 </script>
 
 <div class="content_block">
-    <p>{status}</p>
+    <p>{$t(status)}</p>
 </div>

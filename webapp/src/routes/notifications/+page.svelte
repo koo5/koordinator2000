@@ -1,4 +1,5 @@
 <script>
+    import { t } from '$lib/i18n';
     import Notification from '../../components/Notification.svelte';
     import SubscribedItemsInner from '../../components/SubscribedItemsInner.svelte';
     import { getContextClient, gql, subscribe } from '$lib/urql.ts';
@@ -55,8 +56,8 @@
 
 <div class="content_block">
     <div class="flex items-center justify-between mb-3">
-        <h2 class="m-0">Notifications</h2>
-        <button class="btn btn-sm" on:click={mark_all_read}>Mark all read</button>
+        <h2 class="m-0">{$t('nav.notifications')}</h2>
+        <button class="btn btn-sm" on:click={mark_all_read}>{$t('notif.mark_all')}</button>
     </div>
 
     <ul class="p-0 m-0 list-none">
@@ -64,7 +65,7 @@
             {#each data.campaign_notifications as notification (notification.id)}
                 <Notification {notification} />
             {:else}
-                <li>No notifications yet. They arrive when a campaign crosses one of your thresholds.</li>
+                <li>{$t('notif.empty')}</li>
             {/each}
         </SubscribedItemsInner>
     </ul>

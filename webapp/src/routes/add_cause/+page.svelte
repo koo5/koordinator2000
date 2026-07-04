@@ -3,9 +3,10 @@
     import gql from 'graphql-tag';
     import { my_user } from '$lib/client/my_user.ts';
     import { goto } from '$app/navigation';
+    import { t } from '$lib/i18n';
 </script>
 
-Multiple campaigns can be grouped under one cause. Before starting to fill in data, you may want to register, so that your data may not become orphaned.
+<p class="opacity-70">{$t('cause.intro')}</p>
 
 <MutationForm
     mutation={gql`
@@ -23,5 +24,5 @@ Multiple campaigns can be grouped under one cause. Before starting to fill in da
         goto('/edit_cause/' + result['detail']['data']['insert_causes_one']['id']);
     }}
 >
-    <button type="submit">Add Cause</button>
+    <button class="btn btn-primary btn-sm" type="submit">{$t('cause.submit')}</button>
 </MutationForm>

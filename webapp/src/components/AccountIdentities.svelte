@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { getContextClient, gql, queryStore } from '$lib/urql.ts';
     import { my_user } from '$lib/client/my_user.ts';
 
@@ -30,13 +31,13 @@
 </script>
 
 <div class="identity-section">
-    <h3>Verified identities</h3>
-    <p>Each verified identity adds trust to your account. You can connect more than one.</p>
+    <h3>{$t('ident.title')}</h3>
+    <p>{$t('ident.subtitle')}</p>
 
     {#if $identities.fetching}
-        <p>Loading…</p>
+        <p>{$t('ident.loading')}</p>
     {:else if $identities.error}
-        <p class="error-text">Couldn't load your identities.</p>
+        <p class="error-text">{$t('ident.error')}</p>
     {:else if $identities.data?.verified_user_authentications?.length}
         <ul class="identity-list">
             {#each $identities.data.verified_user_authentications as v}
@@ -48,10 +49,10 @@
             {/each}
         </ul>
     {:else}
-        <p>No verified identities yet — this account is anonymous.</p>
+        <p>{$t('ident.none')}</p>
     {/if}
 
-    <a class="btn btn-primary btn-sm" href="/login">Add a verified identity</a>
+    <a class="btn btn-primary btn-sm" href="/login">{$t('ident.add')}</a>
 </div>
 
 <style>

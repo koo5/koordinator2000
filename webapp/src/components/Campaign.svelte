@@ -10,6 +10,7 @@
     import ParticipationBadge from './ParticipationBadge.svelte';
     import TabularParticipationsBreakdown from './TabularParticipationsBreakdown.svelte';
     import TagManager from './TagManager.svelte';
+    import LocationMap from './LocationMap.svelte';
     //import {slide, fade} from 'svelte/transition';
     /*import { flip } from 'svelte/animate';
     import { crossfade } from 'svelte/transition';
@@ -113,6 +114,15 @@
     <div class="content_block description">
         <p>{@html sanitize_html(campaign.description || '')}</p>
     </div>
+
+    {#if campaign.location_name || campaign.latitude != null}
+        <div class="content_block">
+            <p class="text-sm opacity-70 mt-0 mb-1">📍 {campaign.location_name || `${campaign.latitude}, ${campaign.longitude}`}</p>
+            {#if is_detail_view && campaign.latitude != null && campaign.longitude != null}
+                <LocationMap latitude={campaign.latitude} longitude={campaign.longitude} radius_km={campaign.location_radius} />
+            {/if}
+        </div>
+    {/if}
 
     <h5>{$t('campaign.tags')}</h5>
     <div class="content_block">

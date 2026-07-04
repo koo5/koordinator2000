@@ -15,6 +15,15 @@ test.describe('czech browser', () => {
     // A translated component string (not just nav): the pledge button.
     await expect(page.getByRole('button', { name: /Přislíbit/ }).first()).toBeVisible({ timeout: 15_000 });
   });
+
+  test('secondary pages are translated (account, add-campaign)', async ({ page }) => {
+    await page.goto('/account', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('heading', { name: 'Správa účtu' })).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByRole('heading', { name: 'Ověřené identity' })).toBeVisible();
+
+    await page.goto('/add_campaign', { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('button', { name: 'Založit kampaň' })).toBeVisible({ timeout: 15_000 });
+  });
 });
 
 test.describe('english browser', () => {

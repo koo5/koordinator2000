@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import type { Readable } from 'svelte/store';
     import { debug } from '$lib/stores.ts';
 
@@ -22,7 +23,7 @@
 {:else}
     <!-- Only show loading if no data and no error -->
     <div class="content_block">
-        <div class="animate-flicker">Loading items...</div>
+        <div class="animate-flicker">{$t('misc.loading')}</div>
     </div>
 {/if}
 

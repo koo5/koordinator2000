@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { t, tp } from '$lib/i18n';
+    import { t, tp, locale } from '$lib/i18n';
     import { getContextClient, gql, queryStore } from '$lib/urql.ts';
     import { my_user } from '$lib/client/my_user.ts';
     import CampaignList from './CampaignList.svelte';
+    import { browser } from '$app/environment';
     import { debug } from '$lib/stores';
     import { onMount, tick } from 'svelte';
     import { localStorageSharedStore } from '$lib/client/svelte-shared-store.ts';
@@ -58,6 +59,49 @@
     // All available tags (will be populated from GraphQL)
     let availableTags: Array<{ id: number; name: string; description: string }> = [];
 
+    // "Near me" filter (session-only — coordinates are not persisted).
+    let near_on = false;
+    let nearLat: number | null = null;
+    let nearLng: number | null = null;
+    let nearKm = 100;
+
+    // Language relevance: default the deck to the viewer's UI language (plus
+    // language-agnostic campaigns); a toggle opens it to every language.
+    let show_all_languages = false;
+
+    // Great-circle distance (km) for client-side "nearest" ordering.
+    function haversine(aLat: number, aLng: number, bLat: number, bLng: number): number {
+        const R = 6371;
+        const dLat = ((bLat - aLat) * Math.PI) / 180;
+        const dLng = ((bLng - aLng) * Math.PI) / 180;
+        const s =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos((aLat * Math.PI) / 180) * Math.cos((bLat * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+        return 2 * R * Math.asin(Math.sqrt(s));
+    }
+
+    function toggle_near(): void {
+        if (near_on) {
+            near_on = false;
+            if (sortBy === 'distance') sortBy = 'participant_count';
+            applySearch();
+            return;
+        }
+        if (!browser || !navigator.geolocation) return;
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                nearLat = pos.coords.latitude;
+                nearLng = pos.coords.longitude;
+                near_on = true;
+                applySearch();
+            },
+            e => {
+                console.error('geolocation failed', e);
+                alert($t('near.denied'));
+            }
+        );
+    }
+
     const sortOptions = [
         { value: 'participant_count', key: 'search.sort_most_pledged' },
         { value: 'last_activity_at', key: 'search.sort_recent' },
@@ -81,6 +125,7 @@
                 location_name
                 latitude
                 longitude
+                language
                 participations_aggregate(where: { account: { smazano: { _eq: false } } }) {
                     aggregate {
                         count
@@ -98,11 +143,29 @@
     $: my_user_id = $my_user?.id || -1; // Ensure we have a valid integer even for anonymous users
     let items;
     let seen: number[] = [];
-    $: seeing = get_seeing($items?.data?.campaigns);
-    // The full loaded deck (all pages so far), deduped, passed to the view.
-    $: loaded_ids = [...new Set([...seen, ...seeing])];
+    $: effectiveLimit = near_on ? 200 : itemsPerPage;
+    $: campaigns_raw = $items?.data?.campaigns ?? [];
+    $: seeing = get_seeing(campaigns_raw);
+    // The full loaded deck (all pages so far), deduped, passed to the view. When
+    // sorting by distance under "near me", order the loaded rows client-side (the
+    // box already bounds them, so this is globally correct).
+    $: loaded_ids = build_loaded_ids(seen, campaigns_raw);
     // Another page is likely if the latest batch filled the page size.
-    $: has_more = seeing.length >= itemsPerPage;
+    $: has_more = seeing.length >= effectiveLimit;
+
+    function build_loaded_ids(seen_ids: number[], campaigns: any[]): number[] {
+        let ordered = campaigns;
+        if (near_on && sortBy === 'distance' && nearLat != null && nearLng != null) {
+            ordered = [...campaigns]
+                .filter(c => c.latitude != null && c.longitude != null)
+                .sort(
+                    (a, b) =>
+                        haversine(nearLat!, nearLng!, Number(a.latitude), Number(a.longitude)) -
+                        haversine(nearLat!, nearLng!, Number(b.latitude), Number(b.longitude))
+                );
+        }
+        return [...new Set([...seen_ids, ...ordered.map(c => c.id)])];
+    }
 
     function get_seeing(campaigns: Array<{ id: number }> | undefined): number[] {
         const result: number[] = [];
@@ -151,9 +214,24 @@
                 { id: { _nin: seen } },
                 { _or: [{ title: { _ilike: searchTermWithWildcards } }, { description: { _ilike: searchTermWithWildcards } }] },
                 ...(selectedTagIds.length > 0 ? [{ campaign_tags: { tag_id: { _in: selectedTagIds } } }] : []),
+                // Language relevance: viewer's language + language-agnostic rows.
+                ...(show_all_languages ? [] : [{ _or: [{ language: { _eq: $locale } }, { language: { _is_null: true } }] }]),
+                // "Near me": bounding-box approximation of the chosen distance
+                // (composes with everything above; excludes location-less campaigns).
+                ...(near_on && nearLat != null && nearLng != null
+                    ? [
+                          { latitude: { _gte: nearLat - nearKm / 111, _lte: nearLat + nearKm / 111 } },
+                          {
+                              longitude: {
+                                  _gte: nearLng - nearKm / (111 * Math.max(0.2, Math.cos((nearLat * Math.PI) / 180))),
+                                  _lte: nearLng + nearKm / (111 * Math.max(0.2, Math.cos((nearLat * Math.PI) / 180))),
+                              },
+                          },
+                      ]
+                    : []),
             ],
         },
-        _limit: itemsPerPage,
+        _limit: effectiveLimit,
         _order_by: orderBy(),
     };
 
@@ -239,7 +317,44 @@
             {#each sortOptions as option}
                 <option value={option.value}>{$t(option.key)}</option>
             {/each}
+            {#if near_on}
+                <option value="distance">{$t('search.sort_nearest')}</option>
+            {/if}
         </select>
+        <button
+            type="button"
+            class="btn btn-sm"
+            class:btn-secondary={near_on}
+            class:btn-ghost={!near_on}
+            on:click={toggle_near}
+        >
+            {near_on ? $t('near.on', { km: nearKm }) : $t('near.button')}
+        </button>
+        {#if near_on}
+            <select
+                class="select select-bordered select-sm w-24"
+                bind:value={nearKm}
+                on:change={applySearch}
+                aria-label="Distance"
+            >
+                {#each [25, 100, 500] as km}
+                    <option value={km}>{km} km</option>
+                {/each}
+            </select>
+        {/if}
+        <button
+            type="button"
+            class="btn btn-sm"
+            class:btn-secondary={show_all_languages}
+            class:btn-ghost={!show_all_languages}
+            on:click={() => {
+                show_all_languages = !show_all_languages;
+                applySearch();
+            }}
+            title={show_all_languages ? $t('deck.all_languages') : $t('deck.my_language', { lang: $t('lang.' + $locale) })}
+        >
+            {show_all_languages ? $t('deck.all_languages') : $t('deck.my_language', { lang: $t('lang.' + $locale) })}
+        </button>
     </form>
 
     {#if availableTags.length}

@@ -1,21 +1,22 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import DeleteSelf from '../../components/DeleteSelf.svelte';
     import AccountIdentities from '../../components/AccountIdentities.svelte';
     import { my_user } from '$lib/client/my_user.ts';
 </script>
 
 <div class="account-container">
-    <h2>Account Management</h2>
+    <h2>{$t('account.title')}</h2>
     
     <div class="account-section">
-        <h3>Your Account</h3>
+        <h3>{$t('account.your')}</h3>
         <div class="account-info">
             <div class="info-row">
-                <span class="info-label">Username:</span>
-                <span class="info-value">{$my_user.name || 'Not set'}</span>
+                <span class="info-label">{$t('account.username')}</span>
+                <span class="info-value">{$my_user.name || $t('account.not_set')}</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Account ID:</span>
+                <span class="info-label">{$t('account.id')}</span>
                 <span class="info-value">{$my_user.id}</span>
             </div>
         </div>
@@ -24,12 +25,12 @@
     <AccountIdentities />
 
     <div class="danger-zone-section">
-        <h3>Danger Zone</h3>
+        <h3>{$t('account.danger')}</h3>
         <div class="danger-zone-content">
-            <p>Need to delete your account? You can do that from our dedicated page.</p>
-            <a href="/account/delete" class="delete-account-link">Delete Account →</a>
+            <p>{$t('account.delete_info')}</p>
+            <a href="/account/delete" class="delete-account-link">{$t('account.delete_link')}</a>
             <p class="help-text">
-                Learn more about account deletion in our <a href="/about/help/data-deletion">data deletion guide</a>.
+                {$t('account.delete_help')} <a href="/about/help/data-deletion">{$t('account.delete_guide')}</a>.
             </p>
         </div>
     </div>

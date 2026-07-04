@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { getContextClient, gql } from '$lib/urql.ts';
     import type { Campaign } from '$lib/client/my_user.ts';
 
@@ -33,17 +34,17 @@
         }
     }
 
-    function format_ts(ts: string | undefined): string {
+    function format_ts(ts: string | undefined, tr: (k: string, p?: Record<string, string | number>) => string): string {
         if (!ts) return '';
         const d = new Date(ts);
         const diff_ms = Date.now() - d.getTime();
         const diff_min = Math.floor(diff_ms / 60000);
-        if (diff_min < 1) return 'just now';
-        if (diff_min < 60) return `${diff_min}m ago`;
+        if (diff_min < 1) return tr('time.just_now');
+        if (diff_min < 60) return tr('time.m_ago', { n: diff_min });
         const diff_h = Math.floor(diff_min / 60);
-        if (diff_h < 24) return `${diff_h}h ago`;
+        if (diff_h < 24) return tr('time.h_ago', { n: diff_h });
         const diff_d = Math.floor(diff_h / 24);
-        if (diff_d < 7) return `${diff_d}d ago`;
+        if (diff_d < 7) return tr('time.d_ago', { n: diff_d });
         return d.toLocaleDateString();
     }
 </script>
@@ -52,17 +53,17 @@
     <div class="notification-main">
         <div class="notification-header">
             {#if campaign?.id}
-                <a class="link font-semibold" href="/campaign/{campaign.id}">{campaign.title || 'Unknown Campaign'}</a>
+                <a class="link font-semibold" href="/campaign/{campaign.id}">{campaign.title || $t('notif.unknown_campaign')}</a>
             {:else}
-                <b>{campaign?.title || 'Unknown Campaign'}</b>
+                <b>{campaign?.title || $t('notif.unknown_campaign')}</b>
             {/if}
-            <span class="notification-ts">{format_ts(notification.ts)}</span>
+            <span class="notification-ts">{format_ts(notification.ts, $t)}</span>
         </div>
         <div class="notification-content">{notification.content}</div>
     </div>
     <button
         class="btn btn-ghost btn-xs"
-        title={notification.read ? 'Mark as unread' : 'Mark as read'}
+        title={notification.read ? $t('notif.mark_unread') : $t('notif.mark_read')}
         on:click={toggle_read}
     >
         {notification.read ? '↩' : '✓'}

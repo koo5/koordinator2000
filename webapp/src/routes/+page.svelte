@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -43,12 +44,12 @@
 <div class="auth-error-container">
     <div class="auth-error">
         <button class="close-button" on:click={dismissError}>×</button>
-        <h4>Authentication Error</h4>
-        <p>There was a problem with authentication: {authError}</p>
+        <h4>{$t('home.auth_error_title')}</h4>
+        <p>{$t('home.auth_error_body', { error: authError || '' })}</p>
         {#if errorDescription}
             <p class="error-details">{errorDescription}</p>
         {/if}
-        <p>Please try again or contact support if the problem persists.</p>
+        <p>{$t('home.auth_error_retry')}</p>
     </div>
 </div>
 {/if}

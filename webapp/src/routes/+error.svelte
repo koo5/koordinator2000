@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { page } from '$app/stores';
 
     function hasStack(error: App.Error | null): error is App.Error & { stack: string } {
@@ -18,7 +19,7 @@
             <pre>{$page.error.stack}</pre>
         {/if}
     {/if}
-    <a href="/">Go to home page</a>
+    <a href="/">{$t('error.home')}</a>
 </div>
 
 <style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from '$lib/i18n';
     import { goto } from '$app/navigation';
     import { my_user } from '$lib/client/my_user';
     import { get } from 'svelte/store';
@@ -63,29 +64,24 @@
 </script>
 
 <div class="delete-account-container">
-    <h3>Delete Account</h3>
+    <h3>{$t('del.title')}</h3>
 
     {#if error}
         <div class="error-message">{error}</div>
     {/if}
 
     {#if !confirmDelete}
-        <p class="warning-text">
-            Warning: Deleting your account is permanent and cannot be undone.
-            All your data will be permanently removed.
-        </p>
-        <button class="delete-button" on:click={deleteAccount}>Delete My Account</button>
+        <p class="warning-text">{$t('del.warning')}</p>
+        <button class="delete-button" on:click={deleteAccount}>{$t('del.button')}</button>
     {:else}
-        <p class="confirm-text">
-            Are you sure you want to delete your account? This action cannot be undone.
-        </p>
+        <p class="confirm-text">{$t('del.confirm_text')}</p>
         <div class="button-group">
-            <button class="cancel-button" on:click={cancelDelete} disabled={isDeleting}>Cancel</button>
+            <button class="cancel-button" on:click={cancelDelete} disabled={isDeleting}>{$t('del.cancel')}</button>
             <button class="confirm-button" on:click={deleteAccount} disabled={isDeleting}>
                 {#if isDeleting}
-                    Deleting...
+                    {$t('del.deleting')}
                 {:else}
-                    Confirm Delete
+                    {$t('del.confirm')}
                 {/if}
             </button>
         </div>
